@@ -1,125 +1,116 @@
-import type { Metadata } from 'next';
-import { SITE_CONFIG } from '@/lib/constants';
+import type { Metadata } from "next";
+import { SITE_CONFIG } from "@/lib/constants";
+import FinancingForm from "./FinancingForm";
 
 export const metadata: Metadata = {
-  title: 'Financing',
+  title: "Financing: Get Pre-Approved",
   description:
-    'Get pre-approved for auto financing in minutes. Love Auto Group works with multiple lenders to find the best rate for your situation.',
+    "Get pre-approved for auto financing at Love Auto Group in Villa Park, IL. Quick application, multiple lenders, competitive rates. No obligation.",
 };
 
 export default function FinancingPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 md:py-20">
-      <div className="text-center mb-12">
-        <h1
-          className="text-3xl md:text-4xl font-bold text-gray-900"
-          style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
-        >
-          Get Pre-Approved in Minutes
-        </h1>
-        <p className="mt-3 text-gray-500 text-lg max-w-2xl mx-auto">
-          Quick, easy, and it will not affect your credit score. We work with multiple
-          lenders to find the best rate for your situation.
-        </p>
-      </div>
-
-      {/* Trust signals */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-        {[
-          { icon: '🔒', title: 'Secure & Encrypted', desc: 'Your information is protected' },
-          { icon: '✓', title: 'No Obligation', desc: 'See your options with no commitment' },
-          { icon: '⚡', title: 'Quick Decision', desc: 'Get a response within hours' },
-        ].map((item) => (
-          <div key={item.title} className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center">
-            <span className="text-2xl">{item.icon}</span>
-            <p className="font-semibold text-gray-900 text-sm mt-2">{item.title}</p>
-            <p className="text-gray-500 text-xs mt-1">{item.desc}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Form */}
-      <div className="bg-white border border-gray-200 rounded-xl p-6 md:p-8 shadow-sm">
-        <h2 className="font-bold text-gray-900 text-xl mb-6" style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}>
-          Pre-Approval Application
-        </h2>
-        <form className="space-y-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-              <input type="text" id="fullName" name="fullName" required
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-red-500 focus:ring-red-500" />
-            </div>
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-              <input type="tel" id="phone" name="phone" required
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-red-500 focus:ring-red-500" />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input type="email" id="email" name="email" required
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-red-500 focus:ring-red-500" />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="creditRange" className="block text-sm font-medium text-gray-700 mb-1">Estimated Credit Score</label>
-              <select id="creditRange" name="creditRange"
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-red-500 focus:ring-red-500">
-                <option value="">Select range</option>
-                <option value="excellent">Excellent (720+)</option>
-                <option value="good">Good (660-719)</option>
-                <option value="fair">Fair (600-659)</option>
-                <option value="poor">Needs Work (below 600)</option>
-                <option value="no_credit">No Credit History</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="monthlyBudget" className="block text-sm font-medium text-gray-700 mb-1">Monthly Budget</label>
-              <select id="monthlyBudget" name="monthlyBudget"
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-red-500 focus:ring-red-500">
-                <option value="">Select range</option>
-                <option value="200">Up to $200/mo</option>
-                <option value="300">$200-$300/mo</option>
-                <option value="400">$300-$400/mo</option>
-                <option value="500">$400-$500/mo</option>
-                <option value="500+">$500+/mo</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="vehicleInterest" className="block text-sm font-medium text-gray-700 mb-1">Vehicle of Interest (optional)</label>
-            <input type="text" id="vehicleInterest" name="vehicleInterest"
-              placeholder="e.g., 2019 Lexus RX 350"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-red-500 focus:ring-red-500" />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-red-600 hover:bg-red-700 text-white px-8 py-3.5 rounded-lg text-base font-semibold transition-colors"
-          >
-            Submit Pre-Approval Application
-          </button>
-
-          <p className="text-xs text-gray-400 text-center">
-            By submitting this form, you agree to be contacted by Love Auto Group regarding your financing inquiry.
-            Your information is secure and will not be shared with third parties.
+    <>
+      <section className="bg-brand-navy text-white py-16">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold">
+            Get Pre-Approved for Financing
+          </h1>
+          <p className="mt-4 text-lg text-brand-gray-300">
+            Quick, easy, and no obligation. We work with multiple lenders to find
+            the best option for you.
           </p>
-        </form>
-      </div>
+        </div>
+      </section>
 
-      {/* Call CTA */}
-      <div className="mt-8 text-center">
-        <p className="text-gray-500">
-          Prefer to talk? Call us at{' '}
-          <a href={`tel:${SITE_CONFIG.phoneRaw}`} className="text-red-600 font-semibold hover:text-red-700">
-            {SITE_CONFIG.phone}
-          </a>
-        </p>
-      </div>
-    </div>
+      <section className="max-w-7xl mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12">
+          <div>
+            <FinancingForm />
+          </div>
+
+          {/* Sidebar info */}
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
+              <h2 className="font-bold text-brand-gray-900 mb-4">
+                How It Works
+              </h2>
+              <ol className="space-y-4">
+                {[
+                  {
+                    step: "1",
+                    title: "Submit Your Info",
+                    desc: "Fill out the quick form. It takes less than 2 minutes.",
+                  },
+                  {
+                    step: "2",
+                    title: "We Find Options",
+                    desc: "We work with multiple lenders to find competitive rates for your situation.",
+                  },
+                  {
+                    step: "3",
+                    title: "Pick Your Vehicle",
+                    desc: "Browse our inventory knowing your budget and get behind the wheel faster.",
+                  },
+                ].map((item) => (
+                  <li key={item.step} className="flex gap-3">
+                    <span className="w-8 h-8 bg-brand-red text-white rounded-full flex items-center justify-center font-bold text-sm shrink-0">
+                      {item.step}
+                    </span>
+                    <div>
+                      <p className="font-semibold text-brand-gray-900">
+                        {item.title}
+                      </p>
+                      <p className="text-sm text-brand-gray-500">{item.desc}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="bg-brand-red/5 border border-brand-red/20 rounded-xl p-6">
+              <h3 className="font-bold text-brand-gray-900 mb-2">
+                Your Information Is Safe
+              </h3>
+              <p className="text-sm text-brand-gray-600 leading-relaxed">
+                This is a pre-qualification form, not a full credit application.
+                Your information is kept confidential and used only to explore
+                financing options for you.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
+              <h3 className="font-bold text-brand-gray-900 mb-2">
+                Questions?
+              </h3>
+              <p className="text-sm text-brand-gray-600 mb-3">
+                Prefer to talk to a person? We&apos;re happy to walk you through
+                the process.
+              </p>
+              <a
+                href={`tel:${SITE_CONFIG.phoneRaw}`}
+                className="inline-flex items-center gap-2 text-brand-red hover:text-brand-red-dark font-semibold"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                  />
+                </svg>
+                {SITE_CONFIG.phone}
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

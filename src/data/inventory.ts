@@ -1,0 +1,337 @@
+import { Vehicle } from "@/lib/types";
+
+/**
+ * Real inventory data synced from Dealer Center.
+ * Last sync: April 18, 2026
+ * Source: app.dealercenter.net — Love Auto Group active inventory
+ *
+ * Photo naming: /images/inventory/{slug}/card-{year}-{make}-{model}-{n}.webp
+ * In production, David (DMS agent) provides the live feed.
+ */
+
+function generateImagePaths(
+  slug: string,
+  year: number,
+  make: string,
+  model: string,
+  count: number
+): string[] {
+  const base = `/images/inventory/${slug}`;
+  const prefix = `${year}-${make.toLowerCase()}-${model.toLowerCase()}`;
+  return Array.from({ length: count }, (_, i) => `${base}/${prefix}-${i + 1}.webp`);
+}
+
+export const sampleInventory: Vehicle[] = [
+  {
+    id: "11334",
+    slug: "2016-honda-pilot-touring-11334",
+    vin: "5FNYF6H9XGB041495",
+    stockNumber: "11334",
+    year: 2016,
+    make: "Honda",
+    model: "Pilot",
+    trim: "Touring",
+    price: 10999,
+    mileage: 164623,
+    exteriorColor: "Silver",
+    interiorColor: "Gray",
+    drivetrain: "AWD",
+    transmission: "9-Speed Automatic",
+    engine: "3.5L V6 i-VTEC",
+    bodyStyle: "SUV",
+    fuelType: "Gasoline",
+    description:
+      "The Touring is Honda's flagship Pilot with every option they offered in 2016. This 3.5L V6 AWD does everything: navigation with turn by turn, adaptive cruise control for highway commutes, LaneWatch blind spot camera, premium audio, and rear A/C to keep the whole crew comfortable. At 164K miles, the i-VTEC V6 is just getting warmed up. AWD with 280 hp, confidence in every Illinois winter. Fully reconditioned in house and ready to drive today. Priced at $10,999. Call Love Auto Group at (630) 359-3643 or visit us at 735 N Yale Ave, Villa Park.",
+    features: [
+      "All-Wheel Drive",
+      "Navigation System",
+      "Adaptive Cruise Control",
+      "Honda LaneWatch",
+      "Premium Audio System",
+      "Heated Leather Seats",
+      "Power Liftgate",
+      "Rear A/C",
+      "Keyless Entry & Start",
+      "Bluetooth & SiriusXM",
+      "Backup Camera",
+    ],
+    images: generateImagePaths("2016-honda-pilot-touring-4d", 2016, "honda", "pilot", 30),
+    status: "available",
+    dateInStock: "2026-04-13",
+    daysOnLot: 5,
+  },
+  {
+    id: "11331",
+    slug: "2017-ford-mustang-ecoboost-premium-11331",
+    vin: "1FA6P8TH6H1202495",
+    stockNumber: "11331",
+    year: 2017,
+    make: "Ford",
+    model: "Mustang",
+    trim: "EcoBoost Premium",
+    price: 13999,
+    mileage: 89085,
+    exteriorColor: "Blue",
+    interiorColor: "Black",
+    drivetrain: "RWD",
+    transmission: "6-Speed Automatic SelectShift",
+    engine: "2.3L 4-Cylinder EcoBoost Turbo",
+    bodyStyle: "Coupe",
+    fuelType: "Gasoline",
+    description:
+      "The EcoBoost Premium is the smart Mustang. 310 turbocharged horsepower, the full Premium interior with leather and SYNC 3, and fuel economy that won't punish your wallet. At 89K miles, this coupe has plenty of road ahead. The 2.3L turbo four delivers real performance while keeping insurance reasonable. Heated and cooled seats, push button start, and that unmistakable Mustang presence. Carefully selected and fully reconditioned. Call Love Auto Group at (630) 359-3643.",
+    features: [
+      "EcoBoost 2.3L Turbo (310 HP)",
+      "Leather Heated & Cooled Seats",
+      "SYNC 3 with 8\" Touchscreen",
+      "Push Button Start",
+      "Rear View Camera",
+      "Bluetooth",
+      "Dual Zone Climate Control",
+      "SelectShift Automatic",
+      "Performance Exhaust",
+      "HID Headlamps",
+    ],
+    images: generateImagePaths("2017-ford-mustang-ecoboost-premium-2d", 2017, "ford", "mustang", 21),
+    status: "available",
+    dateInStock: "2026-04-06",
+    daysOnLot: 12,
+  },
+  {
+    id: "11318",
+    slug: "2010-acura-mdx-sport-11318",
+    vin: "2HNYD2H63AH509874",
+    stockNumber: "11318",
+    year: 2010,
+    make: "Acura",
+    model: "MDX",
+    trim: "Sport",
+    price: 4499,
+    mileage: 213197,
+    exteriorColor: "Black",
+    interiorColor: "Black",
+    drivetrain: "AWD",
+    transmission: "5-Speed Automatic",
+    engine: "3.7L V6 VTEC",
+    bodyStyle: "SUV",
+    fuelType: "Gasoline",
+    description:
+      "The Acura MDX Sport is a three row luxury SUV that was built to last, and this one proves it. The 3.7L V6 with Super Handling AWD delivers confident performance in every season. Third row seating, premium audio, and the kind of build quality Honda and Acura are known for. At $4,499, this is a lot of SUV for the money. Thoroughly inspected, fully reconditioned, and ready for the road. Call Love Auto Group at (630) 359-3643.",
+    features: [
+      "Super Handling All-Wheel Drive (SH-AWD)",
+      "3.7L VTEC V6",
+      "Third Row Seating",
+      "Leather Interior",
+      "Power Moonroof",
+      "Bluetooth HandsFreeLink",
+      "Rearview Camera",
+      "Heated Front Seats",
+      "Power Liftgate",
+    ],
+    images: generateImagePaths("2010-acura-mdx-sport-4d", 2010, "acura", "mdx", 23),
+    status: "available",
+    dateInStock: "2025-12-22",
+    daysOnLot: 117,
+  },
+  {
+    id: "11316",
+    slug: "2013-gmc-terrain-slt-11316",
+    vin: "2GKALJEK6D1300009",
+    stockNumber: "11316",
+    year: 2013,
+    make: "GMC",
+    model: "Terrain",
+    trim: "SLT-1",
+    price: 4999,
+    mileage: 151419,
+    exteriorColor: "White",
+    interiorColor: "Black",
+    drivetrain: "FWD",
+    transmission: "6-Speed Automatic",
+    engine: "2.4L 4-Cylinder",
+    bodyStyle: "SUV",
+    fuelType: "Gasoline",
+    description:
+      "The GMC Terrain SLT brings premium features to the compact SUV segment. The SLT-1 trim includes leather seating, a touchscreen infotainment system, and a comfortable ride that handles daily commutes and weekend errands with ease. At $4,999, this is an affordable entry into a well equipped SUV. Thoroughly inspected and fully reconditioned. Call Love Auto Group at (630) 359-3643 or visit us at 735 N Yale Ave, Villa Park.",
+    features: [
+      "Leather Heated Seats",
+      "Touchscreen Infotainment",
+      "Bluetooth",
+      "Backup Camera",
+      "Remote Start",
+      "Power Driver Seat",
+      "OnStar",
+      "Pioneer Premium Audio",
+    ],
+    images: generateImagePaths("2013-gmc-terrain-slt-4d", 2013, "gmc", "terrain", 15),
+    status: "available",
+    dateInStock: "2025-12-22",
+    daysOnLot: 117,
+  },
+  {
+    id: "11313",
+    slug: "2017-hyundai-accent-se-11313",
+    vin: "KMHCT4AE6HU222547",
+    stockNumber: "11313",
+    year: 2017,
+    make: "Hyundai",
+    model: "Accent",
+    trim: "SE",
+    price: 3999,
+    mileage: 157597,
+    exteriorColor: "Silver",
+    interiorColor: "Gray",
+    drivetrain: "FWD",
+    transmission: "6-Speed Automatic",
+    engine: "1.6L 4-Cylinder",
+    bodyStyle: "Sedan",
+    fuelType: "Gasoline",
+    description:
+      "The Hyundai Accent SE is an efficient, reliable daily driver that won't break the bank. The 1.6L engine delivers 26 city / 36 highway MPG, keeping fuel costs low. At under $4,000, this is one of the most affordable ways to get into a dependable sedan. Power windows, keyless entry, and air conditioning. Fully inspected, reconditioned, and ready to go. Call Love Auto Group at (630) 359-3643.",
+    features: [
+      "1.6L Engine (137 HP)",
+      "26 City / 36 Highway MPG",
+      "Power Windows",
+      "Air Conditioning",
+      "Keyless Entry",
+      "Electronic Stability Control",
+      "ABS Brakes",
+      "Dual Air Bags",
+      "Side Air Bags",
+    ],
+    images: generateImagePaths("2017-hyundai-accent-4d", 2017, "hyundai", "accent", 21),
+    status: "available",
+    dateInStock: "2026-02-12",
+    daysOnLot: 65,
+  },
+  {
+    id: "11266",
+    slug: "2016-lexus-rc-350-11266",
+    vin: "JTHHE5BC2G5011456",
+    stockNumber: "11266",
+    year: 2016,
+    make: "Lexus",
+    model: "RC 350",
+    trim: "Base",
+    price: 17999,
+    mileage: 135116,
+    exteriorColor: "Black",
+    interiorColor: "Brown Leather",
+    drivetrain: "RWD",
+    transmission: "8-Speed Automatic",
+    engine: "3.5L V6",
+    bodyStyle: "Coupe",
+    fuelType: "Gasoline",
+    description:
+      "The Lexus RC 350 is a head turner that backs up its looks with 306 horsepower and Lexus reliability. This one comes in black over rich brown leather, the Premium Package with blind spot monitoring, navigation, Bluetooth, and the kind of fit and finish that makes every drive feel special. At 135K miles, the 3.5L V6 is proven and smooth. Rated a \"Great Deal\" by CarGurus. Carefully selected and fully reconditioned. Call Love Auto Group at (630) 359-3643.",
+    features: [
+      "3.5L V6 (306 HP)",
+      "Premium Package",
+      "Blind Spot Monitor",
+      "Navigation System",
+      "Brown Leather Interior",
+      "Bluetooth & SiriusXM",
+      "Safety Connect",
+      "Daytime Running Lights",
+      "Power Moonroof",
+      "8-Speed Automatic",
+    ],
+    images: generateImagePaths("2016-lexus-rc-350-2d", 2016, "lexus", "rc", 24),
+    status: "available",
+    dateInStock: "2025-08-18",
+    daysOnLot: 243,
+  },
+  {
+    id: "11262",
+    slug: "2008-saab-9-3-convertible-11262",
+    vin: "YS3FB79Y886005860",
+    stockNumber: "11262",
+    year: 2008,
+    make: "Saab",
+    model: "9-3",
+    trim: "2.0T",
+    price: 2499,
+    mileage: 192389,
+    exteriorColor: "Gray",
+    interiorColor: "Gray Leather",
+    drivetrain: "FWD",
+    transmission: "Automatic with Sentronic",
+    engine: "2.0L 4-Cylinder Turbo",
+    bodyStyle: "Convertible",
+    fuelType: "Gasoline",
+    description:
+      "A Saab 9-3 convertible is something you don't see every day, and at $2,499, this is an affordable way to enjoy top down driving. The 2.0T turbocharged engine delivers spirited performance, the leather interior is comfortable, and the power roof folds away for open air cruising. Fog lights, cruise control, and rollover protection. Thoroughly inspected and priced to move. Call Love Auto Group at (630) 359-3643.",
+    features: [
+      "2.0L Turbo Engine",
+      "Power Convertible Top",
+      "Leather Seats",
+      "Cruise Control",
+      "Fog Lights",
+      "Rollover Protection",
+      "Power Windows & Locks",
+      "Air Conditioning",
+      "AM/FM/XM Satellite",
+      "ABS Brakes",
+    ],
+    images: generateImagePaths("2008-saab-9-3-2d", 2008, "saab", "9-3", 23),
+    status: "available",
+    dateInStock: "2025-06-23",
+    daysOnLot: 299,
+  },
+];
+
+export function getVehicleBySlug(slug: string): Vehicle | undefined {
+  return sampleInventory.find((v) => v.slug === slug);
+}
+
+export function getFilteredInventory(filters: {
+  make?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  maxMileage?: number;
+  bodyStyle?: string;
+  sortBy?: string;
+}): Vehicle[] {
+  let results = sampleInventory.filter((v) => v.status === "available");
+
+  if (filters.make) {
+    results = results.filter(
+      (v) => v.make.toLowerCase() === filters.make!.toLowerCase()
+    );
+  }
+  if (filters.minPrice) {
+    results = results.filter((v) => v.price >= filters.minPrice!);
+  }
+  if (filters.maxPrice) {
+    results = results.filter((v) => v.price <= filters.maxPrice!);
+  }
+  if (filters.maxMileage) {
+    results = results.filter((v) => v.mileage <= filters.maxMileage!);
+  }
+  if (filters.bodyStyle) {
+    results = results.filter(
+      (v) => v.bodyStyle.toLowerCase() === filters.bodyStyle!.toLowerCase()
+    );
+  }
+
+  switch (filters.sortBy) {
+    case "price-asc":
+      results.sort((a, b) => a.price - b.price);
+      break;
+    case "price-desc":
+      results.sort((a, b) => b.price - a.price);
+      break;
+    case "mileage-asc":
+      results.sort((a, b) => a.mileage - b.mileage);
+      break;
+    case "newest":
+      results.sort((a, b) => b.year - a.year);
+      break;
+    case "recent":
+    default:
+      results.sort((a, b) => a.daysOnLot - b.daysOnLot);
+      break;
+  }
+
+  return results;
+}

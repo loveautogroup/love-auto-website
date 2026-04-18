@@ -1,131 +1,173 @@
-import type { Metadata } from 'next';
-import { SITE_CONFIG } from '@/lib/constants';
+import type { Metadata } from "next";
+import { SITE_CONFIG } from "@/lib/constants";
+import ContactForm from "./ContactForm";
 
 export const metadata: Metadata = {
-  title: 'Contact Us',
+  title: "Contact Us",
   description:
-    'Contact Love Auto Group in Villa Park, IL. Call (630) 359-3643, visit us at 735 N Yale Ave, or send us a message.',
+    "Contact Love Auto Group in Villa Park, IL. Call (630) 359-3643 or visit us at 735 N Yale Ave. Open Mon–Sat.",
 };
 
 export default function ContactPage() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-20">
-      <h1
-        className="text-3xl md:text-4xl font-bold text-gray-900"
-        style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
-      >
-        Contact Us
-      </h1>
-      <p className="mt-2 text-gray-500 text-lg">
-        We would love to hear from you. Reach out anytime.
-      </p>
-
-      <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Contact form */}
-        <div>
-          <h2 className="font-bold text-gray-900 text-xl mb-6" style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}>
-            Send Us a Message
-          </h2>
-          <form className="space-y-5">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-              <input
-                type="text" id="name" name="name" required
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-red-500 focus:ring-red-500"
-                placeholder="Your name"
-              />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                <input
-                  type="tel" id="phone" name="phone" required
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-red-500 focus:ring-red-500"
-                  placeholder="(555) 123-4567"
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input
-                  type="email" id="email" name="email" required
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-red-500 focus:ring-red-500"
-                  placeholder="you@example.com"
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-              <textarea
-                id="message" name="message" rows={5} required
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-red-500 focus:ring-red-500 resize-none"
-                placeholder="How can we help you?"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg text-sm font-semibold transition-colors"
-            >
-              Send Message
-            </button>
-          </form>
+    <>
+      <section className="bg-brand-navy text-white py-16">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold">Contact Us</h1>
+          <p className="mt-4 text-lg text-brand-gray-300">
+            Stop by, give us a call, or send a message. We&apos;d love to hear
+            from you
+          </p>
         </div>
+      </section>
 
-        {/* Contact info + map */}
-        <div>
-          <h2 className="font-bold text-gray-900 text-xl mb-6" style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}>
-            Find Us
-          </h2>
+      <section className="max-w-7xl mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Contact info */}
+          <div>
+            <h2 className="text-2xl font-bold text-brand-gray-900 mb-6">
+              Get in Touch
+            </h2>
 
-          <div className="space-y-4 mb-8">
-            <div className="flex items-start gap-3">
-              <svg className="w-5 h-5 text-red-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <div>
-                <p className="font-medium text-gray-900">Address</p>
-                <p className="text-gray-600 text-sm">{SITE_CONFIG.address.full}</p>
+            <div className="space-y-6">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-brand-red/10 rounded-xl flex items-center justify-center shrink-0">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6 text-brand-red"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-brand-gray-900">Phone</h3>
+                  <a
+                    href={`tel:${SITE_CONFIG.phoneRaw}`}
+                    className="text-brand-red hover:text-brand-red-dark text-lg font-medium"
+                  >
+                    {SITE_CONFIG.phone}
+                  </a>
+                  <p className="text-sm text-brand-gray-500 mt-0.5">
+                    Call or text during business hours
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <svg className="w-5 h-5 text-red-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              <div>
-                <p className="font-medium text-gray-900">Phone</p>
-                <a href={`tel:${SITE_CONFIG.phoneRaw}`} className="text-red-600 hover:text-red-700 text-sm">{SITE_CONFIG.phone}</a>
+
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-brand-red/10 rounded-xl flex items-center justify-center shrink-0">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6 text-brand-red"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-brand-gray-900">Email</h3>
+                  <a
+                    href={`mailto:${SITE_CONFIG.email}`}
+                    className="text-brand-red hover:text-brand-red-dark"
+                  >
+                    {SITE_CONFIG.email}
+                  </a>
+                </div>
               </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <svg className="w-5 h-5 text-red-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <p className="font-medium text-gray-900">Business Hours</p>
-                <div className="text-sm text-gray-600 space-y-0.5 mt-1">
-                  {Object.entries(SITE_CONFIG.hours).map(([day, hours]) => (
-                    <div key={day} className="flex gap-4">
-                      <span className="capitalize w-24">{day}</span>
-                      <span className={hours === 'Closed' ? 'text-red-500' : ''}>{hours}</span>
-                    </div>
-                  ))}
+
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-brand-red/10 rounded-xl flex items-center justify-center shrink-0">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6 text-brand-red"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-brand-gray-900">Address</h3>
+                  <p className="text-brand-gray-700">
+                    {SITE_CONFIG.address.street}
+                    <br />
+                    {SITE_CONFIG.address.city}, {SITE_CONFIG.address.state}{" "}
+                    {SITE_CONFIG.address.zip}
+                  </p>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(SITE_CONFIG.address.full)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-brand-red hover:underline mt-1 inline-block"
+                  >
+                    Get Directions →
+                  </a>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Map placeholder */}
-          <div className="aspect-[4/3] bg-gray-200 rounded-xl overflow-hidden flex items-center justify-center">
-            <div className="text-center text-gray-400">
-              <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <p className="text-sm">Google Maps embed</p>
+            {/* Hours */}
+            <div className="mt-8 bg-white rounded-xl border border-brand-gray-200 p-6">
+              <h3 className="font-bold text-brand-gray-900 mb-4">
+                Business Hours
+              </h3>
+              <ul className="space-y-2">
+                {SITE_CONFIG.hours.map((h) => (
+                  <li key={h.day} className="flex justify-between text-sm">
+                    <span className="text-brand-gray-500">{h.day}</span>
+                    <span
+                      className={`font-medium ${h.hours === "Closed" ? "text-brand-red" : "text-brand-gray-900"}`}
+                    >
+                      {h.hours}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Map */}
+            <div className="mt-6 bg-brand-gray-200 rounded-xl aspect-video flex items-center justify-center">
+              <div className="text-center text-brand-gray-500">
+                <p className="font-medium">Google Maps Embed</p>
+                <p className="text-sm">{SITE_CONFIG.address.full}</p>
+              </div>
             </div>
           </div>
+
+          {/* Contact form */}
+          <div>
+            <h2 className="text-2xl font-bold text-brand-gray-900 mb-6">
+              Send Us a Message
+            </h2>
+            <ContactForm />
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </>
   );
 }

@@ -1,315 +1,464 @@
-import Link from 'next/link';
-import VehicleCard from '@/components/ui/VehicleCard';
-import { FEATURED_VEHICLES } from '@/data/featured-vehicles';
-import { SITE_CONFIG, TRUST_PILLARS } from '@/lib/constants';
+import Link from "next/link";
+import { SITE_CONFIG } from "@/lib/constants";
+import { sampleInventory } from "@/data/inventory";
+import VehicleCard from "@/components/VehicleCard";
+import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
+import PaymentCalculator from "@/components/PaymentCalculator";
 
-/* ── Icon helper ────────────────────────────────────────────── */
-function TrustIcon({ icon }: { icon: string }) {
-  const cls = 'w-8 h-8 text-red-600';
-  if (icon === 'shield-check') {
-    return (
-      <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-      </svg>
-    );
-  }
-  if (icon === 'tag') {
-    return (
-      <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-          d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-      </svg>
-    );
-  }
-  return (
-    <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-    </svg>
-  );
-}
+export default async function HomePage() {
+  const featuredVehicles = sampleInventory
+    .filter((v) => v.status === "available")
+    .slice(0, 6);
 
-/* ── Star rating ────────────────────────────────────────────── */
-function Stars({ rating }: { rating: number }) {
-  return (
-    <div className="flex gap-0.5" aria-label={`${rating} out of 5 stars`}>
-      {[1, 2, 3, 4, 5].map((i) => (
-        <svg
-          key={i}
-          className={`w-5 h-5 ${i <= Math.round(rating) ? 'text-yellow-400' : 'text-gray-300'}`}
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-        </svg>
-      ))}
-    </div>
-  );
-}
-
-/* ── Page ───────────────────────────────────────────────────── */
-export default function HomePage() {
   return (
     <>
-      {/* ═══════ HERO ═══════ */}
-      <section className="relative bg-gray-900 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0"
-            style={{
-              backgroundImage: 'radial-gradient(circle at 25% 50%, #dc2626 0%, transparent 50%), radial-gradient(circle at 75% 50%, #dc2626 0%, transparent 50%)',
-            }}
-          />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 md:py-28 lg:py-36">
+      {/* Hero Section */}
+      <section className="relative bg-brand-navy text-white overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-brand-navy to-[#1a1a2e]" />
+        <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24 lg:py-32">
           <div className="max-w-2xl">
-            <p className="text-red-400 font-semibold text-sm uppercase tracking-wider mb-3">
-              Villa Park, IL
-            </p>
-            <h1
-              className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
-              style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
-            >
-              Quality Vehicles You Can{' '}
-              <span className="text-red-500">Trust</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              Find Your Next Ride
+              <span className="block text-brand-red mt-2">
+                at Love Auto Group
+              </span>
             </h1>
-            <p className="mt-5 text-lg text-gray-300 leading-relaxed max-w-xl">
-              Every vehicle at Love Auto Group is carefully selected, fully reconditioned,
-              and thoroughly inspected. Family owned since 2014, we make buying a used
-              car simple, honest, and stress-free.
+            <p className="mt-6 text-lg md:text-xl text-brand-gray-300 leading-relaxed">
+              Quality used vehicles, inspected, reconditioned, and ready to
+              drive. Family owned in Villa Park, IL since 2014.
             </p>
-
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+            <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <Link
                 href="/inventory"
-                className="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white px-8 py-3.5 rounded-lg text-base font-semibold transition-colors"
+                className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors"
               >
                 Browse Inventory
-                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="ml-2 w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
                 </svg>
               </Link>
               <Link
                 href="/financing"
-                className="inline-flex items-center justify-center bg-white/10 hover:bg-white/20 text-white px-8 py-3.5 rounded-lg text-base font-semibold border border-white/20 transition-colors"
+                className="inline-flex items-center justify-center border-2 border-white/30 hover:bg-white/10 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors"
               >
                 Get Pre-Approved
               </Link>
             </div>
-
-            <div className="mt-10 flex items-center gap-4 text-sm text-gray-400">
-              <Stars rating={SITE_CONFIG.googleReviews.rating} />
-              <span>
-                <strong className="text-white">{SITE_CONFIG.googleReviews.rating}</strong> from{' '}
-                {SITE_CONFIG.googleReviews.count}+ Google reviews
-              </span>
-            </div>
           </div>
-        </div>
-      </section>
 
-      {/* ═══════ QUICK SEARCH BAR ═══════ */}
-      <section className="relative -mt-6 z-10 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-gray-200 p-4 md:p-6">
-          <form action="/inventory" method="GET" className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-            <select name="make" className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-700 focus:border-red-500 focus:ring-red-500" defaultValue="">
-              <option value="">Any Make</option>
-              <option>Lexus</option>
-              <option>Subaru</option>
-              <option>Acura</option>
-              <option>Mazda</option>
-              <option>Toyota</option>
-              <option>Honda</option>
-            </select>
-            <select name="maxPrice" className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-700 focus:border-red-500 focus:ring-red-500" defaultValue="">
-              <option value="">Any Price</option>
-              <option value="10000">Under $10,000</option>
-              <option value="15000">Under $15,000</option>
-              <option value="20000">Under $20,000</option>
-              <option value="25000">Under $25,000</option>
-            </select>
-            <select name="bodyStyle" className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-700 focus:border-red-500 focus:ring-red-500" defaultValue="">
-              <option value="">Any Style</option>
-              <option>Sedan</option>
-              <option>SUV</option>
-              <option>Truck</option>
-              <option>Coupe</option>
-              <option>Hatchback</option>
-            </select>
-            <button type="submit" className="bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg px-6 py-3 text-sm transition-colors flex items-center justify-center gap-2">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              Search
-            </button>
-          </form>
-        </div>
-      </section>
-
-      {/* ═══════ FEATURED VEHICLES ═══════ */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-20">
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900" style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}>
-              Featured Vehicles
-            </h2>
-            <p className="mt-2 text-gray-500">Hand-picked from our current inventory</p>
-          </div>
-          <Link href="/inventory" className="hidden sm:flex items-center gap-1 text-sm font-medium text-red-600 hover:text-red-700 transition-colors">
-            View All
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {FEATURED_VEHICLES.map((vehicle) => (
-            <VehicleCard key={vehicle.id} vehicle={vehicle} />
-          ))}
-        </div>
-        <div className="mt-8 text-center sm:hidden">
-          <Link href="/inventory" className="inline-flex items-center gap-1 text-sm font-semibold text-red-600">
-            View All Inventory
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
-      </section>
-
-      {/* ═══════ TRUST PILLARS ═══════ */}
-      <section className="bg-gray-50 border-y border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-20">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-12" style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}>
-            Why Love Auto Group?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-            {TRUST_PILLARS.map((pillar) => (
-              <div key={pillar.title} className="text-center">
-                <div className="inline-flex items-center justify-center w-14 h-14 bg-red-50 rounded-2xl mb-4">
-                  <TrustIcon icon={pillar.icon} />
-                </div>
-                <h3 className="font-bold text-gray-900 text-lg mb-2" style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}>
-                  {pillar.title}
-                </h3>
-                <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">
-                  {pillar.description}
-                </p>
+          {/* Quick Search */}
+          <div className="mt-12 bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-4xl">
+            <form
+              action="/inventory"
+              className="grid grid-cols-1 sm:grid-cols-4 gap-4"
+            >
+              <div>
+                <label
+                  htmlFor="hero-make"
+                  className="block text-sm font-medium text-brand-gray-300 mb-1"
+                >
+                  Make
+                </label>
+                <select
+                  id="hero-make"
+                  name="make"
+                  className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-white placeholder-brand-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-red"
+                >
+                  <option value="">All Makes</option>
+                  <option value="subaru">Subaru</option>
+                  <option value="lexus">Lexus</option>
+                  <option value="acura">Acura</option>
+                  <option value="mazda">Mazda</option>
+                  <option value="honda">Honda</option>
+                  <option value="toyota">Toyota</option>
+                </select>
               </div>
+              <div>
+                <label
+                  htmlFor="hero-price"
+                  className="block text-sm font-medium text-brand-gray-300 mb-1"
+                >
+                  Max Price
+                </label>
+                <select
+                  id="hero-price"
+                  name="maxPrice"
+                  className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-brand-red"
+                >
+                  <option value="">Any Price</option>
+                  <option value="8000">Under $8,000</option>
+                  <option value="10000">Under $10,000</option>
+                  <option value="12000">Under $12,000</option>
+                  <option value="15000">Under $15,000</option>
+                  <option value="18000">Under $18,000</option>
+                </select>
+              </div>
+              <div>
+                <label
+                  htmlFor="hero-type"
+                  className="block text-sm font-medium text-brand-gray-300 mb-1"
+                >
+                  Body Style
+                </label>
+                <select
+                  id="hero-type"
+                  name="bodyStyle"
+                  className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-brand-red"
+                >
+                  <option value="">All Types</option>
+                  <option value="suv">SUV</option>
+                  <option value="sedan">Sedan</option>
+                  <option value="wagon">Wagon</option>
+                  <option value="truck">Truck</option>
+                  <option value="coupe">Coupe</option>
+                </select>
+              </div>
+              <div className="flex items-end">
+                <button
+                  type="submit"
+                  className="w-full bg-brand-gold hover:bg-brand-gold-light text-brand-navy font-bold px-6 py-2.5 rounded-lg transition-colors"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {/* Quick-Filter Pills — CarMax-inspired one-tap shortcuts */}
+          <div className="mt-6 flex flex-wrap gap-2">
+            {[
+              { label: "Under $10K", href: "/inventory?maxPrice=10000" },
+              { label: "Under $15K", href: "/inventory?maxPrice=15000" },
+              { label: "AWD", href: "/inventory?drivetrain=AWD" },
+              { label: "SUVs", href: "/inventory?bodyStyle=suv" },
+              { label: "Sedans", href: "/inventory?bodyStyle=sedan" },
+              { label: "Low Mileage", href: "/inventory?maxMileage=60000" },
+              { label: "Just Arrived", href: "/inventory?sortBy=recent" },
+            ].map((pill) => (
+              <Link
+                key={pill.label}
+                href={pill.href}
+                className="inline-flex items-center bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/40 text-white text-sm font-medium px-4 py-2 rounded-full transition-all"
+              >
+                {pill.label}
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══════ GOOGLE REVIEWS ═══════ */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-20">
+      {/* Featured Vehicles */}
+      <section className="max-w-7xl mx-auto px-4 py-16" aria-labelledby="featured-heading">
         <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900" style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}>
-            What Our Customers Say
+          <h2 id="featured-heading" className="text-3xl font-bold text-brand-gray-900">
+            Featured Vehicles
           </h2>
-          <div className="mt-3 flex items-center justify-center gap-2">
-            <Stars rating={SITE_CONFIG.googleReviews.rating} />
-            <span className="text-sm text-gray-500">
-              {SITE_CONFIG.googleReviews.rating} stars from {SITE_CONFIG.googleReviews.count}+ reviews on Google
-            </span>
-          </div>
+          <p className="mt-2 text-brand-gray-500">
+            Hand-picked from our inventory, inspected and ready to drive
+          </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { name: 'Michael R.', text: 'Best car buying experience I have ever had. Jeremiah was upfront about everything and the car was in amazing condition. No pressure, no games. I will be back for my next vehicle.', date: 'March 2026' },
-            { name: 'Sarah K.', text: 'Bought a Subaru Forester and it was exactly as described. You can tell they put real work into reconditioning their cars. The whole process was quick and straightforward.', date: 'February 2026' },
-            { name: 'David L.', text: 'Family owned and it shows. They treated us like neighbors, not just customers. Fair price, clean vehicle, no hidden fees. Already recommended them to two friends.', date: 'January 2026' },
-          ].map((review) => (
-            <div key={review.name} className="bg-white border border-gray-200 rounded-xl p-6">
-              <Stars rating={5} />
-              <p className="mt-4 text-gray-600 text-sm leading-relaxed">&ldquo;{review.text}&rdquo;</p>
-              <div className="mt-4 flex items-center gap-2">
-                <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                  <span className="text-red-600 font-semibold text-xs">{review.name.charAt(0)}</span>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">{review.name}</p>
-                  <p className="text-xs text-gray-400">{review.date}</p>
-                </div>
-              </div>
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredVehicles.map((vehicle) => (
+            <VehicleCard key={vehicle.id} vehicle={vehicle} />
           ))}
         </div>
+        <div className="text-center mt-10">
+          <Link
+            href="/inventory"
+            className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3 rounded-xl font-semibold transition-colors"
+          >
+            View All Inventory
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="ml-2 w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
+          </Link>
+        </div>
       </section>
 
-      {/* ═══════ FINANCING CTA ═══════ */}
-      <section className="bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-20">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}>
-              Get Pre-Approved in Minutes
-            </h2>
-            <p className="mt-3 text-gray-400 leading-relaxed">
-              Quick, easy, and it will not affect your credit score. We work with multiple lenders to find the best rate for your situation.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
-              <Link href="/financing" className="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white px-8 py-3.5 rounded-lg text-base font-semibold transition-colors">
-                Apply for Financing
-              </Link>
-              <a href={`tel:${SITE_CONFIG.phoneRaw}`} className="inline-flex items-center justify-center bg-white/10 hover:bg-white/20 text-white px-8 py-3.5 rounded-lg text-base font-semibold border border-white/20 transition-colors">
-                Call {SITE_CONFIG.phone}
-              </a>
+      {/* On the Lot Now — horizontal scroll carousel */}
+      <section className="bg-brand-navy py-12" aria-labelledby="lot-heading">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-baseline justify-between mb-6">
+            <div>
+              <h2 id="lot-heading" className="text-2xl font-bold text-white">
+                On the Lot Now
+              </h2>
+              <p className="text-brand-gray-300 text-sm mt-1">
+                Available today in Villa Park
+              </p>
+            </div>
+            <Link
+              href="/inventory"
+              className="text-brand-red-light hover:text-white text-sm font-semibold transition-colors"
+            >
+              View All →
+            </Link>
+          </div>
+          <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+            {sampleInventory
+              .filter((v) => v.status === "available")
+              .map((v) => {
+                const price = new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0,
+                }).format(v.price);
+                const miles = new Intl.NumberFormat("en-US").format(v.mileage);
+                return (
+                  <Link
+                    key={v.id}
+                    href={`/inventory/${v.slug}`}
+                    className="min-w-[260px] sm:min-w-[280px] bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-xl overflow-hidden transition-all snap-start shrink-0 group"
+                  >
+                    <div className="aspect-[4/3] bg-brand-gray-700/50 relative">
+                      {v.daysOnLot <= 7 && (
+                        <span className="absolute top-2 left-2 bg-brand-green text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                          Just Arrived
+                        </span>
+                      )}
+                    </div>
+                    <div className="p-3">
+                      <h3 className="font-bold text-white text-sm group-hover:text-brand-red-light transition-colors">
+                        {v.year} {v.make} {v.model}
+                      </h3>
+                      <div className="flex items-baseline justify-between mt-1.5">
+                        <span className="text-brand-red-light font-bold">
+                          {price}
+                        </span>
+                        <span className="text-xs text-brand-gray-400">
+                          {miles} mi
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Pillars */}
+      <section className="bg-white py-16" aria-labelledby="why-heading">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 id="why-heading" className="text-3xl font-bold text-center text-brand-gray-900 mb-12">
+            Why Love Auto Group?
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-brand-red/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-8 h-8 text-brand-red"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-brand-gray-900 mb-2">
+                Every Vehicle Inspected
+              </h3>
+              <p className="text-brand-gray-500 leading-relaxed">
+                Every vehicle is thoroughly inspected and reconditioned
+                before it hits the lot. No surprises, just quality you can
+                trust.
+              </p>
+            </div>
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-brand-red/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-8 h-8 text-brand-red"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-brand-gray-900 mb-2">
+                Transparent Pricing
+              </h3>
+              <p className="text-brand-gray-500 leading-relaxed">
+                Our prices are competitive and clearly listed. No hidden fees, no
+                pressure tactics. Just deals that respect your
+                time and budget.
+              </p>
+            </div>
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-brand-red/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-8 h-8 text-brand-red"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-brand-gray-900 mb-2">
+                Family Owned Since 2014
+              </h3>
+              <p className="text-brand-gray-500 leading-relaxed">
+                We&apos;re not a big corporate dealer group. We know our
+                customers by name, and our reputation is everything. That&apos;s
+                why we do it right.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ═══════ LOCATION & HOURS ═══════ */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-20">
+      {/* Google Reviews Badge — live data from Places API, refreshed hourly */}
+      <GoogleReviewsBadge variant="full" />
+
+      {/* Interactive Payment Calculator — CarMax-inspired */}
+      <PaymentCalculator />
+
+      {/* Location & Hours */}
+      <section className="max-w-7xl mx-auto px-4 py-16" aria-labelledby="visit-heading">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900" style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}>
+            <h2 id="visit-heading" className="text-3xl font-bold text-brand-gray-900 mb-6">
               Visit Us in Villa Park
             </h2>
-            <p className="mt-3 text-gray-500 leading-relaxed">
-              Located on Yale Avenue in Villa Park, just minutes from Elmhurst, Lombard, and Addison. Stop by for a test drive or just to see what we have on the lot.
-            </p>
-            <div className="mt-6 space-y-3">
+            <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-red-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 text-brand-red mt-0.5 shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
                 </svg>
-                <span className="text-gray-700">{SITE_CONFIG.address.full}</span>
+                <div>
+                  <p className="font-semibold text-brand-gray-900">
+                    {SITE_CONFIG.address.full}
+                  </p>
+                  <p className="text-sm text-brand-gray-500">
+                    Conveniently located off North Avenue in DuPage County
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
-                <svg className="w-5 h-5 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              <div className="flex items-start gap-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 text-brand-red mt-0.5 shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                  />
                 </svg>
-                <a href={`tel:${SITE_CONFIG.phoneRaw}`} className="text-gray-700 hover:text-red-600 transition-colors font-medium">{SITE_CONFIG.phone}</a>
+                <div>
+                  <a
+                    href={`tel:${SITE_CONFIG.phoneRaw}`}
+                    className="font-semibold text-brand-red hover:text-brand-red-dark"
+                  >
+                    {SITE_CONFIG.phone}
+                  </a>
+                  <p className="text-sm text-brand-gray-500">
+                    Call or text, we respond fast
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="mt-6">
-              <h3 className="font-semibold text-gray-900 mb-2">Hours</h3>
-              <div className="space-y-1 text-sm">
-                {Object.entries(SITE_CONFIG.hours).map(([day, hours]) => (
-                  <div key={day} className="flex justify-between max-w-xs">
-                    <span className="text-gray-500 capitalize">{day}</span>
-                    <span className={hours === 'Closed' ? 'text-red-500 font-medium' : 'text-gray-700'}>{hours}</span>
-                  </div>
+
+            {/* Hours table */}
+            <div className="mt-6 bg-white rounded-xl border border-brand-gray-200 p-5">
+              <h3 className="font-semibold text-brand-gray-900 mb-3">
+                Business Hours
+              </h3>
+              <ul className="space-y-1.5 text-sm">
+                {SITE_CONFIG.hours.map((h) => (
+                  <li key={h.day} className="flex justify-between">
+                    <span className="text-brand-gray-500">{h.day}</span>
+                    <span
+                      className={`font-medium ${h.hours === "Closed" ? "text-brand-red" : "text-brand-gray-900"}`}
+                    >
+                      {h.hours}
+                    </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
-            <Link href="/contact" className="inline-flex items-center gap-2 mt-6 text-sm font-medium text-red-600 hover:text-red-700 transition-colors">
-              Get Directions
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
           </div>
-          <div className="aspect-[4/3] bg-gray-200 rounded-xl overflow-hidden flex items-center justify-center">
-            <div className="text-center text-gray-400">
-              <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+
+          {/* Map placeholder */}
+          <div className="bg-brand-gray-200 rounded-2xl aspect-[4/3] flex items-center justify-center">
+            <div className="text-center text-brand-gray-500">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-12 h-12 mx-auto mb-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                />
               </svg>
-              <p className="text-sm">Google Maps embed goes here</p>
+              <p className="font-medium">Google Maps Embed</p>
+              <p className="text-sm">735 N Yale Ave, Villa Park, IL 60181</p>
             </div>
           </div>
         </div>

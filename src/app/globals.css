@@ -1,46 +1,55 @@
 @import "tailwindcss";
 
-:root {
-  --red-600: #dc2626;
-  --red-700: #b91c1c;
-  --background: #ffffff;
-  --foreground: #111827;
+@theme {
+  /* Love Auto Group Brand Colors — Red / White / Black */
+  --color-brand-navy: #0a0a0a;
+  --color-brand-red: #dc2626;
+  --color-brand-red-dark: #b91c1c;
+  --color-brand-red-light: #ef4444;
+  --color-brand-white: #ffffff;
+
+  /* Legacy aliases — maps old blue/gold refs to new red palette */
+  --color-brand-blue: #dc2626;
+  --color-brand-blue-dark: #b91c1c;
+  --color-brand-gold: #dc2626;
+  --color-brand-gold-light: #ef4444;
+
+  --color-brand-gray-50: #f8fafc;
+  --color-brand-gray-100: #f1f5f9;
+  --color-brand-gray-200: #e2e8f0;
+  --color-brand-gray-300: #cbd5e1;
+  --color-brand-gray-400: #94a3b8;
+  --color-brand-gray-500: #64748b;
+  --color-brand-gray-700: #334155;
+  --color-brand-gray-900: #0f172a;
+  --color-brand-green: #16a34a;
+
+  /* Typography */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
-  --font-heading: var(--font-montserrat);
+/* Skip to main content link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-brand-navy);
+  color: var(--color-brand-white);
+  padding: 8px 16px;
+  z-index: 100;
+  transition: top 0.2s;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+.skip-link:focus {
+  top: 0;
 }
 
-/* Smooth scroll for anchor links */
-html {
-  scroll-behavior: smooth;
+/* Hide scrollbar for horizontal carousels */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-
-/* Focus styles for accessibility */
-*:focus-visible {
-  outline: 2px solid var(--red-600);
-  outline-offset: 2px;
-}
-
-/* Custom scrollbar (webkit) */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-::-webkit-scrollbar-thumb {
-  background: #94a3b8;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

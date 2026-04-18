@@ -1,101 +1,150 @@
-import type { Metadata } from 'next';
-import { SITE_CONFIG } from '@/lib/constants';
+import type { Metadata } from "next";
+import Link from "next/link";
+import { SITE_CONFIG } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: 'FAQ',
+  title: "Frequently Asked Questions",
   description:
-    'Frequently asked questions about buying a used car from Love Auto Group in Villa Park, IL. Financing, trade-ins, warranties, and more.',
+    "Common questions about buying a used car from Love Auto Group in Villa Park, IL. Financing, trade-ins, vehicle history, warranties, and more.",
 };
 
 const faqs = [
   {
-    q: 'Do you offer financing?',
-    a: 'Yes. We work with multiple lenders to find competitive rates for all credit situations. You can apply for pre-approval right on our website and it will not affect your credit score.',
+    question: "What types of vehicles does Love Auto Group sell?",
+    answer:
+      "We specialize in quality Japanese vehicles, including Lexus, Subaru, Acura, and Mazda. We also carry other reliable makes when they meet our standards. Every vehicle on our lot is in the $4,500 to $18,000 price range.",
   },
   {
-    q: 'Are your vehicles inspected before sale?',
-    a: 'Every vehicle is thoroughly inspected and fully reconditioned by our in-house team before it goes on the lot. We do not sell vehicles with hidden problems.',
+    question: "Are your vehicles inspected before sale?",
+    answer:
+      "Yes. Every vehicle we sell is thoroughly inspected and fully reconditioned by our in-house team before it goes on the lot. If something needs fixing, it gets fixed right. We don't cut corners.",
   },
   {
-    q: 'Do you accept trade-ins?',
-    a: 'Absolutely. We will give you a fair market offer on your trade-in. You can submit your vehicle details on our Sell Your Car page or bring it by the lot for an in-person appraisal.',
+    question: "Do you offer financing?",
+    answer:
+      "We work with multiple lenders to help you find financing that fits your budget, including options for buyers with less-than-perfect credit. You can get pre-approved right on our website with no impact to your credit score.",
   },
   {
-    q: 'What brands do you specialize in?',
-    a: 'We focus on quality Japanese makes like Lexus, Subaru, Acura, and Mazda because of their reliability and long-term value. We also carry other makes when we find the right vehicles.',
+    question: "Can I trade in my current vehicle?",
+    answer:
+      "Absolutely. We accept trade-ins and also buy vehicles outright, even if you're not purchasing from us. Visit our Sell Your Car page or stop by the lot for a fair offer.",
   },
   {
-    q: 'Can I schedule a test drive?',
-    a: 'Yes. You can schedule a test drive from any vehicle page on our website, or just give us a call and we will have the car ready when you arrive.',
+    question: "Do you offer warranties?",
+    answer:
+      "We offer optional extended warranty plans on our vehicles. Ask us about coverage options when you visit the lot or give us a call at (630) 359-3643.",
   },
   {
-    q: 'Do you offer warranties?',
-    a: 'We offer extended warranty options on most of our vehicles. Ask us about available coverage when you visit.',
+    question: "Where are you located?",
+    answer:
+      "We're at 735 N Yale Ave in Villa Park, IL 60181. Easy to get to from anywhere in the western suburbs and DuPage County.",
   },
   {
-    q: 'What are your hours?',
-    a: 'Monday 2-7pm, Tuesday through Friday 11am-7pm, Saturday 12-7pm. We are closed on Sundays.',
+    question: "What are your business hours?",
+    answer:
+      "Monday 2PM to 7PM, Tuesday through Friday 11AM to 7PM, Saturday 12PM to 7PM. We're closed on Sundays.",
   },
   {
-    q: 'Where are you located?',
-    a: `We are at ${SITE_CONFIG.address.full}, in the heart of DuPage County. Easy to reach from Elmhurst, Lombard, Addison, and surrounding areas.`,
+    question: "Can I schedule a test drive?",
+    answer:
+      "Yes. You can schedule a test drive by calling us at (630) 359-3643 or by using the contact form on any vehicle listing page. Walk-ins are always welcome too.",
+  },
+  {
+    question: "Do you provide vehicle history reports?",
+    answer:
+      "Yes. We can provide a vehicle history report for any vehicle on our lot. Just ask when you visit or call us.",
+  },
+  {
+    question: "How do you price your vehicles?",
+    answer:
+      "Our prices are competitive and clearly listed. We research the market to make sure you're getting a fair deal. The price you see is the price you pay. No hidden fees, no bait-and-switch.",
+  },
+  {
+    question: "Can I buy a vehicle online and have it delivered?",
+    answer:
+      "We prefer you come see the vehicle in person before purchasing, but we're happy to work with out-of-area buyers on a case-by-case basis. Give us a call to discuss options.",
+  },
+  {
+    question: "What do I need to bring to purchase a vehicle?",
+    answer:
+      "Bring a valid driver's license and proof of insurance. If you're financing, we'll walk you through any additional paperwork. If you're paying cash or with a cashier's check, that's all you need.",
   },
 ];
 
-/* JSON-LD FAQ schema */
-function FAQSchema() {
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
+export default function FAQPage() {
+  // FAQ structured data for Google rich results
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
     mainEntity: faqs.map((faq) => ({
-      '@type': 'Question',
-      name: faq.q,
+      "@type": "Question",
+      name: faq.question,
       acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.a,
+        "@type": "Answer",
+        text: faq.answer,
       },
     })),
   };
-  return (
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-  );
-}
 
-export default function FAQPage() {
   return (
     <>
-      <FAQSchema />
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 md:py-20">
-        <h1
-          className="text-3xl md:text-4xl font-bold text-gray-900"
-          style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
-        >
-          Frequently Asked Questions
-        </h1>
-        <p className="mt-2 text-gray-500">
-          Everything you need to know about buying from Love Auto Group.
-        </p>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
-        <div className="mt-10 space-y-6">
-          {faqs.map((faq, i) => (
-            <div key={i} className="border-b border-gray-200 pb-6 last:border-0">
-              <h2 className="font-semibold text-gray-900 text-lg">{faq.q}</h2>
-              <p className="mt-2 text-gray-600 leading-relaxed">{faq.a}</p>
+      <section className="bg-brand-navy text-white py-16">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold">
+            Frequently Asked Questions
+          </h1>
+          <p className="mt-4 text-lg text-brand-gray-300">
+            Everything you need to know about buying from Love Auto Group
+          </p>
+        </div>
+      </section>
+
+      <section className="max-w-3xl mx-auto px-4 py-16">
+        <div className="space-y-6">
+          {faqs.map((faq, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-xl border border-brand-gray-200 p-6"
+            >
+              <h2 className="text-lg font-bold text-brand-gray-900">
+                {faq.question}
+              </h2>
+              <p className="mt-3 text-brand-gray-600 leading-relaxed">
+                {faq.answer}
+              </p>
             </div>
           ))}
         </div>
 
-        <div className="mt-12 bg-gray-50 border border-gray-200 rounded-xl p-6 text-center">
-          <p className="font-semibold text-gray-900">Still have questions?</p>
-          <p className="text-gray-500 text-sm mt-1">
-            Give us a call at{' '}
-            <a href={`tel:${SITE_CONFIG.phoneRaw}`} className="text-red-600 font-semibold hover:text-red-700">
-              {SITE_CONFIG.phone}
-            </a>{' '}
-            or visit us at the lot.
+        {/* CTA */}
+        <div className="mt-16 bg-brand-red rounded-2xl p-8 md:p-12 text-center text-white">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">
+            Still Have Questions?
+          </h2>
+          <p className="text-red-100 mb-6 max-w-xl mx-auto">
+            We're happy to help. Give us a call or send us a message.
           </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center bg-white text-brand-red px-8 py-3 rounded-xl font-bold hover:bg-brand-gray-100 transition-colors"
+            >
+              Contact Us
+            </Link>
+            <a
+              href={`tel:${SITE_CONFIG.phoneRaw}`}
+              className="inline-flex items-center justify-center border-2 border-white/30 hover:bg-white/10 text-white px-8 py-3 rounded-xl font-semibold transition-colors"
+            >
+              Call {SITE_CONFIG.phone}
+            </a>
+          </div>
         </div>
-      </div>
+      </section>
     </>
   );
 }
