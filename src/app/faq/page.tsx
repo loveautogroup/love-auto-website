@@ -1,185 +1,101 @@
-import type { Metadata } from "next";
-import StructuredData from "@/components/StructuredData";
-
-// ============================================================================
-// FAQ Page — Used Car Buying Questions with JSON-LD Structured Data
-// ============================================================================
+import type { Metadata } from 'next';
+import { SITE_CONFIG } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: "FAQ | Used Car Buying Questions | Love Auto Group Villa Park IL",
+  title: 'FAQ',
   description:
-    "Answers to common questions about buying used cars, financing, trade-ins, and test drives at Love Auto Group in Villa Park, IL.",
-  openGraph: {
-    title: "Frequently Asked Questions | Love Auto Group",
-    description:
-      "Find answers about used car financing, trade-ins, inspections, and more at Love Auto Group Villa Park.",
-    type: "website",
-  },
+    'Frequently asked questions about buying a used car from Love Auto Group in Villa Park, IL. Financing, trade-ins, warranties, and more.',
 };
 
-interface FaqItem {
-  question: string;
-  answer: string;
-}
-
-const faqs: FaqItem[] = [
+const faqs = [
   {
-    question: "What types of vehicles does Love Auto Group sell?",
-    answer:
-      "We carry a wide selection of pre-owned cars, trucks, SUVs, and minivans from popular brands like Toyota, Honda, Ford, Chevrolet, Hyundai, and more. Our inventory changes frequently, so check our online listings or call (630) 359-3643 for the latest availability.",
+    q: 'Do you offer financing?',
+    a: 'Yes. We work with multiple lenders to find competitive rates for all credit situations. You can apply for pre-approval right on our website and it will not affect your credit score.',
   },
   {
-    question: "Do you offer financing for used cars?",
-    answer:
-      "Yes. We work with multiple banks and credit unions to find you the best rate and terms available. We submit your application to several lenders at once so you get competitive offers without having to shop around yourself.",
+    q: 'Are your vehicles inspected before sale?',
+    a: 'Every vehicle is thoroughly inspected and fully reconditioned by our in-house team before it goes on the lot. We do not sell vehicles with hidden problems.',
   },
   {
-    question: "Which banks and credit unions do you work with?",
-    answer:
-      "We partner with a network of trusted local and national banks as well as credit unions. Our relationships with multiple lenders allow us to find financing options for a wide range of credit profiles. Ask our team for specific lender details.",
+    q: 'Do you accept trade-ins?',
+    a: 'Absolutely. We will give you a fair market offer on your trade-in. You can submit your vehicle details on our Sell Your Car page or bring it by the lot for an in-person appraisal.',
   },
   {
-    question: "Can I get financing if my credit is not perfect?",
-    answer:
-      "Yes. Because we work with multiple lenders, we can often find financing solutions for customers who are rebuilding their credit or are first-time buyers. Our finance team will work with you to explore all available options.",
+    q: 'What brands do you specialize in?',
+    a: 'We focus on quality Japanese makes like Lexus, Subaru, Acura, and Mazda because of their reliability and long-term value. We also carry other makes when we find the right vehicles.',
   },
   {
-    question: "Will applying for financing affect my credit score?",
-    answer:
-      "Our initial pre-approval process is designed to give you an idea of your options. When you decide to move forward, the lender will run a standard credit inquiry as part of the loan approval process. Our team can explain exactly what to expect at each step.",
+    q: 'Can I schedule a test drive?',
+    a: 'Yes. You can schedule a test drive from any vehicle page on our website, or just give us a call and we will have the car ready when you arrive.',
   },
   {
-    question: "How much of a down payment do I need?",
-    answer:
-      "Down payment requirements vary depending on the vehicle and financing option. We try to keep down payments as affordable as possible and can work with you to find a plan that fits your budget. Call us at (630) 359-3643 to discuss your specific situation.",
+    q: 'Do you offer warranties?',
+    a: 'We offer extended warranty options on most of our vehicles. Ask us about available coverage when you visit.',
   },
   {
-    question: "Do you accept trade-ins?",
-    answer:
-      "Yes, we accept trade-ins. Bring your vehicle to our lot at 735 N Yale Ave, Villa Park, and we will give you a fair appraisal. The trade-in value can be applied toward your down payment or the purchase price of your next vehicle.",
+    q: 'What are your hours?',
+    a: 'Monday 2-7pm, Tuesday through Friday 11am-7pm, Saturday 12-7pm. We are closed on Sundays.',
   },
   {
-    question: "Can I test drive a vehicle before buying?",
-    answer:
-      "Of course. We encourage every customer to take a test drive before making a decision. Just bring a valid driver license and proof of insurance. You can walk in during business hours or call ahead to schedule an appointment.",
-  },
-  {
-    question: "Are your vehicles inspected before sale?",
-    answer:
-      "Yes. Every vehicle on our lot goes through a thorough inspection to check for mechanical issues, safety concerns, and cosmetic condition. We want you to drive away with confidence, knowing your car is safe and reliable.",
-  },
-  {
-    question: "Do you offer any warranties on used cars?",
-    answer:
-      "Some vehicles may come with remaining manufacturer warranty coverage. We also offer optional extended warranty plans for additional peace of mind. Ask our team about warranty options for the specific vehicle you are interested in.",
-  },
-  {
-    question: "What documents do I need to buy a car?",
-    answer:
-      "You will need a valid driver license, proof of income (such as recent pay stubs), proof of residence (a utility bill or bank statement), and proof of auto insurance. For financing, additional documents may be required depending on the lender.",
-  },
-  {
-    question: "Can I purchase a vehicle online or over the phone?",
-    answer:
-      "You can start the process online by browsing our inventory and submitting a financing pre-approval application. However, we recommend visiting our dealership in person to inspect and test drive the vehicle before completing the purchase.",
-  },
-  {
-    question: "Where is Love Auto Group located?",
-    answer:
-      "We are located at 735 N Yale Ave, Villa Park, IL 60181. We are easily accessible from Lombard, Addison, Elmhurst, Glen Ellyn, Wheaton, Oak Brook, and other DuPage County communities. We are just off Roosevelt Road near Route 83.",
-  },
-  {
-    question: "What are your business hours?",
-    answer:
-      "We are open Monday through Saturday. Hours may vary, so please call us at (630) 359-3643 or check our website for the most up-to-date schedule. We are happy to accommodate appointments outside regular hours when possible.",
-  },
-  {
-    question: "How do I get pre-approved for financing?",
-    answer:
-      "You can fill out our online pre-approval form on our financing page. Just provide your basic contact information, credit range, monthly budget, and the type of vehicle you are looking for. Our team will reach out within one business day with your options.",
+    q: 'Where are you located?',
+    a: `We are at ${SITE_CONFIG.address.full}, in the heart of DuPage County. Easy to reach from Elmhurst, Lombard, Addison, and surrounding areas.`,
   },
 ];
 
-// Build FAQ JSON-LD structured data
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((faq) => ({
-    "@type": "Question",
-    name: faq.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: faq.answer,
-    },
-  })),
-};
+/* JSON-LD FAQ schema */
+function FAQSchema() {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.a,
+      },
+    })),
+  };
+  return (
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+  );
+}
 
-export default function FaqPage() {
+export default function FAQPage() {
   return (
     <>
-      <StructuredData data={faqJsonLd} />
+      <FAQSchema />
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 md:py-20">
+        <h1
+          className="text-3xl md:text-4xl font-bold text-gray-900"
+          style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
+        >
+          Frequently Asked Questions
+        </h1>
+        <p className="mt-2 text-gray-500">
+          Everything you need to know about buying from Love Auto Group.
+        </p>
 
-      {/* Hero */}
-      <section className="bg-[#1B4F72] text-white py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-            Frequently Asked Questions
-          </h1>
-          <p className="text-lg text-blue-100">
-            Answers to common questions about buying a used car at Love Auto Group in Villa Park, IL.
-          </p>
-        </div>
-      </section>
-
-      {/* FAQ Accordion */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
-          {faqs.map((faq, index) => (
-            <details
-              key={index}
-              className="group border-b border-gray-200 py-2"
-            >
-              <summary className="flex items-center justify-between cursor-pointer py-4 text-left">
-                <h2 className="text-lg font-semibold text-[#1B4F72] pr-4">
-                  {faq.question}
-                </h2>
-                <span className="text-[#1B4F72] text-2xl font-light flex-shrink-0 group-open:rotate-45 transition-transform duration-200">
-                  +
-                </span>
-              </summary>
-              <p className="text-gray-700 leading-relaxed pb-4 pl-0 sm:pl-2">
-                {faq.answer}
-              </p>
-            </details>
+        <div className="mt-10 space-y-6">
+          {faqs.map((faq, i) => (
+            <div key={i} className="border-b border-gray-200 pb-6 last:border-0">
+              <h2 className="font-semibold text-gray-900 text-lg">{faq.q}</h2>
+              <p className="mt-2 text-gray-600 leading-relaxed">{faq.a}</p>
+            </div>
           ))}
         </div>
-      </section>
 
-      {/* CTA */}
-      <section className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-[#1B4F72] mb-4">
-            Still Have Questions?
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Our team is happy to help. Give us a call or stop by the dealership.
+        <div className="mt-12 bg-gray-50 border border-gray-200 rounded-xl p-6 text-center">
+          <p className="font-semibold text-gray-900">Still have questions?</p>
+          <p className="text-gray-500 text-sm mt-1">
+            Give us a call at{' '}
+            <a href={`tel:${SITE_CONFIG.phoneRaw}`} className="text-red-600 font-semibold hover:text-red-700">
+              {SITE_CONFIG.phone}
+            </a>{' '}
+            or visit us at the lot.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="tel:+16303593643"
-              className="inline-block bg-[#1B4F72] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[#154360] transition-colors"
-            >
-              Call (630) 359-3643
-            </a>
-            <a
-              href="/contact"
-              className="inline-block border-2 border-[#1B4F72] text-[#1B4F72] font-semibold px-8 py-3 rounded-lg hover:bg-[#1B4F72] hover:text-white transition-colors"
-            >
-              Contact Us
-            </a>
-          </div>
         </div>
-      </section>
+      </div>
     </>
   );
 }

@@ -1,65 +1,92 @@
-// ============================================================================
-// Love Auto Group - Business Constants
-// Single source of truth for all business info used across the site.
-// ============================================================================
+/**
+ * Love Auto Group — Site-wide constants
+ */
 
-export const SITE_URL = "https://loveautogroup.com";
-
-export const BUSINESS_NAME = "Love Auto Group";
-
-export const ADDRESS = {
-  street: "735 N Yale Ave",
-  city: "Villa Park",
-  state: "IL",
-  zip: "60181",
-  full: "735 N Yale Ave, Villa Park, IL 60181",
+export const SITE_CONFIG = {
+  name: 'Love Auto Group',
+  tagline: 'Carefully Selected. Fully Reconditioned. Thoroughly Inspected.',
+  phone: '(630) 359-3643',
+  phoneRaw: '+16303593643',
+  email: 'loveautogroup@gmail.com',
+  address: {
+    street: '735 N Yale Ave',
+    city: 'Villa Park',
+    state: 'IL',
+    zip: '60181',
+    full: '735 N Yale Ave, Villa Park, IL 60181',
+  },
+  hours: {
+    monday: '2:00 PM - 7:00 PM',
+    tuesday: '11:00 AM - 7:00 PM',
+    wednesday: '11:00 AM - 7:00 PM',
+    thursday: '11:00 AM - 7:00 PM',
+    friday: '11:00 AM - 7:00 PM',
+    saturday: '12:00 PM - 7:00 PM',
+    sunday: 'Closed',
+  },
+  social: {
+    facebook: 'https://www.facebook.com/LoveAutoGroup',
+    instagram: 'https://www.instagram.com/loveautogroup',
+    google: 'https://g.page/loveautogroup',
+  },
+  url: 'https://loveautogroup.com',
+  geo: { lat: 41.8895, lng: -87.978 },
+  googleReviews: { rating: 4.7, count: 125 },
+  yearFounded: 2014,
 } as const;
 
-export const PHONE = {
-  display: "(630) 359-3643",
-  href: "tel:+16303593643",
-  raw: "+16303593643",
-} as const;
-
-export const EMAIL = "loveautogroup@gmail.com";
-
-export const HOURS = [
-  { day: "Monday", hours: "2:00 PM - 7:00 PM" },
-  { day: "Tuesday", hours: "11:00 AM - 7:00 PM" },
-  { day: "Wednesday", hours: "11:00 AM - 7:00 PM" },
-  { day: "Thursday", hours: "11:00 AM - 7:00 PM" },
-  { day: "Friday", hours: "11:00 AM - 7:00 PM" },
-  { day: "Saturday", hours: "12:00 PM - 7:00 PM" },
-  { day: "Sunday", hours: "Closed" },
-] as const;
-
-/** Schema.org openingHoursSpecification for structured data */
-export const OPENING_HOURS_SPECIFICATION = [
-  { dayOfWeek: "Monday", opens: "14:00", closes: "19:00" },
-  { dayOfWeek: "Tuesday", opens: "11:00", closes: "19:00" },
-  { dayOfWeek: "Wednesday", opens: "11:00", closes: "19:00" },
-  { dayOfWeek: "Thursday", opens: "11:00", closes: "19:00" },
-  { dayOfWeek: "Friday", opens: "11:00", closes: "19:00" },
-  { dayOfWeek: "Saturday", opens: "12:00", closes: "19:00" },
-] as const;
-
-export const NAP = {
-  name: BUSINESS_NAME,
-  address: ADDRESS,
-  phone: PHONE,
-  email: EMAIL,
+export const BRAND = {
+  colors: {
+    red: '#dc2626',
+    redDark: '#b91c1c',
+    black: '#0a0a0a',
+    white: '#ffffff',
+    offWhite: '#f9fafb',
+    gray: {
+      50: '#f9fafb',
+      100: '#f3f4f6',
+      200: '#e5e7eb',
+      300: '#d1d5db',
+      400: '#9ca3af',
+      500: '#6b7280',
+      600: '#4b5563',
+      700: '#374151',
+      800: '#1f2937',
+      900: '#111827',
+    },
+  },
+  fonts: {
+    heading: '"Montserrat", sans-serif',
+    body: '"Inter", sans-serif',
+  },
 } as const;
 
 export const NAV_LINKS = [
-  { label: "Inventory", href: "/inventory" },
-  { label: "Financing", href: "/financing" },
-  { label: "About", href: "/about" },
-  { label: "FAQ", href: "/faq" },
-  { label: "Contact", href: "/contact" },
+  { label: 'Home', href: '/' },
+  { label: 'Inventory', href: '/inventory' },
+  { label: 'Financing', href: '/financing' },
+  { label: 'Sell Your Car', href: '/sell-your-car' },
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
 ] as const;
 
-export const SOCIAL_LINKS = {
-  facebook: "#",
-  instagram: "#",
-  google: "#",
-} as const;
+export const TRUST_PILLARS = [
+  {
+    title: 'Every Vehicle Inspected & Reconditioned',
+    description:
+      'Our in-house team thoroughly inspects and reconditions every vehicle before it hits the lot. No surprises, no shortcuts.',
+    icon: 'shield-check',
+  },
+  {
+    title: 'Transparent Pricing',
+    description:
+      'The price you see is the price you pay. No hidden fees, no bait-and-switch. We believe in earning your trust.',
+    icon: 'tag',
+  },
+  {
+    title: 'Family Owned Since 2014',
+    description:
+      'Love Auto Group is a family owned business right here in Villa Park. We treat every customer like a neighbor.',
+    icon: 'heart',
+  },
+] as const;

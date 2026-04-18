@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Concept 1: Refined Classic — Love Auto Group Brand Kit
 
-## Getting Started
+**Status:** LOCKED IN (Approved by Jeremiah, April 18, 2026)
 
-First, run the development server:
+This is the official, production-ready brand kit for Love Auto Group. All agents (Bob, Charlotte, Mark, Bill, etc.) should reference these files for any work involving the brand identity.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## What's Inside
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### /logos/
+| File | Use | Background |
+|------|-----|------------|
+| `logo-primary.svg` | Website header, default use | Dark backgrounds |
+| `logo-print.svg` | Business cards, documents, letterheads | Light backgrounds |
+| `logo-reverse.svg` | Merch, signage, red backgrounds | Red backgrounds |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### /favicons/
+| File | Size | Use |
+|------|------|-----|
+| `favicon.ico` | 16+32 | Browser tab fallback |
+| `favicon-16x16.png` | 16x16 | Small browser icon |
+| `favicon-32x32.png` | 32x32 | Standard browser icon |
+| `favicon-180x180.png` | 180x180 | Apple Touch Icon (iOS home screen) |
+| `apple-touch-icon.png` | 180x180 | Same as above (duplicate for compatibility) |
+| `favicon-512x512.png` | 512x512 | PWA, Android, high-res |
 
-## Learn More
+### Reference Files
+| File | What |
+|------|------|
+| `DESIGN-SYSTEM.md` | Full design system spec (colors, typography, component mapping, photo standards) |
+| `brand-lockup-final.html` | Visual brand lockup sheet (open in browser to view) |
+| `brand-lockup-full.png` | Rendered screenshot of the brand lockup |
+| `concept1-expanded.html` | Original concept applications (website mockup, biz cards, social, watermark) |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Brand Colors
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Name | Hex | Use |
+|------|-----|-----|
+| Brand Red | #dc2626 | Primary: CTAs, logo, links, price text |
+| Brand Black | #0a0a0a | Backgrounds, header, footer |
+| White | #ffffff | Text on dark, card backgrounds |
+| Red Dark | #b91c1c | Hover states on red elements |
+| Red Light | #ef4444 | Accents, phone number in header |
+| Green | #16a34a | "Just Arrived" badge, phone CTA |
 
-## Deploy on Vercel
+**RETIRED:** Blue (#2563eb), Gold (#d4a843) — do NOT use
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Typography
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Logo:** Montserrat Black (900) for "LOVE", SemiBold (600) for "AUTO GROUP"
+- **Body:** Inter (400, 500, 600, 700)
+- Google Fonts CDN: `Inter` + `Montserrat:wght@600;900`
+
+## Logo Specs
+
+- "LOVE" in Montserrat Black, red (#dc2626)
+- Red accent gradient line beneath
+- "AUTO GROUP" in Montserrat SemiBold, spaced tracking
+- "SINCE 2014" in Inter Regular
+- Favicon: Red rounded square with white "L" lettermark
+
+## Rules
+
+- On dark backgrounds: use logo-primary.svg (red LOVE, white text)
+- On light backgrounds: use logo-print.svg (red LOVE, black text)
+- On red backgrounds: use logo-reverse.svg (all white)
+- Minimum clear space: height of the "O" in LOVE on all sides
+- Never stretch, rotate, or apply effects
+- Minimum display width: 120px on web, 1.5 inches in print
+
+## Content Rules
+
+- No em dashes. Use commas, periods, or rewrite.
+- "Family owned" not "Family-owned" (no hyphen)
+- Never say "auction" or "mechanic" in customer-facing content
+- Use "carefully selected," "fully reconditioned," "thoroughly inspected"
+
+---
+
+*For the full design system with component mapping and photo standards, see DESIGN-SYSTEM.md*

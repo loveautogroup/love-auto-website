@@ -1,157 +1,136 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import StructuredData from "@/components/StructuredData";
-import {
-  BUSINESS_NAME,
-  SITE_URL,
-  ADDRESS,
-  PHONE,
-  EMAIL,
-  OPENING_HOURS_SPECIFICATION,
-} from "@/lib/constants";
+import type { Metadata } from 'next';
+import { Montserrat, Inter } from 'next/font/google';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import { SITE_CONFIG } from '@/lib/constants';
+import './globals.css';
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
+const montserrat = Montserrat({
+  variable: '--font-montserrat',
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800'],
 });
 
-// ---------------------------------------------------------------------------
-// Site-wide SEO metadata
-// ---------------------------------------------------------------------------
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin'],
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
   title: {
-    template: "%s | Love Auto Group | Villa Park, IL",
-    default:
-      "Used Cars for Sale Villa Park IL | Bank Financing Available | Love Auto Group",
+    default: 'Love Auto Group | Quality Used Cars in Villa Park, IL',
+    template: '%s | Love Auto Group | Villa Park, IL',
   },
   description:
-    "Love Auto Group in Villa Park, IL offers quality used cars for sale with bank and credit union financing. Affordable used vehicles near Chicago, Elmhurst, Lombard & DuPage County.",
+    'Carefully selected, fully reconditioned, and thoroughly inspected quality used vehicles. Family owned dealership in Villa Park, IL specializing in Japanese makes.',
   keywords: [
-    "used cars Villa Park IL",
-    "used car financing Villa Park",
-    "bank financing used cars Chicago",
-    "credit union auto loans Illinois",
-    "used car dealer DuPage County",
-    "affordable used cars Lombard IL",
-    "quality used cars near me",
-    "Love Auto Group",
+    'used cars Villa Park IL',
+    'Love Auto Group',
+    'used car dealer DuPage County',
+    'quality used vehicles',
+    'Japanese cars for sale',
+    'Lexus', 'Subaru', 'Acura', 'Mazda',
+    'used car financing',
   ],
-  authors: [{ name: BUSINESS_NAME }],
-  creator: BUSINESS_NAME,
-  publisher: BUSINESS_NAME,
-  formatDetection: {
-    telephone: true,
-    email: true,
-    address: true,
-  },
+  authors: [{ name: 'Love Auto Group' }],
   openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: SITE_URL,
-    siteName: BUSINESS_NAME,
-    title:
-      "Used Cars for Sale Villa Park IL | Bank Financing Available | Love Auto Group",
+    type: 'website',
+    locale: 'en_US',
+    url: SITE_CONFIG.url,
+    siteName: SITE_CONFIG.name,
+    title: 'Love Auto Group | Quality Used Cars in Villa Park, IL',
     description:
-      "Quality used cars with bank and credit union financing in Villa Park, IL. Serving Chicago, Elmhurst, Lombard & DuPage County.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Love Auto Group - Used Cars Villa Park IL",
-      },
-    ],
+      'Carefully selected, fully reconditioned, and thoroughly inspected quality used vehicles. Family owned since 2014.',
   },
   twitter: {
-    card: "summary_large_image",
-    title:
-      "Used Cars for Sale Villa Park IL | Bank Financing Available | Love Auto Group",
-    description:
-      "Quality used cars with bank and credit union financing in Villa Park, IL. Serving Chicagoland.",
+    card: 'summary_large_image',
+    title: 'Love Auto Group',
+    description: 'Quality used vehicles in Villa Park, IL. Family owned since 2014.',
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
   },
   alternates: {
-    canonical: SITE_URL,
+    canonical: SITE_CONFIG.url,
   },
 };
 
-// ---------------------------------------------------------------------------
-// JSON-LD: LocalBusiness + AutoDealer structured data
-// ---------------------------------------------------------------------------
-const localBusinessJsonLd = {
-  "@context": "https://schema.org",
-  "@type": ["AutoDealer", "LocalBusiness"],
-  "@id": `${SITE_URL}/#business`,
-  name: BUSINESS_NAME,
-  url: SITE_URL,
-  telephone: PHONE.raw,
-  email: EMAIL,
-  image: `${SITE_URL}/og-image.jpg`,
-  logo: `${SITE_URL}/logo.png`,
-  description:
-    "Love Auto Group is a used car dealership in Villa Park, IL offering bank and credit union financing on quality pre-owned vehicles. Serving Chicago, Elmhurst, Lombard & DuPage County.",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: ADDRESS.street,
-    addressLocality: ADDRESS.city,
-    addressRegion: ADDRESS.state,
-    postalCode: ADDRESS.zip,
-    addressCountry: "US",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: 41.8898,
-    longitude: -87.9776,
-  },
-  openingHoursSpecification: OPENING_HOURS_SPECIFICATION.map((spec) => ({
-    "@type": "OpeningHoursSpecification",
-    dayOfWeek: spec.dayOfWeek,
-    opens: spec.opens,
-    closes: spec.closes,
-  })),
-  priceRange: "$$",
-  currenciesAccepted: "USD",
-  paymentAccepted: "Cash, Credit Card, Financing",
-  areaServed: [
-    { "@type": "City", name: "Villa Park, IL" },
-    { "@type": "City", name: "Elmhurst, IL" },
-    { "@type": "City", name: "Lombard, IL" },
-    { "@type": "City", name: "Addison, IL" },
-    { "@type": "City", name: "Chicago, IL" },
-    { "@type": "AdministrativeArea", name: "DuPage County, IL" },
-  ],
-  sameAs: [],
-};
+/* JSON-LD structured data for AutoDealer */
+function LocalBusinessSchema() {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'AutoDealer',
+    name: SITE_CONFIG.name,
+    url: SITE_CONFIG.url,
+    telephone: SITE_CONFIG.phone,
+    email: SITE_CONFIG.email,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: SITE_CONFIG.address.street,
+      addressLocality: SITE_CONFIG.address.city,
+      addressRegion: SITE_CONFIG.address.state,
+      postalCode: SITE_CONFIG.address.zip,
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: SITE_CONFIG.geo.lat,
+      longitude: SITE_CONFIG.geo.lng,
+    },
+    openingHoursSpecification: [
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Monday', opens: '14:00', closes: '19:00' },
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '11:00', closes: '19:00' },
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Saturday', opens: '12:00', closes: '19:00' },
+    ],
+    priceRange: '$6,500-$25,000',
+    image: `${SITE_CONFIG.url}/images/brand/og-image.jpg`,
+    sameAs: [SITE_CONFIG.social.facebook, SITE_CONFIG.social.instagram],
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: SITE_CONFIG.googleReviews.rating.toString(),
+      reviewCount: SITE_CONFIG.googleReviews.count.toString(),
+    },
+  };
 
-// ---------------------------------------------------------------------------
-// Root Layout
-// ---------------------------------------------------------------------------
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full`}>
-      <body className="min-h-full flex flex-col font-sans antialiased bg-white text-[#2C3E50]">
-        <StructuredData data={localBusinessJsonLd} />
+    <html
+      lang="en"
+      className={`${montserrat.variable} ${inter.variable} h-full antialiased`}
+    >
+      <head>
+        <LocalBusinessSchema />
+      </head>
+      <body
+        className="min-h-full flex flex-col bg-white text-gray-900"
+        style={{ fontFamily: 'var(--font-inter), system-ui, sans-serif' }}
+      >
+        {/* Skip to main content — accessibility */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-red-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg"
+        >
+          Skip to main content
+        </a>
+
         <Header />
-        <main className="flex-1">{children}</main>
+        <main id="main-content" className="flex-1">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>
