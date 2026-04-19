@@ -152,11 +152,15 @@ export default function ContactPage() {
             </div>
 
             {/* Map */}
-            <div className="mt-6 bg-brand-gray-200 rounded-xl aspect-video flex items-center justify-center">
-              <div className="text-center text-brand-gray-500">
-                <p className="font-medium">Google Maps Embed</p>
-                <p className="text-sm">{SITE_CONFIG.address.full}</p>
-              </div>
+            <div className="mt-6 rounded-xl overflow-hidden border border-brand-gray-200">
+              <iframe
+                title={`Map of ${SITE_CONFIG.name} at ${SITE_CONFIG.address.full}`}
+                src={`https://www.google.com/maps?q=${encodeURIComponent(SITE_CONFIG.address.full)}&output=embed`}
+                className="w-full aspect-video block border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
             </div>
           </div>
 
