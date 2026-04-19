@@ -4,9 +4,10 @@ import VehicleCard from "@/components/VehicleCard";
 import InventoryFilters from "./InventoryFilters";
 
 export const metadata: Metadata = {
-  title: "Inventory: Used Cars for Sale",
+  title: "Used Cars for Sale in Villa Park, IL | Love Auto Group",
   description:
-    "Browse our full inventory of quality used vehicles in Villa Park, IL. Subaru, Lexus, Acura, Mazda and more. All inspected and reconditioned. Filter by make, price, mileage, and body style.",
+    "Browse our Villa Park, IL inventory of quality used cars from $4,500 to $18,000. Lexus, Subaru, Acura, Mazda. Fully reconditioned and ready to drive.",
+  alternates: { canonical: "https://loveautogroup.com/inventory" },
 };
 
 export default function InventoryPage({

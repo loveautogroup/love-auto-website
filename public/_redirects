@@ -1,0 +1,7 @@
+# TCPA-approved slug alias — our consent language references /privacy
+/privacy       /privacy-policy/     301
+/privacy/      /privacy-policy/     301
+
+# Common slug aliases for marketing consistency
+/terms-of-service    /terms/             301
+/terms-of-service/   /terms/             301

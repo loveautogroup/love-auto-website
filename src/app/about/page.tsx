@@ -3,9 +3,10 @@ import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "About Us",
+  title: "About Love Auto Group, Family Owned in Villa Park IL",
   description:
-    "Love Auto Group is a family owned used car dealership in Villa Park, IL since 2014. Meet our team and learn why we do things differently.",
+    "Family owned in Villa Park, IL since 2014. We specialize in quality Japanese used cars, every one carefully selected, fully reconditioned, and inspected.",
+  alternates: { canonical: "https://loveautogroup.com/about" },
 };
 
 export default function AboutPage() {

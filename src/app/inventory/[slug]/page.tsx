@@ -37,16 +37,32 @@ export async function generateMetadata({
   const vehicle = getVehicleBySlug(slug);
   if (!vehicle) return {};
 
-  const title = `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}`;
-  const price = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(vehicle.price);
+  // Mark's approved VDP title template with fallback for trim overflow.
+  // Full form: "{Year} {Make} {Model} {Trim} for Sale | Love Auto Group"
+  // If over 60 chars, drop the trim to keep Google SERP clean.
+  const base = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
+  const withTrim = `${base} ${vehicle.trim} for Sale | Love Auto Group`;
+  const withoutTrim = `${base} for Sale | Love Auto Group`;
+  const title = withTrim.length <= 60 ? withTrim : withoutTrim;
+
+  const formattedMileage = new Intl.NumberFormat().format(vehicle.mileage);
+  const description = `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim} for sale in Villa Park, IL. ${formattedMileage} miles, ${vehicle.drivetrain}. Carefully selected and fully reconditioned at Love Auto Group.`;
+
+  const url = `https://loveautogroup.com/inventory/${slug}/`;
+  const ogImage = vehicle.images?.[0];
 
   return {
     title,
-    description: `${title} for sale at Love Auto Group in Villa Park, IL. ${price}, ${new Intl.NumberFormat().format(vehicle.mileage)} miles. ${vehicle.drivetrain}. Inspected and reconditioned.`,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "website",
+      siteName: "Love Auto Group",
+      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
+    },
   };
 }
 

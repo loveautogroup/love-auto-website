@@ -9,18 +9,20 @@ import { LocalBusinessSchema } from "@/components/StructuredData";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://loveautogroup.com"),
   title: {
-    default: "Love Auto Group | Quality Used Vehicles | Villa Park, IL",
-    template: "%s | Love Auto Group | Villa Park, IL",
+    default: "Quality Used Cars in Villa Park, IL | Love Auto Group",
+    template: "%s",
   },
   description:
-    "Love Auto Group is a family owned used car dealership in Villa Park, IL since 2014. Specializing in quality Japanese vehicles. Every vehicle inspected and reconditioned. Lexus, Subaru, Acura, Mazda and more.",
+    "Family owned used car dealership in Villa Park, IL since 2014. Quality Japanese vehicles, carefully selected and fully reconditioned. Browse inventory.",
   keywords: [
     "used cars Villa Park IL",
-    "used car dealer DuPage County",
-    "Love Auto Group",
-    "used Subaru",
+    "used car dealership Villa Park",
+    "Japanese used cars DuPage County",
+    "family owned dealership",
     "used Lexus",
+    "used Subaru",
     "used Acura",
     "used Mazda",
     "cars for sale near Chicago",
@@ -34,9 +36,9 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
   },
   openGraph: {
-    title: "Love Auto Group | Quality Used Vehicles | Villa Park, IL",
+    title: "Quality Used Cars in Villa Park, IL | Love Auto Group",
     description:
-      "Family owned since 2014. Quality used vehicles carefully selected and fully reconditioned.",
+      "Family owned used car dealership in Villa Park, IL since 2014. Quality Japanese vehicles, carefully selected and fully reconditioned. Browse inventory.",
     url: "https://loveautogroup.com",
     siteName: "Love Auto Group",
     locale: "en_US",

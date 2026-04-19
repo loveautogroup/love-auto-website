@@ -3,9 +3,10 @@ import { SITE_CONFIG } from "@/lib/constants";
 import ContactForm from "./ContactForm";
 
 export const metadata: Metadata = {
-  title: "Contact Us",
+  title: "Contact Love Auto Group in Villa Park, IL | Visit Us",
   description:
-    "Contact Love Auto Group in Villa Park, IL. Call (630) 359-3643 or visit us at 735 N Yale Ave. Open Mon–Sat.",
+    "Visit Love Auto Group at 735 N Yale Ave, Villa Park, IL 60181. Call (630) 359-3643 or get directions. Open Monday through Saturday, closed Sundays.",
+  alternates: { canonical: "https://loveautogroup.com/contact" },
 };
 
 export default function ContactPage() {

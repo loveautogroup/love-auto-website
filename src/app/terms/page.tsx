@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Terms of Service",
+  title: "Terms of Service | Love Auto Group in Villa Park, IL",
   description:
-    "Terms of service for the Love Auto Group website. Please read these terms before using our site.",
+    "Review the terms of service for Love Auto Group in Villa Park, IL. Your use of our website and services is governed by the terms outlined on this page.",
+  alternates: { canonical: "https://loveautogroup.com/terms" },
 };
 
 export default function TermsPage() {

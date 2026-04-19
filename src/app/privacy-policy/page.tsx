@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
+  title: "Privacy Policy | Love Auto Group in Villa Park, IL",
   description:
-    "Privacy policy for Love Auto Group. How we collect, use, and protect your personal information.",
+    "Read the Love Auto Group privacy policy. Learn how we collect, use, and protect your personal information when you visit our Villa Park, IL dealership.",
+  alternates: { canonical: "https://loveautogroup.com/privacy-policy" },
 };
 
 export default function PrivacyPolicyPage() {

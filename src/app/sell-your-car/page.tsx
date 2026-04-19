@@ -3,9 +3,10 @@ import { SITE_CONFIG } from "@/lib/constants";
 import TradeInForm from "./TradeInForm";
 
 export const metadata: Metadata = {
-  title: "Sell Your Car",
+  title: "Sell or Trade Your Car in Villa Park | Love Auto Group",
   description:
-    "Sell your car to Love Auto Group in Villa Park, IL. Get a fair offer with no hassle. We buy vehicles of all makes and conditions.",
+    "We buy cars too. Get a fair market offer on your vehicle from Love Auto Group in Villa Park, IL. Trade in or cash out, the process takes minutes.",
+  alternates: { canonical: "https://loveautogroup.com/sell-your-car" },
 };
 
 export default function SellYourCarPage() {

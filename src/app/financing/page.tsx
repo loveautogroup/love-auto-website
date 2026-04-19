@@ -3,9 +3,10 @@ import { SITE_CONFIG } from "@/lib/constants";
 import FinancingForm from "./FinancingForm";
 
 export const metadata: Metadata = {
-  title: "Financing: Get Pre-Approved",
+  title: "Used Car Financing, All Credit Welcome | Love Auto",
   description:
-    "Get pre-approved for auto financing at Love Auto Group in Villa Park, IL. Quick application, multiple lenders, competitive rates. No obligation.",
+    "All credit welcome. Multiple lenders, competitive rates, and fast pre-approval with no impact on your credit score. Apply online with Love Auto Group.",
+  alternates: { canonical: "https://loveautogroup.com/financing" },
 };
 
 export default function FinancingPage() {

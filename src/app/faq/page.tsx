@@ -3,9 +3,10 @@ import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Frequently Asked Questions",
+  title: "Used Car FAQ, Financing and Trade-Ins | Love Auto Group",
   description:
-    "Common questions about buying a used car from Love Auto Group in Villa Park, IL. Financing, trade-ins, vehicle history, warranties, and more.",
+    "Questions about financing, trade-ins, warranties, and our inspection process at Love Auto Group in Villa Park, IL. Get the answers before you visit.",
+  alternates: { canonical: "https://loveautogroup.com/faq" },
 };
 
 const faqs = [
