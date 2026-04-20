@@ -68,17 +68,19 @@ export interface MerchandisingConfig {
 }
 
 export const MERCHANDISING: MerchandisingConfig = {
+  // Jordan's hero picks in display order. Four selected to match the
+  // Japanese specialist positioning + highest-margin units.
   featuredVins: [
-    // Jordan picks 3-6 heroes here, in display order.
-    // VINs come from src/data/inventory.ts.
-    "5FNYF6H9XGB041495", // 2016 Honda Pilot Touring
-    "1FA6P8TH6H1202495", // 2017 Ford Mustang EcoBoost Premium
+    "5FNYF6H9XGB041495", // 2016 Honda Pilot Touring (newest, loaded)
+    "JTHHE5BC2G5011456", // 2016 Lexus RC 350 (Japanese, luxury, premium margin)
+    "1FA6P8TH6H1202495", // 2017 Ford Mustang EcoBoost Premium (desirable coupe)
+    "2HNYD2H63AH509874", // 2010 Acura MDX Sport (value play, AWD, SH-AWD)
   ],
 
   defaultWarranty: "30-Day Warranty",
 
   overlays: {
-    // 2016 Honda Pilot Touring — example of a hero listing with full overlay
+    // 2016 Honda Pilot Touring — fresh arrival, third-row family hauler
     "5FNYF6H9XGB041495": {
       carfax: true,
       featurePills: [
@@ -88,19 +90,72 @@ export const MERCHANDISING: MerchandisingConfig = {
       ],
     },
 
-    // 2017 Ford Mustang EcoBoost Premium
+    // 2017 Ford Mustang EcoBoost Premium — sporty coupe, turbo
     "1FA6P8TH6H1202495": {
       carfax: true,
       featurePills: [
         "EcoBoost\nTurbo",
         "Premium\nPackage",
-        "Heated\nLeather Seats",
+        "Heated\nLeather",
+      ],
+    },
+
+    // 2010 Acura MDX Sport — value luxury SUV, SH-AWD, third-row under $5K
+    "2HNYD2H63AH509874": {
+      carfax: true,
+      status: "price-reduced",
+      featurePills: [
+        "Super Handling\nAWD",
+        "Third-Row\nSeats",
+        "Under\n$5,000",
+      ],
+    },
+
+    // 2013 GMC Terrain SLT-1 — well-equipped compact SUV
+    "2GKALJEK6D1300009": {
+      carfax: true,
+      featurePills: [
+        "Heated\nLeather",
+        "Pioneer\nPremium Audio",
+        "Remote\nStart",
+      ],
+    },
+
+    // 2017 Hyundai Accent SE — efficient commuter sedan
+    "KMHCT4AE6HU222547": {
+      carfax: true,
+      featurePills: [
+        "36 Hwy\nMPG",
+        "Under\n$4,000",
+        "Commuter\nReady",
+      ],
+    },
+
+    // 2016 Lexus RC 350 — Japanese luxury coupe, premium margin hero
+    "JTHHE5BC2G5011456": {
+      carfax: true,
+      status: "staff-pick",
+      featurePills: [
+        "306 HP\nV6",
+        "Blind Spot\nMonitor",
+        "Premium\nPackage",
+      ],
+    },
+
+    // 2008 Saab 9-3 2.0T Convertible — niche, unique, under $2,500
+    "YS3FB79Y886005860": {
+      carfax: true,
+      status: "price-drop",
+      featurePills: [
+        "Power\nConvertible",
+        "Turbo\nPerformance",
+        "Under\n$2,500",
       ],
     },
   },
 
   lastUpdated: "2026-04-20",
-  updatedBy: "Charlotte (initial config)",
+  updatedBy: "Jordan (initial merchandising pass)",
 };
 
 /**

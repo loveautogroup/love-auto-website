@@ -41,7 +41,7 @@ export const sampleInventory: Vehicle[] = [
     bodyStyle: "SUV",
     fuelType: "Gasoline",
     description:
-      "The Touring is Honda's flagship Pilot with every option they offered in 2016. This 3.5L V6 AWD does everything: navigation with turn by turn, adaptive cruise control for highway commutes, LaneWatch blind spot camera, premium audio, and rear A/C to keep the whole crew comfortable. At 164K miles, the i-VTEC V6 is just getting warmed up. AWD with 280 hp, confidence in every Illinois winter. Fully reconditioned in house and ready to drive today. Priced at $10,999. Call Love Auto Group at (630) 359-3643 or visit us at 735 N Yale Ave, Villa Park.",
+      "Honda's flagship Pilot trim, loaded with every option they offered in 2016. Third-row seating, adaptive cruise, LaneWatch blind spot camera, navigation, heated leather, and rear A/C for the whole crew. The 3.5L V6 with AWD turns 280 horsepower and takes Illinois winters in stride. 164,623 miles, and that matters less than how the car has been cared for. We replaced the wear items, checked every fluid, and detailed it inside and out before listing. $10,999, ready to drive home. Call or text (630) 359-3643 to set up a test drive at 735 N Yale Ave, Villa Park.",
     features: [
       "All-Wheel Drive",
       "Navigation System",
@@ -79,7 +79,7 @@ export const sampleInventory: Vehicle[] = [
     bodyStyle: "Coupe",
     fuelType: "Gasoline",
     description:
-      "The EcoBoost Premium is the smart Mustang. 310 turbocharged horsepower, the full Premium interior with leather and SYNC 3, and fuel economy that won't punish your wallet. At 89K miles, this coupe has plenty of road ahead. The 2.3L turbo four delivers real performance while keeping insurance reasonable. Heated and cooled seats, push button start, and that unmistakable Mustang presence. Carefully selected and fully reconditioned. Call Love Auto Group at (630) 359-3643.",
+      "The smart Mustang. 310 turbocharged horsepower from the 2.3L EcoBoost, real Mustang presence, and the kind of fuel economy that doesn't punish you for enjoying the drive. This is the Premium trim: heated and cooled leather seats, SYNC 3 with the 8-inch touchscreen, push-button start, dual-zone climate, and HID headlamps. 89,085 miles on the clock, carefully selected and fully reconditioned. $13,999. Test drive available today at our Villa Park lot. Call or text (630) 359-3643.",
     features: [
       "EcoBoost 2.3L Turbo (310 HP)",
       "Leather Heated & Cooled Seats",
@@ -116,7 +116,7 @@ export const sampleInventory: Vehicle[] = [
     bodyStyle: "SUV",
     fuelType: "Gasoline",
     description:
-      "The Acura MDX Sport is a three row luxury SUV that was built to last, and this one proves it. The 3.7L V6 with Super Handling AWD delivers confident performance in every season. Third row seating, premium audio, and the kind of build quality Honda and Acura are known for. At $4,499, this is a lot of SUV for the money. Thoroughly inspected, fully reconditioned, and ready for the road. Call Love Auto Group at (630) 359-3643.",
+      "A three-row luxury SUV for under $5,000 is rare. One that still drives this well at 213,000 miles is rarer. The MDX Sport is built on the same platform as the Honda Pilot but with Acura's Super Handling AWD, the high-output 3.7L VTEC V6, leather interior, moonroof, and the kind of reliability Japanese engineering is known for. Thoroughly inspected and fully reconditioned by our in-house team. $4,499, priced at the value end but built to the same standard as everything else on the lot. Call or text (630) 359-3643 to see it at 735 N Yale Ave, Villa Park.",
     features: [
       "Super Handling All-Wheel Drive (SH-AWD)",
       "3.7L VTEC V6",
@@ -152,7 +152,7 @@ export const sampleInventory: Vehicle[] = [
     bodyStyle: "SUV",
     fuelType: "Gasoline",
     description:
-      "The GMC Terrain SLT brings premium features to the compact SUV segment. The SLT-1 trim includes leather seating, a touchscreen infotainment system, and a comfortable ride that handles daily commutes and weekend errands with ease. At $4,999, this is an affordable entry into a well equipped SUV. Thoroughly inspected and fully reconditioned. Call Love Auto Group at (630) 359-3643 or visit us at 735 N Yale Ave, Villa Park.",
+      "A well-equipped compact SUV under $5,000. The SLT-1 trim is the Terrain with the good stuff: heated leather seats, Pioneer premium audio, remote start, touchscreen infotainment, backup camera, and a comfortable ride that takes daily commutes and weekend errands with ease. 151,419 miles, thoroughly inspected and fully reconditioned by our in-house team. $4,999. Stop by 735 N Yale Ave or call (630) 359-3643 to set up a test drive.",
     features: [
       "Leather Heated Seats",
       "Touchscreen Infotainment",
@@ -187,7 +187,7 @@ export const sampleInventory: Vehicle[] = [
     bodyStyle: "Sedan",
     fuelType: "Gasoline",
     description:
-      "The Hyundai Accent SE is an efficient, reliable daily driver that won't break the bank. The 1.6L engine delivers 26 city / 36 highway MPG, keeping fuel costs low. At under $4,000, this is one of the most affordable ways to get into a dependable sedan. Power windows, keyless entry, and air conditioning. Fully inspected, reconditioned, and ready to go. Call Love Auto Group at (630) 359-3643.",
+      "Efficient, reliable, and under $4,000. The Accent SE delivers 36 highway MPG from its 1.6L engine, keeping fuel costs low for commuters and first-time buyers. Power windows, keyless entry, air conditioning, and a full complement of airbags and stability control. 157,597 miles, thoroughly inspected and fully reconditioned. A solid, no-nonsense daily driver that won't stretch your budget. $3,999. Call or text (630) 359-3643.",
     features: [
       "1.6L Engine (137 HP)",
       "26 City / 36 Highway MPG",
@@ -223,7 +223,7 @@ export const sampleInventory: Vehicle[] = [
     bodyStyle: "Coupe",
     fuelType: "Gasoline",
     description:
-      "The Lexus RC 350 is a head turner that backs up its looks with 306 horsepower and Lexus reliability. This one comes in black over rich brown leather, the Premium Package with blind spot monitoring, navigation, Bluetooth, and the kind of fit and finish that makes every drive feel special. At 135K miles, the 3.5L V6 is proven and smooth. Rated a \"Great Deal\" by CarGurus. Carefully selected and fully reconditioned. Call Love Auto Group at (630) 359-3643.",
+      "A Lexus RC 350 is a head-turner that backs up the looks with 306 horsepower and Lexus build quality. This one finished in black over rich brown leather, the Premium Package with blind-spot monitor, navigation, moonroof, and the kind of fit and finish that makes every drive feel like something. 135,116 miles on a 3.5L V6 that's proven to run well past 250,000 with care. CarGurus rates this listing a Great Deal. Carefully selected, fully reconditioned, and ready at our Villa Park lot. $17,999. Call or text (630) 359-3643 to test drive.",
     features: [
       "3.5L V6 (306 HP)",
       "Premium Package",
@@ -260,7 +260,7 @@ export const sampleInventory: Vehicle[] = [
     bodyStyle: "Convertible",
     fuelType: "Gasoline",
     description:
-      "A Saab 9-3 convertible is something you don't see every day, and at $2,499, this is an affordable way to enjoy top down driving. The 2.0T turbocharged engine delivers spirited performance, the leather interior is comfortable, and the power roof folds away for open air cruising. Fog lights, cruise control, and rollover protection. Thoroughly inspected and priced to move. Call Love Auto Group at (630) 359-3643.",
+      "A Saab convertible isn't something you see every day, and at $2,499, it's an affordable way to enjoy top-down driving this summer. The 2.0T turbocharged engine delivers spirited performance, the leather interior is comfortable, and the power roof folds away for open-air cruising. Fog lights, cruise control, rollover protection, and AM/FM/XM satellite. 192,389 miles, thoroughly inspected, and priced to move to whoever appreciates something different. Call or text (630) 359-3643 to see it at 735 N Yale Ave, Villa Park.",
     features: [
       "2.0L Turbo Engine",
       "Power Convertible Top",

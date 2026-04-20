@@ -5,7 +5,14 @@
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(self)
-  Strict-Transport-Security: max-age=31536000
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  # Content Security Policy — closes Sam's M2 finding.
+  # 'unsafe-inline' on scripts is required for Next.js static export hydration
+  # data (__NEXT_DATA__). Follow-up: tighten with nonces or hashes once we
+  # move off static export or add a build-time CSP hash injector.
+  # frame-src allows Google Maps embed (used on / and /contact).
+  # img-src allows any https: source so Dealer Center photo CDN works.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self'; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
 
 # Admin routes — noindex, no cache. Gated by Cloudflare Zero Trust Access.
 /admin/*
