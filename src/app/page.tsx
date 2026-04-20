@@ -135,7 +135,7 @@ export default async function HomePage() {
             </form>
           </div>
 
-          {/* Quick-Filter Pills — CarMax-inspired one-tap shortcuts */}
+          {/* Quick-Filter Pills â€” CarMax-inspired one-tap shortcuts */}
           <div className="mt-6 flex flex-wrap gap-2">
             {[
               { label: "Under $10K", href: "/inventory?maxPrice=10000" },
@@ -197,7 +197,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* On the Lot Now — horizontal scroll carousel */}
+      {/* On the Lot Now â€” horizontal scroll carousel */}
       <section className="bg-brand-navy py-12" aria-labelledby="lot-heading">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-baseline justify-between mb-6">
@@ -213,7 +213,7 @@ export default async function HomePage() {
               href="/inventory"
               className="text-brand-red-light hover:text-white text-sm font-semibold transition-colors"
             >
-              View All →
+              View All â†’
             </Link>
           </div>
           <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
@@ -348,10 +348,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Google Reviews Badge — live data from Places API, refreshed hourly */}
+      {/* Google Reviews Badge â€” live data from Places API, refreshed hourly */}
       <GoogleReviewsBadge variant="full" />
 
-      {/* Interactive Payment Calculator — CarMax-inspired */}
+      {/* Interactive Payment Calculator â€” CarMax-inspired */}
       <PaymentCalculator />
 
       {/* Location & Hours */}
@@ -440,26 +440,16 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Map placeholder */}
-          <div className="bg-brand-gray-200 rounded-2xl aspect-[4/3] flex items-center justify-center">
-            <div className="text-center text-brand-gray-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-12 h-12 mx-auto mb-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-                />
-              </svg>
-              <p className="font-medium">Google Maps Embed</p>
-              <p className="text-sm">735 N Yale Ave, Villa Park, IL 60181</p>
-            </div>
+          {/* Map */}
+          <div className="rounded-2xl overflow-hidden border border-brand-gray-200">
+            <iframe
+              title={`Map of ${SITE_CONFIG.name} at ${SITE_CONFIG.address.full}`}
+              src={`https://www.google.com/maps?q=${encodeURIComponent(SITE_CONFIG.address.full)}&output=embed`}
+              className="w-full aspect-[4/3] block border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
           </div>
         </div>
       </section>
