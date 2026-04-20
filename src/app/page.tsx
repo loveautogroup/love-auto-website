@@ -1,14 +1,18 @@
 import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
 import { sampleInventory } from "@/data/inventory";
+import { filterFeatured, sortWithFeaturedFirst } from "@/data/merchandising";
 import VehicleCard from "@/components/VehicleCard";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 import PaymentCalculator from "@/components/PaymentCalculator";
 
 export default async function HomePage() {
-  const featuredVehicles = sampleInventory
-    .filter((v) => v.status === "available")
-    .slice(0, 6);
+  // Filter to available stock, then pull Jordan-picked featured VINs first.
+  // If fewer than 6 are featured, top up with the newest available vehicles.
+  const available = sampleInventory.filter((v) => v.status === "available");
+  const featured = filterFeatured(available);
+  const topUp = sortWithFeaturedFirst(available).slice(0, 6);
+  const featuredVehicles = featured.length >= 6 ? featured.slice(0, 6) : topUp;
 
   return (
     <>
@@ -217,9 +221,9 @@ export default async function HomePage() {
             </Link>
           </div>
           <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
-            {sampleInventory
-              .filter((v) => v.status === "available")
-              .map((v) => {
+            {sortWithFeaturedFirst(
+              sampleInventory.filter((v) => v.status === "available")
+            ).map((v) => {
                 const price = new Intl.NumberFormat("en-US", {
                   style: "currency",
                   currency: "USD",

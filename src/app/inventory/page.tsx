@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { sampleInventory } from "@/data/inventory";
+import { sortWithFeaturedFirst } from "@/data/merchandising";
 import VehicleCard from "@/components/VehicleCard";
 import InventoryFilters from "./InventoryFilters";
 
@@ -15,8 +16,11 @@ export default function InventoryPage({
 }: {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) {
-  // In production, this would use the sync'd Dealer Center data
-  const vehicles = sampleInventory.filter((v) => v.status === "available");
+  // Filter to available stock, then apply Jordan's merchandising order
+  // (featured VINs pinned to the top, hidden VINs removed).
+  const vehicles = sortWithFeaturedFirst(
+    sampleInventory.filter((v) => v.status === "available")
+  );
 
   return (
     <>

@@ -1,22 +1,48 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { Vehicle } from "@/lib/types";
+import { SITE_CONFIG } from "@/lib/constants";
+import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
+import {
+  CarfaxBadge,
+  DealerCluster,
+  FeaturePillCluster,
+  PhoneCTA,
+  PhotoScrim,
+  StatusPill,
+  WarrantyBadge,
+} from "./badges";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
 }
 
-function estimateMonthlyPayment(price: number, downPayment = 1000, apr = 0.0699, termMonths = 60): number {
+function estimateMonthlyPayment(
+  price: number,
+  downPayment = 1000,
+  apr = 0.0699,
+  termMonths = 60
+): number {
   const principal = price - downPayment;
   if (principal <= 0) return 0;
   const monthlyRate = apr / 12;
   return Math.round(
     (principal * monthlyRate * Math.pow(1 + monthlyRate, termMonths)) /
-    (Math.pow(1 + monthlyRate, termMonths) - 1)
+      (Math.pow(1 + monthlyRate, termMonths) - 1)
   );
 }
 
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
+  // Resolve per-vehicle merchandising overlay (Jordan-controlled via
+  // src/data/merchandising.ts; future admin UI writes to the same config).
+  const overlay = resolveOverlay(
+    vehicle.vin,
+    vehicle.daysOnLot,
+    vehicle.status
+  );
+  const showCarfax = overlay.carfax === true;
+  const warrantyCopy = overlay.warrantyOverride ?? MERCHANDISING.defaultWarranty;
+
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -28,15 +54,20 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   );
 
   const monthlyPayment = estimateMonthlyPayment(vehicle.price);
+  const hasRealImage =
+    vehicle.images.length > 0 && !vehicle.images[0].includes("placeholder");
 
   return (
-    <Link
-      href={`/inventory/${vehicle.slug}`}
-      className="group bg-white rounded-xl border border-brand-gray-200 overflow-hidden hover:shadow-lg hover:border-brand-red/30 transition-all duration-200"
+    <article
+      className="
+        group relative
+        bg-white rounded-xl border border-brand-gray-200 overflow-hidden
+        hover:shadow-lg hover:border-brand-red/30 transition-all duration-200
+      "
     >
-      {/* Image */}
+      {/* Photo + overlay badges */}
       <div className="relative aspect-[4/3] bg-brand-gray-100 overflow-hidden">
-        {vehicle.images.length > 0 && !vehicle.images[0].includes("placeholder") ? (
+        {hasRealImage ? (
           <Image
             src={vehicle.images[0]}
             alt={`${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}`}
@@ -62,23 +93,55 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             </svg>
           </div>
         )}
-        {/* Status badges */}
-        {vehicle.daysOnLot <= 7 && (
-          <span className="absolute top-3 left-3 bg-brand-green text-white text-xs font-semibold px-2.5 py-1 rounded-full">
-            Just Arrived
-          </span>
-        )}
-        {vehicle.status === "sale-pending" && (
-          <span className="absolute top-3 left-3 bg-brand-gold text-brand-navy text-xs font-semibold px-2.5 py-1 rounded-full">
-            Sale Pending
-          </span>
-        )}
+
+        {/* Gradient scrim for overlay legibility */}
+        <PhotoScrim />
+
+        {/* Top-left: Carfax button (if available) or fallback status pill */}
+        <div className="absolute top-3 left-3 z-10">
+          {showCarfax ? (
+            <CarfaxBadge vin={vehicle.vin} />
+          ) : overlay.effectiveStatus ? (
+            <StatusPill kind={overlay.effectiveStatus} />
+          ) : null}
+        </div>
+
+        {/* Top-center: Jordan-authored feature pills (self-positioning) */}
+        <FeaturePillCluster pills={overlay.featurePills} />
+
+        {/* Bottom-left: Warranty badge */}
+        <div className="absolute bottom-3 left-3 z-10">
+          <WarrantyBadge copy={warrantyCopy} />
+        </div>
+
+        {/* Bottom-center: Phone CTA */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+          <PhoneCTA
+            phone={SITE_CONFIG.phone}
+            phoneRaw={SITE_CONFIG.phoneRaw}
+          />
+        </div>
+
+        {/* Bottom-right: Dealer logo + Google review cluster */}
+        <div className="absolute bottom-3 right-3 z-10">
+          <DealerCluster
+            rating={SITE_CONFIG.reviews.google.rating}
+            reviewCount={SITE_CONFIG.reviews.google.count}
+          />
+        </div>
       </div>
 
-      {/* Info */}
+      {/* Info area — title link uses ::before pseudo-element to make the full
+          card clickable without nesting anchors inside anchors. Badges sit at
+          z-10 so their clicks hit them, not the card link. */}
       <div className="p-4">
         <h3 className="font-bold text-brand-gray-900 group-hover:text-brand-red transition-colors">
-          {vehicle.year} {vehicle.make} {vehicle.model}
+          <Link
+            href={`/inventory/${vehicle.slug}`}
+            className="before:absolute before:inset-0 before:z-[2] before:content-['']"
+          >
+            {vehicle.year} {vehicle.make} {vehicle.model}
+          </Link>
         </h3>
         <p className="text-sm text-brand-gray-500 mt-0.5">{vehicle.trim}</p>
 
@@ -91,13 +154,19 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           </span>
         </div>
 
-        {/* Estimated Monthly Payment */}
         <p className="text-sm text-brand-gray-500 mt-1">
-          Est. <span className="font-semibold text-brand-gray-700">${monthlyPayment}/mo</span>
-          <span className="text-xs text-brand-gray-400 ml-1" title="Based on $1,000 down, 6.99% APR, 60 months">*</span>
+          Est.{" "}
+          <span className="font-semibold text-brand-gray-700">
+            ${monthlyPayment}/mo
+          </span>
+          <span
+            className="text-xs text-brand-gray-400 ml-1"
+            title="Based on $1,000 down, 6.99% APR, 60 months"
+          >
+            *
+          </span>
         </p>
 
-        {/* Highlights */}
         <div className="flex flex-wrap gap-1.5 mt-3">
           {vehicle.drivetrain !== "FWD" && (
             <span className="text-xs bg-brand-gray-100 text-brand-gray-700 px-2 py-0.5 rounded-full">
@@ -118,6 +187,6 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           View Details →
         </div>
       </div>
-    </Link>
+    </article>
   );
 }
