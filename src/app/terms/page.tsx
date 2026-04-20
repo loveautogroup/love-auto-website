@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Terms of Service | Love Auto Group in Villa Park, IL",
   description:
     "Review the terms of service for Love Auto Group in Villa Park, IL. Your use of our website and services is governed by the terms outlined on this page.",
-  alternates: { canonical: "https://loveautogroup.com/terms" },
+  alternates: { canonical: "https://loveautogroup.pages.dev/terms" },
 };
 
 export default function TermsPage() {

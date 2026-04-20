@@ -9,7 +9,7 @@ import { LocalBusinessSchema } from "@/components/StructuredData";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://loveautogroup.com"),
+  metadataBase: new URL("https://loveautogroup.pages.dev"),
   title: {
     default: "Quality Used Cars in Villa Park, IL | Love Auto Group",
     template: "%s",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     title: "Quality Used Cars in Villa Park, IL | Love Auto Group",
     description:
       "Family owned used car dealership in Villa Park, IL since 2014. Quality Japanese vehicles, carefully selected and fully reconditioned. Browse inventory.",
-    url: "https://loveautogroup.com",
+    url: "https://loveautogroup.pages.dev",
     siteName: "Love Auto Group",
     locale: "en_US",
     type: "website",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: {
-    canonical: "https://loveautogroup.com",
+    canonical: "https://loveautogroup.pages.dev",
   },
 };
 

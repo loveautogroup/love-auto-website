@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Sell or Trade Your Car in Villa Park | Love Auto Group",
   description:
     "We buy cars too. Get a fair market offer on your vehicle from Love Auto Group in Villa Park, IL. Trade in or cash out, the process takes minutes.",
-  alternates: { canonical: "https://loveautogroup.com/sell-your-car" },
+  alternates: { canonical: "https://loveautogroup.pages.dev/sell-your-car" },
 };
 
 export default function SellYourCarPage() {
