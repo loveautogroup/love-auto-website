@@ -7,6 +7,14 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(self)
   Strict-Transport-Security: max-age=31536000
 
+# Admin routes — noindex, no cache. Gated by Cloudflare Zero Trust Access.
+/admin/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store, no-cache, must-revalidate, private
+/api/admin/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store, no-cache, must-revalidate, private
+
 # Long-cache immutable static assets
 /*.js
   Cache-Control: public, max-age=31536000, immutable

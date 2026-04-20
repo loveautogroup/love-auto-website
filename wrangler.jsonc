@@ -1,0 +1,30 @@
+{
+  // Cloudflare Pages configuration for Love Auto Group.
+  //
+  // This file binds the KV namespace used by the merchandising admin
+  // (Jordan's featuring + overlay controls). The actual KV namespace ID
+  // is set in the Cloudflare Pages dashboard under Settings → Functions →
+  // KV namespace bindings. Use the same binding name here ("MERCHANDISING")
+  // for local dev parity.
+  //
+  // To create the KV namespace (one-time, via Cloudflare dashboard or CLI):
+  //   wrangler kv:namespace create MERCHANDISING
+  //   wrangler kv:namespace create MERCHANDISING --preview
+  //
+  // Then paste the returned IDs below (or configure via dashboard).
+
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "love-auto-website",
+  "pages_build_output_dir": "out",
+
+  "kv_namespaces": [
+    {
+      "binding": "MERCHANDISING",
+      "id": "REPLACE_WITH_PRODUCTION_KV_ID",
+      "preview_id": "REPLACE_WITH_PREVIEW_KV_ID"
+    }
+  ],
+
+  "compatibility_date": "2026-04-20",
+  "compatibility_flags": ["nodejs_compat"]
+}

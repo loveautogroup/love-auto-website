@@ -4,7 +4,7 @@ module.exports = {
   generateRobotsTxt: true,
   robotsTxtOptions: {
     policies: [
-      { userAgent: '*', allow: '/' },
+      { userAgent: '*', allow: '/', disallow: ['/admin/', '/api/admin/'] },
     ],
     additionalSitemaps: [
       'https://loveautogroup.com/sitemap-vehicles.xml',
