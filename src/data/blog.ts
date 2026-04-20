@@ -11,31 +11,78 @@ export interface BlogPost {
 export const blogPosts: BlogPost[] = [
   {
     slug: "best-used-suvs-under-15000-2026",
-    title: "Best Used SUVs Under $15,000 in 2026",
+    title: "Best Used SUVs Under $15,000 in 2026: A Family Buyer's Guide",
     description:
-      "Looking for a reliable used SUV without breaking the bank? Here are the best options under $15,000 that hold up for years.",
+      "Shopping for a used family SUV under $15,000 in 2026? Here are the most reliable models worth buying, including three-row options, cargo capacity rankings, and what to avoid.",
     date: "2026-04-15",
     author: "Love Auto Group",
     category: "Buying Guides",
     content: `
-      <p>If you're shopping for a used SUV under $15,000, you have more solid options than you might think. The key is knowing which models hold up over time and which ones to avoid.</p>
+      <p><strong>The best used SUVs under $15,000 in 2026 for family use are the Honda Pilot (three-row, 2013–2016), Acura MDX (three-row luxury, 2010–2014), Subaru Outback (two-row wagon, 2015–2018), Mazda CX-5 (two-row compact, 2016–2018), and Lexus RX 350 (two-row luxury, 2013–2015).</strong> All offer reliability past 200,000 miles with basic maintenance, decent fuel economy for their size, and strong resale values so you're not losing money to depreciation.</p>
 
-      <h2>Subaru Forester (2017-2019)</h2>
-      <p>The Forester is one of the best all-around used SUVs at this price point. Standard all-wheel drive, good ground clearance, excellent visibility, and Subaru's reputation for lasting well past 200,000 miles. Look for the 2.5i Premium or Limited trims for the best value.</p>
+      <p>This guide is for buyers prioritizing family use: room for passengers and cargo, comfort on longer trips, and the kind of reliability where you're not planning your weekends around car repairs. For buyers prioritizing winter AWD performance specifically, see our <a href="/blog/best-used-awd-vehicles-chicago-winters-under-15000">AWD winter guide</a>.</p>
 
-      <h2>Lexus RX 350 (2013-2015)</h2>
-      <p>Lexus builds vehicles that last, and the RX 350 is the proof. Even at 8-10 years old, these hold up remarkably well. Comfortable ride, quiet cabin, and the kind of reliability that keeps repair bills low. You'll find clean examples with under 130,000 miles in this budget.</p>
+      <h2>Three-Row Options (Room for 6–8)</h2>
 
-      <h2>Mazda CX-5 (2017-2019)</h2>
-      <p>Mazda doesn't get enough credit. The CX-5 drives better than most competitors, looks sharp, and has proven itself dependable. The Skyactiv engine and transmission combo is solid. Great option if you want something that feels more premium than the price suggests.</p>
+      <h3>Honda Pilot (2013–2016)</h3>
+      <p><strong>Price range:</strong> $9,000 to $14,000 depending on trim and miles</p>
+      <p>The default choice for larger families. Third-row seating actually fits adults (not just kids), cargo space expands to 87 cubic feet with all rows down, and the 3.5L V6 is one of the most reliable engines Honda has ever built. Look for the Touring trim if you can find one in budget — heated leather, navigation, and adaptive cruise change the driving experience. AWD version handles Illinois winters without issue.</p>
+      <p>What to watch for: transmission concerns on the 2016 9-speed were addressed but factor the service history into your decision. 2013–2015 uses the more proven 6-speed.</p>
 
-      <h2>Acura RDX (2013-2016)</h2>
-      <p>Honda engineering in a nicer package. The RDX is peppy, well-built, and ages gracefully. Parts are affordable and service is straightforward. A strong pick for anyone who wants a luxury badge without luxury maintenance costs.</p>
+      <h3>Acura MDX (2010–2014)</h3>
+      <p><strong>Price range:</strong> $5,000 to $11,000</p>
+      <p>Three-row luxury for the price of a bare-bones commuter. Shares the Honda Pilot platform but with SH-AWD (Super Handling AWD), a nicer interior, and Acura's reliability record. Third row is smaller than the Pilot's but fine for kids and occasional adult use. Cargo space is solid with the third row down.</p>
+      <p>This is the value play on this list. A 2012 MDX at $8,000 has the same mechanical bones as a $25,000 luxury SUV from five years newer.</p>
 
-      <h2>What to Look For</h2>
-      <p>Regardless of which model you choose, always check the vehicle history, look for consistent service records, and get a pre-purchase inspection if you're buying privately. Or you can skip all that and buy from a dealer that does the work for you.</p>
+      <h3>Toyota Highlander (2011–2015)</h3>
+      <p><strong>Price range:</strong> $8,000 to $14,000</p>
+      <p>Toyota reliability in three-row form. More family-hauler than sporty, but that's the point. Cargo space is excellent, the ride is comfortable, and Toyota service is available everywhere. The 2014+ redesign is more modern inside; the 2011–2013 models are simpler and sometimes cheaper for equivalent condition.</p>
 
-      <p>At Love Auto Group, every vehicle on our lot has been fully inspected and reconditioned before it gets a price tag. We specialize in exactly these kinds of vehicles. <a href="/inventory">Browse our current inventory</a> or <a href="/contact">contact us</a> if you're looking for something specific.</p>
+      <h2>Two-Row Options (Room for 5 + Cargo)</h2>
+
+      <h3>Subaru Outback (2015–2018)</h3>
+      <p><strong>Price range:</strong> $9,000 to $14,000</p>
+      <p>Technically a wagon, practically an SUV with better fuel economy and a lower load floor. Standard AWD, 8.7 inches of ground clearance (higher than many SUVs), and cargo space that rivals much larger vehicles. The ride is comfortable, visibility is excellent, and Subaru reliability is proven past 200,000 miles.</p>
+      <p>The 2.5L base engine is fine for most. The 3.6R six-cylinder trim has more power for towing or highway passing, but fuel economy drops from 30 MPG highway to 27.</p>
+
+      <h3>Mazda CX-5 (2016–2018)</h3>
+      <p><strong>Price range:</strong> $9,000 to $13,000</p>
+      <p>The CX-5 drives better than anything in its class. Sharper steering, more character, interior materials that feel above the price. SkyActiv engine and transmission combo is reliable, and the Touring and Grand Touring trims add leather and tech. AWD is available but optional.</p>
+      <p>Best for buyers who prioritize how a car drives over how much it hauls. Cargo space is compact-SUV standard, not full-size.</p>
+
+      <h3>Lexus RX 350 (2013–2015)</h3>
+      <p><strong>Price range:</strong> $11,000 to $15,000</p>
+      <p>Premium comfort, luxury build quality, Lexus reliability. Two-row only (the three-row RX 350L came in 2018+ and is above this budget). The RX is the pick for buyers who want a quiet, refined daily driver that handles family duty without feeling like a minivan. AWD option available.</p>
+      <p>At 100,000 to 130,000 miles, these still feel premium. Interior electronics age best on Lexus compared to German competitors.</p>
+
+      <h2>Honorable Mention</h2>
+      <p><strong>Honda CR-V (2015–2018):</strong> Smaller than the Pilot, excellent reliability, great fuel economy. If three-row capacity isn't needed, the CR-V is a solid compact-SUV pick at $10,000 to $13,000. Avoid the 1.5L turbo models (2017+) due to oil dilution issues in cold climates — stick with the 2015–2016 2.4L.</p>
+
+      <p><strong>Acura RDX (2013–2016):</strong> Compact luxury SUV with Honda mechanical reliability. Peppy V6, comfortable ride, well-built interior that ages gracefully. $9,000 to $12,000 range.</p>
+
+      <h2>What to Avoid in This Budget</h2>
+      <ul>
+        <li><strong>Older BMW X3/X5 and Mercedes ML:</strong> The maintenance costs will exceed the value of the vehicle within a year or two.</li>
+        <li><strong>Jeep Grand Cherokee (pre-2014):</strong> Hit or miss reliability, especially on air suspension models.</li>
+        <li><strong>Land Rover LR2/LR4:</strong> Expensive to own at any age.</li>
+        <li><strong>Ford Edge (early 2010s):</strong> The 3.5L V6 is fine but transmission issues plagued this era. Service history matters more than usual.</li>
+        <li><strong>High-mileage first-generation hybrid SUVs:</strong> Battery replacement cost can exceed the vehicle value.</li>
+      </ul>
+
+      <h2>What to Check Before You Buy Any Used SUV</h2>
+      <ul>
+        <li>Carfax or AutoCheck for accident history and title issues</li>
+        <li>Consistent service records — especially oil changes and transmission service</li>
+        <li>Drive it at highway speed — any vibration, wandering steering, or transmission issues show up at 60+ mph</li>
+        <li>Interior electronics: touchscreen, climate, every seat position, every power feature</li>
+        <li>Under the car: rust especially on frame and suspension components (Midwest vehicles)</li>
+        <li>Pre-purchase inspection from an independent mechanic — expect to pay $100-150, saves thousands</li>
+      </ul>
+
+      <h2>Our Take</h2>
+      <p>A used SUV under $15,000 is one of the best values in the car market right now. Someone else absorbed the depreciation, the vehicles have proven themselves through three to five years of real-world use, and the right Japanese makes have another 100,000 miles of service life ahead.</p>
+
+      <p>At Love Auto Group, SUVs make up a big portion of our inventory — we specifically seek out the models above because we know how they hold up. Every one is thoroughly inspected and reconditioned before listing, and we provide a free Carfax report. <a href="/inventory">Browse the current inventory</a> or call us at (630) 359-3643 to ask what's coming in.</p>
     `,
   },
   {

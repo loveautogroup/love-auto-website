@@ -70,6 +70,46 @@ const faqs = [
     answer:
       "Bring a valid driver's license and proof of insurance. If you're financing, we'll walk you through any additional paperwork. If you're paying cash or with a cashier's check, that's all you need.",
   },
+  {
+    question: "Why does Love Auto Group specialize in Japanese vehicles?",
+    answer:
+      "Japanese makes (Lexus, Subaru, Acura, Mazda) consistently rank highest in reliability and hold their value best over time. Over a decade of buying and reconditioning these specific brands, we've learned exactly what to look for and what to avoid on each model. That expertise lets us price competitively and stand behind every vehicle with confidence.",
+  },
+  {
+    question: "Do you have AWD cars for Illinois winters?",
+    answer:
+      "Yes. AWD SUVs and wagons are a big part of what we stock. Subaru Forester and Outback, Acura MDX, Lexus RX 350, Honda CR-V, and Mazda CX-5 are regulars on our lot. Check the current inventory on our website or call us at (630) 359-3643 to ask what's coming in.",
+  },
+  {
+    question: "Can I return a car after I buy it in Illinois?",
+    answer:
+      "Illinois does not have an automatic right-to-return law for used car purchases. Once you sign the paperwork, the vehicle is yours. We encourage every buyer to take their time, test drive thoroughly, ask for a pre-purchase inspection if you want one, and never sign anything you don't fully understand. If you have questions, we'll answer them before the sale, not after.",
+  },
+  {
+    question: "Can you help me find a specific car that's not in your inventory?",
+    answer:
+      "Yes. If you're looking for a specific make, model, or feature set we don't currently have, let us know. We source vehicles regularly and can often find what you're looking for within a week or two. Call (630) 359-3643 or use our contact form to tell us what you want.",
+  },
+  {
+    question: "How long does the buying process take?",
+    answer:
+      "If you're paying cash or bringing your own financing, the paperwork takes about an hour from start to drive-away. With in-house financing, expect two to three hours to run the application, review terms, and finalize the deal. We work to make it as efficient as possible while making sure you understand every document before you sign.",
+  },
+  {
+    question: "Do you sell vehicles with high mileage?",
+    answer:
+      "Yes, and we think it's a smart way to buy. A well-maintained Japanese vehicle at 150,000 to 200,000 miles often has another 100,000 miles of service life ahead. We inspect every high-mileage vehicle carefully and address any issues before listing. The value is better than low-mileage alternatives for most buyers.",
+  },
+  {
+    question: "What's the difference between buying from you versus a franchise dealer?",
+    answer:
+      "Franchise dealers carry new cars from one manufacturer and their certified pre-owned programs add a significant markup for the badge and factory-backed warranty. We're an independent dealer, which means we source from multiple channels, keep overhead lower, and pass those savings on. The tradeoff: no manufacturer-backed CPO warranty, but every vehicle is inspected and reconditioned by our own team with a 30-day warranty included.",
+  },
+  {
+    question: "Do you work with buyers who have bankruptcy or repossession on their credit?",
+    answer:
+      "Yes. We work with multiple lenders including partners that specialize in challenged credit situations. Bankruptcy or repossession on your record doesn't automatically disqualify you. A steady income, a down payment, and an honest conversation about your situation go a long way. Start with our online pre-approval (soft credit pull, no score impact) or call us directly.",
+  },
 ];
 
 export default function FAQPage() {
