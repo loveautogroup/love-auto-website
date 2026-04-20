@@ -45,6 +45,35 @@ const MAX_FEATURED = 12;
 const MAX_PILL_LENGTH = 40;
 const MAX_WARRANTY_LENGTH = 80;
 
+/**
+ * Defense-in-depth character filter for user-supplied display text.
+ *
+ * React escapes these automatically when rendering text children, but we
+ * reject them at the validator so that:
+ *   1. If any downstream consumer ever renders this outside React (email
+ *      templates, PDFs, social previews, the native DMS when Bill migrates),
+ *      it can't be tricked.
+ *   2. No legitimate dealership copy needs `<`, `>`, or `"` — rejecting
+ *      them costs nothing.
+ *   3. Control chars (except \n) shouldn't appear in display copy.
+ *
+ * Sam's call. Added during the Phase 2+3 security audit.
+ */
+function assertSafeText(value: string, fieldLabel: string, issues: string[], allowNewline = false) {
+  if (/[<>"]/.test(value)) {
+    issues.push(`${fieldLabel} may not contain <, >, or " characters.`);
+  }
+  // Allowed control char: \n for two-line pills if allowNewline, otherwise none.
+  // Regex targets ASCII control chars (0x00–0x1F and 0x7F) except \n when permitted.
+  const controlPattern = allowNewline ? /[\x00-\x09\x0B-\x1F\x7F]/ : /[\x00-\x1F\x7F]/;
+  if (controlPattern.test(value)) {
+    issues.push(`${fieldLabel} contains disallowed control characters.`);
+  }
+  if (allowNewline && (value.match(/\n/g)?.length ?? 0) > 1) {
+    issues.push(`${fieldLabel} may contain at most one line break.`);
+  }
+}
+
 export function validateMerchandisingConfig(
   input: unknown
 ): ValidationOk | ValidationFail {
@@ -73,6 +102,8 @@ export function validateMerchandisingConfig(
     issues.push("defaultWarranty must be a string.");
   } else if (obj.defaultWarranty.length > MAX_WARRANTY_LENGTH) {
     issues.push(`defaultWarranty exceeds ${MAX_WARRANTY_LENGTH} characters.`);
+  } else {
+    assertSafeText(obj.defaultWarranty, "defaultWarranty", issues);
   }
 
   // overlays
@@ -103,6 +134,8 @@ export function validateMerchandisingConfig(
           issues.push(`overlays[${vin}].warrantyOverride must be a string.`);
         } else if (o.warrantyOverride.length > MAX_WARRANTY_LENGTH) {
           issues.push(`overlays[${vin}].warrantyOverride too long.`);
+        } else {
+          assertSafeText(o.warrantyOverride, `overlays[${vin}].warrantyOverride`, issues);
         }
       }
       if (o.featurePills !== undefined) {
@@ -112,8 +145,13 @@ export function validateMerchandisingConfig(
           o.featurePills.forEach((pill, i) => {
             if (pill !== undefined && typeof pill !== "string") {
               issues.push(`overlays[${vin}].featurePills[${i}] must be a string or undefined.`);
-            } else if (typeof pill === "string" && pill.length > MAX_PILL_LENGTH) {
-              issues.push(`overlays[${vin}].featurePills[${i}] exceeds ${MAX_PILL_LENGTH} characters.`);
+            } else if (typeof pill === "string") {
+              if (pill.length > MAX_PILL_LENGTH) {
+                issues.push(`overlays[${vin}].featurePills[${i}] exceeds ${MAX_PILL_LENGTH} characters.`);
+              } else {
+                // Pill text allows one \n for two-line formatting.
+                assertSafeText(pill, `overlays[${vin}].featurePills[${i}]`, issues, true);
+              }
             }
           });
         }
