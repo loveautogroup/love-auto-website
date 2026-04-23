@@ -59,6 +59,9 @@ export const metadata: Metadata = {
       "Family owned used car dealership in Villa Park, IL since 2014. Quality Japanese vehicles, carefully selected and fully reconditioned.",
     images: ["https://www.loveautogroup.net/og-image.png"],
   },
+  verification: {
+    google: "l6ab4DiDlnOSGeg0EiwLqR2qt4wUPCULG0_ZdefZMp8",
+  },
   robots: {
     index: true,
     follow: true,
