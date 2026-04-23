@@ -1,13 +1,18 @@
 /**
- * Feature pills cluster — top-center slot over the vehicle photo.
+ * Feature pills cluster — top-RIGHT slot over the vehicle photo.
  *
  * Jordan-authored custom copy per vehicle. Up to 3 pills, each supports a
- * two-line break via \n. Blue glassmorphism styling for photo-agnostic
- * legibility.
+ * two-line break via \n in full mode. Translucent frosted-glass styling so
+ * the photo reads through — Jeremiah's call after the previous solid blue
+ * was crowding the CARFAX badge in third-party feed screenshots.
+ *
+ * Layout: anchored to the right edge of the photo, stacked vertically. This
+ * keeps CARFAX's top-left slot uncontested and creates a clean vertical
+ * column of merchandising callouts that scales to any photo aspect ratio.
  */
 
 interface FeaturePillClusterProps {
-  /** Up to 3 pills. Entries may include \n for a two-line break. */
+  /** Up to 3 pills. Entries may include \n for a two-line break (full mode only). */
   pills?: readonly [string?, string?, string?];
   /** Compact mode for inventory cards — smaller text, single line, fewer pills. */
   compact?: boolean;
@@ -24,11 +29,10 @@ export default function FeaturePillCluster({ pills, compact }: FeaturePillCluste
   return (
     <div
       className={`
-        absolute left-1/2 -translate-x-1/2
-        flex justify-center flex-nowrap z-10
-        ${compact ? "top-2 gap-1" : "top-4 gap-1.5"}
+        absolute right-2 z-10
+        flex flex-col items-end
+        ${compact ? "top-2 gap-1 max-w-[55%]" : "top-3 gap-1.5 max-w-[45%]"}
       `}
-      style={{ maxWidth: compact ? "calc(100% - 80px)" : "calc(100% - 140px)" }}
     >
       {shown.map((pill, i) => {
         const lines = pill.split("\n");
@@ -36,17 +40,24 @@ export default function FeaturePillCluster({ pills, compact }: FeaturePillCluste
           <div
             key={i}
             className={`
-              rounded-full text-white text-center
-              shadow-[0_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-sm
+              rounded-full text-white text-right
+              border border-white/25
+              shadow-[0_2px_6px_rgba(0,0,0,0.35)]
               ${compact
-                ? "px-2 py-0.5 text-[10px] font-bold leading-tight max-w-[100px]"
-                : "px-3 py-1.5 text-[11px] font-bold leading-tight min-w-[72px] max-w-[120px]"}
+                ? "px-2 py-0.5 text-[10px] font-bold leading-tight"
+                : "px-3 py-1.5 text-[11px] font-bold leading-tight"}
             `}
-            style={{ backgroundColor: "rgba(37, 99, 235, 0.92)" }}
+            style={{
+              // ~30% opacity blue + heavy backdrop blur = frosted glass tint
+              backgroundColor: "rgba(37, 99, 235, 0.32)",
+              backdropFilter: "blur(8px) saturate(1.4)",
+              WebkitBackdropFilter: "blur(8px) saturate(1.4)",
+              textShadow: "0 1px 2px rgba(0,0,0,0.6)",
+            }}
           >
             {compact
               ? <span className="block whitespace-nowrap truncate">{lines.join(" ")}</span>
-              : lines.map((line, li) => <span key={li} className="block">{line}</span>)
+              : lines.map((line, li) => <span key={li} className="block whitespace-nowrap">{line}</span>)
             }
           </div>
         );

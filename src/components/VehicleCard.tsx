@@ -10,7 +10,6 @@ import {
   PhoneCTA,
   PhotoScrim,
   StatusPill,
-  WarrantyBadge,
 } from "./badges";
 
 interface VehicleCardProps {
@@ -110,7 +109,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         {/* Gradient scrim for overlay legibility */}
         <PhotoScrim />
 
-        {/* Top-left: CARFAX (scaled 75%) or status pill */}
+        {/* Top-left: CARFAX (scaled 65%) or status pill */}
         <div className="absolute top-2 left-2 z-10 [&_.cf]:scale-[0.65] [&_.cf]:origin-top-left">
           {showCarfax ? (
             <div className="cf">
@@ -121,19 +120,17 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           ) : null}
         </div>
 
-        {/* Top-center: compact feature pills (max 2) */}
+        {/* Top-right: translucent feature pills, vertical stack */}
         <FeaturePillCluster pills={overlay.featurePills} compact />
 
-        {/* Bottom-left: compact warranty (per-vehicle, opt-in via admin).
-            Skipped on cards entirely now — warranty is a VDP-level signal. */}
-        {overlay.warranty && (
-          <div className="absolute bottom-2 left-2 z-10">
-            <WarrantyBadge copy={overlay.warranty} compact />
-          </div>
-        )}
+        {/* Warranty intentionally NOT shown on cards — it's a VDP-level
+            signal. Putting it on the card crowds the bottom row at compact
+            widths and conflicts with the phone CTA, which is the higher
+            priority callout (bypasses third-party spoofed lead numbers). */}
 
-        {/* Bottom-center: compact phone CTA */}
-        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10">
+        {/* Bottom-left: compact phone CTA (anchored left so it can't collide
+            with the dealer cluster on the right at narrow card widths). */}
+        <div className="absolute bottom-2 left-2 z-10">
           <PhoneCTA
             phone={SITE_CONFIG.phone}
             phoneRaw={SITE_CONFIG.phoneRaw}

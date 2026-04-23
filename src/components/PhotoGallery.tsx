@@ -106,29 +106,35 @@ export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps
                 ) : null}
               </div>
 
-              {/* Top-center: feature pills */}
+              {/* Top-right: translucent feature pills (vertical stack) */}
               <FeaturePillCluster pills={overlay.featurePills} />
 
-              {/* Bottom-left: warranty — only renders if Jordan has set
-                  warranty copy on this vehicle (opt-in per VIN). Compact
-                  so the bottom-center phone CTA doesn't get squeezed. */}
-              {warrantyCopy && (
-                <div className="absolute bottom-3 left-3 z-10">
-                  <WarrantyBadge copy={warrantyCopy} compact />
-                </div>
-              )}
-
-              {/* Bottom-center: phone CTA */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+              {/* Bottom-left: phone CTA (anchored left so the dealer
+                  cluster on the right has room to breathe). Compact on
+                  mobile to avoid eating the photo bottom edge. */}
+              <div className="absolute bottom-3 left-3 z-10 md:hidden">
+                <PhoneCTA
+                  phone={SITE_CONFIG.phone}
+                  phoneRaw={SITE_CONFIG.phoneRaw}
+                  compact
+                />
+              </div>
+              <div className="absolute bottom-4 left-4 z-10 hidden md:block">
                 <PhoneCTA
                   phone={SITE_CONFIG.phone}
                   phoneRaw={SITE_CONFIG.phoneRaw}
                 />
               </div>
 
-              {/* Bottom-right: dealer + Google (compact so the phone CTA
-                  in bottom-center doesn't get squeezed off-screen) */}
-              <div className="absolute bottom-3 right-3 z-10">
+              {/* Bottom-right: warranty (if set) stacked above dealer +
+                  Google. Warranty is a VDP-level signal — it shows here
+                  on the gallery photo and only when Jordan has set a
+                  warranty string for this VIN. Vehicles sold as-is
+                  render no warranty pill anywhere. */}
+              <div className="absolute bottom-3 right-3 z-10 flex flex-col items-end gap-1.5">
+                {warrantyCopy && (
+                  <WarrantyBadge copy={warrantyCopy} compact />
+                )}
                 <DealerCluster
                   rating={SITE_CONFIG.reviews.google.rating}
                   reviewCount={SITE_CONFIG.reviews.google.count}

@@ -139,7 +139,9 @@ export default async function VehicleDetailPage({
         </ol>
       </nav>
 
-      <article className="max-w-7xl mx-auto px-4 pb-16">
+      {/* pb-32 on mobile gives clearance for the fixed Call/Text/Calc bar
+          (~76px tall). lg+ drops back to pb-16 since the sticky bar is hidden. */}
+      <article className="max-w-7xl mx-auto px-4 pb-32 lg:pb-16">
         {/* Trust strip — quick brand signal above the gallery */}
         <VDPTrustStrip />
 

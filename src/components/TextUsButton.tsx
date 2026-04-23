@@ -2,11 +2,22 @@
 
 import { SITE_CONFIG } from "@/lib/constants";
 
+/**
+ * Floating "Text Us" CTA — desktop-only.
+ *
+ * Hidden on mobile because:
+ *   - The header already shows a green phone button on mobile
+ *   - The VDP has its own sticky CTA bar at the bottom (Call/Text/Calc)
+ *   - Two FABs at the same screen edge crowds the layout and overlaps content
+ *
+ * On desktop, this is a passive secondary CTA that lives in the corner
+ * and doesn't compete with anything.
+ */
 export default function TextUsButton() {
   return (
     <a
       href={`sms:${SITE_CONFIG.phoneRaw}?body=Hi%2C%20I%27m%20interested%20in%20a%20vehicle%20on%20your%20lot.`}
-      className="fixed bottom-6 right-6 z-40 flex items-center gap-2 bg-brand-green hover:bg-green-600 text-white pl-4 pr-5 py-3 rounded-full shadow-lg hover:shadow-xl transition-all group"
+      className="hidden lg:flex fixed bottom-6 right-6 z-40 items-center gap-2 bg-brand-green hover:bg-green-600 text-white pl-4 pr-5 py-3 rounded-full shadow-lg hover:shadow-xl transition-all group"
       aria-label="Text us"
     >
       <svg
