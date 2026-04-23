@@ -5,6 +5,7 @@ import { filterFeatured, sortWithFeaturedFirst } from "@/data/merchandising";
 import VehicleCard from "@/components/VehicleCard";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 import PaymentCalculator from "@/components/PaymentCalculator";
+import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 
 export default async function HomePage() {
   // Filter to available stock, then pull Jordan-picked featured VINs first.
@@ -158,6 +159,22 @@ export default async function HomePage() {
                 {pill.label}
               </Link>
             ))}
+          </div>
+
+          {/* Trust strip — Carfax Advantage Dealer + family-owned signal.
+              Anchors the hero with a third-party accreditation right above
+              the fold, before the visitor scrolls into inventory. */}
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-brand-gray-300">
+            <CarfaxAdvantageBadge size="md" />
+            <div className="h-10 w-px bg-white/15 hidden sm:block" />
+            <div>
+              <p className="text-white font-semibold">
+                Family Owned · Villa Park, IL
+              </p>
+              <p className="text-xs text-brand-gray-400">
+                Free Carfax on every vehicle. No exceptions.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -347,6 +364,17 @@ export default async function HomePage() {
                 customers by name, and our reputation is everything. That&apos;s
                 why we do it right.
               </p>
+            </div>
+          </div>
+
+          {/* Accreditations row — third-party trust marks. Reinforces the
+              three pillars with externally-verifiable proof points. */}
+          <div className="mt-12 pt-10 border-t border-brand-gray-200">
+            <p className="text-center text-xs uppercase tracking-[0.18em] text-brand-gray-500 mb-5">
+              Accredited & Recognized
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-12">
+              <CarfaxAdvantageBadge size="lg" />
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { SITE_CONFIG, NAV_LINKS } from "@/lib/constants";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
+import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 
 export default async function Footer() {
   const currentYear = new Date().getFullYear();
@@ -26,6 +27,12 @@ export default async function Footer() {
               quality Japanese vehicles, carefully selected and fully
               reconditioned in Villa Park, IL.
             </p>
+
+            {/* Carfax Advantage Dealer accreditation — persistent footer
+                trust mark, visible on every page. */}
+            <div className="mt-5">
+              <CarfaxAdvantageBadge size="sm" />
+            </div>
           </div>
 
           {/* Column 2: Quick Links */}
