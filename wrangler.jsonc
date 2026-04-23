@@ -22,6 +22,16 @@
       "binding": "MERCHANDISING",
       "id": "fb1d2c022f45486ba77fd5ba0ab04b3a",
       "preview_id": "8cc9677f116a4f0aaa29826e1a27dcb8"
+    },
+    {
+      // Finance-application leads from the public /financing form.
+      // Create via Cloudflare dashboard → Workers & Pages → KV → Create:
+      //   LEADS and LEADS_preview
+      // Then paste the IDs here. Until created, the /api/finance-application
+      // endpoint returns 503 on submit.
+      "binding": "LEADS",
+      "id": "REPLACE_WITH_LEADS_KV_ID",
+      "preview_id": "REPLACE_WITH_LEADS_KV_PREVIEW_ID"
     }
   ],
 
