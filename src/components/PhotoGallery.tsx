@@ -22,13 +22,17 @@ interface PhotoGalleryProps {
 }
 
 /**
- * VDP photo gallery. The main hero image gets the full Maxim-style badge
- * overlay (CARFAX, feature pills, warranty, phone CTA, dealer + Google
- * cluster). At gallery scale (~600px wide on desktop) the dense overlay
- * has room and reads cleanly.
+ * VDP photo gallery — Maxim-style layout.
  *
- * If `vehicle` isn't passed, the gallery degrades gracefully to just the
- * photo + thumbnails (no overlay), matching pre-overlay behavior.
+ * Big hero photo on the left (60% width) with the full Maxim-style badge
+ * overlay (CARFAX, feature pills, warranty, phone CTA, dealer + Google).
+ * 2x2 thumbnail grid on the right (40% width). The 4th thumbnail in the
+ * grid carries a "+N more photos" overlay when the vehicle has more than
+ * 5 photos. Below the gallery, a horizontal strip for full navigation.
+ *
+ * Why this layout: hero photo is large enough to showcase the vehicle and
+ * carry the dense overlay; right-side grid gives shoppers a multi-angle
+ * preview without making them click through every photo.
  */
 export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -37,7 +41,6 @@ export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps
   const photoCount = hasRealPhotos ? images.length : 8;
 
   // Resolve overlay only if vehicle is supplied AND we're on the first photo.
-  // Don't show badges on thumbnails — only on the lead photo.
   const overlay = vehicle
     ? resolveOverlay(vehicle.vin, vehicle.daysOnLot, vehicle.status)
     : null;
@@ -45,13 +48,18 @@ export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps
   const showCarfax = overlay?.carfax === true;
   const warrantyCopy = overlay?.warrantyOverride ?? MERCHANDISING.defaultWarranty;
 
+  // Right-side grid shows photos at indexes 1, 2, 3, 4 (the 4 right after
+  // the hero). The 4th tile gets a "+N more photos" overlay if there are
+  // more than 5 total.
+  const gridIndexes = [1, 2, 3, 4];
+  const remaining = Math.max(0, photoCount - 5);
+
   return (
     <div className="space-y-3">
-      {/* Main hero image — full-width on all viewports so the overlay
-          system has room to breathe. Thumbnails sit below as a strip. */}
-      <div className="space-y-2">
-        {/* Primary large image */}
-        <div className="relative aspect-[16/9] bg-brand-gray-100 rounded-xl overflow-hidden">
+      {/* Big hero on left + 2x2 thumb grid on right */}
+      <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-2">
+        {/* Primary hero image */}
+        <div className="relative aspect-[3/2] bg-brand-gray-100 rounded-xl overflow-hidden">
           {hasRealPhotos ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -122,29 +130,73 @@ export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps
             </>
           )}
 
-          {/* Photo counter badge — slid up when main overlay is showing,
-              so it doesn't fight the dealer cluster. */}
+          {/* Photo counter — bottom-left when no overlay, top-right otherwise */}
           {!showBadges && (
-            <span className="absolute bottom-3 right-3 bg-black/70 text-white text-xs font-medium px-2.5 py-1 rounded-full">
-              {selectedIndex + 1} / {photoCount}
-            </span>
-          )}
-          {showBadges && (
-            <span className="absolute top-3 right-3 bg-black/70 text-white text-xs font-medium px-2.5 py-1 rounded-full z-10">
-              {selectedIndex + 1} / {photoCount}
+            <span className="absolute bottom-3 left-3 bg-black/70 text-white text-xs font-medium px-2.5 py-1 rounded-full inline-flex items-center gap-1">
+              <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current">
+                <path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+                <circle cx="12" cy="13" r="3" />
+              </svg>
+              {photoCount} photos · Click to view all
             </span>
           )}
         </div>
 
+        {/* Right-side 2x2 thumbnail grid */}
+        <div className="hidden md:grid grid-cols-2 grid-rows-2 gap-2">
+          {gridIndexes.map((thumbIndex, gridPos) => {
+            const isLastTile = gridPos === 3;
+            const showMoreOverlay = isLastTile && remaining > 0;
+            return (
+              <button
+                key={thumbIndex}
+                onClick={() => setSelectedIndex(thumbIndex)}
+                className={`relative aspect-[4/3] bg-brand-gray-100 rounded-lg overflow-hidden border-2 transition-all ${
+                  selectedIndex === thumbIndex
+                    ? "border-brand-red ring-1 ring-brand-red"
+                    : "border-transparent hover:border-brand-gray-300"
+                }`}
+                aria-label={
+                  showMoreOverlay
+                    ? `View all ${photoCount} photos`
+                    : `View photo ${thumbIndex + 1}`
+                }
+              >
+                {hasRealPhotos && images[thumbIndex] ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={images[thumbIndex]}
+                    alt={`${alt} — Thumbnail ${thumbIndex + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-brand-gray-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                )}
+                {showMoreOverlay && (
+                  <div className="absolute inset-0 bg-black/65 flex items-center justify-center text-white">
+                    <div className="text-center">
+                      <div className="text-2xl font-extrabold leading-none">+{remaining}</div>
+                      <div className="text-[11px] font-semibold mt-0.5">more photos</div>
+                    </div>
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Horizontal thumbnail strip — same on all viewports now */}
+      {/* Horizontal thumbnail strip — full navigation, all viewports */}
       <div className="flex gap-2 overflow-x-auto pb-1">
         {Array.from({ length: photoCount }).map((_, i) => (
           <button
             key={i}
             onClick={() => setSelectedIndex(i)}
-            className={`relative aspect-[4/3] w-24 md:w-28 bg-brand-gray-100 rounded-lg shrink-0 overflow-hidden border-2 transition-all ${
+            className={`relative aspect-[4/3] w-20 md:w-24 bg-brand-gray-100 rounded-lg shrink-0 overflow-hidden border-2 transition-all ${
               selectedIndex === i
                 ? "border-brand-red ring-1 ring-brand-red"
                 : "border-transparent hover:border-brand-gray-300"
@@ -160,7 +212,7 @@ export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center text-brand-gray-200">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
