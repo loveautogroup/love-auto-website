@@ -25,10 +25,11 @@ interface DealerClusterProps {
 // Shared frosted-glass surface — same recipe as FeaturePillCluster /
 // WarrantyBadge for a unified look.
 const GLASS_STYLE = {
-  backgroundColor: "rgba(15, 23, 42, 0.32)",
-  backdropFilter: "blur(8px) saturate(1.4)",
-  WebkitBackdropFilter: "blur(8px) saturate(1.4)",
-  textShadow: "0 1px 2px rgba(0,0,0,0.6)",
+  backgroundColor: "rgba(15, 23, 42, 0.18)",
+  backdropFilter: "blur(10px) saturate(1.4)",
+  WebkitBackdropFilter: "blur(10px) saturate(1.4)",
+  textShadow:
+    "0 0 1px rgba(0,0,0,0.95), 1px 1px 1px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.7)",
 } as const;
 
 export default function DealerCluster({

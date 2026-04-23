@@ -29,10 +29,11 @@ export default function WarrantyBadge({
           : "gap-2 pl-2.5 pr-3.5 py-2"}
       `}
       style={{
-        backgroundColor: "rgba(15, 23, 42, 0.32)",
-        backdropFilter: "blur(8px) saturate(1.4)",
-        WebkitBackdropFilter: "blur(8px) saturate(1.4)",
-        textShadow: "0 1px 2px rgba(0,0,0,0.6)",
+        backgroundColor: "rgba(15, 23, 42, 0.18)",
+        backdropFilter: "blur(10px) saturate(1.4)",
+        WebkitBackdropFilter: "blur(10px) saturate(1.4)",
+        textShadow:
+          "0 0 1px rgba(0,0,0,0.95), 1px 1px 1px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.7)",
       }}
     >
       <div

@@ -2,13 +2,17 @@
  * Feature pills cluster — top-RIGHT slot over the vehicle photo.
  *
  * Jordan-authored custom copy per vehicle. Up to 3 pills, each supports a
- * two-line break via \n in full mode. Translucent frosted-glass styling so
- * the photo reads through — Jeremiah's call after the previous solid blue
- * was crowding the CARFAX badge in third-party feed screenshots.
+ * two-line break via \n in full mode.
  *
- * Layout: anchored to the right edge of the photo, stacked vertically. This
- * keeps CARFAX's top-left slot uncontested and creates a clean vertical
- * column of merchandising callouts that scales to any photo aspect ratio.
+ * Heavy frosted-glass treatment — pills are 18% opacity dark over a
+ * blurred backdrop so the photo reads through clearly. White text with
+ * a hard-edge shadow keeps the copy legible against any photo subject.
+ * Matches the unified overlay aesthetic used by the warranty + dealer
+ * cluster badges (no more standalone blue-tinted boxes).
+ *
+ * Layout: anchored to the right edge of the photo, stacked vertically.
+ * This keeps CARFAX's top-left slot uncontested and creates a clean
+ * vertical column of merchandising callouts at any aspect ratio.
  */
 
 interface FeaturePillClusterProps {
@@ -48,11 +52,14 @@ export default function FeaturePillCluster({ pills, compact }: FeaturePillCluste
                 : "px-2 py-0.5 text-[9px] sm:px-3 sm:py-1.5 sm:text-[11px] font-bold leading-tight"}
             `}
             style={{
-              // ~30% opacity blue + heavy backdrop blur = frosted glass tint
-              backgroundColor: "rgba(37, 99, 235, 0.32)",
-              backdropFilter: "blur(8px) saturate(1.4)",
-              WebkitBackdropFilter: "blur(8px) saturate(1.4)",
-              textShadow: "0 1px 2px rgba(0,0,0,0.6)",
+              // Heavy frosted glass — 18% dark fill over a strong blur lets
+              // the photo show through clearly while keeping white text crisp.
+              // Same recipe as WarrantyBadge / DealerCluster for visual unity.
+              backgroundColor: "rgba(15, 23, 42, 0.18)",
+              backdropFilter: "blur(10px) saturate(1.4)",
+              WebkitBackdropFilter: "blur(10px) saturate(1.4)",
+              textShadow:
+                "0 0 1px rgba(0,0,0,0.95), 1px 1px 1px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.7)",
             }}
           >
             {compact
