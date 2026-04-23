@@ -5,11 +5,14 @@
  *
  * Uses the official Carfax solid-monochrome logo (from Jeremiah's Carfax
  * Advantage Dealer portal) paired with a "Free Report" label bar underneath.
- * Preserves Carfax brand integrity — no recreation, no approximation.
+ * Preserves Carfax brand integrity — no recreation, no approximation, no
+ * tinting of the brand colors. Solid white wrapper + black "FREE REPORT"
+ * bar are the official brand-compliant lockup.
  *
- * Top-left slot on vehicle photo cards. Opens the Carfax report for the VIN
- * in a new tab when tapped. Client component because of the stopPropagation
- * onClick handler (needed so the Carfax click doesn't also navigate to VDP).
+ * Top-left slot on vehicle photos. Live link — opens the Carfax report
+ * for the VIN in a new tab when tapped. Client component because of the
+ * stopPropagation onClick handler (needed so the Carfax click on a card
+ * doesn't also navigate to the VDP).
  */
 
 import Image from "next/image";
@@ -32,8 +35,9 @@ export default function CarfaxBadge({ vin }: CarfaxBadgeProps) {
         w-[140px] rounded-md overflow-hidden
         bg-white border-2 border-[#1A1919]
         shadow-[0_3px_6px_rgba(0,0,0,0.35)]
-        transition-transform duration-150
-        hover:scale-105 hover:shadow-[0_5px_10px_rgba(0,0,0,0.45)]
+        transition-all duration-150
+        hover:scale-[1.05] hover:shadow-[0_5px_10px_rgba(0,0,0,0.45)]
+        active:scale-100
         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white
       "
       aria-label="View free Carfax report for this vehicle"
