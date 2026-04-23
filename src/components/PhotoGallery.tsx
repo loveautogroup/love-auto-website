@@ -107,9 +107,10 @@ export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps
               {/* Top-center: feature pills */}
               <FeaturePillCluster pills={overlay.featurePills} />
 
-              {/* Bottom-left: warranty */}
+              {/* Bottom-left: warranty (compact so the phone CTA in the
+                  bottom-center doesn't get squeezed off-screen) */}
               <div className="absolute bottom-3 left-3 z-10">
-                <WarrantyBadge copy={warrantyCopy} />
+                <WarrantyBadge copy={warrantyCopy} compact />
               </div>
 
               {/* Bottom-center: phone CTA */}

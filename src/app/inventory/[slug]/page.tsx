@@ -8,6 +8,9 @@ import PhotoGallery from "@/components/PhotoGallery";
 import VDPTabs from "@/components/VDPTabs";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
 import VDPPaymentCalculator from "@/components/VDPPaymentCalculator";
+import VDPMarketPrice from "@/components/VDPMarketPrice";
+import MobileCalculatorButton from "@/components/MobileCalculatorButton";
+import { resolveOverlay } from "@/data/merchandising";
 
 function estimateMonthlyPayment(
   price: number,
@@ -89,6 +92,9 @@ export default async function VehicleDetailPage({
 
   const monthlyPayment = estimateMonthlyPayment(vehicle.price);
 
+  // Pull merchandising overlay for market estimate (Jordan-researched).
+  const overlay = resolveOverlay(vehicle.vin, vehicle.daysOnLot, vehicle.status);
+
   const similarVehicles = sampleInventory
     .filter(
       (v) =>
@@ -162,6 +168,17 @@ export default async function VehicleDetailPage({
                 {formattedMileage} miles · {vehicle.drivetrain} · {vehicle.exteriorColor}
               </p>
             </div>
+
+            {/* Market price comparison — only renders when Jordan has set
+                a marketEstimate in the merchandising overlay. */}
+            {overlay.marketEstimate && (
+              <div className="mt-4 lg:mt-6">
+                <VDPMarketPrice
+                  askingPrice={vehicle.price}
+                  marketEstimate={overlay.marketEstimate}
+                />
+              </div>
+            )}
 
             {/* Tabbed Content — Overview, Features, History, Financing */}
             <VDPTabs
@@ -245,7 +262,7 @@ export default async function VehicleDetailPage({
           </div>
         </div>
 
-        {/* Mobile sticky CTA bar */}
+        {/* Mobile sticky CTA bar — Call + Calculate (opens modal) */}
         <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-white border-t border-brand-gray-200 p-3 flex gap-3 z-40">
           <a
             href={`tel:${SITE_CONFIG.phoneRaw}`}
@@ -267,12 +284,11 @@ export default async function VehicleDetailPage({
             </svg>
             Call
           </a>
-          <Link
-            href={`/financing?vehicle=${encodeURIComponent(`${vehicle.year} ${vehicle.make} ${vehicle.model}`)}`}
-            className="flex-1 flex items-center justify-center bg-brand-red text-white py-3 rounded-xl font-semibold"
-          >
-            Get Financing
-          </Link>
+          <MobileCalculatorButton
+            vehiclePrice={vehicle.price}
+            vehicleSlug={vehicle.slug}
+            vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+          />
         </div>
 
         {/* Similar Vehicles */}

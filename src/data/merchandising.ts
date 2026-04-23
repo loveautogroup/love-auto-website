@@ -47,6 +47,15 @@ export interface VehicleOverlay {
 
   /** Hide this vehicle from the site entirely, even if it's active in Dealer Center. */
   hidden?: boolean;
+
+  /**
+   * Estimated fair market price for this vehicle (Jordan's research).
+   * When set, the VDP renders a CarGurus-style price comparison bar:
+   * Great Deal / Good Deal / Fair / Above Market based on the gap
+   * between asking price and this estimate.
+   * Source ideas: KBB Black Book, recent comparable sales, manual research.
+   */
+  marketEstimate?: number;
 }
 
 export interface MerchandisingConfig {
@@ -88,6 +97,7 @@ export const MERCHANDISING: MerchandisingConfig = {
         "Adaptive\nCruise",
         "Heated\nLeather",
       ],
+      marketEstimate: 12500, // priced at $10,999 — Good Deal
     },
 
     // 2017 Ford Mustang EcoBoost Premium — sporty coupe, turbo
@@ -98,6 +108,7 @@ export const MERCHANDISING: MerchandisingConfig = {
         "Premium\nPackage",
         "Heated\nLeather",
       ],
+      marketEstimate: 14800, // priced at $13,999 — Fair
     },
 
     // 2010 Acura MDX Sport — value luxury SUV, SH-AWD, third-row under $5K
@@ -109,6 +120,7 @@ export const MERCHANDISING: MerchandisingConfig = {
         "Third-Row\nSeats",
         "Under\n$5,000",
       ],
+      marketEstimate: 5500, // priced at $4,499 — Great Deal
     },
 
     // 2013 GMC Terrain SLT-1 — well-equipped compact SUV
@@ -119,6 +131,7 @@ export const MERCHANDISING: MerchandisingConfig = {
         "Pioneer\nPremium Audio",
         "Remote\nStart",
       ],
+      marketEstimate: 5400, // priced at $4,999 — Good Deal
     },
 
     // 2017 Hyundai Accent SE — efficient commuter sedan
@@ -129,6 +142,7 @@ export const MERCHANDISING: MerchandisingConfig = {
         "Under\n$4,000",
         "Commuter\nReady",
       ],
+      marketEstimate: 4500, // priced at $3,999 — Good Deal
     },
 
     // 2016 Lexus RC 350 — Japanese luxury coupe, premium margin hero
@@ -140,6 +154,7 @@ export const MERCHANDISING: MerchandisingConfig = {
         "Blind Spot\nMonitor",
         "Premium\nPackage",
       ],
+      marketEstimate: 19200, // priced at $17,999 — Good Deal
     },
 
     // 2008 Saab 9-3 2.0T Convertible — niche, unique, under $2,500
@@ -151,6 +166,7 @@ export const MERCHANDISING: MerchandisingConfig = {
         "Turbo\nPerformance",
         "Under\n$2,500",
       ],
+      marketEstimate: 3200, // priced at $2,499 — Great Deal
     },
   },
 

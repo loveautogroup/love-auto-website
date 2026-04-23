@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Vehicle } from "@/lib/types";
 import { SITE_CONFIG } from "@/lib/constants";
+import VDPFeaturesGrouped from "./VDPFeaturesGrouped";
 
 interface VDPTabsProps {
   vehicle: Vehicle;
@@ -116,33 +117,7 @@ export default function VDPTabs({
 
         {activeTab === "Features" && (
           <section>
-            <h2 className="text-xl font-bold text-brand-gray-900 mb-4">
-              Key Features
-            </h2>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {vehicle.features.map((feature) => (
-                <li
-                  key={feature}
-                  className="flex items-center gap-3 bg-brand-gray-50 rounded-lg px-4 py-3"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-5 h-5 text-brand-green shrink-0"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  <span className="text-brand-gray-700 font-medium">{feature}</span>
-                </li>
-              ))}
-            </ul>
+            <VDPFeaturesGrouped features={vehicle.features} />
           </section>
         )}
 
