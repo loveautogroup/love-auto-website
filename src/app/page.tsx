@@ -29,7 +29,7 @@ export default async function HomePage() {
               </span>
             </h1>
             <p className="mt-6 text-lg md:text-xl text-brand-gray-300 leading-relaxed">
-              Quality used vehicles, inspected, reconditioned, and ready to
+              Quality used vehicles, inspected, reconditioned and ready to
               drive. Family owned in Villa Park, IL since 2014.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
