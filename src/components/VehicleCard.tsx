@@ -144,6 +144,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           <DealerCluster
             rating={SITE_CONFIG.reviews.google.rating}
             reviewCount={SITE_CONFIG.reviews.google.count}
+            reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
             compact
           />
         </div>

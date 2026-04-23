@@ -1,14 +1,23 @@
+"use client";
+
 /**
  * Dealer logo + Google review cluster — bottom-right slot.
  *
- * Frosted-glass translucent treatment to match the rest of the photo
- * overlay system. Heart/star/Google text reads through the photo with
- * a backdrop blur and white text-shadow for legibility.
+ * Renders as a live link to the dealership's Google Business Profile so
+ * shoppers can read the actual reviews. Frosted-glass translucent
+ * treatment matches the rest of the photo overlay system.
+ *
+ * Client component because of the stopPropagation onClick — needed so
+ * tapping the badge on an inventory card opens Google Reviews instead
+ * of navigating to the vehicle's VDP (the card itself is a click target
+ * via the title link's ::before pseudo-element).
  */
 
 interface DealerClusterProps {
   rating: number;
   reviewCount: number;
+  /** URL to the dealership's public Google reviews page. */
+  reviewsUrl: string;
   /** Compact mode for inventory cards — single combined pill, monogram only. */
   compact?: boolean;
 }
@@ -22,19 +31,32 @@ const GLASS_STYLE = {
   textShadow: "0 1px 2px rgba(0,0,0,0.6)",
 } as const;
 
-export default function DealerCluster({ rating, reviewCount, compact }: DealerClusterProps) {
+export default function DealerCluster({
+  rating,
+  reviewCount,
+  reviewsUrl,
+  compact,
+}: DealerClusterProps) {
   if (compact) {
     // Compact: single combined pill — heart mono + Google rating.
     // Mobile sizing (~9px) sm+ scales up to 10px so it doesn't dominate
     // the photo at narrow widths.
     return (
-      <div
+      <a
+        href={reviewsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
+        aria-label={`Read Love Auto Group's ${rating} star Google reviews (${reviewCount} or more)`}
         className="
           flex items-center gap-1 sm:gap-1.5
           rounded-md px-1.5 py-0.5 sm:px-2 sm:py-1
-          text-white border border-white/25
+          text-white border border-white/25 no-underline
           shadow-[0_2px_6px_rgba(0,0,0,0.35)]
           text-[9px] sm:text-[10px] font-bold
+          hover:border-white/50 hover:scale-[1.03] active:scale-100
+          transition-all duration-150
+          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white
         "
         style={GLASS_STYLE}
       >
@@ -46,16 +68,13 @@ export default function DealerCluster({ rating, reviewCount, compact }: DealerCl
         </span>
         <span>{rating.toFixed(1)}</span>
         <span className="text-[#CBD5E1]">· {reviewCount}+</span>
-        <span className="sr-only">
-          Love Auto Group, {rating} out of 5 stars based on {reviewCount} or more reviews
-        </span>
-      </div>
+      </a>
     );
   }
 
   return (
     <div className="flex flex-col items-end gap-1.5">
-      {/* Dealer logo pill */}
+      {/* Dealer logo pill — links to home page */}
       <div
         className="
           flex items-center gap-1.5
@@ -73,14 +92,22 @@ export default function DealerCluster({ rating, reviewCount, compact }: DealerCl
         </span>
       </div>
 
-      {/* Google review pill */}
-      <div
+      {/* Google review pill — live link to Google reviews */}
+      <a
+        href={reviewsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
+        aria-label={`Read Love Auto Group's ${rating} star Google reviews (${reviewCount} or more)`}
         className="
           flex items-center gap-1.5
           rounded-md px-2.5 py-1.5
-          text-white border border-white/25
+          text-white border border-white/25 no-underline
           shadow-[0_2px_6px_rgba(0,0,0,0.35)]
           text-[11px] font-bold
+          hover:border-white/50 hover:scale-[1.03] active:scale-100
+          transition-all duration-150
+          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white
         "
         style={GLASS_STYLE}
       >
@@ -100,10 +127,7 @@ export default function DealerCluster({ rating, reviewCount, compact }: DealerCl
           ★★★★★
         </span>
         <span className="text-white">· {reviewCount}+</span>
-        <span className="sr-only">
-          {rating} out of 5 stars based on {reviewCount} or more reviews
-        </span>
-      </div>
+      </a>
     </div>
   );
 }
