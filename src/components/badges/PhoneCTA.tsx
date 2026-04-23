@@ -25,8 +25,11 @@ export default function PhoneCTA({ phone, phoneRaw, compact }: PhoneCTAProps) {
       onClick={(e) => e.stopPropagation()}
       className="inline-block whitespace-nowrap text-white no-underline"
       style={{
+        // Layered shadow: hard 1px outline at every angle for letter
+        // edges + soft glow for depth. Lets the phone number stay
+        // legible over light/cluttered photos without needing a fill.
         textShadow:
-          "0 2px 6px rgba(0,0,0,0.8), 0 0 2px rgba(0,0,0,0.6)",
+          "0 0 1px rgba(0,0,0,0.95), 1px 1px 1px rgba(0,0,0,0.95), -1px -1px 1px rgba(0,0,0,0.95), 0 2px 8px rgba(0,0,0,0.7)",
       }}
       aria-label={`Call or text us at ${phone}`}
     >

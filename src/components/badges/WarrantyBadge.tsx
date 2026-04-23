@@ -22,12 +22,18 @@ export default function WarrantyBadge({
     <div
       className={`
         inline-flex items-center rounded-full text-white
-        shadow-[0_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-sm
+        border border-white/25
+        shadow-[0_2px_6px_rgba(0,0,0,0.35)]
         ${compact
           ? "gap-0.5 pl-1 pr-1.5 py-0.5 sm:gap-1 sm:pl-1.5 sm:pr-2 sm:py-1"
           : "gap-2 pl-2.5 pr-3.5 py-2"}
       `}
-      style={{ backgroundColor: "rgba(15, 23, 42, 0.78)" }}
+      style={{
+        backgroundColor: "rgba(15, 23, 42, 0.32)",
+        backdropFilter: "blur(8px) saturate(1.4)",
+        WebkitBackdropFilter: "blur(8px) saturate(1.4)",
+        textShadow: "0 1px 2px rgba(0,0,0,0.6)",
+      }}
     >
       <div
         className={`

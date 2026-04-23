@@ -1,7 +1,9 @@
 /**
  * Dealer logo + Google review cluster — bottom-right slot.
- * Two stacked dark-transparent pills: Love Auto Group wordmark on top,
- * Google review rating (stars + count) on bottom.
+ *
+ * Frosted-glass translucent treatment to match the rest of the photo
+ * overlay system. Heart/star/Google text reads through the photo with
+ * a backdrop blur and white text-shadow for legibility.
  */
 
 interface DealerClusterProps {
@@ -10,6 +12,15 @@ interface DealerClusterProps {
   /** Compact mode for inventory cards — single combined pill, monogram only. */
   compact?: boolean;
 }
+
+// Shared frosted-glass surface — same recipe as FeaturePillCluster /
+// WarrantyBadge for a unified look.
+const GLASS_STYLE = {
+  backgroundColor: "rgba(15, 23, 42, 0.32)",
+  backdropFilter: "blur(8px) saturate(1.4)",
+  WebkitBackdropFilter: "blur(8px) saturate(1.4)",
+  textShadow: "0 1px 2px rgba(0,0,0,0.6)",
+} as const;
 
 export default function DealerCluster({ rating, reviewCount, compact }: DealerClusterProps) {
   if (compact) {
@@ -21,10 +32,11 @@ export default function DealerCluster({ rating, reviewCount, compact }: DealerCl
         className="
           flex items-center gap-1 sm:gap-1.5
           rounded-md px-1.5 py-0.5 sm:px-2 sm:py-1
-          text-white shadow-[0_2px_4px_rgba(0,0,0,0.3)]
-          backdrop-blur-sm text-[9px] sm:text-[10px] font-bold
+          text-white border border-white/25
+          shadow-[0_2px_6px_rgba(0,0,0,0.35)]
+          text-[9px] sm:text-[10px] font-bold
         "
-        style={{ backgroundColor: "rgba(15, 23, 42, 0.78)" }}
+        style={GLASS_STYLE}
       >
         <span className="text-[10px] sm:text-[12px] font-black text-[#EF4444]" aria-hidden="true">
           ♥
@@ -33,7 +45,7 @@ export default function DealerCluster({ rating, reviewCount, compact }: DealerCl
           ★
         </span>
         <span>{rating.toFixed(1)}</span>
-        <span className="text-[#94A3B8]">· {reviewCount}+</span>
+        <span className="text-[#CBD5E1]">· {reviewCount}+</span>
         <span className="sr-only">
           Love Auto Group, {rating} out of 5 stars based on {reviewCount} or more reviews
         </span>
@@ -48,10 +60,10 @@ export default function DealerCluster({ rating, reviewCount, compact }: DealerCl
         className="
           flex items-center gap-1.5
           rounded-md px-3 py-1.5
-          text-white shadow-[0_2px_4px_rgba(0,0,0,0.3)]
-          backdrop-blur-sm
+          text-white border border-white/25
+          shadow-[0_2px_6px_rgba(0,0,0,0.35)]
         "
-        style={{ backgroundColor: "rgba(15, 23, 42, 0.78)" }}
+        style={GLASS_STYLE}
       >
         <span className="text-[14px] font-black text-[#EF4444]" aria-hidden="true">
           ♥
@@ -66,11 +78,11 @@ export default function DealerCluster({ rating, reviewCount, compact }: DealerCl
         className="
           flex items-center gap-1.5
           rounded-md px-2.5 py-1.5
-          text-white shadow-[0_2px_4px_rgba(0,0,0,0.3)]
-          backdrop-blur-sm
+          text-white border border-white/25
+          shadow-[0_2px_6px_rgba(0,0,0,0.35)]
           text-[11px] font-bold
         "
-        style={{ backgroundColor: "rgba(15, 23, 42, 0.78)" }}
+        style={GLASS_STYLE}
       >
         <span
           className="
