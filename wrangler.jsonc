@@ -30,8 +30,8 @@
       // Then paste the IDs here. Until created, the /api/finance-application
       // endpoint returns 503 on submit.
       "binding": "LEADS",
-      "id": "REPLACE_WITH_LEADS_KV_ID",
-      "preview_id": "REPLACE_WITH_LEADS_KV_PREVIEW_ID"
+      "id": "f0cd98ac82a24502a8d454420e56a497",
+      "preview_id": "e111ee4ce8f3446082e15efe99ca9ee8"
     }
   ],
 
