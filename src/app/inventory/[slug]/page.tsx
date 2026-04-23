@@ -6,6 +6,8 @@ import { VehicleSchema } from "@/components/StructuredData";
 import { SITE_CONFIG } from "@/lib/constants";
 import PhotoGallery from "@/components/PhotoGallery";
 import VDPTabs from "@/components/VDPTabs";
+import VDPTrustStrip from "@/components/VDPTrustStrip";
+import VDPPaymentCalculator from "@/components/VDPPaymentCalculator";
 
 function estimateMonthlyPayment(
   price: number,
@@ -125,6 +127,9 @@ export default async function VehicleDetailPage({
       </nav>
 
       <article className="max-w-7xl mx-auto px-4 pb-16">
+        {/* Trust strip — quick brand signal above the gallery */}
+        <VDPTrustStrip />
+
         <div className="lg:grid lg:grid-cols-[1fr_380px] lg:gap-8">
           {/* Left column — photos + tabbed details.
               min-w-0 keeps the 1fr column from blowing out and pushing the
@@ -196,7 +201,7 @@ export default async function VehicleDetailPage({
               <div className="space-y-3">
                 <a
                   href={`tel:${SITE_CONFIG.phoneRaw}`}
-                  className="flex items-center justify-center gap-2 w-full bg-brand-green hover:bg-green-700 text-white py-3.5 rounded-xl font-semibold transition-colors"
+                  className="flex items-center justify-center gap-2 w-full bg-brand-green hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition-colors"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -215,22 +220,21 @@ export default async function VehicleDetailPage({
                   Call {SITE_CONFIG.phone}
                 </a>
                 <Link
-                  href={`/financing?vehicle=${encodeURIComponent(`${vehicle.year} ${vehicle.make} ${vehicle.model}`)}`}
-                  className="flex items-center justify-center w-full bg-brand-red hover:bg-brand-red-dark text-white py-3.5 rounded-xl font-semibold transition-colors"
-                >
-                  Get Financing
-                </Link>
-                <Link
                   href={`/contact?vehicle=${encodeURIComponent(`${vehicle.year} ${vehicle.make} ${vehicle.model}`)}`}
-                  className="flex items-center justify-center w-full border-2 border-brand-gray-200 hover:border-brand-red text-brand-gray-700 hover:text-brand-red py-3.5 rounded-xl font-semibold transition-colors"
+                  className="flex items-center justify-center w-full border-2 border-brand-gray-200 hover:border-brand-red text-brand-gray-700 hover:text-brand-red py-3 rounded-xl font-semibold transition-colors"
                 >
                   Ask a Question
                 </Link>
               </div>
 
-              <p className="text-xs text-brand-gray-400 text-center">
-                *Est. payment: $1,000 down, 6.99% APR, 60 mo. Subject to credit approval.
-              </p>
+              {/* Interactive payment calculator — replaces the static
+                  $/mo line and the standalone "Get Financing" button.
+                  Calculator's CTA goes straight to /financing pre-filled. */}
+              <VDPPaymentCalculator
+                vehiclePrice={vehicle.price}
+                vehicleSlug={vehicle.slug}
+                vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+              />
 
               <div className="pt-4 border-t border-brand-gray-100 text-center">
                 <p className="text-xs text-brand-gray-400">
