@@ -42,8 +42,13 @@ export interface VehicleOverlay {
    */
   featurePills?: [string?, string?, string?];
 
-  /** Override the default warranty copy on this card. Defaults to DEFAULT_WARRANTY. */
-  warrantyOverride?: string;
+  /**
+   * Per-vehicle warranty copy, e.g. "30-Day Warranty", "60-Day Powertrain
+   * Warranty". Set to opt this vehicle into showing the warranty badge on
+   * its VDP hero. Leave undefined for vehicles sold as-is (no warranty
+   * badge will render anywhere).
+   */
+  warranty?: string;
 
   /** Hide this vehicle from the site entirely, even if it's active in Dealer Center. */
   hidden?: boolean;
@@ -65,8 +70,14 @@ export interface MerchandisingConfig {
    */
   featuredVins: string[];
 
-  /** Default warranty copy shown on every vehicle card (unless overridden). */
-  defaultWarranty: string;
+  /**
+   * Phone number where customer text messages are received. Used by the
+   * "Text Us" button on the VDP. If unset, falls back to SITE_CONFIG.phoneRaw.
+   * Format: digits only (no parens or dashes), e.g. "6303593643".
+   * Allows routing texts to a different number than calls — e.g. a sales
+   * line that's monitored 24/7 vs the main shop line.
+   */
+  textPhone?: string;
 
   /** Per-VIN overlay settings. */
   overlays: Record<string, VehicleOverlay>;
@@ -86,8 +97,6 @@ export const MERCHANDISING: MerchandisingConfig = {
     "2HNYD2H63AH509874", // 2010 Acura MDX Sport (value play, AWD, SH-AWD)
   ],
 
-  defaultWarranty: "30-Day Warranty",
-
   overlays: {
     // 2016 Honda Pilot Touring — fresh arrival, third-row family hauler
     "5FNYF6H9XGB041495": {
@@ -98,6 +107,7 @@ export const MERCHANDISING: MerchandisingConfig = {
         "Heated\nLeather",
       ],
       marketEstimate: 12500, // priced at $10,999 — Good Deal
+      warranty: "30-Day Warranty",
     },
 
     // 2017 Ford Mustang EcoBoost Premium — sporty coupe, turbo
@@ -109,9 +119,10 @@ export const MERCHANDISING: MerchandisingConfig = {
         "Heated\nLeather",
       ],
       marketEstimate: 14800, // priced at $13,999 — Fair
+      warranty: "30-Day Powertrain Warranty",
     },
 
-    // 2010 Acura MDX Sport — value luxury SUV, SH-AWD, third-row under $5K
+    // 2010 Acura MDX Sport — high mileage, sold as-is, no warranty
     "2HNYD2H63AH509874": {
       carfax: true,
       status: "price-reduced",
@@ -123,7 +134,7 @@ export const MERCHANDISING: MerchandisingConfig = {
       marketEstimate: 5500, // priced at $4,499 — Great Deal
     },
 
-    // 2013 GMC Terrain SLT-1 — well-equipped compact SUV
+    // 2013 GMC Terrain SLT-1 — well-equipped compact SUV, sold as-is
     "2GKALJEK6D1300009": {
       carfax: true,
       featurePills: [
@@ -134,7 +145,7 @@ export const MERCHANDISING: MerchandisingConfig = {
       marketEstimate: 5400, // priced at $4,999 — Good Deal
     },
 
-    // 2017 Hyundai Accent SE — efficient commuter sedan
+    // 2017 Hyundai Accent SE — efficient commuter sedan, sold as-is
     "KMHCT4AE6HU222547": {
       carfax: true,
       featurePills: [
@@ -155,9 +166,10 @@ export const MERCHANDISING: MerchandisingConfig = {
         "Premium\nPackage",
       ],
       marketEstimate: 19200, // priced at $17,999 — Good Deal
+      warranty: "30-Day Warranty",
     },
 
-    // 2008 Saab 9-3 2.0T Convertible — niche, unique, under $2,500
+    // 2008 Saab 9-3 2.0T Convertible — niche, sold as-is
     "YS3FB79Y886005860": {
       carfax: true,
       status: "price-drop",

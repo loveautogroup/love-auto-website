@@ -10,7 +10,7 @@ import VDPTrustStrip from "@/components/VDPTrustStrip";
 import VDPPaymentCalculator from "@/components/VDPPaymentCalculator";
 import VDPMarketPrice from "@/components/VDPMarketPrice";
 import MobileCalculatorButton from "@/components/MobileCalculatorButton";
-import { resolveOverlay } from "@/data/merchandising";
+import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
 
 function estimateMonthlyPayment(
   price: number,
@@ -94,6 +94,13 @@ export default async function VehicleDetailPage({
 
   // Pull merchandising overlay for market estimate (Jordan-researched).
   const overlay = resolveOverlay(vehicle.vin, vehicle.daysOnLot, vehicle.status);
+
+  // Text Us number — Jordan-configurable in admin, falls back to main shop phone.
+  const textPhone = MERCHANDISING.textPhone ?? SITE_CONFIG.phoneRaw;
+  const textBody = encodeURIComponent(
+    `Hi! I'm interested in the ${vehicle.year} ${vehicle.make} ${vehicle.model} on your website.`
+  );
+  const smsHref = `sms:+1${textPhone}?&body=${textBody}`;
 
   const similarVehicles = sampleInventory
     .filter(
@@ -236,6 +243,15 @@ export default async function VehicleDetailPage({
                   </svg>
                   Call {SITE_CONFIG.phone}
                 </a>
+                <a
+                  href={smsHref}
+                  className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors"
+                >
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
+                    <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
+                  </svg>
+                  Text Us
+                </a>
                 <Link
                   href={`/contact?vehicle=${encodeURIComponent(`${vehicle.year} ${vehicle.make} ${vehicle.model}`)}`}
                   className="flex items-center justify-center w-full border-2 border-brand-gray-200 hover:border-brand-red text-brand-gray-700 hover:text-brand-red py-3 rounded-xl font-semibold transition-colors"
@@ -262,15 +278,16 @@ export default async function VehicleDetailPage({
           </div>
         </div>
 
-        {/* Mobile sticky CTA bar — Call + Calculate (opens modal) */}
-        <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-white border-t border-brand-gray-200 p-3 flex gap-3 z-40">
+        {/* Mobile sticky CTA bar — Call + Text + Calculate */}
+        <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-white border-t border-brand-gray-200 p-3 flex gap-2 z-40">
           <a
             href={`tel:${SITE_CONFIG.phoneRaw}`}
-            className="flex-1 flex items-center justify-center gap-2 bg-brand-green text-white py-3 rounded-xl font-semibold"
+            className="flex-1 flex items-center justify-center gap-1.5 bg-brand-green text-white py-3 rounded-xl font-semibold text-sm"
+            aria-label="Call us"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-5 h-5"
+              className="w-4 h-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -283,6 +300,16 @@ export default async function VehicleDetailPage({
               />
             </svg>
             Call
+          </a>
+          <a
+            href={smsHref}
+            className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 text-white py-3 rounded-xl font-semibold text-sm"
+            aria-label="Text us"
+          >
+            <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true">
+              <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
+            </svg>
+            Text
           </a>
           <MobileCalculatorButton
             vehiclePrice={vehicle.price}

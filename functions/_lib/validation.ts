@@ -19,7 +19,7 @@ type StatusKind = (typeof STATUS_KINDS)[number];
 
 export interface MerchandisingConfigInput {
   featuredVins: string[];
-  defaultWarranty: string;
+  textPhone?: string;
   overlays: Record<string, VehicleOverlayInput>;
 }
 
@@ -27,8 +27,9 @@ export interface VehicleOverlayInput {
   status?: StatusKind;
   carfax?: boolean;
   featurePills?: [string?, string?, string?];
-  warrantyOverride?: string;
+  warranty?: string;
   hidden?: boolean;
+  marketEstimate?: number;
 }
 
 export interface ValidationOk {
@@ -97,13 +98,13 @@ export function validateMerchandisingConfig(
     });
   }
 
-  // defaultWarranty
-  if (typeof obj.defaultWarranty !== "string") {
-    issues.push("defaultWarranty must be a string.");
-  } else if (obj.defaultWarranty.length > MAX_WARRANTY_LENGTH) {
-    issues.push(`defaultWarranty exceeds ${MAX_WARRANTY_LENGTH} characters.`);
-  } else {
-    assertSafeText(obj.defaultWarranty, "defaultWarranty", issues);
+  // textPhone (optional, digits only, 10-15 chars)
+  if (obj.textPhone !== undefined) {
+    if (typeof obj.textPhone !== "string") {
+      issues.push("textPhone must be a string of digits.");
+    } else if (!/^[0-9]{10,15}$/.test(obj.textPhone)) {
+      issues.push("textPhone must be 10-15 digits (no spaces or punctuation).");
+    }
   }
 
   // overlays
@@ -129,13 +130,13 @@ export function validateMerchandisingConfig(
       if (o.hidden !== undefined && typeof o.hidden !== "boolean") {
         issues.push(`overlays[${vin}].hidden must be boolean.`);
       }
-      if (o.warrantyOverride !== undefined) {
-        if (typeof o.warrantyOverride !== "string") {
-          issues.push(`overlays[${vin}].warrantyOverride must be a string.`);
-        } else if (o.warrantyOverride.length > MAX_WARRANTY_LENGTH) {
-          issues.push(`overlays[${vin}].warrantyOverride too long.`);
+      if (o.warranty !== undefined) {
+        if (typeof o.warranty !== "string") {
+          issues.push(`overlays[${vin}].warranty must be a string.`);
+        } else if (o.warranty.length > MAX_WARRANTY_LENGTH) {
+          issues.push(`overlays[${vin}].warranty too long.`);
         } else {
-          assertSafeText(o.warrantyOverride, `overlays[${vin}].warrantyOverride`, issues);
+          assertSafeText(o.warranty, `overlays[${vin}].warranty`, issues);
         }
       }
       if (o.featurePills !== undefined) {

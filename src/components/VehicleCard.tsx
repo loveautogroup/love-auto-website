@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Vehicle } from "@/lib/types";
 import { SITE_CONFIG } from "@/lib/constants";
-import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
+import { resolveOverlay } from "@/data/merchandising";
 import {
   CarfaxBadge,
   DealerCluster,
@@ -55,7 +55,6 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     vehicle.status
   );
   const showCarfax = overlay.carfax === true;
-  const warrantyCopy = overlay.warrantyOverride ?? MERCHANDISING.defaultWarranty;
 
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -125,10 +124,13 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         {/* Top-center: compact feature pills (max 2) */}
         <FeaturePillCluster pills={overlay.featurePills} compact />
 
-        {/* Bottom-left: compact warranty */}
-        <div className="absolute bottom-2 left-2 z-10">
-          <WarrantyBadge copy={warrantyCopy} compact />
-        </div>
+        {/* Bottom-left: compact warranty (per-vehicle, opt-in via admin).
+            Skipped on cards entirely now — warranty is a VDP-level signal. */}
+        {overlay.warranty && (
+          <div className="absolute bottom-2 left-2 z-10">
+            <WarrantyBadge copy={overlay.warranty} compact />
+          </div>
+        )}
 
         {/* Bottom-center: compact phone CTA */}
         <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10">

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Vehicle } from "@/lib/types";
 import { SITE_CONFIG } from "@/lib/constants";
-import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
+import { resolveOverlay } from "@/data/merchandising";
 import {
   CarfaxBadge,
   DealerCluster,
@@ -46,7 +46,9 @@ export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps
     : null;
   const showBadges = vehicle && selectedIndex === 0;
   const showCarfax = overlay?.carfax === true;
-  const warrantyCopy = overlay?.warrantyOverride ?? MERCHANDISING.defaultWarranty;
+  // Warranty is opt-in per vehicle. Vehicles sold as-is have no warranty
+  // string set, in which case the warranty badge does not render.
+  const warrantyCopy = overlay?.warranty;
 
   // Right-side grid shows photos at indexes 1, 2, 3, 4 (the 4 right after
   // the hero). The 4th tile gets a "+N more photos" overlay if there are
@@ -107,11 +109,14 @@ export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps
               {/* Top-center: feature pills */}
               <FeaturePillCluster pills={overlay.featurePills} />
 
-              {/* Bottom-left: warranty (compact so the phone CTA in the
-                  bottom-center doesn't get squeezed off-screen) */}
-              <div className="absolute bottom-3 left-3 z-10">
-                <WarrantyBadge copy={warrantyCopy} compact />
-              </div>
+              {/* Bottom-left: warranty — only renders if Jordan has set
+                  warranty copy on this vehicle (opt-in per VIN). Compact
+                  so the bottom-center phone CTA doesn't get squeezed. */}
+              {warrantyCopy && (
+                <div className="absolute bottom-3 left-3 z-10">
+                  <WarrantyBadge copy={warrantyCopy} compact />
+                </div>
+              )}
 
               {/* Bottom-center: phone CTA */}
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">

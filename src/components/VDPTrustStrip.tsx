@@ -31,7 +31,7 @@ export default function VDPTrustStrip() {
             <Shield />
             <span>
               <strong className="font-bold">Total Protection</strong>
-              <span className="hidden md:inline text-white/80"> — Inspection, 30-Day Warranty, Free CARFAX</span>
+              <span className="hidden md:inline text-white/80"> — Thorough Inspection &amp; Free CARFAX Report</span>
             </span>
           </span>
 

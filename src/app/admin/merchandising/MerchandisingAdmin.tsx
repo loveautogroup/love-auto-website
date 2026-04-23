@@ -35,7 +35,7 @@ type SaveState =
 
 interface EditableConfig {
   featuredVins: string[];
-  defaultWarranty: string;
+  textPhone?: string;
   overlays: Record<string, VehicleOverlay>;
 }
 
@@ -52,7 +52,7 @@ const STATUS_OPTIONS: { value: StatusBadgeKind | ""; label: string }[] = [
 export default function MerchandisingAdmin() {
   const [config, setConfig] = useState<EditableConfig>({
     featuredVins: [...MERCHANDISING.featuredVins],
-    defaultWarranty: MERCHANDISING.defaultWarranty,
+    textPhone: MERCHANDISING.textPhone,
     overlays: structuredClone(MERCHANDISING.overlays),
   });
   const [saveState, setSaveState] = useState<SaveState>({ kind: "loading" });
@@ -89,8 +89,7 @@ export default function MerchandisingAdmin() {
         if (data.config) {
           setConfig({
             featuredVins: data.config.featuredVins ?? [],
-            defaultWarranty:
-              data.config.defaultWarranty ?? MERCHANDISING.defaultWarranty,
+            textPhone: data.config.textPhone,
             overlays: data.config.overlays ?? {},
           });
         }
@@ -213,25 +212,35 @@ export default function MerchandisingAdmin() {
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <Section title="Global settings">
-          <label className="block">
+          <label className="block max-w-md">
             <span className="block text-sm font-medium text-brand-gray-700 mb-1">
-              Default warranty copy
+              Text Us number (digits only)
             </span>
             <input
-              type="text"
-              value={config.defaultWarranty}
-              maxLength={80}
-              onChange={(e) =>
-                setConfig((c) => ({ ...c, defaultWarranty: e.target.value }))
-              }
+              type="tel"
+              inputMode="numeric"
+              pattern="[0-9]{10,15}"
+              value={config.textPhone ?? ""}
+              maxLength={15}
+              placeholder="6303593643"
+              onChange={(e) => {
+                const digitsOnly = e.target.value.replace(/[^0-9]/g, "");
+                setConfig((c) => ({
+                  ...c,
+                  textPhone: digitsOnly || undefined,
+                }));
+              }}
               className="
-                block w-full max-w-md rounded-md border border-brand-gray-300
-                px-3 py-2 text-sm
+                block w-full rounded-md border border-brand-gray-300
+                px-3 py-2 text-sm font-mono
                 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent
               "
             />
             <p className="text-xs text-brand-gray-500 mt-1">
-              Shown on every vehicle card unless overridden below.
+              Powers the &quot;Text Us&quot; button on every VDP. 10-15 digits, no
+              dashes or spaces. Leave blank to use the main shop phone number from
+              site config. Useful for routing customer texts to a sales line monitored
+              after hours.
             </p>
           </label>
         </Section>
@@ -508,17 +517,20 @@ function VehicleRow({
           </label>
 
           <label className="block">
-            <span className="block text-xs font-semibold text-brand-gray-700 mb-1">
-              Warranty override
+            <span className="flex items-center justify-between text-xs font-semibold text-brand-gray-700 mb-1">
+              <span>Warranty (VDP only)</span>
+              {overlay.warranty && (
+                <span className="text-[10px] font-medium text-brand-green normal-case">Shown on VDP</span>
+              )}
             </span>
             <input
               type="text"
-              value={overlay.warrantyOverride ?? ""}
+              value={overlay.warranty ?? ""}
               maxLength={80}
-              placeholder="(uses default)"
+              placeholder="(none — sold as-is)"
               onChange={(e) =>
                 onUpdateOverlay({
-                  warrantyOverride: e.target.value || undefined,
+                  warranty: e.target.value || undefined,
                 })
               }
               className="
@@ -526,6 +538,9 @@ function VehicleRow({
                 px-3 py-2 text-sm
               "
             />
+            <p className="text-[10px] text-brand-gray-500 mt-1 leading-tight">
+              Shown only on this vehicle&apos;s VDP. Examples: &quot;30-Day Warranty&quot;, &quot;60-Day Powertrain Warranty&quot;. Leave blank to sell as-is (no warranty badge).
+            </p>
           </label>
 
           <label className="flex items-center gap-2 cursor-pointer">

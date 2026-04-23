@@ -10,7 +10,7 @@ const CREDIT_TIERS = [
   { label: "Rebuilding (<620)", apr: 0.1499 },
 ];
 
-const TERMS = [36, 48, 60, 72];
+const TERMS = [6, 12, 24, 36, 48, 60, 72];
 
 interface VDPPaymentCalculatorProps {
   vehiclePrice: number;
