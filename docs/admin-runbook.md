@@ -151,16 +151,29 @@ Full rules for the classifier live in `docs/photo-arrangement-rules.md`.
 See the list at the end of the cutover runbook and in the active tasks.
 Quickest wins:
 
-1. **Resend API key** — currently, when a new lead comes in, the
+1. **Cloudflare Access on /admin/\*** — **important**. Right now the
+   admin API endpoints are gated (they check for a `cf-access-jwt-
+   assertion` header and return 401 without one), but the admin HTML
+   pages are technically served to anyone who visits `/admin/*`.
+   Visitors see a loading shell with "Could not load…" errors — no PII
+   leaks — but it still exposes the admin URL structure. Set up a
+   Cloudflare Access application for `www.loveautogroup.net/admin/*`
+   and `www.loveautogroup.net/api/admin/*`, policy = email allow-list
+   (`loveautogroup@gmail.com` and any additional team emails). Under
+   Cloudflare dash → Zero Trust → Access → Applications → Add.
+
+2. **Resend API key** — currently, when a new lead comes in, the
    Cloudflare Function stores it in KV but can't send you an email
    notification. You'll only see the lead when you visit `/admin/leads`.
    Fix: sign up at resend.com, verify `loveautogroup.net`, add
    `RESEND_API_KEY` env var in Cloudflare Pages.
-2. **Google Places API billing** — when enabled, the VDP customer
+
+3. **Google Places API billing** — when enabled, the VDP customer
    reviews embed pulls live Google reviews. Right now it shows curated
    fallbacks. Enable billing in Google Cloud Console on the
    `love-auto-website` project.
-3. **Bing Webmaster Tools** — their site was down when I tried to
+
+4. **Bing Webmaster Tools** — their site was down when I tried to
    submit your sitemap. Rerun: `https://www.bing.com/webmasters/home`,
    add property, submit `https://www.loveautogroup.net/sitemap.xml`.
 

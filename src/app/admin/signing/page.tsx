@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SigningAdmin from "./SigningAdmin";
+import AdminBackLink from "@/components/AdminBackLink";
 
 export const metadata: Metadata = {
   title: "E-Signature Sessions — Admin | Love Auto Group",
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
 export default function SigningAdminPage() {
   return (
     <main className="max-w-7xl mx-auto px-4 py-8">
+      <AdminBackLink />
       <h1 className="text-3xl font-bold text-brand-gray-900 mb-2">
         E-Signature Sessions
       </h1>

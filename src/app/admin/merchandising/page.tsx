@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import MerchandisingAdmin from "./MerchandisingAdmin";
+import AdminBackLink from "@/components/AdminBackLink";
 
 export const metadata: Metadata = {
   title: "Merchandising Admin | Love Auto Group",
@@ -8,5 +9,10 @@ export const metadata: Metadata = {
 };
 
 export default function MerchandisingAdminPage() {
-  return <MerchandisingAdmin />;
+  return (
+    <div className="max-w-7xl mx-auto px-4 pt-8">
+      <AdminBackLink />
+      <MerchandisingAdmin />
+    </div>
+  );
 }
