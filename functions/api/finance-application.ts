@@ -47,8 +47,50 @@ interface StoredLead extends FinanceApplicationInput {
   status: "new" | "contacted" | "qualified" | "lost";
 }
 
+/** Simple KV-backed per-IP rate limiter. Caps at 3 submissions per hour. */
+async function checkRateLimit(
+  ip: string | undefined,
+  env: Env
+): Promise<{ ok: true } | { ok: false; retryAfterSec: number }> {
+  if (!ip) return { ok: true }; // no IP → let through; CF edge should always give us one
+  const key = `rate:finance:${ip}`;
+  const now = Math.floor(Date.now() / 1000);
+  const raw = await env.LEADS.get(key);
+  const attempts: number[] = raw ? JSON.parse(raw) : [];
+  // Keep only timestamps within the last hour
+  const recent = attempts.filter((t) => now - t < 3600);
+  if (recent.length >= 3) {
+    const oldestRecent = Math.min(...recent);
+    return { ok: false, retryAfterSec: 3600 - (now - oldestRecent) };
+  }
+  recent.push(now);
+  await env.LEADS.put(key, JSON.stringify(recent), { expirationTtl: 3600 });
+  return { ok: true };
+}
+
 export const onRequestPost: PagesFunction<Env> = async (ctx) => {
   const { request, env } = ctx;
+
+  // Anti-abuse: per-IP rate limit. 3 per hour.
+  const ip = request.headers.get("cf-connecting-ip") ?? undefined;
+  const rl = await checkRateLimit(ip, env);
+  if (!rl.ok) {
+    return new Response(
+      JSON.stringify({
+        ok: false,
+        error:
+          "You've submitted several applications recently. If this was in error, call us at (630) 359-3643.",
+      }),
+      {
+        status: 429,
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Retry-After": String(rl.retryAfterSec),
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );
+  }
 
   let body: unknown;
   try {
