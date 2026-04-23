@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "validate:photos": "tsx scripts/validate-photo-order.ts"
+    "validate:photos": "tsx scripts/validate-photo-order.ts",
+    "classify:photos": "tsx scripts/classify-photos.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
