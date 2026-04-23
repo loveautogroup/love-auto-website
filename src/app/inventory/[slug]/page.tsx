@@ -132,6 +132,7 @@ export default async function VehicleDetailPage({
             <PhotoGallery
               images={vehicle.images}
               alt={`${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim} ${vehicle.exteriorColor}`}
+              vehicle={vehicle}
             />
 
             {/* Vehicle Title (mobile) */}

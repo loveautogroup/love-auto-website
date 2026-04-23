@@ -1,19 +1,49 @@
 "use client";
 
 import { useState } from "react";
+import { Vehicle } from "@/lib/types";
+import { SITE_CONFIG } from "@/lib/constants";
+import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
+import {
+  CarfaxBadge,
+  DealerCluster,
+  FeaturePillCluster,
+  PhoneCTA,
+  PhotoScrim,
+  StatusPill,
+  WarrantyBadge,
+} from "./badges";
 
 interface PhotoGalleryProps {
   images: string[];
   alt: string;
+  /** Optional — when provided, the main hero photo gets the full overlay system. */
+  vehicle?: Vehicle;
 }
 
-export default function PhotoGallery({ images, alt }: PhotoGalleryProps) {
+/**
+ * VDP photo gallery. The main hero image gets the full Maxim-style badge
+ * overlay (CARFAX, feature pills, warranty, phone CTA, dealer + Google
+ * cluster). At gallery scale (~600px wide on desktop) the dense overlay
+ * has room and reads cleanly.
+ *
+ * If `vehicle` isn't passed, the gallery degrades gracefully to just the
+ * photo + thumbnails (no overlay), matching pre-overlay behavior.
+ */
+export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // For now we show placeholders since real photos aren't synced yet.
-  // When Bob delivers processed photos, they'll render through Next.js <Image>.
   const hasRealPhotos = images.length > 0 && !images[0]?.includes("placeholder");
   const photoCount = hasRealPhotos ? images.length : 8;
+
+  // Resolve overlay only if vehicle is supplied AND we're on the first photo.
+  // Don't show badges on thumbnails — only on the lead photo.
+  const overlay = vehicle
+    ? resolveOverlay(vehicle.vin, vehicle.daysOnLot, vehicle.status)
+    : null;
+  const showBadges = vehicle && selectedIndex === 0;
+  const showCarfax = overlay?.carfax === true;
+  const warrantyCopy = overlay?.warrantyOverride ?? MERCHANDISING.defaultWarranty;
 
   return (
     <div className="space-y-3">
@@ -22,6 +52,7 @@ export default function PhotoGallery({ images, alt }: PhotoGalleryProps) {
         {/* Primary large image */}
         <div className="relative aspect-[4/3] bg-brand-gray-100 rounded-xl overflow-hidden">
           {hasRealPhotos ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={images[selectedIndex]}
               alt={`${alt} — Photo ${selectedIndex + 1}`}
@@ -49,10 +80,59 @@ export default function PhotoGallery({ images, alt }: PhotoGalleryProps) {
               </div>
             </div>
           )}
-          {/* Photo counter badge */}
-          <span className="absolute bottom-3 right-3 bg-black/70 text-white text-xs font-medium px-2.5 py-1 rounded-full">
-            {selectedIndex + 1} / {photoCount}
-          </span>
+
+          {/* Full Maxim-style badge overlay — VDP main photo only */}
+          {showBadges && vehicle && overlay && (
+            <>
+              <PhotoScrim />
+
+              {/* Top-left: CARFAX or status */}
+              <div className="absolute top-3 left-3 z-10">
+                {showCarfax ? (
+                  <CarfaxBadge vin={vehicle.vin} />
+                ) : overlay.effectiveStatus ? (
+                  <StatusPill kind={overlay.effectiveStatus} />
+                ) : null}
+              </div>
+
+              {/* Top-center: feature pills */}
+              <FeaturePillCluster pills={overlay.featurePills} />
+
+              {/* Bottom-left: warranty */}
+              <div className="absolute bottom-3 left-3 z-10">
+                <WarrantyBadge copy={warrantyCopy} />
+              </div>
+
+              {/* Bottom-center: phone CTA */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+                <PhoneCTA
+                  phone={SITE_CONFIG.phone}
+                  phoneRaw={SITE_CONFIG.phoneRaw}
+                />
+              </div>
+
+              {/* Bottom-right: dealer + Google */}
+              <div className="absolute bottom-3 right-3 z-10">
+                <DealerCluster
+                  rating={SITE_CONFIG.reviews.google.rating}
+                  reviewCount={SITE_CONFIG.reviews.google.count}
+                />
+              </div>
+            </>
+          )}
+
+          {/* Photo counter badge — slid up when main overlay is showing,
+              so it doesn't fight the dealer cluster. */}
+          {!showBadges && (
+            <span className="absolute bottom-3 right-3 bg-black/70 text-white text-xs font-medium px-2.5 py-1 rounded-full">
+              {selectedIndex + 1} / {photoCount}
+            </span>
+          )}
+          {showBadges && (
+            <span className="absolute top-3 right-3 bg-black/70 text-white text-xs font-medium px-2.5 py-1 rounded-full z-10">
+              {selectedIndex + 1} / {photoCount}
+            </span>
+          )}
         </div>
 
         {/* Thumbnail grid — 2x3 on desktop */}
@@ -71,6 +151,7 @@ export default function PhotoGallery({ images, alt }: PhotoGalleryProps) {
                 aria-label={`View photo ${thumbIndex + 1}`}
               >
                 {hasRealPhotos && images[thumbIndex] ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={images[thumbIndex]}
                     alt={`${alt} — Thumbnail ${thumbIndex + 1}`}
@@ -103,6 +184,7 @@ export default function PhotoGallery({ images, alt }: PhotoGalleryProps) {
             aria-label={`View photo ${i + 1}`}
           >
             {hasRealPhotos && images[i] ? (
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={images[i]}
                 alt=""

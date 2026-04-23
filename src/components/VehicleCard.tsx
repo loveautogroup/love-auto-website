@@ -1,17 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Vehicle } from "@/lib/types";
-import { SITE_CONFIG } from "@/lib/constants";
-import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
-import {
-  CarfaxBadge,
-  DealerCluster,
-  FeaturePillCluster,
-  PhoneCTA,
-  PhotoScrim,
-  StatusPill,
-  WarrantyBadge,
-} from "./badges";
+import { resolveOverlay } from "@/data/merchandising";
+import { CarfaxBadge, StatusPill } from "./badges";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -32,16 +23,29 @@ function estimateMonthlyPayment(
   );
 }
 
+/**
+ * Vehicle card for the inventory grid and homepage Featured section.
+ *
+ * Bob's call: cards in a grid are too small (~360px wide on desktop, narrower
+ * on mobile) for the full Maxim-style overlay. The full overlay lives on the
+ * VDP main photo (PhotoGallery) where there's room. Cards keep ONLY the two
+ * elements that drive a click:
+ *   - Top-left: CARFAX Free Report (or status pill if no Carfax)
+ *   - Top-center: up to 3 feature pills (Jordan-authored copy, slimmed down)
+ *
+ * Phone, warranty, dealer logo, Google review badge are all available
+ * sitewide in the header — duplicating them on every card was clutter.
+ */
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
-  // Resolve per-vehicle merchandising overlay (Jordan-controlled via
-  // src/data/merchandising.ts; future admin UI writes to the same config).
   const overlay = resolveOverlay(
     vehicle.vin,
     vehicle.daysOnLot,
     vehicle.status
   );
   const showCarfax = overlay.carfax === true;
-  const warrantyCopy = overlay.warrantyOverride ?? MERCHANDISING.defaultWarranty;
+  const visiblePills = (overlay.featurePills ?? []).filter(
+    (p): p is string => Boolean(p && p.trim())
+  );
 
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -65,7 +69,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         hover:shadow-lg hover:border-brand-red/30 transition-all duration-200
       "
     >
-      {/* Photo + overlay badges */}
+      {/* Photo + minimal corner overlays */}
       <div className="relative aspect-[4/3] bg-brand-gray-100 overflow-hidden">
         {hasRealImage ? (
           <Image
@@ -94,46 +98,19 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           </div>
         )}
 
-        {/* Gradient scrim for overlay legibility */}
-        <PhotoScrim />
-
-        {/* Top-left: Carfax button (if available) or fallback status pill */}
-        <div className="absolute top-3 left-3 z-10">
+        {/* Top-left: CARFAX (compact at card scale) or status pill */}
+        <div className="absolute top-3 left-3 z-10 [&_.carfax-scale]:scale-90 [&_.carfax-scale]:origin-top-left">
           {showCarfax ? (
-            <CarfaxBadge vin={vehicle.vin} />
+            <div className="carfax-scale">
+              <CarfaxBadge vin={vehicle.vin} />
+            </div>
           ) : overlay.effectiveStatus ? (
             <StatusPill kind={overlay.effectiveStatus} />
           ) : null}
         </div>
-
-        {/* Top-center: Jordan-authored feature pills (self-positioning) */}
-        <FeaturePillCluster pills={overlay.featurePills} />
-
-        {/* Bottom-left: Warranty badge */}
-        <div className="absolute bottom-3 left-3 z-10">
-          <WarrantyBadge copy={warrantyCopy} />
-        </div>
-
-        {/* Bottom-center: Phone CTA */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
-          <PhoneCTA
-            phone={SITE_CONFIG.phone}
-            phoneRaw={SITE_CONFIG.phoneRaw}
-          />
-        </div>
-
-        {/* Bottom-right: Dealer logo + Google review cluster */}
-        <div className="absolute bottom-3 right-3 z-10">
-          <DealerCluster
-            rating={SITE_CONFIG.reviews.google.rating}
-            reviewCount={SITE_CONFIG.reviews.google.count}
-          />
-        </div>
       </div>
 
-      {/* Info area — title link uses ::before pseudo-element to make the full
-          card clickable without nesting anchors inside anchors. Badges sit at
-          z-10 so their clicks hit them, not the card link. */}
+      {/* Info area */}
       <div className="p-4">
         <h3 className="font-bold text-brand-gray-900 group-hover:text-brand-red transition-colors">
           <Link
@@ -167,7 +144,28 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           </span>
         </p>
 
-        <div className="flex flex-wrap gap-1.5 mt-3">
+        {/* Jordan-authored feature pills, sized for card width.
+            (On the VDP these sit on the photo; on cards they live below
+            because there isn't room over the photo.) */}
+        {visiblePills.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-3">
+            {visiblePills.map((pill, i) => (
+              <span
+                key={i}
+                className="
+                  text-[11px] font-bold leading-tight
+                  bg-blue-600/90 text-white
+                  px-2.5 py-1 rounded-full
+                "
+              >
+                {pill.replace(/\n/g, " ")}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Spec chips — drivetrain + first 2 features */}
+        <div className="flex flex-wrap gap-1.5 mt-2">
           {vehicle.drivetrain !== "FWD" && (
             <span className="text-xs bg-brand-gray-100 text-brand-gray-700 px-2 py-0.5 rounded-full">
               {vehicle.drivetrain}
