@@ -9,40 +9,45 @@
 interface FeaturePillClusterProps {
   /** Up to 3 pills. Entries may include \n for a two-line break. */
   pills?: readonly [string?, string?, string?];
+  /** Compact mode for inventory cards — smaller text, single line, fewer pills. */
+  compact?: boolean;
 }
 
-export default function FeaturePillCluster({ pills }: FeaturePillClusterProps) {
+export default function FeaturePillCluster({ pills, compact }: FeaturePillClusterProps) {
   const visible = (pills ?? []).filter((p): p is string => Boolean(p && p.trim()));
   if (visible.length === 0) return null;
 
+  // Compact mode: cap to 2 pills max, force single-line, smaller text
+  const limit = compact ? 2 : 3;
+  const shown = visible.slice(0, limit);
+
   return (
     <div
-      className="
-        absolute top-4 left-1/2 -translate-x-1/2
-        flex gap-1.5 justify-center flex-nowrap
-        z-10
-      "
-      style={{ maxWidth: "calc(100% - 140px)" }}
+      className={`
+        absolute left-1/2 -translate-x-1/2
+        flex justify-center flex-nowrap z-10
+        ${compact ? "top-2 gap-1" : "top-4 gap-1.5"}
+      `}
+      style={{ maxWidth: compact ? "calc(100% - 80px)" : "calc(100% - 140px)" }}
     >
-      {visible.map((pill, i) => {
+      {shown.map((pill, i) => {
         const lines = pill.split("\n");
         return (
           <div
             key={i}
-            className="
-              rounded-full px-3 py-1.5
-              text-[11px] font-bold leading-tight text-white text-center
-              shadow-[0_2px_4px_rgba(0,0,0,0.25)]
-              backdrop-blur-sm
-              min-w-[72px] max-w-[120px]
-            "
+            className={`
+              rounded-full text-white text-center
+              shadow-[0_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-sm
+              ${compact
+                ? "px-2 py-0.5 text-[10px] font-bold leading-tight max-w-[100px]"
+                : "px-3 py-1.5 text-[11px] font-bold leading-tight min-w-[72px] max-w-[120px]"}
+            `}
             style={{ backgroundColor: "rgba(37, 99, 235, 0.92)" }}
           >
-            {lines.map((line, li) => (
-              <span key={li} className="block">
-                {line}
-              </span>
-            ))}
+            {compact
+              ? <span className="block whitespace-nowrap truncate">{lines.join(" ")}</span>
+              : lines.map((line, li) => <span key={li} className="block">{line}</span>)
+            }
           </div>
         );
       })}

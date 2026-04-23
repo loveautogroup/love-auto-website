@@ -1,8 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Vehicle } from "@/lib/types";
-import { resolveOverlay } from "@/data/merchandising";
-import { CarfaxBadge, StatusPill } from "./badges";
+import { SITE_CONFIG } from "@/lib/constants";
+import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
+import {
+  CarfaxBadge,
+  DealerCluster,
+  FeaturePillCluster,
+  PhoneCTA,
+  PhotoScrim,
+  StatusPill,
+  WarrantyBadge,
+} from "./badges";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -26,15 +35,18 @@ function estimateMonthlyPayment(
 /**
  * Vehicle card for the inventory grid and homepage Featured section.
  *
- * Bob's call: cards in a grid are too small (~360px wide on desktop, narrower
- * on mobile) for the full Maxim-style overlay. The full overlay lives on the
- * VDP main photo (PhotoGallery) where there's room. Cards keep ONLY the two
- * elements that drive a click:
- *   - Top-left: CARFAX Free Report (or status pill if no Carfax)
- *   - Top-center: up to 3 feature pills (Jordan-authored copy, slimmed down)
+ * Cards carry the FULL Maxim-style overlay in compact mode (CARFAX top-left,
+ * up to 2 short feature pills top-center, compact warranty bottom-left,
+ * phone CTA bottom-center, dealer + Google compact bottom-right).
  *
- * Phone, warranty, dealer logo, Google review badge are all available
- * sitewide in the header — duplicating them on every card was clutter.
+ * Why dense overlay on cards: Jeremiah's call. The pills are attention
+ * grabbers in third-party syndicated feeds (CarGurus, Cars.com, Marketplace),
+ * and the burned-in phone number lets customers bypass third-party spoofed
+ * lead-capture numbers — saving per-lead billing AND letting customers text
+ * the dealer directly (which many prefer over the third-party form).
+ *
+ * Each badge has a `compact` variant scaled for the ~360px card width.
+ * The VDP gallery uses the full-size badges (PhotoGallery component).
  */
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const overlay = resolveOverlay(
@@ -43,9 +55,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     vehicle.status
   );
   const showCarfax = overlay.carfax === true;
-  const visiblePills = (overlay.featurePills ?? []).filter(
-    (p): p is string => Boolean(p && p.trim())
-  );
+  const warrantyCopy = overlay.warrantyOverride ?? MERCHANDISING.defaultWarranty;
 
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -69,7 +79,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         hover:shadow-lg hover:border-brand-red/30 transition-all duration-200
       "
     >
-      {/* Photo + minimal corner overlays */}
+      {/* Photo + full overlay (compact-scaled) */}
       <div className="relative aspect-[4/3] bg-brand-gray-100 overflow-hidden">
         {hasRealImage ? (
           <Image
@@ -98,15 +108,44 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           </div>
         )}
 
-        {/* Top-left: CARFAX (compact at card scale) or status pill */}
-        <div className="absolute top-3 left-3 z-10 [&_.carfax-scale]:scale-90 [&_.carfax-scale]:origin-top-left">
+        {/* Gradient scrim for overlay legibility */}
+        <PhotoScrim />
+
+        {/* Top-left: CARFAX (scaled 75%) or status pill */}
+        <div className="absolute top-2 left-2 z-10 [&_.cf]:scale-[0.65] [&_.cf]:origin-top-left">
           {showCarfax ? (
-            <div className="carfax-scale">
+            <div className="cf">
               <CarfaxBadge vin={vehicle.vin} />
             </div>
           ) : overlay.effectiveStatus ? (
             <StatusPill kind={overlay.effectiveStatus} />
           ) : null}
+        </div>
+
+        {/* Top-center: compact feature pills (max 2) */}
+        <FeaturePillCluster pills={overlay.featurePills} compact />
+
+        {/* Bottom-left: compact warranty */}
+        <div className="absolute bottom-2 left-2 z-10">
+          <WarrantyBadge copy={warrantyCopy} compact />
+        </div>
+
+        {/* Bottom-center: compact phone CTA */}
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10">
+          <PhoneCTA
+            phone={SITE_CONFIG.phone}
+            phoneRaw={SITE_CONFIG.phoneRaw}
+            compact
+          />
+        </div>
+
+        {/* Bottom-right: compact dealer + Google */}
+        <div className="absolute bottom-2 right-2 z-10">
+          <DealerCluster
+            rating={SITE_CONFIG.reviews.google.rating}
+            reviewCount={SITE_CONFIG.reviews.google.count}
+            compact
+          />
         </div>
       </div>
 
@@ -144,28 +183,8 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           </span>
         </p>
 
-        {/* Jordan-authored feature pills, sized for card width.
-            (On the VDP these sit on the photo; on cards they live below
-            because there isn't room over the photo.) */}
-        {visiblePills.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-3">
-            {visiblePills.map((pill, i) => (
-              <span
-                key={i}
-                className="
-                  text-[11px] font-bold leading-tight
-                  bg-blue-600/90 text-white
-                  px-2.5 py-1 rounded-full
-                "
-              >
-                {pill.replace(/\n/g, " ")}
-              </span>
-            ))}
-          </div>
-        )}
-
         {/* Spec chips — drivetrain + first 2 features */}
-        <div className="flex flex-wrap gap-1.5 mt-2">
+        <div className="flex flex-wrap gap-1.5 mt-3">
           {vehicle.drivetrain !== "FWD" && (
             <span className="text-xs bg-brand-gray-100 text-brand-gray-700 px-2 py-0.5 rounded-full">
               {vehicle.drivetrain}

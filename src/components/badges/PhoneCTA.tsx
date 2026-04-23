@@ -14,28 +14,29 @@ interface PhoneCTAProps {
   phone: string;
   /** Raw digits for tel: link, e.g. "6303593643". */
   phoneRaw: string;
+  /** Compact mode for inventory cards — smaller, no "Call/Txt" prefix. */
+  compact?: boolean;
 }
 
-export default function PhoneCTA({ phone, phoneRaw }: PhoneCTAProps) {
+export default function PhoneCTA({ phone, phoneRaw, compact }: PhoneCTAProps) {
   return (
     <a
       href={`tel:${phoneRaw}`}
       onClick={(e) => e.stopPropagation()}
-      className="
-        inline-block whitespace-nowrap
-        text-white no-underline
-      "
+      className="inline-block whitespace-nowrap text-white no-underline"
       style={{
         textShadow:
           "0 2px 6px rgba(0,0,0,0.8), 0 0 2px rgba(0,0,0,0.6)",
       }}
       aria-label={`Call or text us at ${phone}`}
     >
-      <span className="text-[13px] font-semibold mr-1.5 text-[#E2E8F0]">
-        Call/Txt
-      </span>
+      {!compact && (
+        <span className="text-[13px] font-semibold mr-1.5 text-[#E2E8F0]">
+          Call/Txt
+        </span>
+      )}
       <span
-        className="text-[22px] font-extrabold"
+        className={compact ? "text-[14px] font-extrabold" : "text-[22px] font-extrabold"}
         style={{ letterSpacing: "-0.01em" }}
       >
         {phone}

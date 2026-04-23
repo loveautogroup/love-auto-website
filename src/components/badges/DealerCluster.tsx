@@ -7,9 +7,38 @@
 interface DealerClusterProps {
   rating: number;
   reviewCount: number;
+  /** Compact mode for inventory cards — single combined pill, monogram only. */
+  compact?: boolean;
 }
 
-export default function DealerCluster({ rating, reviewCount }: DealerClusterProps) {
+export default function DealerCluster({ rating, reviewCount, compact }: DealerClusterProps) {
+  if (compact) {
+    // Compact: single combined pill — heart mono + Google rating
+    return (
+      <div
+        className="
+          flex items-center gap-1.5
+          rounded-md px-2 py-1
+          text-white shadow-[0_2px_4px_rgba(0,0,0,0.3)]
+          backdrop-blur-sm text-[10px] font-bold
+        "
+        style={{ backgroundColor: "rgba(15, 23, 42, 0.78)" }}
+      >
+        <span className="text-[12px] font-black text-[#EF4444]" aria-hidden="true">
+          ♥
+        </span>
+        <span className="text-[#F59E0B] text-[11px]" aria-hidden="true">
+          ★
+        </span>
+        <span>{rating.toFixed(1)}</span>
+        <span className="text-[#94A3B8]">· {reviewCount}+</span>
+        <span className="sr-only">
+          Love Auto Group, {rating} out of 5 stars based on {reviewCount} or more reviews
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-end gap-1.5">
       {/* Dealer logo pill */}
