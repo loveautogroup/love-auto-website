@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Vehicle } from "@/lib/types";
 import { SITE_CONFIG } from "@/lib/constants";
 import { resolveOverlay } from "@/data/merchandising";
+import { applyPhotoOrder } from "@/data/photoOrder";
 import {
   CarfaxBadge,
   DealerCluster,
@@ -35,10 +36,16 @@ interface PhotoGalleryProps {
  * carry the dense overlay; right-side grid gives shoppers a multi-angle
  * preview without making them click through every photo.
  */
-export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps) {
+export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const hasRealPhotos = images.length > 0 && !images[0]?.includes("placeholder");
+  // Jordan-authored manifest reorders photos: exterior front-3/4 first,
+  // then remaining exteriors, then interior, then details. Vehicles
+  // without a manifest entry fall through unchanged.
+  const hasRealPhotos = rawImages.length > 0 && !rawImages[0]?.includes("placeholder");
+  const images = hasRealPhotos && vehicle
+    ? applyPhotoOrder(vehicle.slug, rawImages)
+    : rawImages;
   const photoCount = hasRealPhotos ? images.length : 8;
 
   // Resolve overlay only if vehicle is supplied AND we're on the first photo.

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Vehicle } from "@/lib/types";
 import { SITE_CONFIG } from "@/lib/constants";
 import { resolveOverlay } from "@/data/merchandising";
+import { applyPhotoOrder } from "@/data/photoOrder";
 import {
   CarfaxBadge,
   DealerCluster,
@@ -68,6 +69,11 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const monthlyPayment = estimateMonthlyPayment(vehicle.price);
   const hasRealImage =
     vehicle.images.length > 0 && !vehicle.images[0].includes("placeholder");
+  // Apply Jordan's manifest so the card hero = the best exterior shot,
+  // not whatever Dealer Center happened to export as image #1.
+  const orderedImages = hasRealImage
+    ? applyPhotoOrder(vehicle.slug, vehicle.images)
+    : vehicle.images;
 
   return (
     <article
@@ -81,7 +87,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
       <div className="relative aspect-[4/3] bg-brand-gray-100 overflow-hidden">
         {hasRealImage ? (
           <Image
-            src={vehicle.images[0]}
+            src={orderedImages[0]}
             alt={`${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}`}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"

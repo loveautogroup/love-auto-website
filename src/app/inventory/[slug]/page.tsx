@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { sampleInventory, getVehicleBySlug } from "@/data/inventory";
 import { VehicleSchema, BreadcrumbSchema } from "@/components/StructuredData";
+import { applyPhotoOrder } from "@/data/photoOrder";
 import { SITE_CONFIG } from "@/lib/constants";
 import PhotoGallery from "@/components/PhotoGallery";
 import VDPTabs from "@/components/VDPTabs";
@@ -57,7 +58,11 @@ export async function generateMetadata({
   const description = `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim} for sale in Villa Park, IL. ${formattedMileage} miles, ${vehicle.drivetrain}. Carefully selected and fully reconditioned at Love Auto Group.`;
 
   const url = `https://www.loveautogroup.net/inventory/${slug}/`;
-  const ogImage = vehicle.images?.[0];
+  // Hero photo for social-share preview reflects Jordan's manifest, so
+  // the Facebook/iMessage preview is the front 3/4 — not whatever
+  // Dealer Center happened to export as image #1.
+  const orderedImages = applyPhotoOrder(vehicle.slug, vehicle.images ?? []);
+  const ogImage = orderedImages[0];
 
   return {
     title,
