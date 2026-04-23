@@ -121,11 +121,13 @@ export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps
                 />
               </div>
 
-              {/* Bottom-right: dealer + Google */}
+              {/* Bottom-right: dealer + Google (compact so the phone CTA
+                  in bottom-center doesn't get squeezed off-screen) */}
               <div className="absolute bottom-3 right-3 z-10">
                 <DealerCluster
                   rating={SITE_CONFIG.reviews.google.rating}
                   reviewCount={SITE_CONFIG.reviews.google.count}
+                  compact
                 />
               </div>
             </>
