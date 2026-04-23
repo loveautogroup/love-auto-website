@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants";
+import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -13,9 +14,13 @@ export default function Header() {
       {/* Top bar — phone + hours */}
       <div className="bg-brand-gray-900 text-sm py-1.5 px-4 hidden md:block">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <span className="text-brand-gray-300">
-            735 N Yale Ave, Villa Park, IL 60181
-          </span>
+          <div className="flex items-center gap-4">
+            <span className="text-brand-gray-300">
+              735 N Yale Ave, Villa Park, IL 60181
+            </span>
+            <span className="text-brand-gray-700" aria-hidden="true">|</span>
+            <CarfaxAdvantageBadge size="xs" />
+          </div>
           <div className="flex items-center gap-4">
             {/* Google Reviews badge */}
             <a
@@ -45,6 +50,14 @@ export default function Header() {
             </a>
           </div>
         </div>
+      </div>
+
+      {/* Mobile-only Carfax Advantage strip — keeps the credibility signal
+          visible on phones since the desktop top bar is hidden there. */}
+      <div className="md:hidden bg-brand-gray-900 px-4 py-1.5 flex items-center justify-center gap-2 text-[11px]">
+        <CarfaxAdvantageBadge size="xs" />
+        <span className="text-brand-gray-400">·</span>
+        <span className="text-brand-gray-300 font-medium">Free Carfax on every vehicle</span>
       </div>
 
       {/* Main nav */}

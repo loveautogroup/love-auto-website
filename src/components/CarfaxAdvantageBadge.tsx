@@ -17,13 +17,14 @@
 import Image from "next/image";
 
 interface CarfaxAdvantageBadgeProps {
-  /** Display size variant. "sm" for footer, "md" for trust strip, "lg" for the Difference section. */
-  size?: "sm" | "md" | "lg";
+  /** Display size variant. xs=banner, sm=footer, md=hero trust strip, lg=accreditations row. */
+  size?: "xs" | "sm" | "md" | "lg";
   /** Optional className passthrough for layout-level positioning. */
   className?: string;
 }
 
 const SIZE_PX: Record<NonNullable<CarfaxAdvantageBadgeProps["size"]>, number> = {
+  xs: 36,
   sm: 64,
   md: 96,
   lg: 140,
