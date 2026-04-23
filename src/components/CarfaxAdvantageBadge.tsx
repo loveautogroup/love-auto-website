@@ -1,19 +1,17 @@
+"use client";
+
 /**
- * Carfax Advantage Dealer trust badge.
+ * Carfax Advantage Dealer trust badge — live link to the real Carfax
+ * dealer-profile page.
  *
- * Carfax-issued accreditation mark — Love Auto Group qualifies as an
- * Advantage Dealer in Carfax's program (free Carfax reports on every
- * inventory vehicle, ongoing reporting compliance, etc.). It's a real
- * differentiator vs. most local indie used-car dealers, so we surface
- * it in multiple high-trust spots: the desktop header banner, the
- * homepage hero trust strip, the "Why Buy" Difference section, and
- * the footer.
+ * Carfax-issued accreditation. Clicking any badge opens Love Auto
+ * Group's verified Carfax Reviews / About Us page in a new tab so
+ * shoppers can confirm the accreditation independently. Same "verify
+ * it yourself" trust pattern as the Google review badge.
  *
- * Currently rendered as a static graphic (non-clickable). When we have
- * the real Carfax dealer-locator URL for our store, wrap the <Image> in
- * an <a target="_blank"> and add hover/active scale + focus-visible
- * outline back — the previous live-link version 404'd because the URL
- * was a placeholder. Tracking the URL in SITE_CONFIG once obtained.
+ * Placements: desktop header banner, homepage hero trust strip, "Why
+ * Buy" Difference section, footer, and the /free-carfax-villa-park
+ * landing page.
  */
 
 import Image from "next/image";
@@ -32,6 +30,12 @@ const SIZE_PX: Record<NonNullable<CarfaxAdvantageBadgeProps["size"]>, number> = 
   lg: 140,
 };
 
+// Official Carfax dealer-profile URL for Love Auto Group Inc. Sourced from
+// Carfax's public dealer directory (not portal-gated) so shoppers can
+// verify the Advantage Dealer accreditation independently.
+const CARFAX_DEALER_URL =
+  "https://www.carfax.com/Reviews-Love-Auto-Group-Inc-Villa-Park-IL_QQHUM61BVE";
+
 export default function CarfaxAdvantageBadge({
   size = "md",
   className = "",
@@ -39,10 +43,17 @@ export default function CarfaxAdvantageBadge({
   const px = SIZE_PX[size];
 
   return (
-    <span
-      role="img"
-      aria-label="Love Auto Group is a Carfax Advantage Dealer"
-      className={`inline-flex items-center justify-center ${className}`}
+    <a
+      href={CARFAX_DEALER_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Love Auto Group is a Carfax Advantage Dealer — verify on Carfax"
+      className={`
+        inline-flex items-center justify-center
+        transition-transform duration-150 hover:scale-[1.04] active:scale-100
+        focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red
+        ${className}
+      `}
     >
       <Image
         src="/brand/carfax-advantage-dealer.png"
@@ -54,6 +65,6 @@ export default function CarfaxAdvantageBadge({
         style={{ width: px }}
         unoptimized
       />
-    </span>
+    </a>
   );
 }

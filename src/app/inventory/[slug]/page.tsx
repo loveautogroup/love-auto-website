@@ -12,6 +12,7 @@ import VDPMarketPrice from "@/components/VDPMarketPrice";
 import MobileCalculatorButton from "@/components/MobileCalculatorButton";
 import VDPFAQ from "@/components/VDPFAQ";
 import ShowCarfaxButton from "@/components/ShowCarfaxButton";
+import VDPReviews from "@/components/VDPReviews";
 import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
 
 function estimateMonthlyPayment(
@@ -222,6 +223,13 @@ export default async function VehicleDetailPage({
                 vehicle's specs + warranty overlay. */}
             <div className="mt-8">
               <VDPFAQ vehicle={vehicle} warranty={overlay.warranty} />
+            </div>
+
+            {/* Customer reviews — live data from Google Places API, with
+                Jordan-curated fallback when the API key isn't set. Server-
+                fetched at build time; refreshes on every Cloudflare deploy. */}
+            <div className="mt-8">
+              <VDPReviews />
             </div>
           </div>
 

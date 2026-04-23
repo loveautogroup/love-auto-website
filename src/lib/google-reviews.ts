@@ -1,32 +1,68 @@
 /**
- * Fetches live Google review data (rating + count) from the Places API (New).
+ * Fetches live Google review data (rating, count, latest reviews) from
+ * the Places API (New).
  *
  * Required environment variables:
- *   GOOGLE_PLACES_API_KEY  — Your Google Cloud API key with Places API enabled
- *   GOOGLE_PLACE_ID        — The Place ID for Love Auto Group
+ *   GOOGLE_PLACES_API_KEY — Google Cloud API key with Places API enabled
+ *   GOOGLE_PLACE_ID       — Place ID for Love Auto Group
  *
- * The result is cached via Next.js ISR and revalidated every hour so the
- * numbers stay current without burning API quota on every page view.
+ * On static export (`output: "export"`), fetches run at build time — each
+ * Cloudflare rebuild refreshes the embedded reviews, which is fine for a
+ * dealership that doesn't accumulate dozens of new reviews per day.
+ *
+ * Sam's note: the Places API key must be restricted by referrer or IP in
+ * Google Cloud Console to prevent abuse. Same key should NOT be checked
+ * into the repo — set via Cloudflare Pages environment variables.
  */
+
+export interface GoogleReviewSnippet {
+  author: string;
+  /** Author profile photo URL, if available */
+  authorPhoto?: string;
+  /** 1-5 */
+  rating: number;
+  /** Review body text */
+  text: string;
+  /** Relative time description ("a week ago") */
+  relativeTime: string;
+  /** ISO publish time, useful for structured data */
+  publishTime: string;
+}
 
 export interface GoogleReviewData {
   rating: number;
   reviewCount: number;
-  updatedAt: string; // ISO timestamp of last successful fetch
+  /** Up to 5 recent reviews from the Places API. Empty array on fallback. */
+  reviews: GoogleReviewSnippet[];
+  updatedAt: string;
 }
 
-// Fallback values shown when the API key isn't configured yet
 const FALLBACK: GoogleReviewData = {
   rating: 4.7,
   reviewCount: 125,
+  reviews: [],
   updatedAt: new Date().toISOString(),
 };
+
+interface PlacesApiResponse {
+  rating?: number;
+  userRatingCount?: number;
+  reviews?: Array<{
+    rating?: number;
+    text?: { text?: string };
+    relativePublishTimeDescription?: string;
+    publishTime?: string;
+    authorAttribution?: {
+      displayName?: string;
+      photoUri?: string;
+    };
+  }>;
+}
 
 export async function getGoogleReviews(): Promise<GoogleReviewData> {
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
   const placeId = process.env.GOOGLE_PLACE_ID;
 
-  // If env vars aren't set, return fallback silently (dev / first deploy)
   if (!apiKey || !placeId) {
     console.warn(
       "[google-reviews] GOOGLE_PLACES_API_KEY or GOOGLE_PLACE_ID not set. Using fallback values."
@@ -36,13 +72,11 @@ export async function getGoogleReviews(): Promise<GoogleReviewData> {
 
   try {
     const url = `https://places.googleapis.com/v1/places/${placeId}`;
-
     const res = await fetch(url, {
       headers: {
         "X-Goog-Api-Key": apiKey,
-        "X-Goog-FieldMask": "rating,userRatingCount",
+        "X-Goog-FieldMask": "rating,userRatingCount,reviews",
       },
-      // Revalidate every hour — keeps the count fresh without excessive API calls
       next: { revalidate: 3600 },
     });
 
@@ -54,11 +88,24 @@ export async function getGoogleReviews(): Promise<GoogleReviewData> {
       return FALLBACK;
     }
 
-    const data = await res.json();
+    const data = (await res.json()) as PlacesApiResponse;
+
+    const reviews: GoogleReviewSnippet[] =
+      (data.reviews ?? [])
+        .filter((r) => r.text?.text && r.authorAttribution?.displayName)
+        .map((r) => ({
+          author: r.authorAttribution!.displayName!,
+          authorPhoto: r.authorAttribution?.photoUri,
+          rating: r.rating ?? 5,
+          text: r.text!.text!,
+          relativeTime: r.relativePublishTimeDescription ?? "",
+          publishTime: r.publishTime ?? new Date().toISOString(),
+        }));
 
     return {
       rating: data.rating ?? FALLBACK.rating,
       reviewCount: data.userRatingCount ?? FALLBACK.reviewCount,
+      reviews,
       updatedAt: new Date().toISOString(),
     };
   } catch (error) {
