@@ -1,7 +1,57 @@
+# Cloudflare Pages _redirects — production cutover map.
+#
+# Preserves search-engine equity from the legacy auto-CMS site at
+# loveautogroup.net when DNS cuts over to this Next.js build. Without
+# these 301s, every existing inbound link (Google, Yelp, CarGurus,
+# Facebook, Yellow Pages, BBB, etc.) would 404 and the dealership's
+# accumulated rankings would zero out.
+#
+# Format: source-pattern  destination  status-code
+# 301 = permanent redirect (Google passes ~95% of link equity through)
+
+# ─── Existing slug aliases ──────────────────────────────────────────
 # TCPA-approved slug alias — our consent language references /privacy
-/privacy       /privacy-policy/     301
-/privacy/      /privacy-policy/     301
+/privacy                     /privacy-policy/                  301
+/privacy/                    /privacy-policy/                  301
 
 # Common slug aliases for marketing consistency
-/terms-of-service    /terms/             301
-/terms-of-service/   /terms/             301
+/terms-of-service            /terms/                           301
+/terms-of-service/           /terms/                           301
+
+# ─── Top-level legacy pages → new equivalents ───────────────────────
+# Old auto-CMS top-level URLs from the previous site
+/about-us                    /about                            301
+/about-us/                   /about                            301
+/store                       /contact                          301
+/store/                      /contact                          301
+/reviews                     /about#reviews                    301
+/reviews/                    /about#reviews                    301
+/locatorservice              /sell-your-car                    301
+/locatorservice/             /sell-your-car                    301
+/contact-us                  /contact                          301
+/contact-us/                 /contact                          301
+
+# ─── Inventory listing pages ────────────────────────────────────────
+# Legacy CMS used /newandusedcars and variants
+/newandusedcars              /inventory                        301
+/newandusedcars/             /inventory                        301
+/newandusedcars/*            /inventory                        301
+
+# ─── Common legacy paths from auto-CMS templates ────────────────────
+/financing-application       /financing                        301
+/credit-application          /financing                        301
+/apply                       /financing                        301
+/apply-for-financing         /financing                        301
+/value-your-trade            /sell-your-car                    301
+/trade-in                    /sell-your-car                    301
+/sell-us-your-car            /sell-your-car                    301
+/services                    /                                 301
+/parts                       /                                 301
+/specials                    /inventory                        301
+
+# ─── Old VDP slug pattern (best-effort) ─────────────────────────────
+# Legacy CMS likely used /vehicle-details/{stocknum} or /vehicle/{vin}.
+# These force-redirect to the inventory index since slug-to-slug
+# mapping isn't possible without the legacy slug list. Better than 404.
+/vehicle-details/*           /inventory                        301
+/vehicle/*                   /inventory                        301

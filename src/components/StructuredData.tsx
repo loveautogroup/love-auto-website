@@ -5,6 +5,7 @@ export function LocalBusinessSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "AutoDealer",
+    "@id": `${SITE_CONFIG.url}/#dealership`,
     name: SITE_CONFIG.name,
     url: SITE_CONFIG.url,
     telephone: SITE_CONFIG.phone,
@@ -44,6 +45,20 @@ export function LocalBusinessSchema() {
     },
     priceRange: "$4,500–$18,000",
     image: `${SITE_CONFIG.url}/images/storefront.jpg`,
+    // Sam's notes: AggregateRating uses real Google Business profile data
+    // (rating + count from SITE_CONFIG.reviews.google). Update via Google
+    // Places API sync in a future revision.
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: SITE_CONFIG.reviews.google.rating.toFixed(1),
+      reviewCount: SITE_CONFIG.reviews.google.count,
+      bestRating: "5",
+      worstRating: "1",
+    },
+    sameAs: [
+      SITE_CONFIG.social.facebook,
+      SITE_CONFIG.social.google,
+    ],
   };
 
   return (
@@ -95,6 +110,7 @@ export function VehicleSchema({ vehicle }: { vehicle: Vehicle }) {
           : "https://schema.org/LimitedAvailability",
       seller: {
         "@type": "AutoDealer",
+        "@id": `${SITE_CONFIG.url}/#dealership`,
         name: SITE_CONFIG.name,
         address: {
           "@type": "PostalAddress",
@@ -107,6 +123,56 @@ export function VehicleSchema({ vehicle }: { vehicle: Vehicle }) {
       },
     },
     image: vehicle.images,
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+/**
+ * BreadcrumbList — adds breadcrumb rich result eligibility to inner pages.
+ * Pass an ordered list of {name, url} pairs from root → current page.
+ */
+export function BreadcrumbSchema({ items }: { items: { name: string; url: string }[] }) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+/**
+ * FAQPage — emit on the FAQ page so Google can serve the rich-result
+ * accordion in SERPs. Q/A pairs are passed as {question, answer} objects.
+ */
+export function FAQSchema({ items }: { items: { question: string; answer: string }[] }) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
   };
 
   return (

@@ -9,7 +9,7 @@ import { LocalBusinessSchema } from "@/components/StructuredData";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://loveautogroup.pages.dev"),
+  metadataBase: new URL("https://www.loveautogroup.net"),
   title: {
     default: "Quality Used Cars in Villa Park, IL | Love Auto Group",
     template: "%s",
@@ -39,17 +39,32 @@ export const metadata: Metadata = {
     title: "Quality Used Cars in Villa Park, IL | Love Auto Group",
     description:
       "Family owned used car dealership in Villa Park, IL since 2014. Quality Japanese vehicles, carefully selected and fully reconditioned. Browse inventory.",
-    url: "https://loveautogroup.pages.dev",
+    url: "https://www.loveautogroup.net",
     siteName: "Love Auto Group",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "https://www.loveautogroup.net/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Love Auto Group — Quality Used Cars in Villa Park, IL",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Quality Used Cars in Villa Park, IL | Love Auto Group",
+    description:
+      "Family owned used car dealership in Villa Park, IL since 2014. Quality Japanese vehicles, carefully selected and fully reconditioned.",
+    images: ["https://www.loveautogroup.net/og-image.png"],
   },
   robots: {
     index: true,
     follow: true,
   },
   alternates: {
-    canonical: "https://loveautogroup.pages.dev",
+    canonical: "https://www.loveautogroup.net",
   },
 };
 

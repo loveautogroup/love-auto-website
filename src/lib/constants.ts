@@ -11,7 +11,7 @@ export const SITE_CONFIG = {
     zip: "60181",
     full: "735 N Yale Ave, Villa Park, IL 60181",
   },
-  url: "https://loveautogroup.pages.dev",
+  url: "https://www.loveautogroup.net",
   established: 2014,
   hours: [
     { day: "Sunday", hours: "Closed" },

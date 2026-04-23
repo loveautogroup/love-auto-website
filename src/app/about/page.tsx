@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "About Love Auto Group, Family Owned in Villa Park IL",
   description:
     "Family owned in Villa Park, IL since 2014. We specialize in quality Japanese used cars, every one carefully selected, fully reconditioned, and inspected.",
-  alternates: { canonical: "https://loveautogroup.pages.dev/about" },
+  alternates: { canonical: "https://www.loveautogroup.net/about" },
 };
 
 export default function AboutPage() {

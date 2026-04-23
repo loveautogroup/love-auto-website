@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Vehicle } from "@/lib/types";
 import { SITE_CONFIG } from "@/lib/constants";
 import { resolveOverlay } from "@/data/merchandising";
@@ -63,11 +64,14 @@ export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps
         {/* Primary hero image */}
         <div className="relative aspect-[3/2] bg-brand-gray-100 rounded-xl overflow-hidden">
           {hasRealPhotos ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={images[selectedIndex]}
-              alt={`${alt} — Photo ${selectedIndex + 1}`}
-              className="w-full h-full object-cover"
+              alt={`${alt} for sale in Villa Park, IL — Photo ${selectedIndex + 1} of ${photoCount}`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 60vw"
+              priority={selectedIndex === 0}
+              unoptimized
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-brand-gray-300">
@@ -181,11 +185,13 @@ export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps
                 }
               >
                 {hasRealPhotos && images[thumbIndex] ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <Image
                     src={images[thumbIndex]}
-                    alt={`${alt} — Thumbnail ${thumbIndex + 1}`}
-                    className="w-full h-full object-cover"
+                    alt={`${alt} — view ${thumbIndex + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 20vw"
+                    unoptimized
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center text-brand-gray-200">
@@ -222,11 +228,13 @@ export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps
             aria-label={`View photo ${i + 1}`}
           >
             {hasRealPhotos && images[i] ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={images[i]}
-                alt={`${alt} — Thumbnail ${i + 1}`}
-                className="w-full h-full object-cover"
+                alt={`${alt} — view ${i + 1}`}
+                fill
+                className="object-cover"
+                sizes="100px"
+                unoptimized
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center text-brand-gray-200">

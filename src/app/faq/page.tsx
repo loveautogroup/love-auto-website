@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Used Car FAQ, Financing and Trade-Ins | Love Auto Group",
   description:
     "Questions about financing, trade-ins, warranties, and our inspection process at Love Auto Group in Villa Park, IL. Get the answers before you visit.",
-  alternates: { canonical: "https://loveautogroup.pages.dev/faq" },
+  alternates: { canonical: "https://www.loveautogroup.net/faq" },
 };
 
 const faqs = [

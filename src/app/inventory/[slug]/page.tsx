@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { sampleInventory, getVehicleBySlug } from "@/data/inventory";
-import { VehicleSchema } from "@/components/StructuredData";
+import { VehicleSchema, BreadcrumbSchema } from "@/components/StructuredData";
 import { SITE_CONFIG } from "@/lib/constants";
 import PhotoGallery from "@/components/PhotoGallery";
 import VDPTabs from "@/components/VDPTabs";
@@ -10,6 +10,8 @@ import VDPTrustStrip from "@/components/VDPTrustStrip";
 import VDPPaymentCalculator from "@/components/VDPPaymentCalculator";
 import VDPMarketPrice from "@/components/VDPMarketPrice";
 import MobileCalculatorButton from "@/components/MobileCalculatorButton";
+import VDPFAQ from "@/components/VDPFAQ";
+import ShowCarfaxButton from "@/components/ShowCarfaxButton";
 import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
 
 function estimateMonthlyPayment(
@@ -53,7 +55,7 @@ export async function generateMetadata({
   const formattedMileage = new Intl.NumberFormat().format(vehicle.mileage);
   const description = `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim} for sale in Villa Park, IL. ${formattedMileage} miles, ${vehicle.drivetrain}. Carefully selected and fully reconditioned at Love Auto Group.`;
 
-  const url = `https://loveautogroup.pages.dev/inventory/${slug}/`;
+  const url = `https://www.loveautogroup.net/inventory/${slug}/`;
   const ogImage = vehicle.images?.[0];
 
   return {
@@ -114,6 +116,16 @@ export default async function VehicleDetailPage({
   return (
     <>
       <VehicleSchema vehicle={vehicle} />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://www.loveautogroup.net/" },
+          { name: "Inventory", url: "https://www.loveautogroup.net/inventory/" },
+          {
+            name: `${vehicle.year} ${vehicle.make} ${vehicle.model}`,
+            url: `https://www.loveautogroup.net/inventory/${vehicle.slug}/`,
+          },
+        ]}
+      />
 
       {/* Breadcrumb */}
       <nav
@@ -176,6 +188,14 @@ export default async function VehicleDetailPage({
               <p className="text-sm text-brand-gray-500 mt-1">
                 {formattedMileage} miles · {vehicle.drivetrain} · {vehicle.exteriorColor}
               </p>
+              {/* Mobile Show Carfax — inline next to the title so it's
+                  impossible to miss. The tiny badge on the photo alone
+                  isn't obvious enough to mobile users. */}
+              {overlay.carfax && (
+                <div className="mt-3">
+                  <ShowCarfaxButton vin={vehicle.vin} variant="inline" />
+                </div>
+              )}
             </div>
 
             {/* Market price comparison — only renders when Jordan has set
@@ -196,6 +216,13 @@ export default async function VehicleDetailPage({
               formattedMileage={formattedMileage}
               monthlyPayment={monthlyPayment}
             />
+
+            {/* Vehicle-specific FAQ — emits FAQPage JSON-LD for rich-result
+                eligibility in SERPs. Generated dynamically from the
+                vehicle's specs + warranty overlay. */}
+            <div className="mt-8">
+              <VDPFAQ vehicle={vehicle} warranty={overlay.warranty} />
+            </div>
           </div>
 
           {/* Right column — CTA panel (desktop) */}
@@ -261,6 +288,15 @@ export default async function VehicleDetailPage({
                   Ask a Question
                 </Link>
               </div>
+
+              {/* Show Carfax — explicit labeled CTA. The small badge on
+                  the photo alone isn't obvious enough to most buyers, per
+                  Jeremiah's feedback. */}
+              {overlay.carfax && (
+                <div className="pt-1">
+                  <ShowCarfaxButton vin={vehicle.vin} variant="wide" />
+                </div>
+              )}
 
               {/* Interactive payment calculator — replaces the static
                   $/mo line and the standalone "Get Financing" button.

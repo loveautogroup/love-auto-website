@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy | Love Auto Group in Villa Park, IL",
   description:
     "Read the Love Auto Group privacy policy. Learn how we collect, use, and protect your personal information when you visit our Villa Park, IL dealership.",
-  alternates: { canonical: "https://loveautogroup.pages.dev/privacy-policy" },
+  alternates: { canonical: "https://www.loveautogroup.net/privacy-policy" },
 };
 
 export default function PrivacyPolicyPage() {

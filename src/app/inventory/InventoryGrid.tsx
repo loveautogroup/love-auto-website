@@ -1,0 +1,111 @@
+"use client";
+
+import { useMemo, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import type { Vehicle } from "@/lib/types";
+import VehicleCard from "@/components/VehicleCard";
+
+interface InventoryGridProps {
+  /** Full merchandise-ordered list of available vehicles. */
+  vehicles: Vehicle[];
+}
+
+function InventoryGridInner({ vehicles }: InventoryGridProps) {
+  const searchParams = useSearchParams();
+
+  const filtered = useMemo(() => {
+    const make = searchParams.get("make")?.toLowerCase();
+    const bodyStyle = searchParams.get("bodyStyle")?.toLowerCase();
+    const drivetrain = searchParams.get("drivetrain");
+    const minPrice = Number(searchParams.get("minPrice")) || null;
+    const maxPrice = Number(searchParams.get("maxPrice")) || null;
+    const maxMileage = Number(searchParams.get("maxMileage")) || null;
+    const minYear = Number(searchParams.get("minYear")) || null;
+    const maxYear = Number(searchParams.get("maxYear")) || null;
+    const q = searchParams.get("q")?.toLowerCase();
+
+    return vehicles.filter((v) => {
+      if (make && v.make.toLowerCase() !== make) return false;
+      if (bodyStyle && v.bodyStyle.toLowerCase() !== bodyStyle) return false;
+      if (drivetrain && v.drivetrain !== drivetrain) return false;
+      if (minPrice !== null && v.price < minPrice) return false;
+      if (maxPrice !== null && v.price > maxPrice) return false;
+      if (maxMileage !== null && v.mileage > maxMileage) return false;
+      if (minYear !== null && v.year < minYear) return false;
+      if (maxYear !== null && v.year > maxYear) return false;
+      if (q) {
+        const tokens = q.split(/\s+/).filter(Boolean);
+        const haystack = [
+          v.make,
+          v.model,
+          v.trim,
+          v.drivetrain,
+          v.bodyStyle,
+          ...(v.features ?? []),
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+        if (!tokens.every((t) => haystack.includes(t))) return false;
+      }
+      return true;
+    });
+  }, [vehicles, searchParams]);
+
+  return (
+    <>
+      <div className="flex items-center justify-between mb-6">
+        <p className="text-brand-gray-500 text-sm">
+          Showing{" "}
+          <span className="font-semibold text-brand-gray-900">{filtered.length}</span>{" "}
+          {filtered.length === 1 ? "vehicle" : "vehicles"}
+        </p>
+        <select
+          className="text-sm border border-brand-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-red"
+          aria-label="Sort vehicles"
+        >
+          <option value="recent">Recently Added</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="mileage-asc">Mileage: Low to High</option>
+          <option value="newest">Year: Newest First</option>
+        </select>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+        {filtered.map((vehicle) => (
+          <VehicleCard key={vehicle.id} vehicle={vehicle} />
+        ))}
+      </div>
+
+      {filtered.length === 0 && (
+        <div className="text-center py-16">
+          <p className="text-xl font-semibold text-brand-gray-700">
+            No vehicles match your filters
+          </p>
+          <p className="mt-2 text-brand-gray-500">
+            Try adjusting your search, or{" "}
+            <a href="/contact" className="text-brand-red hover:underline">
+              contact us
+            </a>{" "}
+            . We source vehicles to order.
+          </p>
+        </div>
+      )}
+    </>
+  );
+}
+
+/**
+ * Inventory grid — client component so it can read URL search params
+ * (required for static export, where server-side searchParams isn't
+ * available at build time). Wraps in Suspense because useSearchParams
+ * requires it under Next 15+.
+ */
+export default function InventoryGrid({ vehicles }: InventoryGridProps) {
+  return (
+    <Suspense fallback={<div className="py-16 text-center text-brand-gray-500">Loading inventory...</div>}>
+      <InventoryGridInner vehicles={vehicles} />
+    </Suspense>
+  );
+}
