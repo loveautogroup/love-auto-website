@@ -126,9 +126,11 @@ export default async function VehicleDetailPage({
 
       <article className="max-w-7xl mx-auto px-4 pb-16">
         <div className="lg:grid lg:grid-cols-[1fr_380px] lg:gap-8">
-          {/* Left column — photos + tabbed details */}
-          <div>
-            {/* Photo Gallery — CarMax-style grid */}
+          {/* Left column — photos + tabbed details.
+              min-w-0 keeps the 1fr column from blowing out and pushing the
+              sidebar off-screen when the gallery hero photo is full-width. */}
+          <div className="min-w-0">
+            {/* Photo Gallery */}
             <PhotoGallery
               images={vehicle.images}
               alt={`${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim} ${vehicle.exteriorColor}`}
