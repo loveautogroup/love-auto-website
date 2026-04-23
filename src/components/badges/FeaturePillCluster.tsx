@@ -29,9 +29,9 @@ export default function FeaturePillCluster({ pills, compact }: FeaturePillCluste
   return (
     <div
       className={`
-        absolute right-2 z-10
+        absolute right-1.5 sm:right-2 z-10
         flex flex-col items-end
-        ${compact ? "top-2 gap-1 max-w-[55%]" : "top-3 gap-1.5 max-w-[45%]"}
+        ${compact ? "top-1.5 sm:top-2 gap-0.5 sm:gap-1 max-w-[55%]" : "top-2 sm:top-3 gap-1 sm:gap-1.5 max-w-[45%]"}
       `}
     >
       {shown.map((pill, i) => {
@@ -44,8 +44,8 @@ export default function FeaturePillCluster({ pills, compact }: FeaturePillCluste
               border border-white/25
               shadow-[0_2px_6px_rgba(0,0,0,0.35)]
               ${compact
-                ? "px-2 py-0.5 text-[10px] font-bold leading-tight"
-                : "px-3 py-1.5 text-[11px] font-bold leading-tight"}
+                ? "px-1.5 py-[1px] text-[9px] sm:px-2 sm:py-0.5 sm:text-[10px] font-bold leading-tight"
+                : "px-2 py-0.5 text-[9px] sm:px-3 sm:py-1.5 sm:text-[11px] font-bold leading-tight"}
             `}
             style={{
               // ~30% opacity blue + heavy backdrop blur = frosted glass tint

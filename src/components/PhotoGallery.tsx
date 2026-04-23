@@ -97,8 +97,11 @@ export default function PhotoGallery({ images, alt, vehicle }: PhotoGalleryProps
             <>
               <PhotoScrim />
 
-              {/* Top-left: CARFAX or status */}
-              <div className="absolute top-3 left-3 z-10">
+              {/* Top-left: CARFAX or status. Scaled down on mobile so the
+                  badge doesn't dominate the photo at narrow viewports — full
+                  size returns at sm+ where there's room. Origin top-left so
+                  the visual hugs the corner regardless of scale. */}
+              <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 [&_>*]:scale-[0.7] sm:[&_>*]:scale-100 [&_>*]:origin-top-left">
                 {showCarfax ? (
                   <CarfaxBadge vin={vehicle.vin} />
                 ) : overlay.effectiveStatus ? (

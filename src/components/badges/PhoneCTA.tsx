@@ -36,7 +36,11 @@ export default function PhoneCTA({ phone, phoneRaw, compact }: PhoneCTAProps) {
         </span>
       )}
       <span
-        className={compact ? "text-[14px] font-extrabold" : "text-[22px] font-extrabold"}
+        className={
+          compact
+            ? "text-[12px] sm:text-[14px] font-extrabold"
+            : "text-[16px] sm:text-[22px] font-extrabold"
+        }
         style={{ letterSpacing: "-0.01em" }}
       >
         {phone}

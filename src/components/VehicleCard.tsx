@@ -109,8 +109,9 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         {/* Gradient scrim for overlay legibility */}
         <PhotoScrim />
 
-        {/* Top-left: CARFAX (scaled 65%) or status pill */}
-        <div className="absolute top-2 left-2 z-10 [&_.cf]:scale-[0.65] [&_.cf]:origin-top-left">
+        {/* Top-left: CARFAX or status pill. CARFAX scaled 55% on mobile,
+            65% on sm+ — the badge dominates narrow card photos otherwise. */}
+        <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 [&_.cf]:scale-[0.55] sm:[&_.cf]:scale-[0.65] [&_.cf]:origin-top-left">
           {showCarfax ? (
             <div className="cf">
               <CarfaxBadge vin={vehicle.vin} />
@@ -130,7 +131,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
 
         {/* Bottom-left: compact phone CTA (anchored left so it can't collide
             with the dealer cluster on the right at narrow card widths). */}
-        <div className="absolute bottom-2 left-2 z-10">
+        <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 z-10">
           <PhoneCTA
             phone={SITE_CONFIG.phone}
             phoneRaw={SITE_CONFIG.phoneRaw}
@@ -139,7 +140,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         </div>
 
         {/* Bottom-right: compact dealer + Google */}
-        <div className="absolute bottom-2 right-2 z-10">
+        <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
           <DealerCluster
             rating={SITE_CONFIG.reviews.google.rating}
             reviewCount={SITE_CONFIG.reviews.google.count}
