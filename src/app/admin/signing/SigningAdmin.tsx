@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getTemplate } from "@/data/signingTemplates";
 
 type DocumentKind =
   | "buyers-order"
@@ -302,6 +303,23 @@ export default function SigningAdmin() {
                       onChange={(e) => updateDoc(i, "title", e.target.value)}
                       className="flex-1 border border-brand-gray-200 rounded px-2 py-1.5 text-sm"
                     />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const t = getTemplate(doc.kind);
+                        if (t) {
+                          updateDoc(i, "title", t.title);
+                          updateDoc(i, "body", t.body);
+                        } else {
+                          alert(`No template available for "${KIND_LABELS[doc.kind]}" — fill in manually.`);
+                        }
+                      }}
+                      disabled={doc.kind === "other"}
+                      className="text-xs font-semibold bg-brand-gray-100 hover:bg-brand-gray-200 disabled:opacity-50 disabled:cursor-not-allowed text-brand-gray-700 px-2 py-1.5 rounded whitespace-nowrap"
+                      title="Fill in the Diane-approved boilerplate for this document kind"
+                    >
+                      Use template
+                    </button>
                     {docs.length > 1 && (
                       <button
                         type="button"
@@ -314,12 +332,19 @@ export default function SigningAdmin() {
                     )}
                   </div>
                   <textarea
-                    placeholder="Document body (what the customer reads before signing). Optional."
-                    rows={3}
+                    placeholder="Document body (what the customer reads before signing). Optional — click 'Use template' for Diane-approved boilerplate, then edit any [bracketed] placeholders."
+                    rows={4}
                     value={doc.body ?? ""}
                     onChange={(e) => updateDoc(i, "body", e.target.value)}
-                    className="w-full border border-brand-gray-200 rounded px-2 py-1.5 text-sm"
+                    className="w-full border border-brand-gray-200 rounded px-2 py-1.5 text-sm font-mono"
                   />
+                  {doc.body && doc.body.includes("[") && (
+                    <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1">
+                      ⚠ Template contains <code>[bracketed]</code>{" "}
+                      placeholders — replace them with real values before
+                      sending.
+                    </p>
+                  )}
                 </li>
               ))}
             </ul>
