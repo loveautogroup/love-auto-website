@@ -6,6 +6,28 @@ import Image from "next/image";
 import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 
+// Simple Carfax wordmark for the mobile-only banner — same SVG used inside
+// the per-vehicle FREE REPORT button on photo overlays. Shows up on phones
+// where the Advantage Dealer shield is too tall to fit the slim header bar.
+function CarfaxWordmark() {
+  return (
+    <span
+      className="inline-flex items-center bg-white border border-[#1A1919] rounded-sm px-1.5 py-0.5"
+      role="img"
+      aria-label="Free Carfax report on every vehicle"
+    >
+      <Image
+        src="/brand/carfax-logo.svg"
+        alt="Carfax"
+        width={56}
+        height={12}
+        className="h-3 w-auto"
+        unoptimized
+      />
+    </span>
+  );
+}
+
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -52,10 +74,12 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile-only Carfax Advantage strip — keeps the credibility signal
-          visible on phones since the desktop top bar is hidden there. */}
+      {/* Mobile-only credibility strip — desktop top bar is hidden on phones,
+          so surface a simple Carfax wordmark + tagline as a persistent trust
+          signal. Replaces the Advantage Dealer shield, which was too tall
+          for this slim row on mobile and was 404'ing on click. */}
       <div className="md:hidden bg-brand-gray-900 px-4 py-1.5 flex items-center justify-center gap-2 text-[11px]">
-        <CarfaxAdvantageBadge size="xs" />
+        <CarfaxWordmark />
         <span className="text-brand-gray-400">·</span>
         <span className="text-brand-gray-300 font-medium">Free Carfax on every vehicle</span>
       </div>
