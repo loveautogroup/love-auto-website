@@ -55,3 +55,9 @@
 # mapping isn't possible without the legacy slug list. Better than 404.
 /vehicle-details/*           /inventory                        301
 /vehicle/*                   /inventory                        301
+
+# ─── E-signature flow — serve shell for any session ID ─────────────
+# Static export generates only /sign/shell/; every real session ID
+# rewrites (200) to the shell which then fetches the session at runtime
+# from /api/sign/:id based on the actual window.location path.
+/sign/*                      /sign/shell/index.html            200

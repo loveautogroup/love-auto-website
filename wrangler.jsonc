@@ -25,13 +25,18 @@
     },
     {
       // Finance-application leads from the public /financing form.
-      // Create via Cloudflare dashboard → Workers & Pages → KV → Create:
-      //   LEADS and LEADS_preview
-      // Then paste the IDs here. Until created, the /api/finance-application
-      // endpoint returns 503 on submit.
       "binding": "LEADS",
       "id": "f0cd98ac82a24502a8d454420e56a497",
       "preview_id": "e111ee4ce8f3446082e15efe99ca9ee8"
+    },
+    {
+      // E-signature sessions from /admin/signing + /sign/[id].
+      // Create via Cloudflare dashboard → Workers & Pages → KV → Create:
+      //   SIGNING and SIGNING_preview
+      // Then paste the IDs here. Until created, signing endpoints return 503.
+      "binding": "SIGNING",
+      "id": "381080f3f56447968df1499a7db628be",
+      "preview_id": "f92bcf98233e45d2b60e14d66426cef4"
     }
   ],
 
