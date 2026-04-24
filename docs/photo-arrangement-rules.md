@@ -1,8 +1,20 @@
 # Photo Arrangement Rules (Permanent)
 
-**Owner:** Jordan (sales / conversion)
+**Owner:** Jeremiah (final word) → Jordan (sales / conversion)
 **Implementers:** Bill (Phase 2 automation), Charlotte (rendering layer)
-**Status:** **Canonical — do not change without Jordan's approval**
+**Status:** **CANONICAL — PERMANENT RULE, DO NOT CHANGE WITHOUT JEREMIAH'S APPROVAL**
+
+Re-affirmed Apr 23 2026 by Jeremiah after the v1 manifest had several
+misclassified heroes (Honda Pilot v1 hero was the dashboard, etc.).
+The exterior-front-3/4 hero rule is treated as a hard contract: every
+implementer must verify the chosen hero file is actually a front-3/4
+by reading the file FULL-SIZE before commit. Montage thumbnails are
+not enough — that's how v1 went wrong.
+
+**Sequence ground truth:** Jeremiah's preferred photo sequence for any
+vehicle is whatever Dealer Center shows in the active-inventory
+detail-view photo carousel for that vehicle. When in doubt about
+ordering, copy that sequence.
 
 This is the permanent rule book for how vehicle photos get displayed on
 the website. Every vehicle follows these rules. New vehicles added to
@@ -11,6 +23,26 @@ Bill's Vision API pipeline (Phase 2), but in both cases the final sort
 order respects the priorities below.
 
 ---
+
+## The master rule (above all others)
+
+**The order Jeremiah hand-arranges in DealerCenter's Media tab IS the
+order the website displays. Verbatim. No re-classification.**
+
+When a customer opens a vehicle on loveautogroup.net, photo #1 in
+DealerCenter is photo #1 on the site, photo #2 in DC is photo #2 on
+the site, and so on. Jeremiah established this April 23 2026 with two
+reference vehicles he had personally arranged in DealerCenter — the
+2017 Subaru Forester (Stock #11326, 21 photos) and the 2016 Honda
+Pilot Touring (Stock #11334, 30 photos). Both follow the same
+exterior-first → interior-front-to-back → details-last pattern below.
+
+The hero rule, the priority table, and the category list that follow
+are the SAME pattern Jeremiah uses when arranging photos in
+DealerCenter — they're documented here so automated classifiers
+(Phase 2 Vision API as a fallback / sanity check) and any new
+implementer can produce the same ordering when DC's order is
+unavailable. **When DC's order IS available, use it directly.**
 
 ## The hero rule
 

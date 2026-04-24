@@ -225,10 +225,27 @@ When the sync sees a new photo URL from Dealer Center:
 Public R2 bucket bound to `photos.loveautogroup.net` subdomain. Site
 references images at `https://photos.loveautogroup.net/vehicles/{vin}/{N}.jpg`.
 
-**Photo ordering:** the existing `src/data/photoOrder.ts` manifest still
-applies. Bill: when a new VIN's photos arrive, automatically run the
-Phase 2 vision classifier (`scripts/classify-photos.ts`) and write the
-result back to `inventory:current`. Photo order persists across syncs.
+**Photo ordering — UPDATED Apr 23 2026:** Jeremiah hand-arranges
+photos in DealerCenter's Media tab. **The order DC ships them in the
+feed IS the order the website displays. Verbatim.** No re-classification.
+
+Concretely: when the worker parses the feed, the `<photos>` array's
+existing element ordering becomes the `images` array's ordering on
+SyncedVehicle. The photo-pipeline writes them to R2 with sequential
+positions matching that order (`01.jpg`, `02.jpg`, ...) and the site
+displays them in that order.
+
+The Phase 2 Vision API classifier (`scripts/classify-photos.ts`)
+becomes a **fallback / sanity check only** — it runs after the DC
+order is applied and surfaces a warning on `/admin/sync-status` if
+slot 1 looks like anything other than exterior-front-3/4. Jeremiah
+fixes those cases by re-ordering in DC, not by overriding on the
+website. The `src/data/photoOrder.ts` manifest stays in the repo as
+fallback for vehicles where DC photo order is unavailable (e.g.
+imported from a non-DC source).
+
+See `docs/photo-arrangement-rules.md` for the full canonical rule
+including Jeremiah's reference vehicles.
 
 ### 4. Pages Function — `/api/inventory`
 
