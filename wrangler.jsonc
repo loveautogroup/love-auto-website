@@ -38,22 +38,17 @@
       "id": "381080f3f56447968df1499a7db628be",
       "preview_id": "f92bcf98233e45d2b60e14d66426cef4"
     },
-    {
-      // Inventory snapshot + sync logs written by the inventory-sync
-      // Cron Worker (workers/inventory-sync). Read by /api/inventory and
-      // /api/admin/sync-status. SHARED across the Worker and Pages — both
-      // bind to the same namespace.
-      //
-      // Create via:
-      //   wrangler kv:namespace create INVENTORY
-      //   wrangler kv:namespace create INVENTORY --preview
-      // Then paste the IDs here AND in workers/inventory-sync/wrangler.toml.
-      // Until created, /api/inventory returns 204 and the site falls back
-      // to src/data/inventory.ts.
-      "binding": "INVENTORY",
-      "id": "REPLACE_AFTER_KV_CREATE",
-      "preview_id": "REPLACE_AFTER_KV_CREATE_PREVIEW"
-    }
+    // INVENTORY KV (for /api/inventory + /api/admin/sync-status) is
+    // intentionally NOT bound here yet — Cloudflare Pages rejects the
+    // deploy if it tries to resolve a placeholder ID. To enable:
+    //   1. wrangler kv:namespace create INVENTORY
+    //   2. wrangler kv:namespace create INVENTORY --preview
+    //   3. Add the binding object below with the real IDs returned by
+    //      step 1 + 2 (and also paste them into
+    //      workers/inventory-sync/wrangler.toml).
+    //   4. Push.
+    // Until then, /api/inventory returns 204 (binding missing) and the
+    // site falls back to the build-time src/data/inventory.ts list.
   ],
 
   "compatibility_date": "2026-04-20",
