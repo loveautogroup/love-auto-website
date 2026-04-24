@@ -27,18 +27,15 @@ const US_STATES = [
   "VA","WA","WV","WI","WY","DC",
 ];
 
-interface FormValues {
+/** Everything a single applicant (buyer or co-buyer) captures. */
+interface ApplicantFields {
   firstName: string;
   lastName: string;
-  email: string;
-  phone: string;
-  addressStreet: string;
-  addressCity: string;
-  addressState: string;
-  addressZip: string;
   dateOfBirth: string;
-  housingStatus: "own" | "rent" | "other" | "";
-  monthlyHousingPayment: string;
+  dlNumber: string;
+  dlState: string;
+  dlIssueDate: string;
+  dlExpiryDate: string;
   employmentStatus:
     | "employed"
     | "self-employed"
@@ -49,19 +46,56 @@ interface FormValues {
     | "";
   employer: string;
   jobTitle: string;
+  employerPhone: string;
   monthlyIncome: string;
   timeAtJobMonths: string;
+}
+
+interface FormValues extends ApplicantFields {
+  // Contact (buyer only)
+  email: string;
+  phone: string;
+  // Shared address
+  addressStreet: string;
+  addressCity: string;
+  addressState: string;
+  addressZip: string;
+  // Housing (buyer only — co-buyer sharing address)
+  housingStatus: "own" | "rent" | "other" | "";
+  monthlyHousingPayment: string;
+  // Vehicle / deal
   vehicleInterest: string;
   desiredMonthlyPayment: string;
   desiredDownPayment: string;
   hasTradeIn: boolean;
   tradeInDetails: string;
+  // Co-buyer
+  hasCoBuyer: boolean;
+  coBuyer: ApplicantFields;
+  // Consents + anti-spam
   tcpaConsent: boolean;
   privacyConsent: boolean;
   honeypot: string;
 }
 
+const EMPTY_APPLICANT: ApplicantFields = {
+  firstName: "",
+  lastName: "",
+  dateOfBirth: "",
+  dlNumber: "",
+  dlState: "IL",
+  dlIssueDate: "",
+  dlExpiryDate: "",
+  employmentStatus: "",
+  employer: "",
+  jobTitle: "",
+  employerPhone: "",
+  monthlyIncome: "",
+  timeAtJobMonths: "",
+};
+
 const INITIAL: FormValues = {
+  // Buyer fields
   firstName: "",
   lastName: "",
   email: "",
@@ -71,11 +105,16 @@ const INITIAL: FormValues = {
   addressState: "IL",
   addressZip: "",
   dateOfBirth: "",
+  dlNumber: "",
+  dlState: "IL",
+  dlIssueDate: "",
+  dlExpiryDate: "",
   housingStatus: "",
   monthlyHousingPayment: "",
   employmentStatus: "",
   employer: "",
   jobTitle: "",
+  employerPhone: "",
   monthlyIncome: "",
   timeAtJobMonths: "",
   vehicleInterest: "",
@@ -83,6 +122,8 @@ const INITIAL: FormValues = {
   desiredDownPayment: "",
   hasTradeIn: false,
   tradeInDetails: "",
+  hasCoBuyer: false,
+  coBuyer: { ...EMPTY_APPLICANT },
   tcpaConsent: false,
   privacyConsent: false,
   honeypot: "",
@@ -108,12 +149,19 @@ export default function FinancingForm() {
     setValues((prev) => ({ ...prev, [key]: value }));
   }
 
+  function updateCoBuyer<K extends keyof ApplicantFields>(
+    key: K,
+    value: ApplicantFields[K]
+  ) {
+    setValues((prev) => ({ ...prev, coBuyer: { ...prev.coBuyer, [key]: value } }));
+  }
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (state.kind === "submitting") return;
     setState({ kind: "submitting" });
 
-    // Coerce numbers before send.
+    // Coerce numbers + serialize co-buyer only when included.
     const payload = {
       ...values,
       monthlyHousingPayment:
@@ -131,6 +179,18 @@ export default function FinancingForm() {
         values.desiredDownPayment === ""
           ? undefined
           : Number(values.desiredDownPayment),
+      // Drop the co-buyer payload entirely when the toggle is off — server
+      // validator expects `coBuyer` only when hasCoBuyer is true.
+      coBuyer: values.hasCoBuyer
+        ? {
+            ...values.coBuyer,
+            monthlyIncome: Number(values.coBuyer.monthlyIncome || 0),
+            timeAtJobMonths:
+              values.coBuyer.timeAtJobMonths === ""
+                ? undefined
+                : Number(values.coBuyer.timeAtJobMonths),
+          }
+        : undefined,
       renderTimestamp: renderTimestamp.current,
     };
 
@@ -416,6 +476,65 @@ export default function FinancingForm() {
             onChange={(e) => update("monthlyHousingPayment", e.target.value)}
           />
         </label>
+
+        {/* Driver's License (optional — saves a follow-up call when submitting to lender) */}
+        <div className="pt-4 border-t border-brand-gray-100">
+          <p className="text-xs uppercase tracking-wide text-brand-gray-500 font-semibold mb-3">
+            Driver&apos;s License (optional)
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <label className="block">
+              <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                DL number
+              </span>
+              <input
+                type="text"
+                maxLength={30}
+                className={fieldClass}
+                value={values.dlNumber}
+                onChange={(e) => update("dlNumber", e.target.value)}
+              />
+            </label>
+            <label className="block">
+              <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                DL state
+              </span>
+              <select
+                className={fieldClass}
+                value={values.dlState}
+                onChange={(e) => update("dlState", e.target.value)}
+              >
+                {US_STATES.map((st) => (
+                  <option key={st} value={st}>
+                    {st}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="block">
+              <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                DL issue date
+              </span>
+              <input
+                type="date"
+                className={fieldClass}
+                value={values.dlIssueDate}
+                onChange={(e) => update("dlIssueDate", e.target.value)}
+              />
+            </label>
+            <label className="block">
+              <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                DL expiry date
+              </span>
+              <input
+                type="date"
+                className={fieldClass}
+                value={values.dlExpiryDate}
+                onChange={(e) => update("dlExpiryDate", e.target.value)}
+              />
+            </label>
+          </div>
+        </div>
       </fieldset>
 
       {/* ─── Employment ─── */}
@@ -487,21 +606,35 @@ export default function FinancingForm() {
               onChange={(e) => update("jobTitle", e.target.value)}
             />
           </label>
+          <label className="block">
+            <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+              Employer phone
+            </span>
+            <input
+              type="tel"
+              inputMode="tel"
+              autoComplete="work tel"
+              placeholder="(555) 555-5555"
+              className={fieldClass}
+              value={values.employerPhone}
+              onChange={(e) => update("employerPhone", e.target.value)}
+            />
+          </label>
+          <label className="block">
+            <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+              Time at current job (months)
+            </span>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              max={720}
+              className={fieldClass}
+              value={values.timeAtJobMonths}
+              onChange={(e) => update("timeAtJobMonths", e.target.value)}
+            />
+          </label>
         </div>
-        <label className="block">
-          <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-            Time at current job (months)
-          </span>
-          <input
-            type="number"
-            inputMode="numeric"
-            min={0}
-            max={720}
-            className={fieldClass}
-            value={values.timeAtJobMonths}
-            onChange={(e) => update("timeAtJobMonths", e.target.value)}
-          />
-        </label>
       </fieldset>
 
       {/* ─── Vehicle interest ─── */}
@@ -580,6 +713,168 @@ export default function FinancingForm() {
               placeholder="e.g. 2012 Honda Civic LX, 140k miles, runs great, one owner"
             />
           </label>
+        )}
+      </fieldset>
+
+      {/* ─── Co-Buyer (optional) ─── */}
+      <fieldset className="space-y-4" disabled={disabled}>
+        <legend className="text-sm font-bold text-brand-gray-900 mb-2 uppercase tracking-wide">
+          Co-Buyer
+        </legend>
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            className="mt-1"
+            checked={values.hasCoBuyer}
+            onChange={(e) => update("hasCoBuyer", e.target.checked)}
+          />
+          <span className="text-sm text-brand-gray-700">
+            Add a co-buyer to this application.{" "}
+            <span className="text-brand-gray-500">
+              A co-buyer&apos;s income can help if your own income is limited or
+              you&apos;re rebuilding credit. Spouse, parent, or anyone willing
+              to be jointly responsible for the loan.
+            </span>
+          </span>
+        </label>
+
+        {values.hasCoBuyer && (
+          <div className="space-y-4 rounded-lg border border-brand-gray-200 bg-brand-gray-50 p-5">
+            <p className="text-xs uppercase tracking-wide text-brand-gray-600 font-semibold">
+              Co-Buyer Information
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <label className="block">
+                <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                  First name <span className="text-brand-red">*</span>
+                </span>
+                <input
+                  type="text"
+                  required
+                  className={fieldClass}
+                  value={values.coBuyer.firstName}
+                  onChange={(e) => updateCoBuyer("firstName", e.target.value)}
+                />
+              </label>
+              <label className="block">
+                <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                  Last name <span className="text-brand-red">*</span>
+                </span>
+                <input
+                  type="text"
+                  required
+                  className={fieldClass}
+                  value={values.coBuyer.lastName}
+                  onChange={(e) => updateCoBuyer("lastName", e.target.value)}
+                />
+              </label>
+              <label className="block">
+                <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                  Date of birth <span className="text-brand-red">*</span>
+                </span>
+                <input
+                  type="date"
+                  required
+                  className={fieldClass}
+                  value={values.coBuyer.dateOfBirth}
+                  onChange={(e) => updateCoBuyer("dateOfBirth", e.target.value)}
+                />
+              </label>
+              <label className="block">
+                <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                  Employment status <span className="text-brand-red">*</span>
+                </span>
+                <select
+                  required
+                  className={fieldClass}
+                  value={values.coBuyer.employmentStatus}
+                  onChange={(e) =>
+                    updateCoBuyer(
+                      "employmentStatus",
+                      e.target.value as ApplicantFields["employmentStatus"]
+                    )
+                  }
+                >
+                  <option value="">Select…</option>
+                  <option value="employed">Employed (W-2)</option>
+                  <option value="self-employed">Self-employed</option>
+                  <option value="retired">Retired</option>
+                  <option value="student">Student</option>
+                  <option value="unemployed">Unemployed</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label className="block">
+                <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                  Monthly gross income <span className="text-brand-red">*</span>
+                </span>
+                <input
+                  type="number"
+                  required
+                  inputMode="numeric"
+                  min={0}
+                  placeholder="$"
+                  className={fieldClass}
+                  value={values.coBuyer.monthlyIncome}
+                  onChange={(e) => updateCoBuyer("monthlyIncome", e.target.value)}
+                />
+              </label>
+              <label className="block">
+                <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                  Employer
+                </span>
+                <input
+                  type="text"
+                  className={fieldClass}
+                  value={values.coBuyer.employer}
+                  onChange={(e) => updateCoBuyer("employer", e.target.value)}
+                />
+              </label>
+              <label className="block">
+                <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                  Job title
+                </span>
+                <input
+                  type="text"
+                  className={fieldClass}
+                  value={values.coBuyer.jobTitle}
+                  onChange={(e) => updateCoBuyer("jobTitle", e.target.value)}
+                />
+              </label>
+              <label className="block">
+                <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                  Employer phone
+                </span>
+                <input
+                  type="tel"
+                  inputMode="tel"
+                  placeholder="(555) 555-5555"
+                  className={fieldClass}
+                  value={values.coBuyer.employerPhone}
+                  onChange={(e) => updateCoBuyer("employerPhone", e.target.value)}
+                />
+              </label>
+              <label className="block">
+                <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                  Time at current job (months)
+                </span>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  max={720}
+                  className={fieldClass}
+                  value={values.coBuyer.timeAtJobMonths}
+                  onChange={(e) => updateCoBuyer("timeAtJobMonths", e.target.value)}
+                />
+              </label>
+            </div>
+            <p className="text-xs text-brand-gray-500 pt-2 border-t border-brand-gray-200">
+              We&apos;ll collect the co-buyer&apos;s driver&apos;s license info
+              during your visit — we only need enough here to start the
+              application.
+            </p>
+          </div>
         )}
       </fieldset>
 

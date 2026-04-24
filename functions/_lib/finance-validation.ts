@@ -15,14 +15,41 @@
  *     (bots auto-submit instantly)
  */
 
+/**
+ * One person on the application (buyer or co-buyer). Co-buyer is optional;
+ * if provided, only required fields are the name + DOB + employment +
+ * income. DL info is nice-to-have — lenders ask for it, capturing upfront
+ * saves a follow-up call, but missing DL doesn't block submission.
+ */
+export interface ApplicantInput {
+  // Contact / identity
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string; // YYYY-MM-DD
+
+  // Driver's license (optional — captured for lender convenience)
+  dlNumber?: string;
+  dlState?: string;       // 2-letter code
+  dlIssueDate?: string;   // YYYY-MM-DD
+  dlExpiryDate?: string;  // YYYY-MM-DD
+
+  // Employment
+  employmentStatus: "employed" | "self-employed" | "retired" | "student" | "unemployed" | "other";
+  employer?: string;
+  jobTitle?: string;
+  employerPhone?: string;
+  monthlyIncome: number;
+  timeAtJobMonths?: number;
+}
+
 export interface FinanceApplicationInput {
-  // Contact
+  // Primary applicant (buyer)
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
 
-  // Address
+  // Address (shared with co-buyer if present)
   addressStreet: string;
   addressCity: string;
   addressState: string;
@@ -30,6 +57,10 @@ export interface FinanceApplicationInput {
 
   // Personal — NO SSN on the form
   dateOfBirth: string; // YYYY-MM-DD
+  dlNumber?: string;
+  dlState?: string;
+  dlIssueDate?: string;
+  dlExpiryDate?: string;
   housingStatus: "own" | "rent" | "other";
   monthlyHousingPayment?: number;
 
@@ -37,6 +68,7 @@ export interface FinanceApplicationInput {
   employmentStatus: "employed" | "self-employed" | "retired" | "student" | "unemployed" | "other";
   employer?: string;
   jobTitle?: string;
+  employerPhone?: string;
   monthlyIncome: number;
   timeAtJobMonths?: number;
 
@@ -48,6 +80,10 @@ export interface FinanceApplicationInput {
   // Trade-in
   hasTradeIn: boolean;
   tradeInDetails?: string; // year/make/model of trade if applicable
+
+  // Co-buyer (optional — entire sub-object is omitted when hasCoBuyer is false)
+  hasCoBuyer: boolean;
+  coBuyer?: ApplicantInput;
 
   // Legal disclosures + consents (Diane)
   tcpaConsent: boolean; // SMS consent
@@ -75,6 +111,7 @@ const MAX_ADDRESS = 120;
 const MAX_CITY = 60;
 const MAX_EMPLOYER = 120;
 const MAX_JOB = 80;
+const MAX_DL_NUMBER = 30;
 const MAX_VEHICLE = 200;
 const MAX_TRADE = 200;
 
@@ -123,6 +160,57 @@ function isValidDate(v: string): boolean {
   const minDob = new Date(now.getFullYear() - 110, now.getMonth(), now.getDate());
   const maxDob = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());
   return d >= minDob && d <= maxDob;
+}
+
+/**
+ * Looser date check for DL issue / expiry dates. Just a valid ISO date
+ * within a reasonable window (not 1900, not year 3000).
+ */
+function isValidAnyDate(v: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) return false;
+  const d = new Date(v);
+  if (isNaN(d.getTime())) return false;
+  const year = d.getFullYear();
+  return year >= 1950 && year <= 2100;
+}
+
+/**
+ * Validate the optional DL fields + employer phone on a given applicant
+ * (buyer or co-buyer). All four DL fields are independently optional;
+ * if the DL number is provided, the state must also be provided.
+ */
+function validateDlAndEmployerPhone(
+  o: Record<string, unknown>,
+  who: string,
+  issues: string[]
+): void {
+  const hasDlNumber = typeof o.dlNumber === "string" && o.dlNumber.trim().length > 0;
+  if (hasDlNumber) {
+    const dl = (o.dlNumber as string).trim();
+    if (dl.length > MAX_DL_NUMBER) {
+      issues.push(`${who} driver's license number is too long.`);
+    } else if (!/^[A-Za-z0-9-]{3,}$/.test(dl)) {
+      issues.push(`${who} driver's license number contains invalid characters.`);
+    }
+    if (typeof o.dlState !== "string" || !/^[A-Za-z]{2}$/.test(o.dlState)) {
+      issues.push(`${who} driver's license state must be a 2-letter code when a DL number is provided.`);
+    }
+  }
+  for (const [field, value] of [
+    ["DL issue date", o.dlIssueDate],
+    ["DL expiry date", o.dlExpiryDate],
+  ] as const) {
+    if (typeof value === "string" && value.length > 0 && !isValidAnyDate(value)) {
+      issues.push(`${who} ${field} must be a valid date (YYYY-MM-DD).`);
+    }
+  }
+  if (typeof o.employerPhone === "string" && o.employerPhone.length > 0) {
+    if (!isValidPhone(o.employerPhone)) {
+      issues.push(`${who} employer phone number is invalid.`);
+    } else if (o.employerPhone.length > MAX_PHONE) {
+      issues.push(`${who} employer phone is too long.`);
+    }
+  }
 }
 
 export function validateFinanceApplication(
@@ -211,6 +299,7 @@ export function validateFinanceApplication(
   if (typeof o.dateOfBirth !== "string" || !isValidDate(o.dateOfBirth)) {
     issues.push("Valid date of birth is required (must be 18 or older).");
   }
+  validateDlAndEmployerPhone(o, "Buyer", issues);
   if (
     typeof o.housingStatus !== "string" ||
     !HOUSING_STATUSES.includes(o.housingStatus as (typeof HOUSING_STATUSES)[number])
@@ -291,6 +380,71 @@ export function validateFinanceApplication(
       issues.push("Trade-in details are too long.");
     } else {
       assertSafeText(o.tradeInDetails, "Trade-in details", issues);
+    }
+  }
+
+  // ─── CO-BUYER (optional) ───────────────────────────────────────────
+  if (typeof o.hasCoBuyer !== "boolean") {
+    issues.push("Co-buyer question must be answered.");
+  }
+  if (o.hasCoBuyer === true) {
+    const co = o.coBuyer;
+    if (!co || typeof co !== "object") {
+      issues.push("Co-buyer information is required when a co-buyer is added.");
+    } else {
+      const c = co as Record<string, unknown>;
+      if (typeof c.firstName !== "string" || c.firstName.trim().length === 0) {
+        issues.push("Co-buyer first name is required.");
+      } else if (c.firstName.length > MAX_NAME) {
+        issues.push("Co-buyer first name is too long.");
+      } else {
+        assertSafeText(c.firstName, "Co-buyer first name", issues);
+      }
+      if (typeof c.lastName !== "string" || c.lastName.trim().length === 0) {
+        issues.push("Co-buyer last name is required.");
+      } else if (c.lastName.length > MAX_NAME) {
+        issues.push("Co-buyer last name is too long.");
+      } else {
+        assertSafeText(c.lastName, "Co-buyer last name", issues);
+      }
+      if (typeof c.dateOfBirth !== "string" || !isValidDate(c.dateOfBirth)) {
+        issues.push("Co-buyer date of birth is required (must be 18 or older).");
+      }
+      validateDlAndEmployerPhone(c, "Co-buyer", issues);
+      if (
+        typeof c.employmentStatus !== "string" ||
+        !EMPLOYMENT_STATUSES.includes(
+          c.employmentStatus as (typeof EMPLOYMENT_STATUSES)[number]
+        )
+      ) {
+        issues.push(
+          `Co-buyer employment status must be one of: ${EMPLOYMENT_STATUSES.join(", ")}.`
+        );
+      }
+      if (c.employer !== undefined && c.employer !== "") {
+        if (typeof c.employer !== "string" || c.employer.length > MAX_EMPLOYER) {
+          issues.push("Co-buyer employer name is invalid or too long.");
+        } else {
+          assertSafeText(c.employer, "Co-buyer employer", issues);
+        }
+      }
+      if (c.jobTitle !== undefined && c.jobTitle !== "") {
+        if (typeof c.jobTitle !== "string" || c.jobTitle.length > MAX_JOB) {
+          issues.push("Co-buyer job title is invalid or too long.");
+        } else {
+          assertSafeText(c.jobTitle, "Co-buyer job title", issues);
+        }
+      }
+      const coIncome = Number(c.monthlyIncome);
+      if (!Number.isFinite(coIncome) || coIncome < 0 || coIncome > 1000000) {
+        issues.push("Valid co-buyer monthly income is required.");
+      }
+      if (c.timeAtJobMonths !== undefined && c.timeAtJobMonths !== null && c.timeAtJobMonths !== "") {
+        const m = Number(c.timeAtJobMonths);
+        if (!Number.isFinite(m) || m < 0 || m > 720) {
+          issues.push("Co-buyer time at current job must be between 0 and 720 months.");
+        }
+      }
     }
   }
 

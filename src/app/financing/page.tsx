@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/constants";
 import FinancingForm from "./FinancingForm";
+import PaymentCalculator from "./PaymentCalculator";
 
 export const metadata: Metadata = {
   title: "Used Car Financing, All Credit Welcome | Love Auto",
@@ -12,19 +13,48 @@ export const metadata: Metadata = {
 export default function FinancingPage() {
   return (
     <>
+      {/* Hero with dual-CTA split */}
       <section className="bg-brand-navy text-white py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
+          <p className="text-brand-red uppercase tracking-wider text-sm font-bold mb-3">
+            Financing
+          </p>
           <h1 className="text-4xl md:text-5xl font-bold">
-            Get Pre-Approved for Financing
+            Financing for All Credit Levels
           </h1>
-          <p className="mt-4 text-lg text-brand-gray-300">
-            Quick, easy, and no obligation. We work with multiple lenders to find
-            the best option for you.
+          <p className="mt-4 text-lg text-brand-gray-300 max-w-2xl mx-auto">
+            First-time buyer? Rebuilding credit? No problem. Love Auto Group
+            works with multiple lenders to find you the best rate.
+          </p>
+          <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              href="#apply"
+              className="inline-flex items-center justify-center gap-2 bg-brand-red hover:bg-brand-red-dark text-white font-bold text-lg px-8 py-4 rounded-xl transition-colors"
+            >
+              <span aria-hidden>📋</span> Full Credit Application
+            </a>
+            <a
+              href="#apply"
+              className="inline-flex items-center justify-center gap-2 bg-white/10 border border-white/30 hover:bg-white/20 text-white font-bold text-lg px-8 py-4 rounded-xl transition-colors"
+            >
+              <span aria-hidden>⚡</span> Quick Pre-Qualify
+            </a>
+          </div>
+          <p className="mt-3 text-sm text-brand-gray-400">
+            Soft inquiry — no impact to your credit score to apply.
           </p>
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 py-16">
+      {/* Payment calculator */}
+      <section className="max-w-5xl mx-auto px-4 -mt-8 relative z-10">
+        <PaymentCalculator />
+      </section>
+
+      <section
+        id="apply"
+        className="max-w-7xl mx-auto px-4 py-16 scroll-mt-20"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12">
           <div>
             <FinancingForm />
