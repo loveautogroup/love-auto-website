@@ -56,7 +56,10 @@ export const sampleInventory: Vehicle[] = [
       "Backup Camera",
     ],
     images: generateImagePaths("2016-honda-pilot-touring-4d", 2016, "honda", "pilot", 30),
-    status: "available",
+    // Sold 04/13/2026 per DealerCenter; flipped to "sold" Apr 23 2026
+    // so the inventory grid auto-hides it. Listing data preserved for
+    // when the live inventory-sync Cron Worker takes over status drift.
+    status: "sold",
     dateInStock: "2026-04-13",
     daysOnLot: 5,
   },
@@ -274,7 +277,9 @@ export const sampleInventory: Vehicle[] = [
       "ABS Brakes",
     ],
     images: generateImagePaths("2008-saab-9-3-2d", 2008, "saab", "9-3", 23),
-    status: "available",
+    // Sold per DealerCenter sold-vehicles report; flipped to "sold"
+    // Apr 23 2026 during the same audit that caught the Honda Pilot.
+    status: "sold",
     dateInStock: "2025-06-23",
     daysOnLot: 299,
   },
