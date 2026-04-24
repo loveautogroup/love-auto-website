@@ -1,0 +1,21 @@
+{
+  // Standalone tsconfig for the inventory-sync Cron Worker. Uses
+  // @cloudflare/workers-types so KVNamespace, R2Bucket, ScheduledController,
+  // ExecutionContext, and the Cloudflare-extended Request init are typed.
+  // Excluded from the root tsconfig because the root project targets DOM lib
+  // and the Worker runtime is service-worker-shaped.
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "types": ["@cloudflare/workers-types"]
+  },
+  "include": ["src/**/*.ts"]
+}

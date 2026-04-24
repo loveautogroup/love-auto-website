@@ -4,14 +4,33 @@ import { useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Vehicle } from "@/lib/types";
 import VehicleCard from "@/components/VehicleCard";
+import { useInventory } from "@/lib/useInventory";
+import { sortWithFeaturedFirst } from "@/data/merchandising";
 
 interface InventoryGridProps {
-  /** Full merchandise-ordered list of available vehicles. */
+  /**
+   * Build-time merchandise-ordered fallback. Used as initial render
+   * (avoids empty state flash) and whenever the live KV-backed feed is
+   * unavailable. Once /api/inventory returns a snapshot, we replace
+   * with that — re-applying merchandising sort + status filter.
+   */
   vehicles: Vehicle[];
 }
 
-function InventoryGridInner({ vehicles }: InventoryGridProps) {
+function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) {
   const searchParams = useSearchParams();
+  const { vehicles: liveVehicles, source, syncedAt } = useInventory();
+
+  // Use live snapshot when present, otherwise stick with the SSR'd fallback.
+  // Either way, run them through the same merchandising sort + availability
+  // filter so featured cars stay pinned and sold cars stay hidden from the
+  // public grid.
+  const vehicles =
+    source === "fallback"
+      ? fallbackVehicles
+      : sortWithFeaturedFirst(
+          liveVehicles.filter((v) => v.status === "available")
+        );
 
   const filtered = useMemo(() => {
     const make = searchParams.get("make")?.toLowerCase();
@@ -59,6 +78,14 @@ function InventoryGridInner({ vehicles }: InventoryGridProps) {
           Showing{" "}
           <span className="font-semibold text-brand-gray-900">{filtered.length}</span>{" "}
           {filtered.length === 1 ? "vehicle" : "vehicles"}
+          {source === "live" && syncedAt && (
+            <span
+              className="ml-2 text-[11px] text-brand-gray-400"
+              title={`Live from Dealer Center, synced ${new Date(syncedAt).toLocaleString()}`}
+            >
+              · live
+            </span>
+          )}
         </p>
         <select
           className="text-sm border border-brand-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-red"

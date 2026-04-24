@@ -1,0 +1,63 @@
+# Cron Worker — Inventory Sync
+#
+# Pulls the Dealer Center feed every 15 minutes, parses it into our
+# canonical SyncedVehicle shape, mirrors photos into R2, and writes
+# the snapshot to the INVENTORY KV namespace. The Pages site reads
+# from KV via /api/inventory at request time.
+#
+# Deploy:
+#   cd workers/inventory-sync
+#   wrangler deploy
+#
+# Trigger manually (after deploy):
+#   curl -X POST https://inventory-sync.<account>.workers.dev/run \
+#     -H "Authorization: Bearer <first-12-chars-of-DEALER_CENTER_FEED_AUTH>"
+#
+# Set secrets after deploy:
+#   wrangler secret put DEALER_CENTER_FEED_URL
+#   wrangler secret put DEALER_CENTER_FEED_AUTH    # optional; basic or bearer
+#   wrangler secret put HEALTHCHECK_URL            # optional
+#
+# Set vars in [vars] below or via dashboard.
+
+name = "inventory-sync"
+main = "src/index.ts"
+compatibility_date = "2026-04-20"
+compatibility_flags = ["nodejs_compat"]
+
+# Run every 15 minutes — gives us near-realtime mirror without
+# hammering Dealer Center. If they ask us to back off, change to
+# "*/30 * * * *" or "0 */1 * * *".
+[triggers]
+crons = ["*/15 * * * *"]
+
+# Non-secret vars. The PARSER value is updated once Dealer Center
+# confirms their feed format ("adf-xml", "dealer-xml", "csv", or "stub").
+[vars]
+PARSER = "stub"
+PHOTOS_PUBLIC_BASE = "https://photos.loveautogroup.net"
+
+# KV: canonical snapshot + per-run logs.
+# Create via:  wrangler kv:namespace create INVENTORY
+#              wrangler kv:namespace create INVENTORY --preview
+# Then paste the IDs below.
+[[kv_namespaces]]
+binding = "INVENTORY"
+id = "REPLACE_AFTER_KV_CREATE"
+preview_id = "REPLACE_AFTER_KV_CREATE_PREVIEW"
+
+# R2: vehicle photo storage.
+# Create via:  wrangler r2 bucket create love-auto-photos
+[[r2_buckets]]
+binding = "PHOTOS"
+bucket_name = "love-auto-photos"
+preview_bucket_name = "love-auto-photos-preview"
+
+# Observability: keep logs for 7 days, sample 100% so we can see every run
+# while we're still in the early-tuning phase. Drop sampling to 0.1 once
+# the worker is stable.
+[observability]
+enabled = true
+[observability.logs]
+enabled = true
+head_sampling_rate = 1

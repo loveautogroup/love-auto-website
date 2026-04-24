@@ -18,6 +18,8 @@ interface Stats {
   lostLeads: number;
   openSigningSessions: number;
   completedSigningSessions: number;
+  inventoryCount: number | null;
+  inventoryAgeMinutes: number | null;
   loading: boolean;
   error: string | null;
 }
@@ -30,6 +32,8 @@ export default function AdminHub() {
     lostLeads: 0,
     openSigningSessions: 0,
     completedSigningSessions: 0,
+    inventoryCount: null,
+    inventoryAgeMinutes: null,
     loading: true,
     error: null,
   });
@@ -37,12 +41,16 @@ export default function AdminHub() {
   useEffect(() => {
     async function load() {
       try {
-        const [leadsRes, sessionsRes] = await Promise.all([
+        const [leadsRes, sessionsRes, syncRes] = await Promise.all([
           fetch("/api/admin/leads", {
             credentials: "include",
             cache: "no-store",
           }).catch(() => null),
           fetch("/api/admin/signing-sessions", {
+            credentials: "include",
+            cache: "no-store",
+          }).catch(() => null),
+          fetch("/api/admin/sync-status", {
             credentials: "include",
             cache: "no-store",
           }).catch(() => null),
@@ -52,9 +60,20 @@ export default function AdminHub() {
           leadsRes && leadsRes.ok ? await leadsRes.json() : null;
         const sessData =
           sessionsRes && sessionsRes.ok ? await sessionsRes.json() : null;
+        const syncData = syncRes && syncRes.ok ? await syncRes.json() : null;
 
         const leads: Array<{ status: string }> = leadsData?.leads ?? [];
         const sessions: Array<{ status: string }> = sessData?.sessions ?? [];
+
+        const inventoryCount: number | null =
+          syncData?.snapshot?.vehicleCount ?? null;
+        const inventoryAgeMinutes: number | null =
+          syncData?.snapshot?.syncedAt
+            ? Math.floor(
+                (Date.now() - new Date(syncData.snapshot.syncedAt).getTime()) /
+                  60_000
+              )
+            : null;
 
         setStats({
           newLeads: leads.filter((l) => l.status === "new").length,
@@ -70,6 +89,8 @@ export default function AdminHub() {
           completedSigningSessions: sessions.filter(
             (s) => s.status === "signed" || s.status === "archived"
           ).length,
+          inventoryCount,
+          inventoryAgeMinutes,
           loading: false,
           error: null,
         });
@@ -155,6 +176,18 @@ export default function AdminHub() {
             href="/admin/merchandising"
             title="Merchandising"
             description="Control which vehicles are featured, set custom photo overlays and market estimates, and manage the Text Us number."
+          />
+          <NavCard
+            href="/admin/sync-status"
+            title="Inventory Sync"
+            description="Watch the Cron Worker mirror Dealer Center inventory into the site every 15 minutes. Trigger a manual sync, inspect the latest snapshot, see what changed."
+            badge={
+              stats.inventoryCount !== null
+                ? `${stats.inventoryCount} cars · ${
+                    stats.inventoryAgeMinutes ?? 0
+                  }m ago`
+                : undefined
+            }
           />
         </div>
       </section>
