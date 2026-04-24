@@ -43,8 +43,8 @@ PHOTOS_PUBLIC_BASE = "https://photos.loveautogroup.net"
 # Then paste the IDs below.
 [[kv_namespaces]]
 binding = "INVENTORY"
-id = "REPLACE_AFTER_KV_CREATE"
-preview_id = "REPLACE_AFTER_KV_CREATE_PREVIEW"
+id = "8e64e40dfeae483396a3b1eaa755c820"
+preview_id = "9cefd2c111df4fb78e80090ade013440"
 
 # R2: vehicle photo storage.
 # Create via:  wrangler r2 bucket create love-auto-photos
