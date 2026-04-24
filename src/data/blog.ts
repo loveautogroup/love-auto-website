@@ -1,3 +1,17 @@
+/**
+ * Blog post content — PARKED Apr 2026.
+ *
+ * The /blog and /blog/[slug] routes were removed at the user's request
+ * (intent: bring the blog back later). All post content is preserved
+ * here so re-launching is a small task: recreate src/app/blog/page.tsx
+ * and src/app/blog/[slug]/page.tsx from git history, re-add `Blog` to
+ * NAV_LINKS in src/lib/constants.ts, re-add blogPages to sitemap.ts,
+ * and remove the /blog → /inventory 301s in public/_redirects.
+ *
+ * While parked, this file isn't imported anywhere except this comment.
+ * Don't delete — the content is the work product to revive.
+ */
+
 export interface BlogPost {
   slug: string;
   title: string;

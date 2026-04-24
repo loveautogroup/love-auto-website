@@ -49,6 +49,14 @@
 /parts                       /                                 301
 /specials                    /inventory                        301
 
+# ─── Blog routes (parked Apr 2026) ──────────────────────────────────
+# Blog removed from public site but content preserved in src/data/blog.ts.
+# Any inbound link to a blog post lands on /inventory rather than 404.
+# When the blog comes back, delete these four lines.
+/blog                        /inventory                        301
+/blog/                       /inventory                        301
+/blog/*                      /inventory                        301
+
 # ─── Old VDP slug pattern (best-effort) ─────────────────────────────
 # Legacy CMS likely used /vehicle-details/{stocknum} or /vehicle/{vin}.
 # These force-redirect to the inventory index since slug-to-slug
