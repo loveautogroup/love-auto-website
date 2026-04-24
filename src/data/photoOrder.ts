@@ -68,19 +68,25 @@ export const PHOTO_ORDER: Record<string, number[]> = {
   ],
 
   // 2013 GMC Terrain SLT-1 — 15 photos
-  // v1 hero #1 was already exterior front-3/4 — confirmed best hero.
-  // v2 keeps #1 but re-orders the rest exteriors-first.
+  // v3 (Apr 24 2026): Jeremiah called out that the order didn't match
+  // his DealerCenter Media-tab arrangement. Re-mapped DC slot order
+  // to repo file numbers by visual comparison against the DC media
+  // grid. Verified DC slot 1 (the hero) = repo #1 (matched directly).
   "2013-gmc-terrain-slt-4d": [
-    1, 14, 9, 8, 11, 12, 13, 5, 3, 10, 2, 7,
-    6, 15, 4,
+    1, 14, 8, 9, 12, 10, 13, 3, 5, 11, 2, 6,
+    15, 7, 4,
   ],
 
   // 2017 Hyundai Accent SE — 21 photos
-  // v1 hero #1 was already a front-3/4 but #16 is a tighter, cleaner
-  // shot. v2 hero #16 = clean front-3/4 driver-side of the silver sedan.
+  // v3 (Apr 24 2026): Re-mapped from DC Media tab. v2 hero was repo
+  // #16 (chosen by visual inspection as the cleanest front-3/4);
+  // DC's actual slot 1 maps better to repo #21 (lower angle, trees
+  // background, matches DC's overcast lighting). Full DC-sequence
+  // re-arrangement — interior/engine photos moved to end per DC's
+  // grouping.
   "2017-hyundai-accent-4d": [
-    16, 1, 21, 11, 12, 7, 19, 6, 13, 20, 3, 9,
-    4, 14, 8, 17, 2, 10, 5, 15, 18,
+    21, 11, 16, 13, 6, 7, 9, 1, 19, 20, 12, 3,
+    14, 4, 2, 8, 10, 17, 5, 15, 18,
   ],
 
   // 2008 Saab 9-3 2.0T Convertible — 23 photos
