@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TextUsButton from "@/components/TextUsButton";
+import StickyCTA from "@/components/StickyCTA";
 import { LocalBusinessSchema } from "@/components/StructuredData";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
@@ -87,6 +88,7 @@ export default function RootLayout({
         <main id="main-content">{children}</main>
         <Footer />
         <TextUsButton />
+        <StickyCTA />
       </body>
     </html>
   );

@@ -14,6 +14,7 @@ import MobileCalculatorButton from "@/components/MobileCalculatorButton";
 import VDPFAQ from "@/components/VDPFAQ";
 import ShowCarfaxButton from "@/components/ShowCarfaxButton";
 import VDPReviews from "@/components/VDPReviews";
+import VDPInquireButton from "@/components/VDPInquireButton";
 import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
 
 function estimateMonthlyPayment(
@@ -294,12 +295,14 @@ export default async function VehicleDetailPage({
                   </svg>
                   Text Us
                 </a>
-                <Link
-                  href={`/contact?vehicle=${encodeURIComponent(`${vehicle.year} ${vehicle.make} ${vehicle.model}`)}`}
-                  className="flex items-center justify-center w-full border-2 border-brand-gray-200 hover:border-brand-red text-brand-gray-700 hover:text-brand-red py-3 rounded-xl font-semibold transition-colors"
-                >
-                  Ask a Question
-                </Link>
+                <VDPInquireButton
+                  vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.trim ? " " + vehicle.trim : ""}`}
+                  vehicleVin={vehicle.vin}
+                  className="w-full"
+                />
+                {/* Replaced previous /contact?vehicle Link with inline
+                    modal — keeps the user on the VDP and posts directly
+                    to the DMS public-leads endpoint. */}
               </div>
 
               {/* Show Carfax — explicit labeled CTA. The small badge on
