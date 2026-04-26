@@ -30,6 +30,8 @@ export interface VehicleOverlayInput {
   warranty?: string;
   hidden?: boolean;
   marketEstimate?: number;
+  /** Per-vehicle override of the global textPhone. Same format: 10-15 digits. */
+  textPhone?: string;
 }
 
 export interface ValidationOk {
@@ -155,6 +157,18 @@ export function validateMerchandisingConfig(
               }
             }
           });
+        }
+      }
+      // Per-vehicle textPhone override. Same shape as the global textPhone:
+      // 10-15 digits, no punctuation. The DMS panel strips formatting before
+      // sending so users can paste "(630) 555-1234" and we accept it.
+      if (o.textPhone !== undefined) {
+        if (typeof o.textPhone !== "string") {
+          issues.push(`overlays[${vin}].textPhone must be a string of digits.`);
+        } else if (!/^[0-9]{10,15}$/.test(o.textPhone)) {
+          issues.push(
+            `overlays[${vin}].textPhone must be 10-15 digits (no spaces or punctuation).`
+          );
         }
       }
     }

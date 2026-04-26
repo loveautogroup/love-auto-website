@@ -61,6 +61,16 @@ export interface VehicleOverlay {
    * Source ideas: KBB Black Book, recent comparable sales, manual research.
    */
   marketEstimate?: number;
+
+  /**
+   * Per-vehicle override for the "Text Us" phone number on the VDP.
+   * Format: digits only (no parens or dashes), e.g. "6303593643".
+   * When set, this VIN's VDP routes Text Us SMS to this number instead of
+   * the global MerchandisingConfig.textPhone (which itself falls back to
+   * SITE_CONFIG.phoneRaw). Useful when a specific salesperson is
+   * point-of-contact for a particular vehicle.
+   */
+  textPhone?: string;
 }
 
 export interface MerchandisingConfig {

@@ -104,8 +104,11 @@ export default async function VehicleDetailPage({
   // Pull merchandising overlay for market estimate (Jordan-researched).
   const overlay = resolveOverlay(vehicle.vin, vehicle.daysOnLot, vehicle.status);
 
-  // Text Us number — Jordan-configurable in admin, falls back to main shop phone.
-  const textPhone = MERCHANDISING.textPhone ?? SITE_CONFIG.phoneRaw;
+  // Text Us number — per-vehicle override wins, then global merchandising
+  // textPhone, then SITE_CONFIG.phoneRaw. Lets Jeremiah route SMS for a
+  // specific car to a specific salesperson without changing brand-level numbers.
+  const textPhone =
+    overlay.textPhone ?? MERCHANDISING.textPhone ?? SITE_CONFIG.phoneRaw;
   const textBody = encodeURIComponent(
     `Hi! I'm interested in the ${vehicle.year} ${vehicle.make} ${vehicle.model} on your website.`
   );
