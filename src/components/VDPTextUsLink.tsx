@@ -39,7 +39,12 @@ interface Props {
 
 function buildHref(phone: string, bodyText: string): string {
   const encoded = encodeURIComponent(bodyText);
-  return `sms:+1${phone}?&body=${encoded}`;
+  // Format: sms:NUMBER?body=TEXT (no +1 prefix, single ? for query start).
+  // Samsung Messages on the Fold 6 rejects malformed `?&body=` and Chrome's
+  // intent handler bounces back to the page (visible "flicker"). Pixel +
+  // Google Messages tolerates the bad format. Match the working TextUsButton
+  // format here.
+  return `sms:${phone}?body=${encoded}`;
 }
 
 export default function VDPTextUsLink({
@@ -73,21 +78,4 @@ export default function VDPTextUsLink({
         }
       })
       .catch(() => {
-        // Silent — keep the baked default. We never want this fetch to
-        // break the link.
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [vin]);
-
-  return (
-    <a
-      href={buildHref(phone, bodyText)}
-      className={className}
-      aria-label={ariaLabel}
-    >
-      {children}
-    </a>
-  );
-}
+        /
