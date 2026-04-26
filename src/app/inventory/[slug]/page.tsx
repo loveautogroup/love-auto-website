@@ -17,6 +17,10 @@ import VDPReviews from "@/components/VDPReviews";
 import VDPInquireButton from "@/components/VDPInquireButton";
 import VDPTextUsLink from "@/components/VDPTextUsLink";
 import VDPVinSignal from "@/components/VDPVinSignal";
+import {
+  VDPCarfaxButton,
+  VDPMarketPriceWrap,
+} from "@/components/VDPMerchandisingWrappers";
 import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
 
 function estimateMonthlyPayment(
@@ -204,25 +208,25 @@ export default async function VehicleDetailPage({
                 {formattedMileage} miles · {vehicle.drivetrain} · {vehicle.exteriorColor}
               </p>
               {/* Mobile Show Carfax — inline next to the title so it's
-                  impossible to miss. The tiny badge on the photo alone
-                  isn't obvious enough to mobile users. */}
-              {overlay.carfax && (
-                <div className="mt-3">
-                  <ShowCarfaxButton vin={vehicle.vin} variant="inline" />
-                </div>
-              )}
+                  impossible to miss. Client wrapper picks up runtime overlay
+                  changes from the DMS panel without a site rebuild. */}
+              <VDPCarfaxButton
+                vin={vehicle.vin}
+                daysOnLot={vehicle.daysOnLot}
+                vehicleStatus={vehicle.status}
+                variant="inline"
+              />
             </div>
 
             {/* Market price comparison — only renders when Jordan has set
-                a marketEstimate in the merchandising overlay. */}
-            {overlay.marketEstimate && (
-              <div className="mt-4 lg:mt-6">
-                <VDPMarketPrice
-                  askingPrice={vehicle.price}
-                  marketEstimate={overlay.marketEstimate}
-                />
-              </div>
-            )}
+                a marketEstimate in the merchandising overlay. Client wrapper
+                picks up runtime KV updates without rebuilding. */}
+            <VDPMarketPriceWrap
+              vin={vehicle.vin}
+              daysOnLot={vehicle.daysOnLot}
+              vehicleStatus={vehicle.status}
+              askingPrice={vehicle.price}
+            />
 
             {/* Tabbed Content — Overview, Features, History, Financing */}
             <VDPTabs
@@ -316,13 +320,14 @@ export default async function VehicleDetailPage({
               </div>
 
               {/* Show Carfax — explicit labeled CTA. The small badge on
-                  the photo alone isn't obvious enough to most buyers, per
-                  Jeremiah's feedback. */}
-              {overlay.carfax && (
-                <div className="pt-1">
-                  <ShowCarfaxButton vin={vehicle.vin} variant="wide" />
-                </div>
-              )}
+                  the photo alone isn't obvious enough to most buyers.
+                  Client wrapper for runtime KV updates. */}
+              <VDPCarfaxButton
+                vin={vehicle.vin}
+                daysOnLot={vehicle.daysOnLot}
+                vehicleStatus={vehicle.status}
+                variant="wide"
+              />
 
               {/* Interactive payment calculator — replaces the static
                   $/mo line and the standalone "Get Financing" button.

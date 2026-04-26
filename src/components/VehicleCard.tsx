@@ -1,8 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Vehicle } from "@/lib/types";
 import { SITE_CONFIG } from "@/lib/constants";
-import { resolveOverlay } from "@/data/merchandising";
+import { useResolveOverlay } from "@/data/useMerchandising";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import {
   CarfaxBadge,
@@ -49,7 +51,10 @@ function estimateMonthlyPayment(
  * The VDP gallery uses the full-size badges (PhotoGallery component).
  */
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
-  const overlay = resolveOverlay(
+  // Runtime hook — re-renders when /api/merchandising resolves so DMS-saved
+  // overlays (carfax shield, feature pills, status badge, hidden flag) take
+  // effect immediately instead of waiting for a Cloudflare Pages rebuild.
+  const overlay = useResolveOverlay(
     vehicle.vin,
     vehicle.daysOnLot,
     vehicle.status

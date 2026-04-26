@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Vehicle } from "@/lib/types";
 import { SITE_CONFIG } from "@/lib/constants";
-import { resolveOverlay } from "@/data/merchandising";
+import { useResolveOverlay } from "@/data/useMerchandising";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import {
   CarfaxBadge,
@@ -48,10 +48,15 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
     : rawImages;
   const photoCount = hasRealPhotos ? images.length : 8;
 
-  // Resolve overlay only if vehicle is supplied AND we're on the first photo.
-  const overlay = vehicle
-    ? resolveOverlay(vehicle.vin, vehicle.daysOnLot, vehicle.status)
-    : null;
+  // Runtime hook always called (rules of hooks) — vehicle-conditional render
+  // happens at the JSX level via showBadges. Empty fallback values mean
+  // hook returns harmlessly when no vehicle is in scope.
+  const overlayLive = useResolveOverlay(
+    vehicle?.vin ?? "",
+    vehicle?.daysOnLot ?? 0,
+    vehicle?.status ?? "available"
+  );
+  const overlay = vehicle ? overlayLive : null;
   const showBadges = vehicle && selectedIndex === 0;
   const showCarfax = overlay?.carfax === true;
   // Warranty is opt-in per vehicle. Vehicles sold as-is have no warranty
