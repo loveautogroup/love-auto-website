@@ -4,9 +4,16 @@
  * InquiryModal — modal wrapper around LeadForm for VDP and sticky CTA
  * inquiries. Renders a backdrop + centered card with the form inside.
  * Auto-closes 4 seconds after a successful submission.
+ *
+ * Portal: renders at document.body to escape any ancestor stacking context.
+ * Without this, a `position: sticky` ancestor in the VDP layout was creating
+ * a stacking context that scoped our z-[60] modal underneath the floating
+ * StickyCTA + TextUsButton pills (themselves at z-40, but in the body's
+ * stacking context, so they outranked the modal's contained context).
  */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import LeadForm, { type LeadFormProps } from "@/components/LeadForm";
 
 interface InquiryModalProps extends LeadFormProps {
@@ -23,6 +30,14 @@ export default function InquiryModal({
   subtitle,
   ...formProps
 }: InquiryModalProps) {
+  // Mount-only flag — guards createPortal against SSR where `document`
+  // doesn't exist. The component is "use client" but Next.js still does
+  // an initial pass where document references are unsafe.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Lock body scroll while open + handle Escape
   useEffect(() => {
     if (!open) return;
@@ -37,9 +52,9 @@ export default function InquiryModal({
     };
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
-  return (
+  const modalUI = (
     <div
       // z-[60] beats the floating StickyCTA + TextUsButton (both z-40 but
       // mounted in root layout, AFTER <main> in DOM order — z-50 alone
@@ -96,4 +111,6 @@ export default function InquiryModal({
       </div>
     </div>
   );
+
+  return createPortal(modalUI, document.body);
 }
