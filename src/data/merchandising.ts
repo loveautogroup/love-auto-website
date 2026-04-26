@@ -20,7 +20,19 @@ export type StatusBadgeKind =
   | "price-drop"
   | "staff-pick"
   | "low-mileage"
-  | "sale-pending";
+  | "sale-pending"
+  | "hot-deal"
+  | "great-deal"
+  | "below-market"
+  | "managers-special"
+  | "reconditioned"
+  | "off-lease"
+  | "trade-in"
+  | "new-arrival"
+  | "must-see"
+  | "rare-find"
+  | "loaded"
+  | "make-offer";
 
 /**
  * Per-vehicle overlay settings, keyed by VIN.
@@ -36,11 +48,11 @@ export interface VehicleOverlay {
   carfax?: boolean;
 
   /**
-   * Up to 3 custom feature pills displayed top-center over the photo.
+   * Up to 5 custom feature pills displayed top-center over the photo.
    * Each pill supports a two-line break using \n. Keep each line under ~14 characters.
    * Examples: "Blacked-Out\nAdventure Ready", "Symmetrical\nAWD", "LED Off-Road\nLight Bar"
    */
-  featurePills?: [string?, string?, string?];
+  featurePills?: [string?, string?, string?, string?, string?];
 
   /**
    * Per-vehicle warranty copy, e.g. "30-Day Warranty", "60-Day Powertrain
@@ -216,7 +228,14 @@ export function resolveOverlay(
     effectiveStatus = "just-arrived";
   }
 
-  return { ...override, effectiveStatus };
+  // Default-on for the Carfax shield/button: every Love Auto vehicle is
+  // sold with a free Carfax, so it should appear on every VDP unless
+  // Jordan explicitly opts a vehicle OUT in the merchandising panel
+  // (e.g. while waiting for a fresh report). The DMS panel writes
+  // `carfax: false` to opt out and omits the field to keep the default.
+  const carfax = override.carfax !== false;
+
+  return { ...override, carfax, effectiveStatus };
 }
 
 /**

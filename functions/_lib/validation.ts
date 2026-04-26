@@ -13,6 +13,18 @@ const STATUS_KINDS = [
   "staff-pick",
   "low-mileage",
   "sale-pending",
+  "hot-deal",
+  "great-deal",
+  "below-market",
+  "managers-special",
+  "reconditioned",
+  "off-lease",
+  "trade-in",
+  "new-arrival",
+  "must-see",
+  "rare-find",
+  "loaded",
+  "make-offer",
 ] as const;
 
 type StatusKind = (typeof STATUS_KINDS)[number];
@@ -26,7 +38,7 @@ export interface MerchandisingConfigInput {
 export interface VehicleOverlayInput {
   status?: StatusKind;
   carfax?: boolean;
-  featurePills?: [string?, string?, string?];
+  featurePills?: [string?, string?, string?, string?, string?];
   warranty?: string;
   hidden?: boolean;
   marketEstimate?: number;
@@ -142,8 +154,8 @@ export function validateMerchandisingConfig(
         }
       }
       if (o.featurePills !== undefined) {
-        if (!Array.isArray(o.featurePills) || o.featurePills.length > 3) {
-          issues.push(`overlays[${vin}].featurePills must be an array of up to 3 strings.`);
+        if (!Array.isArray(o.featurePills) || o.featurePills.length > 5) {
+          issues.push(`overlays[${vin}].featurePills must be an array of up to 5 strings.`);
         } else {
           o.featurePills.forEach((pill, i) => {
             if (pill !== undefined && typeof pill !== "string") {

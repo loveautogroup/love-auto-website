@@ -1,7 +1,7 @@
 /**
  * Feature pills cluster — top-RIGHT slot over the vehicle photo.
  *
- * Jordan-authored custom copy per vehicle. Up to 3 pills, each supports a
+ * Jordan-authored custom copy per vehicle. Up to 5 pills, each supports a
  * two-line break via \n in full mode.
  *
  * Heavy frosted-glass treatment — pills are 18% opacity dark over a
@@ -16,8 +16,8 @@
  */
 
 interface FeaturePillClusterProps {
-  /** Up to 3 pills. Entries may include \n for a two-line break (full mode only). */
-  pills?: readonly [string?, string?, string?];
+  /** Up to 5 pills. Entries may include \n for a two-line break (full mode only). */
+  pills?: readonly [string?, string?, string?, string?, string?];
   /** Compact mode for inventory cards — smaller text, single line, fewer pills. */
   compact?: boolean;
 }
@@ -26,8 +26,10 @@ export default function FeaturePillCluster({ pills, compact }: FeaturePillCluste
   const visible = (pills ?? []).filter((p): p is string => Boolean(p && p.trim()));
   if (visible.length === 0) return null;
 
-  // Compact mode: cap to 2 pills max, force single-line, smaller text
-  const limit = compact ? 2 : 3;
+  // Compact mode: cap to 2 pills max (inventory cards stay clean).
+  // Full mode: render up to 5 — with the merchandising panel now offering
+  // 5 slots, the VDP photo overlay needs to surface them all.
+  const limit = compact ? 2 : 5;
   const shown = visible.slice(0, limit);
 
   return (

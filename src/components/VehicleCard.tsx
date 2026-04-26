@@ -8,6 +8,7 @@ import { useResolveOverlay } from "@/data/useMerchandising";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import {
   CarfaxBadge,
+  CarfaxPillStack,
   DealerCluster,
   FeaturePillCluster,
   PhoneCTA,
@@ -59,7 +60,6 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     vehicle.daysOnLot,
     vehicle.status
   );
-  const showCarfax = overlay.carfax === true;
 
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -120,20 +120,26 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         {/* Gradient scrim for overlay legibility */}
         <PhotoScrim />
 
-        {/* Top-left: CARFAX or status pill. CARFAX scaled 55% on mobile,
-            65% on sm+ — the badge dominates narrow card photos otherwise. */}
-        <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 [&_.cf]:scale-[0.55] sm:[&_.cf]:scale-[0.65] [&_.cf]:origin-top-left">
-          {showCarfax ? (
-            <div className="cf">
-              <CarfaxBadge vin={vehicle.vin} />
-            </div>
-          ) : overlay.effectiveStatus ? (
+        {/* Top-left column: full Carfax + status cluster — shield,
+            active Carfax pills, status pill (in that vertical order).
+            Mirrors the VDP hero so the inventory grid feels consistent.
+            Shield scaled 55% on mobile / 65% on sm+; pills + status
+            render at compact size. */}
+        <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 flex flex-col items-start gap-1">
+          <div className="cf [&_.cf]:scale-[0.55] sm:[&_.cf]:scale-[0.65] [&_.cf]:origin-top-left">
+            <CarfaxBadge vin={vehicle.vin} />
+          </div>
+          <CarfaxPillStack overlay={overlay} compact />
+          {overlay.effectiveStatus && (
             <StatusPill kind={overlay.effectiveStatus} />
-          ) : null}
+          )}
         </div>
 
-        {/* Top-right: translucent feature pills, vertical stack */}
-        <FeaturePillCluster pills={overlay.featurePills} compact />
+        {/* Top-right column: compact feature pill stack only. Right-
+            aligned, mirrors the VDP. */}
+        <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 flex flex-col items-end gap-1">
+          <FeaturePillCluster pills={overlay.featurePills} compact stack="inline" />
+        </div>
 
         {/* Warranty intentionally NOT shown on cards — it's a VDP-level
             signal. Putting it on the card crowds the bottom row at compact

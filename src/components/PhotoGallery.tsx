@@ -8,6 +8,7 @@ import { useResolveOverlay } from "@/data/useMerchandising";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import {
   CarfaxBadge,
+  CarfaxPillStack,
   DealerCluster,
   FeaturePillCluster,
   PhoneCTA,
@@ -58,7 +59,6 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
   );
   const overlay = vehicle ? overlayLive : null;
   const showBadges = vehicle && selectedIndex === 0;
-  const showCarfax = overlay?.carfax === true;
   // Warranty is opt-in per vehicle. Vehicles sold as-is have no warranty
   // string set, in which case the warranty badge does not render.
   const warrantyCopy = overlay?.warranty;
@@ -113,20 +113,33 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
             <>
               <PhotoScrim />
 
-              {/* Top-left: CARFAX or status. Scaled down on mobile so the
-                  badge doesn't dominate the photo at narrow viewports — full
-                  size returns at sm+ where there's room. Origin top-left so
-                  the visual hugs the corner regardless of scale. */}
-              <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 [&_>*]:scale-[0.7] sm:[&_>*]:scale-100 [&_>*]:origin-top-left">
-                {showCarfax ? (
+              {/* Top-left column: every merchandising signal that lives
+                  in the left corner — read top-down:
+                    1. CARFAX shield (always; every LAG vehicle ships
+                       with a free Carfax, no per-vehicle opt-out)
+                    2. CarfaxPillStack (1-Owner / No Accidents /
+                       Service Records — only active flags render)
+                    3. StatusPill (Hot Deal, Just Arrived, etc. — only
+                       when Jordan has set one in the merch panel)
+                  Inner div wraps the shield because we only scale down
+                  the shield on mobile, not the pills below it. */}
+              <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 flex flex-col items-start gap-1.5">
+                <div className="[&_>*]:scale-[0.7] sm:[&_>*]:scale-100 [&_>*]:origin-top-left">
                   <CarfaxBadge vin={vehicle.vin} />
-                ) : overlay.effectiveStatus ? (
+                </div>
+                <CarfaxPillStack overlay={overlay} />
+                {overlay.effectiveStatus && (
                   <StatusPill kind={overlay.effectiveStatus} />
-                ) : null}
+                )}
               </div>
 
-              {/* Top-right: translucent feature pills (vertical stack) */}
-              <FeaturePillCluster pills={overlay.featurePills} />
+              {/* Top-right column: regular feature pills (1-5 slots) —
+                  AWD, Heated Leather, etc. Right-aligned so they hug
+                  the photo's right edge, separate visual block from
+                  the trust-signal Carfax/status cluster on the left. */}
+              <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 flex flex-col items-end gap-1.5">
+                <FeaturePillCluster pills={overlay.featurePills} stack="inline" />
+              </div>
 
               {/* Bottom-left: phone CTA (anchored left so the dealer
                   cluster on the right has room to breathe). Compact on

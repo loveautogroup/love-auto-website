@@ -107,7 +107,12 @@ export function useResolveOverlay(
     effectiveStatus = "just-arrived";
   }
 
-  return { ...override, effectiveStatus };
+  // Default-on for Carfax — see comment in resolveOverlay(). undefined or
+  // true both mean "show the Carfax shield"; only an explicit `false` in
+  // KV opts a vehicle out.
+  const carfax = override.carfax !== false;
+
+  return { ...override, carfax, effectiveStatus };
 }
 
 /**
