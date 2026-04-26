@@ -1,6 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { SITE_CONFIG } from "@/lib/constants";
+import { useMerchandising } from "@/data/useMerchandising";
 
 /**
  * Floating "Text Us" CTA — desktop-only.
@@ -10,13 +13,65 @@ import { SITE_CONFIG } from "@/lib/constants";
  *   - The VDP has its own sticky CTA bar at the bottom (Call/Text/Calc)
  *   - Two FABs at the same screen edge crowds the layout and overlaps content
  *
- * On desktop, this is a passive secondary CTA that lives in the corner
- * and doesn't compete with anything.
+ * On desktop, this is a passive secondary CTA that lives in the corner.
+ *
+ * VIN-aware on VDPs: when the VDP page mounts a VDPVinSignal component,
+ * `document.body.dataset.vdpVin` is set. We read it here, look up the
+ * per-vehicle textPhone override from /api/merchandising (via the cached
+ * useMerchandising hook), and prefer the salesperson's number over the
+ * dealership default. Off VDPs (homepage, inventory grid, contact, etc.)
+ * the dataset attribute is absent and we fall back to SITE_CONFIG.phoneRaw.
  */
+
+const DEFAULT_BODY = "Hi, I'm interested in a vehicle on your lot.";
+
+function buildHref(phoneRaw: string, bodyRaw: string): string {
+  return `sms:${phoneRaw}?body=${encodeURIComponent(bodyRaw)}`;
+}
+
 export default function TextUsButton() {
+  const pathname = usePathname();
+  const config = useMerchandising();
+  const [vdpVin, setVdpVin] = useState<string | null>(null);
+
+  // Re-read the body dataset on every pathname change. The VDPVinSignal
+  // component sets it from useEffect, so we have to wait a tick after
+  // navigation for it to populate. A microtask + a fallback frame
+  // covers both same-page rerenders and SPA route transitions.
+  useEffect(() => {
+    let cancelled = false;
+    const read = () => {
+      if (cancelled) return;
+      setVdpVin(document.body.dataset.vdpVin ?? null);
+    };
+    read();
+    const t = setTimeout(read, 50);
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
+  }, [pathname]);
+
+  // Resolve which phone the link should point at:
+  //   per-vehicle overlay > global merchandising textPhone > dealership default
+  let phone = SITE_CONFIG.phoneRaw;
+  let body = DEFAULT_BODY;
+  if (vdpVin) {
+    const overlayPhone = config.overlays?.[vdpVin]?.textPhone;
+    if (overlayPhone && /^[0-9]{10,15}$/.test(overlayPhone)) {
+      phone = overlayPhone;
+      // Slightly more contextual body text when on a vehicle page.
+      body = "Hi, I'm interested in this vehicle on your website.";
+    } else if (config.textPhone && /^[0-9]{10,15}$/.test(config.textPhone)) {
+      phone = config.textPhone;
+    }
+  } else if (config.textPhone && /^[0-9]{10,15}$/.test(config.textPhone)) {
+    phone = config.textPhone;
+  }
+
   return (
     <a
-      href={`sms:${SITE_CONFIG.phoneRaw}?body=Hi%2C%20I%27m%20interested%20in%20a%20vehicle%20on%20your%20lot.`}
+      href={buildHref(phone, body)}
       className="hidden lg:flex fixed bottom-6 right-6 z-40 items-center gap-2 bg-brand-green hover:bg-green-600 text-white pl-4 pr-5 py-3 rounded-full shadow-lg hover:shadow-xl transition-all group"
       aria-label="Text us"
     >

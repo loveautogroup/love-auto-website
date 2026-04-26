@@ -16,6 +16,7 @@ import ShowCarfaxButton from "@/components/ShowCarfaxButton";
 import VDPReviews from "@/components/VDPReviews";
 import VDPInquireButton from "@/components/VDPInquireButton";
 import VDPTextUsLink from "@/components/VDPTextUsLink";
+import VDPVinSignal from "@/components/VDPVinSignal";
 import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
 
 function estimateMonthlyPayment(
@@ -125,6 +126,10 @@ export default async function VehicleDetailPage({
 
   return (
     <>
+      {/* Tells the floating TextUsButton in the root layout which vehicle
+          we're on, so it can pick up overlay.textPhone from the merchandising
+          config. Renders nothing. */}
+      <VDPVinSignal vin={vehicle.vin} />
       <VehicleSchema vehicle={vehicle} />
       <BreadcrumbSchema
         items={[
