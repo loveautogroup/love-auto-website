@@ -41,13 +41,17 @@ export default function InquiryModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      // z-[60] beats the floating StickyCTA + TextUsButton (both z-40 but
+      // mounted in root layout, AFTER <main> in DOM order — z-50 alone
+      // wasn't enough to keep them under the modal). Backdrop bumped to
+      // bg-black/80 for cleaner visual separation from photo-card badges.
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4"
       role="dialog"
       aria-modal="true"
       aria-label={title}
     >
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
