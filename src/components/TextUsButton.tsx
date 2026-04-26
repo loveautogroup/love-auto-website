@@ -54,8 +54,10 @@ export default function TextUsButton() {
 
   // Resolve which phone the link should point at:
   //   per-vehicle overlay > global merchandising textPhone > dealership default
-  let phone = SITE_CONFIG.phoneRaw;
-  let body = DEFAULT_BODY;
+  // Explicit `string` annotation widens the type from SITE_CONFIG.phoneRaw's
+  // narrowed literal type so we can reassign with overlay/global values.
+  let phone: string = SITE_CONFIG.phoneRaw;
+  let body: string = DEFAULT_BODY;
   if (vdpVin) {
     const overlayPhone = config.overlays?.[vdpVin]?.textPhone;
     if (overlayPhone && /^[0-9]{10,15}$/.test(overlayPhone)) {
