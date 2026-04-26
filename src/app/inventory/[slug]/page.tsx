@@ -15,6 +15,7 @@ import VDPFAQ from "@/components/VDPFAQ";
 import ShowCarfaxButton from "@/components/ShowCarfaxButton";
 import VDPReviews from "@/components/VDPReviews";
 import VDPInquireButton from "@/components/VDPInquireButton";
+import VDPTextUsLink from "@/components/VDPTextUsLink";
 import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
 
 function estimateMonthlyPayment(
@@ -104,15 +105,14 @@ export default async function VehicleDetailPage({
   // Pull merchandising overlay for market estimate (Jordan-researched).
   const overlay = resolveOverlay(vehicle.vin, vehicle.daysOnLot, vehicle.status);
 
-  // Text Us number — per-vehicle override wins, then global merchandising
-  // textPhone, then SITE_CONFIG.phoneRaw. Lets Jeremiah route SMS for a
-  // specific car to a specific salesperson without changing brand-level numbers.
-  const textPhone =
+  // Default Text Us number for the build-time render. The VDPTextUsLink
+  // client component will fetch /api/merchandising on mount and override
+  // with overlay.textPhone if Jordan/Jeremiah set one in the DMS — that's
+  // the runtime path. Server-rendered HTML uses this default so users
+  // without JS still get a working link.
+  const textPhoneDefault =
     overlay.textPhone ?? MERCHANDISING.textPhone ?? SITE_CONFIG.phoneRaw;
-  const textBody = encodeURIComponent(
-    `Hi! I'm interested in the ${vehicle.year} ${vehicle.make} ${vehicle.model} on your website.`
-  );
-  const smsHref = `sms:+1${textPhone}?&body=${textBody}`;
+  const textBodyRaw = `Hi! I'm interested in the ${vehicle.year} ${vehicle.make} ${vehicle.model} on your website.`;
 
   const similarVehicles = sampleInventory
     .filter(
@@ -289,15 +289,17 @@ export default async function VehicleDetailPage({
                   </svg>
                   Call {SITE_CONFIG.phone}
                 </a>
-                <a
-                  href={smsHref}
+                <VDPTextUsLink
+                  vin={vehicle.vin}
+                  defaultPhone={textPhoneDefault}
+                  bodyText={textBodyRaw}
                   className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors"
                 >
                   <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
                     <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
                   </svg>
                   Text Us
-                </a>
+                </VDPTextUsLink>
                 <VDPInquireButton
                   vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.trim ? " " + vehicle.trim : ""}`}
                   vehicleVin={vehicle.vin}
@@ -358,16 +360,18 @@ export default async function VehicleDetailPage({
             </svg>
             Call
           </a>
-          <a
-            href={smsHref}
+          <VDPTextUsLink
+            vin={vehicle.vin}
+            defaultPhone={textPhoneDefault}
+            bodyText={textBodyRaw}
             className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 text-white py-3 rounded-xl font-semibold text-sm"
-            aria-label="Text us"
+            ariaLabel="Text us"
           >
             <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true">
               <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
             </svg>
             Text
-          </a>
+          </VDPTextUsLink>
           <MobileCalculatorButton
             vehiclePrice={vehicle.price}
             vehicleSlug={vehicle.slug}
