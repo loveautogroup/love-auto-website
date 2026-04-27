@@ -11,7 +11,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative bg-brand-navy text-white overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-brand-navy to-[#1a1a2e]" />
-        <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24 lg:py-32">
+        <div className="relative max-w-7xl mx-auto px-4 py-8 md:py-12 lg:py-16">
           <div className="max-w-2xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
               Find Your Next Ride
@@ -54,7 +54,7 @@ export default function HomePage() {
           </div>
 
           {/* Quick Search */}
-          <div className="mt-12 bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-4xl">
+          <div className="mt-6 bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-4xl">
             <form
               action="/inventory"
               className="grid grid-cols-1 sm:grid-cols-4 gap-4"
