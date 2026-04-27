@@ -203,10 +203,11 @@ export default async function VehicleDetailPage({
         {/* Trust strip — quick brand signal above the gallery */}
         <VDPTrustStrip />
 
-        <div className="lg:grid lg:grid-cols-[1fr_380px] lg:gap-8">
-          {/* Left column — photos + tabbed details.
-              min-w-0 keeps the 1fr column from blowing out and pushing the
-              sidebar off-screen when the gallery hero photo is full-width. */}
+        <div className="flex flex-col gap-8">
+          {/* Hero block — photos + tabbed details now span the full content
+              width on every breakpoint. The right-side sidebar has been
+              moved BELOW the hero (rendered later in this file) so the
+              gallery dominates the page. */}
           <div className="min-w-0">
             {/* Photo Gallery */}
             <PhotoGallery
@@ -278,9 +279,16 @@ export default async function VehicleDetailPage({
             </div>
           </div>
 
-          {/* Right column — CTA panel (desktop) */}
+          {/* Sidebar block — moved BELOW the hero so the gallery gets
+              the full content width on desktop. On lg+, the contents render
+              as a row of three cards (price/CTA, Carfax shield, payment
+              estimator) rather than a tall stack. The mobile title block
+              above the gallery still handles the small-viewport flow, so
+              this entire block is hidden on mobile (the existing mobile
+              title + sticky CTA bar already cover that case). */}
           <div className="hidden lg:block">
-            <div className="sticky top-24 bg-white rounded-xl border border-brand-gray-200 p-6 space-y-5">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="bg-white rounded-xl border border-brand-gray-200 p-6 space-y-5">
               <div>
                 <h1 className="text-xl font-bold text-brand-gray-900">
                   {vehicle.year} {vehicle.make} {vehicle.model}
@@ -340,27 +348,29 @@ export default async function VehicleDetailPage({
                     modal — keeps the user on the VDP and posts directly
                     to the DMS public-leads endpoint. */}
               </div>
+              </div>
 
-              {/* Show Carfax — explicit labeled CTA. The small badge on
-                  the photo alone isn't obvious enough to most buyers.
-                  Client wrapper for runtime KV updates. */}
-              <VDPCarfaxButton
-                vin={vehicle.vin}
-                daysOnLot={vehicle.daysOnLot}
-                vehicleStatus={vehicle.status}
-                variant="wide"
-              />
+              {/* Card 2 — Carfax shield CTA on its own card so the row
+                  reads as three equal-weight blocks. */}
+              <div className="bg-white rounded-xl border border-brand-gray-200 p-6 flex flex-col justify-center">
+                <VDPCarfaxButton
+                  vin={vehicle.vin}
+                  daysOnLot={vehicle.daysOnLot}
+                  vehicleStatus={vehicle.status}
+                  variant="wide"
+                />
+              </div>
 
-              {/* Interactive payment calculator — replaces the static
-                  $/mo line and the standalone "Get Financing" button.
-                  Calculator's CTA goes straight to /financing pre-filled. */}
-              <VDPPaymentCalculator
-                vehiclePrice={vehicle.price}
-                vehicleSlug={vehicle.slug}
-                vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
-              />
+              {/* Card 3 — payment calculator. */}
+              <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
+                <VDPPaymentCalculator
+                  vehiclePrice={vehicle.price}
+                  vehicleSlug={vehicle.slug}
+                  vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+                />
+              </div>
 
-              <div className="pt-4 border-t border-brand-gray-100 text-center">
+              <div className="lg:col-span-3 pt-4 border-t border-brand-gray-100 text-center">
                 <p className="text-xs text-brand-gray-400">
                   Love Auto Group · Villa Park, IL
                 </p>

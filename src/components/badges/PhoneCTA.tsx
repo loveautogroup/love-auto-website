@@ -34,7 +34,7 @@ export default function PhoneCTA({ phone, phoneRaw, compact }: PhoneCTAProps) {
       aria-label={`Call or text us at ${phone}`}
     >
       {!compact && (
-        <span className="text-[11px] sm:text-[12px] font-semibold mr-1 text-[#E2E8F0]">
+        <span className="text-[16px] sm:text-[18px] font-semibold mr-2 text-[#E2E8F0]">
           Call/Txt
         </span>
       )}
@@ -42,7 +42,7 @@ export default function PhoneCTA({ phone, phoneRaw, compact }: PhoneCTAProps) {
         className={
           compact
             ? "text-[12px] sm:text-[13px] font-extrabold"
-            : "text-[15px] sm:text-[17px] font-extrabold"
+            : "text-[22px] sm:text-[26px] font-extrabold"
         }
         style={{ letterSpacing: "-0.01em" }}
       >
