@@ -86,7 +86,7 @@ export default function CarfaxPillStack({ overlay, compact }: CarfaxPillStackPro
               border border-[#00873E]/50
               shadow-[0_2px_6px_rgba(0,0,0,0.35)]
               ${compact
-                ? "px-1.5 py-[1px] text-[9px] sm:px-2 sm:py-0.5 sm:text-[10px] font-bold leading-tight"
+                ? "px-1 py-[1px] text-[8px] sm:px-1.5 sm:py-0.5 sm:text-[9px] font-bold leading-tight"
                 : "px-2.5 py-1 text-[12px] sm:px-3 sm:py-1.5 sm:text-[14px] font-bold leading-tight"}
             `}
             style={{
