@@ -25,17 +25,17 @@ interface PhotoGalleryProps {
 }
 
 /**
- * VDP photo gallery — Maxim-style layout.
+ * VDP photo gallery — full-width hero layout.
  *
- * Big hero photo on the left (~55% width) with the full Maxim-style badge
+ * Hero photo spans the full gallery width with the Maxim-style badge
  * overlay (CARFAX, feature pills, warranty, phone CTA, dealer + Google).
- * 1x3 vertical thumbnail column on the right (~45% width) plus a 4th
- * "+N more photos" tile at the bottom when the vehicle has more than 5
- * photos. Below the gallery, a horizontal strip for full navigation.
+ * Below the hero sits a horizontal scrollable thumbnail strip — every
+ * photo in the manifest, click any to swap it into the hero. Last tile
+ * carries a "+N more photos" badge when total exceeds visible count.
  *
- * Why this layout: hero photo is large enough to showcase the vehicle and
- * carry the dense overlay; right-side grid gives shoppers a multi-angle
- * preview without making them click through every photo.
+ * Why this layout: hero needs to dominate the page so the vehicle and
+ * its overlay get full visual weight; horizontal strip is a single
+ * navigator that scales naturally to any photo count.
  */
 const COMING_SOON_PLACEHOLDER = "/images/coming-soon.svg";
 
@@ -69,16 +69,15 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
   // string set, in which case the warranty badge does not render.
   const warrantyCopy = overlay?.warranty;
 
-  // Right-side grid shows photos at indexes 1, 2, 3, 4 (the 4 right after
-  // the hero). The 4th tile gets a "+N more photos" overlay if there are
-  // more than 5 total.
-  const gridIndexes = [1, 2, 3, 4];
+  // Last visible thumbnail in the strip carries a "+N more photos"
+  // badge when total photos exceed the 5 we treat as visible above the
+  // fold. Strip itself is scrollable so all photos are reachable.
   const remaining = Math.max(0, photoCount - 5);
 
   return (
     <div className="space-y-3">
-      {/* Big hero on left + 1x3 vertical thumb column on right */}
-      <div className="grid grid-cols-1 md:grid-cols-[11fr_9fr] gap-2">
+      {/* Full-width hero photo */}
+      <div>
         {/* Primary hero image */}
         <div className="relative aspect-[3/2] bg-brand-gray-100 rounded-xl overflow-hidden">
           {hasRealPhotos ? (
@@ -211,89 +210,59 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
           )}
         </div>
 
-        {/* Right-side 1x3 vertical thumb column + bottom "+N more" tile.
-            Hero now eats ~55% of the row, so each thumb gets a wider
-            aspect ratio (4:3) at roughly 165x120 visual size. */}
-        <div className="hidden md:flex flex-col gap-2">
-          {gridIndexes.map((thumbIndex, gridPos) => {
-            const isLastTile = gridPos === 3;
-            const showMoreOverlay = isLastTile && remaining > 0;
-            return (
-              <button
-                key={thumbIndex}
-                onClick={() => setSelectedIndex(thumbIndex)}
-                className={`relative flex-1 aspect-[4/3] bg-brand-gray-100 rounded-lg overflow-hidden border-2 transition-all ${
-                  selectedIndex === thumbIndex
-                    ? "border-brand-red ring-1 ring-brand-red"
-                    : "border-transparent hover:border-brand-gray-300"
-                }`}
-                aria-label={
-                  showMoreOverlay
-                    ? `View all ${photoCount} photos`
-                    : `View photo ${thumbIndex + 1}`
-                }
-              >
-                {hasRealPhotos && images[thumbIndex] ? (
-                  <Image
-                    src={images[thumbIndex]}
-                    alt={`${alt} — view ${thumbIndex + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 50vw, 20vw"
-                    unoptimized
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-brand-gray-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                )}
-                {showMoreOverlay && (
-                  <div className="absolute inset-0 bg-black/65 flex items-center justify-center text-white">
-                    <div className="text-center">
-                      <div className="text-2xl font-extrabold leading-none">+{remaining}</div>
-                      <div className="text-[11px] font-semibold mt-0.5">more photos</div>
-                    </div>
-                  </div>
-                )}
-              </button>
-            );
-          })}
-        </div>
       </div>
 
-      {/* Horizontal thumbnail strip — full navigation, all viewports */}
-      <div className="flex gap-2 overflow-x-auto pb-1">
-        {Array.from({ length: photoCount }).map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setSelectedIndex(i)}
-            className={`relative aspect-[4/3] w-20 md:w-24 bg-brand-gray-100 rounded-lg shrink-0 overflow-hidden border-2 transition-all ${
-              selectedIndex === i
-                ? "border-brand-red ring-1 ring-brand-red"
-                : "border-transparent hover:border-brand-gray-300"
-            }`}
-            aria-label={`View photo ${i + 1}`}
-          >
-            {hasRealPhotos && images[i] ? (
-              <Image
-                src={images[i]}
-                alt={`${alt} — view ${i + 1}`}
-                fill
-                className="object-cover"
-                sizes="100px"
-                unoptimized
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center text-brand-gray-200">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-            )}
-          </button>
-        ))}
+      {/* Horizontal scrollable thumbnail strip — every photo, click to
+          swap into the hero. Last tile carries the "+N more" badge when
+          remaining > 0. Single navigator replaces the prior split
+          (right-side grid + bottom strip) so the hero gets the full
+          gallery width. */}
+      <div className="flex gap-2 overflow-x-auto pb-2 mt-3">
+        {Array.from({ length: photoCount }).map((_, i) => {
+          const isLastVisible = i === photoCount - 1;
+          const showMoreOverlay = isLastVisible && remaining > 0;
+          return (
+            <button
+              key={i}
+              onClick={() => setSelectedIndex(i)}
+              className={`relative flex-shrink-0 w-[150px] aspect-[4/3] bg-brand-gray-100 rounded-lg overflow-hidden border-2 transition-all ${
+                selectedIndex === i
+                  ? "border-brand-red ring-1 ring-brand-red"
+                  : "border-transparent hover:border-brand-gray-300"
+              }`}
+              aria-label={
+                showMoreOverlay
+                  ? `View all ${photoCount} photos`
+                  : `View photo ${i + 1}`
+              }
+            >
+              {hasRealPhotos && images[i] ? (
+                <Image
+                  src={images[i]}
+                  alt={`${alt} — view ${i + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="150px"
+                  unoptimized
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center text-brand-gray-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+              )}
+              {showMoreOverlay && (
+                <div className="absolute inset-0 bg-black/65 flex items-center justify-center text-white">
+                  <div className="text-center">
+                    <div className="text-2xl font-extrabold leading-none">+{remaining}</div>
+                    <div className="text-[11px] font-semibold mt-0.5">more photos</div>
+                  </div>
+                </div>
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
