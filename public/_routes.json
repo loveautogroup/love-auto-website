@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "description": "Force every /api/* request to Pages Functions. Without this, GET requests to /api/* fall through Cloudflare's static-asset check and hit out/404.html (Next.js's static 404 page) before the function dispatcher runs. POST/OPTIONS work without this file because Cloudflare's static-asset path only catches GET/HEAD. Generated _routes.json from auto-discovery wasn't sufficient on Pages V3 builds with output: \"export\" + trailingSlash: true.",
+  "include": ["/api/*"],
+  "exclude": []
+}
