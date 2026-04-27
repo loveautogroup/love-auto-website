@@ -91,12 +91,24 @@ export interface VehicleOverlay {
   carfaxNoAccidents?: boolean;
   /** Carfax shows documented service records. */
   carfaxServiceRecords?: boolean;
+  /** Carfax title status is clean (not salvage/rebuilt/flood/lemon). */
+  carfaxCleanTitle?: boolean;
+  /** Carfax mileage readings are consistent (no rollback / discrepancy). */
+  carfaxVerifiedMileage?: boolean;
+  /** No open OEM safety recalls. */
+  carfaxNoOpenRecalls?: boolean;
+  /** Personal-use only (non-commercial). Manual flag for now. */
+  carfaxPersonalUse?: boolean;
   /** Index into the variant phrasings (defined in CARFAX_PILL_VARIANTS
    *  below) for each Carfax highlight chip. Lets Jordan pick a different
    *  wording per vehicle and have it persist. */
   carfaxOneOwnerVariant?: number;
   carfaxNoAccidentsVariant?: number;
   carfaxServiceRecordsVariant?: number;
+  carfaxCleanTitleVariant?: number;
+  carfaxVerifiedMileageVariant?: number;
+  carfaxNoOpenRecallsVariant?: number;
+  carfaxPersonalUseVariant?: number;
   /** Public Carfax report URL. Customers click the shield on the VDP to
    *  view it; auto-built from VIN at panel save time using the standard
    *  Carfax pattern. */
@@ -113,7 +125,13 @@ export interface VehicleOverlay {
  * phrasings; later entries are alternates Jordan can rotate through.
  */
 export const CARFAX_PILL_VARIANTS: Record<
-  "oneOwner" | "noAccidents" | "serviceRecords",
+  | "oneOwner"
+  | "noAccidents"
+  | "serviceRecords"
+  | "cleanTitle"
+  | "verifiedMileage"
+  | "noOpenRecalls"
+  | "personalUse",
   Array<{ pill: string }>
 > = {
   oneOwner: [
@@ -136,6 +154,34 @@ export const CARFAX_PILL_VARIANTS: Record<
     { pill: "Records\nVerified" },
     { pill: "Maintained\nRecords" },
     { pill: "Records\nDocumented" },
+  ],
+  cleanTitle: [
+    { pill: "Clean Title" },
+    { pill: "Title\nGuaranteed" },
+    { pill: "No Title\nIssues" },
+    { pill: "Verified\nClean" },
+    { pill: "Title\nVerified" },
+  ],
+  verifiedMileage: [
+    { pill: "Verified\nMileage" },
+    { pill: "Odometer\nOK" },
+    { pill: "No\nRollback" },
+    { pill: "Mileage\nConfirmed" },
+    { pill: "Mileage\nVerified" },
+  ],
+  noOpenRecalls: [
+    { pill: "No Open\nRecalls" },
+    { pill: "Recall\nFree" },
+    { pill: "No Pending\nRecalls" },
+    { pill: "Recalls\nClear" },
+    { pill: "Up to\nDate" },
+  ],
+  personalUse: [
+    { pill: "Personal\nUse" },
+    { pill: "Non-\nCommercial" },
+    { pill: "Family\nOwned" },
+    { pill: "Personal\nVehicle" },
+    { pill: "Owner\nDriven" },
   ],
 };
 

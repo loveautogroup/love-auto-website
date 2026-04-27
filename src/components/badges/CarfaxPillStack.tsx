@@ -1,12 +1,19 @@
 /**
  * CarfaxPillStack — vertical stack of Carfax-specific highlight pills
- * (1-Owner, No Accidents, Service Records) rendered directly under the
- * Carfax shield in the top-left of the VDP photo overlay.
+ * (1-Owner, No Accidents, Service Records, Clean Title, Verified Mileage,
+ * No Open Recalls, Personal Use) rendered directly under the Carfax
+ * shield in the top-left of the VDP photo overlay.
  *
  * Only renders the flags Jordan has toggled ON in the merchandising
  * panel. Pill text is one of the variant phrasings stored at
- * `overlay.carfax{One,Accidents,Service}OwnerVariant`; falls back to
- * variant 0 (the safe canonical phrasing) when the index is missing.
+ * `overlay.carfax{Flag}Variant`; falls back to variant 0 (the safe
+ * canonical phrasing) when the index is missing.
+ *
+ * Capped at 5 visible pills to match FeaturePillCluster's max count and
+ * keep the photo overlay legible. When more than 5 flags are active,
+ * the priority order below decides which drop:
+ *   oneOwner → noAccidents → serviceRecords → cleanTitle →
+ *   verifiedMileage → noOpenRecalls → personalUse
  *
  * Visual treatment matches FeaturePillCluster — heavy frosted glass
  * over the photo, white text with a hard shadow for legibility — but
@@ -27,24 +34,41 @@ function clampIndex(i: number | undefined, len: number): number {
   return Math.min(Math.max(0, Math.floor(i)), len - 1);
 }
 
-export default function CarfaxPillStack({ overlay, compact }: CarfaxPillStackProps) {
-  // Only render if at least one flag is on. We intentionally accept
-  // exact `true` (not just truthy) so an unset field doesn't render.
-  const items: Array<{ key: string; pill: string }> = [];
-  if (overlay.carfaxOneOwner === true) {
-    const idx = clampIndex(overlay.carfaxOneOwnerVariant, CARFAX_PILL_VARIANTS.oneOwner.length);
-    items.push({ key: "oneOwner", pill: CARFAX_PILL_VARIANTS.oneOwner[idx].pill });
-  }
-  if (overlay.carfaxNoAccidents === true) {
-    const idx = clampIndex(overlay.carfaxNoAccidentsVariant, CARFAX_PILL_VARIANTS.noAccidents.length);
-    items.push({ key: "noAccidents", pill: CARFAX_PILL_VARIANTS.noAccidents[idx].pill });
-  }
-  if (overlay.carfaxServiceRecords === true) {
-    const idx = clampIndex(overlay.carfaxServiceRecordsVariant, CARFAX_PILL_VARIANTS.serviceRecords.length);
-    items.push({ key: "serviceRecords", pill: CARFAX_PILL_VARIANTS.serviceRecords[idx].pill });
-  }
+/** Max number of Carfax highlight pills rendered at once. Matches the
+ *  feature-pill cluster max so the overlay stays balanced. */
+const MAX_VISIBLE = 5;
 
-  if (items.length === 0) return null;
+/** Display priority — when more than MAX_VISIBLE flags are active, the
+ *  later entries get dropped. Mirrors the order in the DMS merch panel. */
+const FLAG_ORDER: Array<{
+  key: keyof VehicleOverlay;
+  variantKey: keyof VehicleOverlay;
+  variantSet: keyof typeof CARFAX_PILL_VARIANTS;
+}> = [
+  { key: "carfaxOneOwner", variantKey: "carfaxOneOwnerVariant", variantSet: "oneOwner" },
+  { key: "carfaxNoAccidents", variantKey: "carfaxNoAccidentsVariant", variantSet: "noAccidents" },
+  { key: "carfaxServiceRecords", variantKey: "carfaxServiceRecordsVariant", variantSet: "serviceRecords" },
+  { key: "carfaxCleanTitle", variantKey: "carfaxCleanTitleVariant", variantSet: "cleanTitle" },
+  { key: "carfaxVerifiedMileage", variantKey: "carfaxVerifiedMileageVariant", variantSet: "verifiedMileage" },
+  { key: "carfaxNoOpenRecalls", variantKey: "carfaxNoOpenRecallsVariant", variantSet: "noOpenRecalls" },
+  { key: "carfaxPersonalUse", variantKey: "carfaxPersonalUseVariant", variantSet: "personalUse" },
+];
+
+export default function CarfaxPillStack({ overlay, compact }: CarfaxPillStackProps) {
+  // Build the active item list in priority order, then cap to MAX_VISIBLE.
+  // We intentionally accept exact `true` (not just truthy) so an unset
+  // field doesn't render.
+  const items: Array<{ key: string; pill: string }> = [];
+  for (const { key, variantKey, variantSet } of FLAG_ORDER) {
+    if (overlay[key] === true) {
+      const variants = CARFAX_PILL_VARIANTS[variantSet];
+      const idx = clampIndex(overlay[variantKey] as number | undefined, variants.length);
+      items.push({ key: String(key), pill: variants[idx].pill });
+    }
+  }
+  const visibleItems = items.slice(0, MAX_VISIBLE);
+
+  if (visibleItems.length === 0) return null;
 
   return (
     <div
@@ -52,7 +76,7 @@ export default function CarfaxPillStack({ overlay, compact }: CarfaxPillStackPro
         compact ? "gap-0.5 sm:gap-1" : "gap-1 sm:gap-1.5"
       }`}
     >
-      {items.map((item) => {
+      {visibleItems.map((item) => {
         const lines = item.pill.split("\n");
         return (
           <div
