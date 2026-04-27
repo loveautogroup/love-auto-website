@@ -78,4 +78,21 @@ export default function VDPTextUsLink({
         }
       })
       .catch(() => {
-        /
+        // Silent — keep the baked default. We never want this fetch to
+        // break the link.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [vin]);
+
+  return (
+    <a
+      href={buildHref(phone, bodyText)}
+      className={className}
+      aria-label={ariaLabel}
+    >
+      {children}
+    </a>
+  );
+}
