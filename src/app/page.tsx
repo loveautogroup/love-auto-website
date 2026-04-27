@@ -13,20 +13,20 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-br from-black via-brand-navy to-[#1a1a2e]" />
         <div className="relative max-w-7xl mx-auto px-4 py-8 md:py-12 lg:py-16">
           <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">
               Find Your Next Ride
               <span className="block text-brand-red mt-2">
                 at Love Auto Group
               </span>
             </h1>
-            <p className="mt-6 text-lg md:text-xl text-brand-gray-300 leading-relaxed">
+            <p className="mt-3 text-sm md:text-base text-brand-gray-300 leading-relaxed">
               Quality used vehicles, inspected, reconditioned and ready to
               drive. Family owned in Villa Park, IL since 2014.
             </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+            <div className="mt-4 flex flex-col sm:flex-row gap-3">
               <Link
                 href="/inventory"
-                className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors"
+                className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
               >
                 Browse Inventory
                 <svg
@@ -46,7 +46,7 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/financing"
-                className="inline-flex items-center justify-center border-2 border-white/30 hover:bg-white/10 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors"
+                className="inline-flex items-center justify-center border-2 border-white/30 hover:bg-white/10 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
               >
                 Get Pre-Approved
               </Link>
@@ -54,7 +54,7 @@ export default function HomePage() {
           </div>
 
           {/* Quick Search */}
-          <div className="mt-6 bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-4xl">
+          <div className="mt-4 bg-white/10 backdrop-blur-sm rounded-xl p-3 max-w-4xl">
             <form
               action="/inventory"
               className="grid grid-cols-1 sm:grid-cols-4 gap-4"

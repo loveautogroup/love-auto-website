@@ -60,7 +60,7 @@ export function VDPLiveStatus({
   fallback,
   className,
 }: BaseProps & {
-  fallback: "available" | "sale-pending" | "sold";
+  fallback: "available" | "sale-pending" | "sold" | "coming-soon";
 }) {
   const { vehicles, source } = useInventory();
   const value = (() => {
@@ -91,6 +91,19 @@ export function VDPLiveStatus({
       >
         <span className="w-2 h-2 bg-amber-500 rounded-full" />
         Sale Pending
+      </span>
+    );
+  }
+  if (value === "coming-soon") {
+    return (
+      <span
+        className={
+          className ??
+          "inline-flex items-center gap-1.5 text-sm font-medium text-brand-red"
+        }
+      >
+        <span className="w-2 h-2 bg-brand-red rounded-full animate-pulse" />
+        Coming Soon
       </span>
     );
   }

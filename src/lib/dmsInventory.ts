@@ -84,7 +84,7 @@ function slugify(input: string): string {
 
 function mapStatus(
   raw: string | null | undefined
-): "available" | "sale-pending" | "sold" {
+): "available" | "sale-pending" | "sold" | "coming-soon" {
   const s = (raw ?? "").toString().trim().toLowerCase();
   if (
     s === "sale pending" ||
@@ -95,6 +95,14 @@ function mapStatus(
     return "sale-pending";
   }
   if (s === "sold") return "sold";
+  if (
+    s === "coming soon" ||
+    s === "coming-soon" ||
+    s === "in_recon" ||
+    s === "in recon"
+  ) {
+    return "coming-soon";
+  }
   return "available";
 }
 

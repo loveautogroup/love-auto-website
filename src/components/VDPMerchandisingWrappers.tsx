@@ -25,7 +25,7 @@ import { useResolveOverlay } from "@/data/useMerchandising";
 interface BaseProps {
   vin: string;
   daysOnLot: number;
-  vehicleStatus: "available" | "sale-pending" | "sold";
+  vehicleStatus: "available" | "sale-pending" | "sold" | "coming-soon";
 }
 
 interface CarfaxProps extends BaseProps {
