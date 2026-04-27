@@ -33,6 +33,8 @@ interface VDPLivePhotosProps {
   vehicle: Vehicle;
 }
 
+const COMING_SOON_PLACEHOLDER = "/images/coming-soon.svg";
+
 export default function VDPLivePhotos({
   vin,
   seedImages,
@@ -52,5 +54,15 @@ export default function VDPLivePhotos({
     }
   }
 
-  return <PhotoGallery images={images} alt={alt} vehicle={vehicle} />;
+  // Hard fallback — when both the seed file AND the live DMS snapshot
+  // have zero images for this vehicle, show the branded "Coming Soon"
+  // placeholder so the gallery never renders an empty gray box. The
+  // PhotoGallery component treats /placeholder paths as "no real photos"
+  // (hasRealPhotos === false), so we route a single placeholder URL
+  // that the component will paint as the hero image AND the thumbs
+  // get the empty-state SVG.
+  const hasAnyImage = Array.isArray(images) && images.length > 0;
+  const finalImages = hasAnyImage ? images : [COMING_SOON_PLACEHOLDER];
+
+  return <PhotoGallery images={finalImages} alt={alt} vehicle={vehicle} />;
 }

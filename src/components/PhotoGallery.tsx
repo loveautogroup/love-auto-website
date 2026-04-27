@@ -27,18 +27,24 @@ interface PhotoGalleryProps {
 /**
  * VDP photo gallery — Maxim-style layout.
  *
- * Big hero photo on the left (60% width) with the full Maxim-style badge
+ * Big hero photo on the left (~55% width) with the full Maxim-style badge
  * overlay (CARFAX, feature pills, warranty, phone CTA, dealer + Google).
- * 2x2 thumbnail grid on the right (40% width). The 4th thumbnail in the
- * grid carries a "+N more photos" overlay when the vehicle has more than
- * 5 photos. Below the gallery, a horizontal strip for full navigation.
+ * 1x3 vertical thumbnail column on the right (~45% width) plus a 4th
+ * "+N more photos" tile at the bottom when the vehicle has more than 5
+ * photos. Below the gallery, a horizontal strip for full navigation.
  *
  * Why this layout: hero photo is large enough to showcase the vehicle and
  * carry the dense overlay; right-side grid gives shoppers a multi-angle
  * preview without making them click through every photo.
  */
+const COMING_SOON_PLACEHOLDER = "/images/coming-soon.svg";
+
 export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  // Tracks if the active hero photo errored on load. When true, we
+  // swap to the branded "Coming Soon" placeholder so a 404 / dead
+  // CDN URL never leaves an empty gray box on the VDP.
+  const [erroredSrcs, setErroredSrcs] = useState<Set<string>>(new Set());
 
   // Jordan-authored manifest reorders photos: exterior front-3/4 first,
   // then remaining exteriors, then interior, then details. Vehicles
@@ -71,20 +77,36 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
 
   return (
     <div className="space-y-3">
-      {/* Big hero on left + 2x2 thumb grid on right */}
-      <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-2">
+      {/* Big hero on left + 1x3 vertical thumb column on right */}
+      <div className="grid grid-cols-1 md:grid-cols-[11fr_9fr] gap-2">
         {/* Primary hero image */}
         <div className="relative aspect-[3/2] bg-brand-gray-100 rounded-xl overflow-hidden">
           {hasRealPhotos ? (
-            <Image
-              src={images[selectedIndex]}
-              alt={`${alt} for sale in Villa Park, IL — Photo ${selectedIndex + 1} of ${photoCount}`}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 60vw"
-              priority={selectedIndex === 0}
-              unoptimized
-            />
+            (() => {
+              const rawHero = images[selectedIndex];
+              const heroSrc = erroredSrcs.has(rawHero)
+                ? COMING_SOON_PLACEHOLDER
+                : rawHero;
+              return (
+                <Image
+                  src={heroSrc}
+                  alt={`${alt} for sale in Villa Park, IL — Photo ${selectedIndex + 1} of ${photoCount}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 60vw"
+                  priority={selectedIndex === 0}
+                  unoptimized
+                  onError={() => {
+                    setErroredSrcs((prev) => {
+                      if (prev.has(rawHero)) return prev;
+                      const next = new Set(prev);
+                      next.add(rawHero);
+                      return next;
+                    });
+                  }}
+                />
+              );
+            })()
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-brand-gray-300">
               <div className="text-center">
@@ -189,8 +211,10 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
           )}
         </div>
 
-        {/* Right-side 2x2 thumbnail grid */}
-        <div className="hidden md:grid grid-cols-2 grid-rows-2 gap-2">
+        {/* Right-side 1x3 vertical thumb column + bottom "+N more" tile.
+            Hero now eats ~55% of the row, so each thumb gets a wider
+            aspect ratio (4:3) at roughly 165x120 visual size. */}
+        <div className="hidden md:flex flex-col gap-2">
           {gridIndexes.map((thumbIndex, gridPos) => {
             const isLastTile = gridPos === 3;
             const showMoreOverlay = isLastTile && remaining > 0;
@@ -198,7 +222,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
               <button
                 key={thumbIndex}
                 onClick={() => setSelectedIndex(thumbIndex)}
-                className={`relative aspect-[4/3] bg-brand-gray-100 rounded-lg overflow-hidden border-2 transition-all ${
+                className={`relative flex-1 aspect-[4/3] bg-brand-gray-100 rounded-lg overflow-hidden border-2 transition-all ${
                   selectedIndex === thumbIndex
                     ? "border-brand-red ring-1 ring-brand-red"
                     : "border-transparent hover:border-brand-gray-300"

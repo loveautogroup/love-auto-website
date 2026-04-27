@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Vehicle } from "@/lib/types";
@@ -99,6 +100,8 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     }
   }
 
+  const COMING_SOON_PLACEHOLDER = "/images/coming-soon.svg";
+
   const hasRealImage =
     vehicle.images.length > 0 && !vehicle.images[0].includes("placeholder");
   // Apply Jordan's manifest so the card hero = the best exterior shot,
@@ -106,7 +109,29 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const orderedImages = hasRealImage
     ? applyPhotoOrder(vehicle.slug, vehicle.images)
     : vehicle.images;
-  const heroImage = heroOverride ?? orderedImages[0];
+
+  // Live-snapshot may also be empty. If neither seed nor live has any
+  // photos, fall back to the branded "Coming Soon" placeholder so the
+  // card never paints an empty gray box on the inventory grid.
+  const liveForVin = liveSource !== "fallback"
+    ? liveVehicles.find((v) => v.vin === vehicle.vin)
+    : undefined;
+  const liveHasImages =
+    liveForVin && Array.isArray(liveForVin.images) && liveForVin.images.length > 0;
+  const noPhotosAnywhere = !hasRealImage && !liveHasImages;
+
+  const initialHero = noPhotosAnywhere
+    ? COMING_SOON_PLACEHOLDER
+    : (heroOverride ?? orderedImages[0]);
+
+  // onError fallback — if the chosen hero URL 404s or fails to load
+  // (DealerCenter CDN flake, deleted seed asset, etc.), swap to the
+  // "Coming Soon" SVG. Local state so the swap survives re-render.
+  const [heroSrc, setHeroSrc] = useState<string>(initialHero);
+  const heroImage = heroSrc;
+  // We treat the placeholder as a "real" image for rendering purposes
+  // so <Image> renders it (instead of the gray empty-state SVG).
+  const showImage = hasRealImage || liveHasImages || noPhotosAnywhere;
 
   return (
     <article
@@ -118,13 +143,19 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     >
       {/* Photo + full overlay (compact-scaled) */}
       <div className="relative aspect-[4/3] bg-brand-gray-100 overflow-hidden">
-        {hasRealImage ? (
+        {showImage ? (
           <Image
             src={heroImage}
             alt={`${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}`}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            onError={() => {
+              if (heroSrc !== COMING_SOON_PLACEHOLDER) {
+                setHeroSrc(COMING_SOON_PLACEHOLDER);
+              }
+            }}
+            unoptimized={heroSrc.endsWith(".svg")}
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-brand-gray-300">
