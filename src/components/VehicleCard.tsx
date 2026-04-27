@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Vehicle } from "@/lib/types";
 import { SITE_CONFIG } from "@/lib/constants";
+import { useInventory } from "@/lib/useInventory";
 import { useResolveOverlay } from "@/data/useMerchandising";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import {
@@ -74,6 +75,30 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   );
 
   const monthlyPayment = estimateMonthlyPayment(vehicle.price);
+
+  // Live photo hydration — mirrors VDPLivePhotos pattern. Seed images
+  // are local /public/images/inventory/... paths captured when the
+  // vehicle was added to the seed file. DMS holds the canonical
+  // DealerCenter URLs that Jeremiah edited via the merchandising
+  // panel. Render seed first (SSR/SEO safe), then once useInventory()
+  // hydrates, swap ONLY the hero (first image) if the live snapshot
+  // has its own non-empty images array AND the live first image is
+  // different from the seed's first image. Keeps the swap minimal —
+  // the rest of the card layout is unchanged.
+  const { vehicles: liveVehicles, source: liveSource } = useInventory();
+  let heroOverride: string | null = null;
+  if (liveSource !== "fallback") {
+    const live = liveVehicles.find((v) => v.vin === vehicle.vin);
+    if (
+      live &&
+      Array.isArray(live.images) &&
+      live.images.length > 0 &&
+      live.images[0] !== vehicle.images[0]
+    ) {
+      heroOverride = live.images[0];
+    }
+  }
+
   const hasRealImage =
     vehicle.images.length > 0 && !vehicle.images[0].includes("placeholder");
   // Apply Jordan's manifest so the card hero = the best exterior shot,
@@ -81,6 +106,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const orderedImages = hasRealImage
     ? applyPhotoOrder(vehicle.slug, vehicle.images)
     : vehicle.images;
+  const heroImage = heroOverride ?? orderedImages[0];
 
   return (
     <article
@@ -94,7 +120,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
       <div className="relative aspect-[4/3] bg-brand-gray-100 overflow-hidden">
         {hasRealImage ? (
           <Image
-            src={orderedImages[0]}
+            src={heroImage}
             alt={`${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}`}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
