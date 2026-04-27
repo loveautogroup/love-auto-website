@@ -213,10 +213,15 @@ export const MERCHANDISING: MerchandisingConfig = {
   // Jordan's hero picks in display order. Four selected to match the
   // Japanese specialist positioning + highest-margin units.
   featuredVins: [
-    "5FNYF6H9XGB041495", // 2016 Honda Pilot Touring (newest, loaded)
-    "JTHHE5BC2G5011456", // 2016 Lexus RC 350 (Japanese, luxury, premium margin)
-    "1FA6P8TH6H1202495", // 2017 Ford Mustang EcoBoost Premium (desirable coupe)
-    "2HNYD2H63AH509874", // 2010 Acura MDX Sport (value play, AWD, SH-AWD)
+    // 2026-04-27: Featured rotated to the 3 cleanest active units after a
+    // full Carfax sweep on every vehicle. Previous picks pulled because:
+    //   - Honda Pilot 5FNYF6H9XGB041495: SOLD 04/13/2026
+    //   - Lexus RC 350: 2 airbag deployments (still listed, just not featured)
+    //   - Mustang 1FA6P8TH6H1202495: VIN typo (real Mustang is H5, NAM title brand)
+    //   - Acura MDX 2HNYD2H63AH509874: 4 accidents reported
+    "KMHCT4AE6HU222547", // 2017 Hyundai Accent SE
+    "2GKALUEK6D6300009", // 2013 GMC Terrain SLT-1
+    "JF2SJAGC1HH553881", // 2017 Subaru Forester 2.5i Premium
   ],
 
   overlays: {
