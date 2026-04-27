@@ -12,7 +12,11 @@
   # move off static export or add a build-time CSP hash injector.
   # frame-src allows Google Maps embed (used on / and /contact).
   # img-src allows any https: source so Dealer Center photo CDN works.
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self'; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+  # connect-src includes dms.loveautogroup.net for the LeadForm submit
+  # (POST /api/v1/public/leads) and any client-side inventory/merchandising
+  # fetches. Without this, the browser blocks the cross-origin fetch with
+  # "Failed to fetch" before the request even leaves — server logs stay empty.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://dms.loveautogroup.net; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
 
 # Admin routes — noindex, no cache. Gated by Cloudflare Zero Trust Access.
 /admin/*
