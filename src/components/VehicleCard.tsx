@@ -61,10 +61,12 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     vehicle.status
   );
 
+  const priceHasCents = Math.round(vehicle.price * 100) % 100 !== 0;
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 0,
+    minimumFractionDigits: priceHasCents ? 2 : 0,
+    maximumFractionDigits: 2,
   }).format(vehicle.price);
 
   const formattedMileage = new Intl.NumberFormat("en-US").format(

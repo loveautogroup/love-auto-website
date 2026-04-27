@@ -19,12 +19,15 @@ interface BaseProps {
   className?: string;
 }
 
-const formatPrice = (n: number) =>
-  new Intl.NumberFormat("en-US", {
+const formatPrice = (n: number) => {
+  const hasCents = Math.round(n * 100) % 100 !== 0;
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 0,
+    minimumFractionDigits: hasCents ? 2 : 0,
+    maximumFractionDigits: 2,
   }).format(n);
+};
 
 const formatMileage = (n: number) => new Intl.NumberFormat("en-US").format(n);
 

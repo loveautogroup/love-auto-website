@@ -38,10 +38,12 @@ export function HomeOnTheLot() {
   return (
     <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
       {ordered.map((v) => {
+        const priceHasCents = Math.round(v.price * 100) % 100 !== 0;
         const price = new Intl.NumberFormat("en-US", {
           style: "currency",
           currency: "USD",
-          maximumFractionDigits: 0,
+          minimumFractionDigits: priceHasCents ? 2 : 0,
+          maximumFractionDigits: 2,
         }).format(v.price);
         const miles = new Intl.NumberFormat("en-US").format(v.mileage);
         return (

@@ -120,10 +120,12 @@ export default async function VehicleDetailPage({
   const vehicle = await resolveVehicle(slug);
   if (!vehicle) notFound();
 
+  const priceHasCents = Math.round(vehicle.price * 100) % 100 !== 0;
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 0,
+    minimumFractionDigits: priceHasCents ? 2 : 0,
+    maximumFractionDigits: 2,
   }).format(vehicle.price);
 
   const formattedMileage = new Intl.NumberFormat("en-US").format(
@@ -433,7 +435,9 @@ export default async function VehicleDetailPage({
                     {new Intl.NumberFormat("en-US", {
                       style: "currency",
                       currency: "USD",
-                      maximumFractionDigits: 0,
+                      minimumFractionDigits:
+                        Math.round(v.price * 100) % 100 !== 0 ? 2 : 0,
+                      maximumFractionDigits: 2,
                     }).format(v.price)}
                   </p>
                   <p className="text-sm text-brand-gray-500">

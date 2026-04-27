@@ -35,11 +35,14 @@ interface RatingInfo {
 function ratingFor(askingPrice: number, marketEstimate: number): RatingInfo {
   const ratio = askingPrice / marketEstimate;
   const savings = marketEstimate - askingPrice;
+  const savingsAbs = Math.abs(savings);
+  const savingsHasCents = Math.round(savingsAbs * 100) % 100 !== 0;
   const formatted = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(Math.abs(savings));
+    minimumFractionDigits: savingsHasCents ? 2 : 0,
+    maximumFractionDigits: 2,
+  }).format(savingsAbs);
 
   // Map ratio to marker position. We want 70% of estimate = 0% of bar (far left
   // = great deal), 130% of estimate = 100% of bar (far right = above market).
@@ -94,15 +97,19 @@ export default function VDPMarketPrice({
   if (!marketEstimate || marketEstimate <= 0) return null;
 
   const rating = ratingFor(askingPrice, marketEstimate);
+  const askingHasCents = Math.round(askingPrice * 100) % 100 !== 0;
   const formattedAsking = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 0,
+    minimumFractionDigits: askingHasCents ? 2 : 0,
+    maximumFractionDigits: 2,
   }).format(askingPrice);
+  const estimateHasCents = Math.round(marketEstimate * 100) % 100 !== 0;
   const formattedEstimate = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 0,
+    minimumFractionDigits: estimateHasCents ? 2 : 0,
+    maximumFractionDigits: 2,
   }).format(marketEstimate);
 
   return (
