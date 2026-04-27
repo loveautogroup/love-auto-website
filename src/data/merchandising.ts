@@ -66,6 +66,14 @@ export interface VehicleOverlay {
   /** Hide this vehicle from the site entirely, even if it's active in Dealer Center. */
   hidden?: boolean;
 
+  /** When true, the public site uses the branded "Coming Soon" placeholder
+   *  as this vehicle's hero image, regardless of whether photos are present.
+   *  Mirrors the same field on the DMS merchandising panel. Useful for
+   *  IN_RECON cars you want to tease without showing rough in-progress
+   *  shots, or to override the auto-fallback when you DON'T want the
+   *  placeholder shown. */
+  useComingSoonPlaceholder?: boolean;
+
   /**
    * Estimated fair market price for this vehicle (Jordan's research).
    * When set, the VDP renders a CarGurus-style price comparison bar:

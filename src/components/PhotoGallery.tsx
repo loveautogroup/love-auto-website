@@ -65,6 +65,10 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
   );
   const overlay = vehicle ? overlayLive : null;
   const showBadges = vehicle && selectedIndex === 0;
+  // Per-vehicle Coming Soon placeholder toggle from the DMS merchandising
+  // panel. When true, the hero photo is the branded placeholder regardless
+  // of whether real photos exist for the vehicle.
+  const forcePlaceholder = overlay?.useComingSoonPlaceholder === true;
   // Warranty is opt-in per vehicle. Vehicles sold as-is have no warranty
   // string set, in which case the warranty badge does not render.
   const warrantyCopy = overlay?.warranty;
@@ -80,12 +84,16 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
       <div>
         {/* Primary hero image */}
         <div className="relative aspect-[3/2] bg-brand-gray-100 rounded-xl overflow-hidden">
-          {hasRealPhotos ? (
+          {(hasRealPhotos || forcePlaceholder) ? (
             (() => {
-              const rawHero = images[selectedIndex];
-              const heroSrc = erroredSrcs.has(rawHero)
+              const rawHero = hasRealPhotos ? images[selectedIndex] : COMING_SOON_PLACEHOLDER;
+              // forcePlaceholder is computed at the component scope above
+              // (mirrors the per-vehicle DMS merchandising toggle).
+              const heroSrc = forcePlaceholder
                 ? COMING_SOON_PLACEHOLDER
-                : rawHero;
+                : erroredSrcs.has(rawHero)
+                  ? COMING_SOON_PLACEHOLDER
+                  : rawHero;
               return (
                 <Image
                   src={heroSrc}

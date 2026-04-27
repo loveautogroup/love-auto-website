@@ -120,9 +120,16 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     liveForVin && Array.isArray(liveForVin.images) && liveForVin.images.length > 0;
   const noPhotosAnywhere = !hasRealImage && !liveHasImages;
 
-  const initialHero = noPhotosAnywhere
+  // Per-vehicle toggle (DMS merchandising panel) — when on, force the
+  // branded Coming Soon placeholder as the hero, regardless of whether
+  // real photos exist for the vehicle.
+  const forcePlaceholder = overlay.useComingSoonPlaceholder === true;
+
+  const initialHero = forcePlaceholder
     ? COMING_SOON_PLACEHOLDER
-    : (heroOverride ?? orderedImages[0]);
+    : noPhotosAnywhere
+      ? COMING_SOON_PLACEHOLDER
+      : (heroOverride ?? orderedImages[0]);
 
   // onError fallback — if the chosen hero URL 404s or fails to load
   // (DealerCenter CDN flake, deleted seed asset, etc.), swap to the
@@ -131,7 +138,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const heroImage = heroSrc;
   // We treat the placeholder as a "real" image for rendering purposes
   // so <Image> renders it (instead of the gray empty-state SVG).
-  const showImage = hasRealImage || liveHasImages || noPhotosAnywhere;
+  const showImage = hasRealImage || liveHasImages || noPhotosAnywhere || forcePlaceholder;
 
   return (
     <article
