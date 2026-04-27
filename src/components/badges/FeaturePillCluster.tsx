@@ -20,9 +20,23 @@ interface FeaturePillClusterProps {
   pills?: readonly [string?, string?, string?, string?, string?];
   /** Compact mode for inventory cards — smaller text, single line, fewer pills. */
   compact?: boolean;
+  /**
+   * Layout mode:
+   *  - undefined (default, legacy): absolutely positioned at top-right of
+   *    the photo, stacked vertically and right-aligned.
+   *  - "inline": no absolute positioning — parent flex column controls
+   *    placement. Pill text + container alignment inherit from the
+   *    parent (typically items-end for the right-side merchandising
+   *    column on PhotoGallery / VehicleCard).
+   */
+  stack?: "inline";
 }
 
-export default function FeaturePillCluster({ pills, compact }: FeaturePillClusterProps) {
+export default function FeaturePillCluster({
+  pills,
+  compact,
+  stack,
+}: FeaturePillClusterProps) {
   const visible = (pills ?? []).filter((p): p is string => Boolean(p && p.trim()));
   if (visible.length === 0) return null;
 
@@ -32,21 +46,27 @@ export default function FeaturePillCluster({ pills, compact }: FeaturePillCluste
   const limit = compact ? 2 : 5;
   const shown = visible.slice(0, limit);
 
+  // Container layout differs by stack mode. Left-stack mode is inline
+  // (parent column handles positioning); legacy mode is absolutely
+  // positioned at top-right of the photo. Both use vertical stacking.
+  const containerClass =
+    stack === "left"
+      ? `flex flex-col items-start ${compact ? "gap-0.5 sm:gap-1 max-w-[60%]" : "gap-1 sm:gap-1.5 max-w-[55%]"}`
+      : `absolute right-1.5 sm:right-2 z-10 flex flex-col items-end ${compact ? "top-1.5 sm:top-2 gap-0.5 sm:gap-1 max-w-[55%]" : "top-2 sm:top-3 gap-1 sm:gap-1.5 max-w-[45%]"}`;
+
+  // Pill text alignment matches the cluster anchor — left-stack pills
+  // read left-to-right, legacy right-anchored pills read right-aligned.
+  const textAlign = stack === "left" ? "text-left" : "text-right";
+
   return (
-    <div
-      className={`
-        absolute right-1.5 sm:right-2 z-10
-        flex flex-col items-end
-        ${compact ? "top-1.5 sm:top-2 gap-0.5 sm:gap-1 max-w-[55%]" : "top-2 sm:top-3 gap-1 sm:gap-1.5 max-w-[45%]"}
-      `}
-    >
+    <div className={containerClass}>
       {shown.map((pill, i) => {
         const lines = pill.split("\n");
         return (
           <div
             key={i}
             className={`
-              rounded-full text-white text-right
+              rounded-full text-white ${textAlign}
               border border-white/25
               shadow-[0_2px_6px_rgba(0,0,0,0.35)]
               ${compact
