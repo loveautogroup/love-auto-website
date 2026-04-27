@@ -44,6 +44,15 @@ export interface VehicleOverlayInput {
   marketEstimate?: number;
   /** Per-vehicle override of the global textPhone. Same format: 10-15 digits. */
   textPhone?: string;
+  // Carfax data set in the DMS panel; rendered on the VDP as pills under
+  // the Carfax shield.
+  carfaxOneOwner?: boolean;
+  carfaxNoAccidents?: boolean;
+  carfaxServiceRecords?: boolean;
+  carfaxOneOwnerVariant?: number;
+  carfaxNoAccidentsVariant?: number;
+  carfaxServiceRecordsVariant?: number;
+  carfaxReportUrl?: string;
 }
 
 export interface ValidationOk {
@@ -143,6 +152,30 @@ export function validateMerchandisingConfig(
       }
       if (o.hidden !== undefined && typeof o.hidden !== "boolean") {
         issues.push(`overlays[${vin}].hidden must be boolean.`);
+      }
+      // Carfax-specific flags + variant indexes (rendered on the VDP as
+      // pills under the Carfax shield). Same shape as in the DMS validator.
+      for (const flag of ["carfaxOneOwner", "carfaxNoAccidents", "carfaxServiceRecords"] as const) {
+        if (o[flag] !== undefined && typeof o[flag] !== "boolean") {
+          issues.push(`overlays[${vin}].${flag} must be boolean.`);
+        }
+      }
+      for (const idx of ["carfaxOneOwnerVariant", "carfaxNoAccidentsVariant", "carfaxServiceRecordsVariant"] as const) {
+        const val = o[idx];
+        if (val !== undefined) {
+          if (typeof val !== "number" || !Number.isInteger(val) || val < 0 || val > 20) {
+            issues.push(`overlays[${vin}].${idx} must be a non-negative integer ≤ 20.`);
+          }
+        }
+      }
+      if (o.carfaxReportUrl !== undefined) {
+        if (typeof o.carfaxReportUrl !== "string") {
+          issues.push(`overlays[${vin}].carfaxReportUrl must be a string.`);
+        } else if (o.carfaxReportUrl.length > 500) {
+          issues.push(`overlays[${vin}].carfaxReportUrl exceeds 500 characters.`);
+        } else if (!/^https:\/\/(www\.)?carfax\.com\//.test(o.carfaxReportUrl)) {
+          issues.push(`overlays[${vin}].carfaxReportUrl must be an https://carfax.com URL.`);
+        }
       }
       if (o.warranty !== undefined) {
         if (typeof o.warranty !== "string") {

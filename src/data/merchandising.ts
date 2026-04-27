@@ -83,7 +83,61 @@ export interface VehicleOverlay {
    * point-of-contact for a particular vehicle.
    */
   textPhone?: string;
+
+  // ── Carfax data (set per vehicle in the DMS merchandising panel) ────
+  /** Vehicle has had only one previous owner per Carfax. */
+  carfaxOneOwner?: boolean;
+  /** No accidents reported on Carfax. */
+  carfaxNoAccidents?: boolean;
+  /** Carfax shows documented service records. */
+  carfaxServiceRecords?: boolean;
+  /** Index into the variant phrasings (defined in CARFAX_PILL_VARIANTS
+   *  below) for each Carfax highlight chip. Lets Jordan pick a different
+   *  wording per vehicle and have it persist. */
+  carfaxOneOwnerVariant?: number;
+  carfaxNoAccidentsVariant?: number;
+  carfaxServiceRecordsVariant?: number;
+  /** Public Carfax report URL. Customers click the shield on the VDP to
+   *  view it; auto-built from VIN at panel save time using the standard
+   *  Carfax pattern. */
+  carfaxReportUrl?: string;
 }
+
+/**
+ * Variant phrasings for the three Carfax highlight pills. Mirrors the
+ * CARFAX_VARIANTS const in the DMS MerchandisingPanel — must stay in
+ * sync. Index lookup is bounds-checked with clamp() before render.
+ *
+ * Pill text honors the two-line / 14-char-per-line format used by the
+ * regular feature pills. Defaults (index 0) are the safe canonical
+ * phrasings; later entries are alternates Jordan can rotate through.
+ */
+export const CARFAX_PILL_VARIANTS: Record<
+  "oneOwner" | "noAccidents" | "serviceRecords",
+  Array<{ pill: string }>
+> = {
+  oneOwner: [
+    { pill: "1-Owner" },
+    { pill: "Single\nOwner" },
+    { pill: "Original\nOwner" },
+    { pill: "One\nOwner" },
+    { pill: "1-Owner\nVehicle" },
+  ],
+  noAccidents: [
+    { pill: "No Accidents" },
+    { pill: "Accident\nFree" },
+    { pill: "Clean\nHistory" },
+    { pill: "Zero\nAccidents" },
+    { pill: "Crash\nFree" },
+  ],
+  serviceRecords: [
+    { pill: "Service\nRecords" },
+    { pill: "Service\nHistory" },
+    { pill: "Records\nVerified" },
+    { pill: "Maintained\nRecords" },
+    { pill: "Records\nDocumented" },
+  ],
+};
 
 export interface MerchandisingConfig {
   /**
