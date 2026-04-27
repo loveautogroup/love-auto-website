@@ -50,13 +50,13 @@ export default function FeaturePillCluster({
   // (parent column handles positioning); legacy mode is absolutely
   // positioned at top-right of the photo. Both use vertical stacking.
   const containerClass =
-    stack === "left"
-      ? `flex flex-col items-start ${compact ? "gap-0.5 sm:gap-1 max-w-[60%]" : "gap-1 sm:gap-1.5 max-w-[55%]"}`
+    stack === "inline"
+      ? `flex flex-col items-end ${compact ? "gap-0.5 sm:gap-1 max-w-[60%]" : "gap-1 sm:gap-1.5 max-w-[55%]"}`
       : `absolute right-1.5 sm:right-2 z-10 flex flex-col items-end ${compact ? "top-1.5 sm:top-2 gap-0.5 sm:gap-1 max-w-[55%]" : "top-2 sm:top-3 gap-1 sm:gap-1.5 max-w-[45%]"}`;
 
-  // Pill text alignment matches the cluster anchor — left-stack pills
-  // read left-to-right, legacy right-anchored pills read right-aligned.
-  const textAlign = stack === "left" ? "text-left" : "text-right";
+  // Pill text alignment is right-aligned in both modes — the cluster sits
+  // on the right side of the photo, so right-aligned text reads cleanly.
+  const textAlign = "text-right";
 
   return (
     <div className={containerClass}>
