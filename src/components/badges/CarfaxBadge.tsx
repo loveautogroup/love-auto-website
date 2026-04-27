@@ -32,7 +32,7 @@ export default function CarfaxBadge({ vin }: CarfaxBadgeProps) {
       onClick={(e) => e.stopPropagation()}
       className="
         inline-flex flex-col items-stretch
-        w-[100px] rounded-md overflow-hidden
+        w-[90px] rounded-md overflow-hidden
         bg-white border-2 border-[#1A1919]
         shadow-[0_3px_6px_rgba(0,0,0,0.35)]
         transition-all duration-150
@@ -45,15 +45,15 @@ export default function CarfaxBadge({ vin }: CarfaxBadgeProps) {
       <Image
         src="/brand/carfax-logo.svg"
         alt="Carfax"
-        width={122}
-        height={23}
+        width={110}
+        height={21}
         className="w-full h-auto px-0.5 pt-1 pb-0.5"
         unoptimized
       />
       <span
         className="
           bg-[#1A1919] text-white text-center uppercase
-          text-[8px] font-black tracking-[0.12em] py-[3px]
+          text-[7px] font-black tracking-[0.12em] py-[2px]
         "
       >
         Free Report

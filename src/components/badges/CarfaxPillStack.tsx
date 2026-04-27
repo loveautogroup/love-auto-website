@@ -9,8 +9,8 @@
  * `overlay.carfax{Flag}Variant`; falls back to variant 0 (the safe
  * canonical phrasing) when the index is missing.
  *
- * Capped at 5 visible pills to match FeaturePillCluster's max count and
- * keep the photo overlay legible. When more than 5 flags are active,
+ * Capped at 3 visible pills (Jeremiah default — can be raised to 4 or 5
+ * via the constant below). When more than 3 flags are active,
  * the priority order below decides which drop:
  *   oneOwner → noAccidents → serviceRecords → cleanTitle →
  *   verifiedMileage → noOpenRecalls → personalUse
@@ -34,9 +34,9 @@ function clampIndex(i: number | undefined, len: number): number {
   return Math.min(Math.max(0, Math.floor(i)), len - 1);
 }
 
-/** Max number of Carfax highlight pills rendered at once. Matches the
- *  feature-pill cluster max so the overlay stays balanced. */
-const MAX_VISIBLE = 5;
+/** Max number of Carfax highlight pills rendered at once. Default 3 —
+ *  raise to 4 or 5 here if Jeremiah wants more pills visible on the hero. */
+const MAX_VISIBLE = 3;
 
 /** Display priority — when more than MAX_VISIBLE flags are active, the
  *  later entries get dropped. Mirrors the order in the DMS merch panel. */
@@ -87,7 +87,7 @@ export default function CarfaxPillStack({ overlay, compact }: CarfaxPillStackPro
               shadow-[0_2px_6px_rgba(0,0,0,0.35)]
               ${compact
                 ? "px-1.5 py-[1px] text-[9px] sm:px-2 sm:py-0.5 sm:text-[10px] font-bold leading-tight"
-                : "px-1.5 py-0.5 text-[8px] sm:px-2 sm:py-1 sm:text-[9px] font-bold leading-tight"}
+                : "px-1 py-[1px] text-[7px] sm:px-1.5 sm:py-[2px] sm:text-[8px] font-bold leading-tight"}
             `}
             style={{
               // Carfax-tinted frosted glass — slightly green-shifted dark

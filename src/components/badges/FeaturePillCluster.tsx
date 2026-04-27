@@ -71,7 +71,7 @@ export default function FeaturePillCluster({
               shadow-[0_2px_6px_rgba(0,0,0,0.35)]
               ${compact
                 ? "px-1.5 py-[1px] text-[9px] sm:px-2 sm:py-0.5 sm:text-[10px] font-bold leading-tight"
-                : "px-1.5 py-0.5 text-[8px] sm:px-2 sm:py-1 sm:text-[9px] font-bold leading-tight"}
+                : "px-1 py-[1px] text-[7px] sm:px-1.5 sm:py-[2px] sm:text-[8px] font-bold leading-tight"}
             `}
             style={{
               // Heavy frosted glass — 18% dark fill over a strong blur lets
