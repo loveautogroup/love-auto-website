@@ -26,7 +26,7 @@ export default function WarrantyBadge({
         shadow-[0_2px_6px_rgba(0,0,0,0.35)]
         ${compact
           ? "gap-0.5 pl-1 pr-1.5 py-0.5 sm:gap-1 sm:pl-1.5 sm:pr-2 sm:py-1"
-          : "gap-2 pl-2.5 pr-3.5 py-2"}
+          : "gap-1.5 pl-2 pr-3 py-1.5"}
       `}
       style={{
         backgroundColor: "rgba(15, 23, 42, 0.18)",
@@ -41,7 +41,7 @@ export default function WarrantyBadge({
           flex items-center justify-center rounded-full flex-shrink-0 bg-[#2563EB]
           ${compact
             ? "w-[13px] h-[13px] sm:w-[16px] sm:h-[16px]"
-            : "w-[22px] h-[22px]"}
+            : "w-[20px] h-[20px]"}
         `}
         aria-hidden="true"
       >
@@ -62,8 +62,8 @@ export default function WarrantyBadge({
         </span>
       ) : (
         <div className="flex flex-col leading-tight">
-          <span className="text-[12px] font-bold">{copy}</span>
-          <span className="text-[10px] font-medium text-[#CBD5E1]">{subCopy}</span>
+          <span className="text-[11px] font-bold">{copy}</span>
+          <span className="text-[9px] font-medium text-[#CBD5E1]">{subCopy}</span>
         </div>
       )}
     </div>

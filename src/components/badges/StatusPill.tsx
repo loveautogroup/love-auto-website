@@ -41,7 +41,7 @@ export default function StatusPill({ kind }: StatusPillProps) {
     <span
       className={`
         inline-block rounded-md
-        px-3 py-1.5 text-[13px] font-semibold leading-none
+        px-2.5 py-1 text-[12px] font-semibold leading-none
         shadow-[0_2px_4px_rgba(0,0,0,0.15)]
         ${className}
       `}

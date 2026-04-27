@@ -63,7 +63,7 @@ export default function CarfaxPillStack({ overlay, compact }: CarfaxPillStackPro
               shadow-[0_2px_6px_rgba(0,0,0,0.35)]
               ${compact
                 ? "px-1.5 py-[1px] text-[9px] sm:px-2 sm:py-0.5 sm:text-[10px] font-bold leading-tight"
-                : "px-2 py-0.5 text-[9px] sm:px-3 sm:py-1.5 sm:text-[11px] font-bold leading-tight"}
+                : "px-2 py-0.5 text-[9px] sm:px-2.5 sm:py-1 sm:text-[10px] font-bold leading-tight"}
             `}
             style={{
               // Carfax-tinted frosted glass — slightly green-shifted dark
