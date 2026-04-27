@@ -19,7 +19,7 @@ export interface Vehicle {
   description: string;
   features: string[];
   images: string[];
-  status: "available" | "sale-pending" | "sold";
+  status: "available" | "sale-pending" | "sold" | "coming-soon";
   dateInStock: string;
   daysOnLot: number;
 }

@@ -29,7 +29,7 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
     source === "fallback"
       ? fallbackVehicles
       : sortWithFeaturedFirst(
-          liveVehicles.filter((v) => v.status === "available")
+          liveVehicles.filter((v) => v.status !== "sold")
         );
 
   const filtered = useMemo(() => {

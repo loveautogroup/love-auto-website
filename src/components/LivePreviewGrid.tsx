@@ -15,7 +15,7 @@ import VehicleCard from "@/components/VehicleCard";
 
 export default function LivePreviewGrid() {
   const { vehicles } = useInventory();
-  const available = vehicles.filter((v) => v.status === "available");
+  const available = vehicles.filter((v) => v.status !== "sold");
   const featured = filterFeatured(available);
   const previewVehicles =
     featured.length >= 6

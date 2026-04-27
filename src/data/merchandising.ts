@@ -21,6 +21,7 @@ export type StatusBadgeKind =
   | "staff-pick"
   | "low-mileage"
   | "sale-pending"
+  | "coming-soon"
   | "hot-deal"
   | "great-deal"
   | "below-market"
@@ -320,12 +321,13 @@ export const MERCHANDISING: MerchandisingConfig = {
 export function resolveOverlay(
   vin: string,
   daysOnLot: number,
-  vehicleStatus: "available" | "sale-pending" | "sold"
+  vehicleStatus: "available" | "sale-pending" | "sold" | "coming-soon"
 ): VehicleOverlay & { effectiveStatus?: StatusBadgeKind } {
   const override = MERCHANDISING.overlays[vin] ?? {};
 
   // Priority: manual status > Sale Pending > Just Arrived (new inventory)
-  let effectiveStatus: StatusBadgeKind | undefined = override.status;
+  let effectiveStatus: StatusBadgeKind | undefined =
+    vehicleStatus === "coming-soon" ? "coming-soon" : override.status;
   if (!effectiveStatus && vehicleStatus === "sale-pending") {
     effectiveStatus = "sale-pending";
   }

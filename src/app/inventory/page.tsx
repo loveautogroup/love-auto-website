@@ -16,7 +16,7 @@ export default function InventoryPage() {
   // logic runs in InventoryGrid via useSearchParams (required for static
   // export — server-side searchParams not available at build time).
   const vehicles = sortWithFeaturedFirst(
-    sampleInventory.filter((v) => v.status === "available")
+    sampleInventory.filter((v) => v.status !== "sold")
   );
 
   return (

@@ -37,7 +37,7 @@ interface PhotoGalleryProps {
  * its overlay get full visual weight; horizontal strip is a single
  * navigator that scales naturally to any photo count.
  */
-const COMING_SOON_PLACEHOLDER = "/images/coming-soon.svg";
+const COMING_SOON_PLACEHOLDER = "/images/coming-soon.png";
 
 export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);

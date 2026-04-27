@@ -21,6 +21,7 @@ const VARIANTS: Record<
   "staff-pick": { label: "Staff Pick", className: "bg-[#2563EB] text-white" },
   "low-mileage": { label: "Low Mileage", className: "bg-[#0D9488] text-white" },
   "sale-pending": { label: "Sale Pending", className: "bg-[#64748B] text-white" },
+  "coming-soon": { label: "Coming Soon", className: "bg-brand-red text-white" },
   "hot-deal": { label: "Hot Deal", className: "bg-[#DC2626] text-white" },
   "great-deal": { label: "Great Deal", className: "bg-[#059669] text-white" },
   "below-market": { label: "Below Market", className: "bg-[#0EA5E9] text-white" },

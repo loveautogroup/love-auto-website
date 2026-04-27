@@ -92,14 +92,15 @@ export function useMerchandising(): MerchandisingConfig {
 export function useResolveOverlay(
   vin: string,
   daysOnLot: number,
-  vehicleStatus: "available" | "sale-pending" | "sold"
+  vehicleStatus: "available" | "sale-pending" | "sold" | "coming-soon"
 ): VehicleOverlay & { effectiveStatus?: StatusBadgeKind } {
   const config = useMerchandising();
   const override = config.overlays?.[vin] ?? {};
 
   // Same logic as the synchronous resolveOverlay() in src/data/merchandising.ts:
   // Priority: manual status > Sale Pending > Just Arrived (new inventory)
-  let effectiveStatus: StatusBadgeKind | undefined = override.status;
+  let effectiveStatus: StatusBadgeKind | undefined =
+    vehicleStatus === "coming-soon" ? "coming-soon" : override.status;
   if (!effectiveStatus && vehicleStatus === "sale-pending") {
     effectiveStatus = "sale-pending";
   }

@@ -100,7 +100,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     }
   }
 
-  const COMING_SOON_PLACEHOLDER = "/images/coming-soon.svg";
+  const COMING_SOON_PLACEHOLDER = "/images/coming-soon.png";
 
   const hasRealImage =
     vehicle.images.length > 0 && !vehicle.images[0].includes("placeholder");
@@ -155,7 +155,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
                 setHeroSrc(COMING_SOON_PLACEHOLDER);
               }
             }}
-            unoptimized={heroSrc.endsWith(".svg")}
+            unoptimized={heroSrc.endsWith(".svg") || heroSrc.endsWith("/coming-soon.png")}
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-brand-gray-300">

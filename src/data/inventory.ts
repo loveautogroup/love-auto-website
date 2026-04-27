@@ -276,7 +276,7 @@ export function getFilteredInventory(filters: {
   bodyStyle?: string;
   sortBy?: string;
 }): Vehicle[] {
-  let results = sampleInventory.filter((v) => v.status === "available");
+  let results = sampleInventory.filter((v) => v.status !== "sold");
 
   if (filters.make) {
     results = results.filter(

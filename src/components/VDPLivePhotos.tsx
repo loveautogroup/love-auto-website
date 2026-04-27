@@ -33,7 +33,7 @@ interface VDPLivePhotosProps {
   vehicle: Vehicle;
 }
 
-const COMING_SOON_PLACEHOLDER = "/images/coming-soon.svg";
+const COMING_SOON_PLACEHOLDER = "/images/coming-soon.png";
 
 export default function VDPLivePhotos({
   vin,

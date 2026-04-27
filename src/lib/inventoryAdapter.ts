@@ -38,7 +38,7 @@ export interface SyncedVehicle {
   interiorColor: string;
   mileage: number;
   price: number;
-  status: "available" | "sale-pending" | "sold";
+  status: "available" | "sale-pending" | "sold" | "coming-soon";
   features: string[];
   daysOnLot: number;
   dateInStock: string;

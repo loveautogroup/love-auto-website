@@ -97,7 +97,7 @@ interface SyncedVehicle {
   interiorColor: string;
   mileage: number;
   price: number;
-  status: "available" | "sale-pending" | "sold";
+  status: "available" | "sale-pending" | "sold" | "coming-soon";
   features: string[];
   daysOnLot: number;
   dateInStock: string;
@@ -132,12 +132,20 @@ function slugify(input: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-function mapStatus(raw: string | null | undefined): "available" | "sale-pending" | "sold" {
+function mapStatus(
+  raw: string | null | undefined
+): "available" | "sale-pending" | "sold" | "coming-soon" {
   const s = (raw ?? "").toString().trim().toLowerCase();
   if (s === "sale pending" || s === "sale-pending" || s === "deal pending" || s === "deal_pending") {
     return "sale-pending";
   }
   if (s === "sold") return "sold";
+  // IN_RECON cars come through as "Coming Soon" from the DMS public route.
+  // We surface them on the website with a Coming Soon badge so customers can
+  // submit interest before the car hits retail-ready.
+  if (s === "coming soon" || s === "coming-soon" || s === "in_recon" || s === "in recon") {
+    return "coming-soon";
+  }
   // Default to available for "Available", "RETAIL_READY", "" etc.
   return "available";
 }
