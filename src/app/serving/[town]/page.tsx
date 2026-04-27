@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { sampleInventory } from "@/data/inventory";
-import { sortWithFeaturedFirst, filterFeatured } from "@/data/merchandising";
 import { SERVICE_AREAS } from "@/data/serviceAreas";
-import VehicleCard from "@/components/VehicleCard";
+import LivePreviewGrid from "@/components/LivePreviewGrid";
 import { BreadcrumbSchema } from "@/components/StructuredData";
 
 /**
@@ -51,13 +49,7 @@ export default async function ServiceAreaPage({
   const content = SERVICE_AREAS.find((s) => s.slug === town);
   if (!content) notFound();
 
-  // Show a curated 6-vehicle preview — Jordan's featured picks first.
-  const available = sampleInventory.filter((v) => v.status === "available");
-  const featured = filterFeatured(available);
-  const previewVehicles =
-    featured.length >= 6
-      ? featured.slice(0, 6)
-      : sortWithFeaturedFirst(available).slice(0, 6);
+  // Inventory grid is live (DMS-driven via useInventory)
 
   return (
     <>
@@ -120,11 +112,7 @@ export default async function ServiceAreaPage({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {previewVehicles.map((vehicle) => (
-            <VehicleCard key={vehicle.id} vehicle={vehicle} />
-          ))}
-        </div>
+        <LivePreviewGrid />
 
         <div className="text-center mt-10">
           <Link

@@ -16,13 +16,14 @@
 
 import type { MetadataRoute } from "next";
 import { sampleInventory } from "@/data/inventory";
+import { fetchDmsInventory } from "@/lib/dmsInventory";
 
 // Required for static export.
 export const dynamic = "force-static";
 
 const BASE = "https://www.loveautogroup.net";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   // Static marketing/info pages
@@ -60,15 +61,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/free-carfax-villa-park`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
   ];
 
-  // Per-vehicle VDPs — only available stock (no point indexing sold)
-  const vehiclePages: MetadataRoute.Sitemap = sampleInventory
-    .filter((v) => v.status !== "sold")
-    .map((v) => ({
-      url: `${BASE}/inventory/${v.slug}/`,
+  // Per-vehicle VDPs — union of seed-known slugs and the live DMS list
+  // so live-only vehicles are sitemap'd as soon as they hit DealerCenter.
+  // DMS fetch is best-effort: on failure we still ship the seed list.
+  const live = await fetchDmsInventory().catch(() => []);
+  const slugs = new Map<string, string>(); // slug → status
+  for (const v of sampleInventory) {
+    if (v.status !== "sold") slugs.set(v.slug, v.status);
+  }
+  for (const v of live) {
+    if (v.status !== "sold") slugs.set(v.slug, v.status);
+  }
+  const vehiclePages: MetadataRoute.Sitemap = Array.from(slugs.keys()).map(
+    (slug) => ({
+      url: `${BASE}/inventory/${slug}/`,
       lastModified: now,
       changeFrequency: "weekly" as const,
       priority: 0.8,
-    }));
+    })
+  );
 
   return [...staticPages, ...landingPages, ...vehiclePages];
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { sampleInventory, getVehicleBySlug } from "@/data/inventory";
+import { fetchDmsInventory } from "@/lib/dmsInventory";
 import { VehicleSchema, BreadcrumbSchema } from "@/components/StructuredData";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -17,6 +18,11 @@ import VDPReviews from "@/components/VDPReviews";
 import VDPInquireButton from "@/components/VDPInquireButton";
 import VDPTextUsLink from "@/components/VDPTextUsLink";
 import VDPVinSignal from "@/components/VDPVinSignal";
+import {
+  VDPLivePrice,
+  VDPLiveMileage,
+  VDPLiveStatus,
+} from "@/components/VDPLivePrice";
 import {
   VDPCarfaxButton,
   VDPMarketPriceWrap,
@@ -39,9 +45,28 @@ function estimateMonthlyPayment(
 }
 
 export async function generateStaticParams() {
-  return sampleInventory.map((vehicle) => ({
-    slug: vehicle.slug,
-  }));
+  // Build-time fetch of the live DMS inventory so VDPs for vehicles that
+  // exist only in DealerCenter (i.e. not yet hand-added to the seed file)
+  // get pre-rendered. On DMS failure, fall back to seed-only — the build
+  // never breaks because of an upstream outage.
+  const live = await fetchDmsInventory();
+  const slugs = new Set<string>();
+  for (const v of sampleInventory) slugs.add(v.slug);
+  for (const v of live) slugs.add(v.slug);
+  return Array.from(slugs).map((slug) => ({ slug }));
+}
+
+
+async function resolveVehicle(slug: string) {
+  const seedHit = getVehicleBySlug(slug);
+  if (seedHit) return seedHit;
+  // Slug exists in the static-params list but not in the seed file
+  // (live-only vehicle from DMS). Fetch DMS and adapt one record.
+  const live = await fetchDmsInventory();
+  const match = live.find((v) => v.slug === slug);
+  if (!match) return undefined;
+  const { syncedToVehicle } = await import("@/lib/dmsInventory");
+  return syncedToVehicle(match);
 }
 
 export async function generateMetadata({
@@ -50,7 +75,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const vehicle = getVehicleBySlug(slug);
+  const vehicle = await resolveVehicle(slug);
   if (!vehicle) return {};
 
   // Mark's approved VDP title template with fallback for trim overflow.
@@ -92,7 +117,7 @@ export default async function VehicleDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const vehicle = getVehicleBySlug(slug);
+  const vehicle = await resolveVehicle(slug);
   if (!vehicle) notFound();
 
   const formattedPrice = new Intl.NumberFormat("en-US", {
@@ -198,14 +223,14 @@ export default async function VehicleDetailPage({
               </h1>
               <div className="flex items-baseline gap-3 mt-2">
                 <p className="text-3xl font-bold text-brand-red">
-                  {formattedPrice}
+                  <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
                 </p>
                 <p className="text-sm text-brand-gray-500">
                   Est. ${monthlyPayment}/mo*
                 </p>
               </div>
               <p className="text-sm text-brand-gray-500 mt-1">
-                {formattedMileage} miles · {vehicle.drivetrain} · {vehicle.exteriorColor}
+                <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles · {vehicle.drivetrain} · {vehicle.exteriorColor}
               </p>
               {/* Mobile Show Carfax — inline next to the title so it's
                   impossible to miss. Client wrapper picks up runtime overlay
@@ -260,22 +285,17 @@ export default async function VehicleDetailPage({
                 </h1>
                 <p className="text-sm text-brand-gray-500">{vehicle.trim}</p>
                 <p className="text-3xl font-bold text-brand-red mt-3">
-                  {formattedPrice}
+                  <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
                 </p>
                 <p className="text-sm text-brand-gray-500 mt-1">
                   Est. <span className="font-semibold">${monthlyPayment}/mo</span>*
                 </p>
                 <p className="text-sm text-brand-gray-500 mt-1">
-                  {formattedMileage} miles · {vehicle.drivetrain}
+                  <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles · {vehicle.drivetrain}
                 </p>
               </div>
 
-              {vehicle.status === "available" && (
-                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-green">
-                  <span className="w-2 h-2 bg-brand-green rounded-full animate-pulse" />
-                  Available
-                </span>
-              )}
+              <VDPLiveStatus vin={vehicle.vin} fallback={vehicle.status} />
 
               <div className="space-y-3">
                 <a

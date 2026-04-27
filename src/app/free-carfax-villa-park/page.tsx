@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { sampleInventory } from "@/data/inventory";
-import { sortWithFeaturedFirst } from "@/data/merchandising";
-import VehicleCard from "@/components/VehicleCard";
+import LivePreviewGrid from "@/components/LivePreviewGrid";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import { BreadcrumbSchema } from "@/components/StructuredData";
 
@@ -22,10 +20,6 @@ export const metadata: Metadata = {
 };
 
 export default function FreeCarfaxLanding() {
-  const previewVehicles = sortWithFeaturedFirst(
-    sampleInventory.filter((v) => v.status === "available")
-  ).slice(0, 6);
-
   return (
     <>
       <BreadcrumbSchema
@@ -105,9 +99,7 @@ export default function FreeCarfaxLanding() {
             Browse Inventory — Free Carfax on Every Listing
           </h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {previewVehicles.map((v) => <VehicleCard key={v.id} vehicle={v} />)}
-        </div>
+        <LivePreviewGrid />
         <div className="text-center mt-10">
           <Link
             href="/inventory"

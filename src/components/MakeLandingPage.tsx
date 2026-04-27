@@ -1,8 +1,6 @@
 import Link from "next/link";
-import { sampleInventory } from "@/data/inventory";
-import { sortWithFeaturedFirst } from "@/data/merchandising";
 import type { MakeLandingContent } from "@/data/makeLandings";
-import VehicleCard from "@/components/VehicleCard";
+import MakeLandingInventory from "@/components/MakeLandingInventory";
 import { BreadcrumbSchema } from "@/components/StructuredData";
 
 interface MakeLandingPageProps {
@@ -21,16 +19,6 @@ interface MakeLandingPageProps {
 export default function MakeLandingPage({ content }: MakeLandingPageProps) {
   const filterType = content.filterType ?? "make";
   const filterValue = (content.filterValue ?? content.make).toLowerCase();
-  const inventoryForMake = sortWithFeaturedFirst(
-    sampleInventory.filter((v) => {
-      if (v.status !== "available") return false;
-      if (filterType === "bodyStyle") {
-        return v.bodyStyle.toLowerCase() === filterValue;
-      }
-      return v.make.toLowerCase() === filterValue;
-    })
-  );
-
   const pluralNoun = content.pluralNoun ?? `${content.make}s`;
   const isBodyStyle = filterType === "bodyStyle";
 
@@ -74,44 +62,12 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
       </section>
 
       {/* Live inventory */}
-      <section className="max-w-7xl mx-auto px-4 py-12" aria-labelledby="live-inv-heading">
-        <h2 id="live-inv-heading" className="text-2xl font-bold text-brand-gray-900 mb-2">
-          Available {isBodyStyle ? pluralNoun : `Used ${content.make}`} Inventory
-        </h2>
-        <p className="text-brand-gray-500 mb-6">
-          {inventoryForMake.length > 0
-            ? `${inventoryForMake.length} ${pluralNoun.toLowerCase()} on the lot today.`
-            : `No ${pluralNoun.toLowerCase()} in stock right now — check back soon, or `}
-          {inventoryForMake.length === 0 && (
-            <Link href="/sell-your-car" className="text-brand-red hover:underline font-semibold">
-              tell us what you're looking for
-            </Link>
-          )}
-          {inventoryForMake.length === 0 && " and we'll source one to order."}
-        </p>
-
-        {inventoryForMake.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {inventoryForMake.map((vehicle) => (
-              <VehicleCard key={vehicle.id} vehicle={vehicle} />
-            ))}
-          </div>
-        ) : (
-          <div className="bg-brand-gray-50 border border-brand-gray-200 rounded-xl p-8 text-center">
-            <p className="text-brand-gray-700">
-              We rotate inventory weekly. Browse our{" "}
-              <Link href="/inventory" className="text-brand-red hover:underline font-semibold">
-                full inventory
-              </Link>{" "}
-              or call{" "}
-              <a href="tel:6303593643" className="text-brand-red hover:underline font-semibold">
-                (630) 359-3643
-              </a>{" "}
-              to ask about upcoming arrivals.
-            </p>
-          </div>
-        )}
-      </section>
+      <MakeLandingInventory
+        filterType={filterType}
+        filterValue={filterValue}
+        pluralNoun={pluralNoun}
+        make={content.make}
+      />
 
       {/* Editorial content */}
       <article className="max-w-4xl mx-auto px-4 pb-16">

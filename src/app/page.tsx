@@ -1,20 +1,11 @@
 import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
-import { sampleInventory } from "@/data/inventory";
-import { filterFeatured, sortWithFeaturedFirst } from "@/data/merchandising";
-import VehicleCard from "@/components/VehicleCard";
+import HomeFeaturedGrid, { HomeOnTheLot } from "@/components/HomeFeaturedGrid";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 import PaymentCalculator from "@/components/PaymentCalculator";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 
-export default async function HomePage() {
-  // Filter to available stock, then pull Jordan-picked featured VINs first.
-  // If fewer than 6 are featured, top up with the newest available vehicles.
-  const available = sampleInventory.filter((v) => v.status === "available");
-  const featured = filterFeatured(available);
-  const topUp = sortWithFeaturedFirst(available).slice(0, 6);
-  const featuredVehicles = featured.length >= 6 ? featured.slice(0, 6) : topUp;
-
+export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
@@ -189,11 +180,7 @@ export default async function HomePage() {
             Hand-picked from our inventory, inspected and ready to drive
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredVehicles.map((vehicle) => (
-            <VehicleCard key={vehicle.id} vehicle={vehicle} />
-          ))}
-        </div>
+        <HomeFeaturedGrid />
         <div className="text-center mt-10">
           <Link
             href="/inventory"
@@ -237,46 +224,7 @@ export default async function HomePage() {
               View All â†’
             </Link>
           </div>
-          <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
-            {sortWithFeaturedFirst(
-              sampleInventory.filter((v) => v.status === "available")
-            ).map((v) => {
-                const price = new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 0,
-                }).format(v.price);
-                const miles = new Intl.NumberFormat("en-US").format(v.mileage);
-                return (
-                  <Link
-                    key={v.id}
-                    href={`/inventory/${v.slug}`}
-                    className="min-w-[260px] sm:min-w-[280px] bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-xl overflow-hidden transition-all snap-start shrink-0 group"
-                  >
-                    <div className="aspect-[4/3] bg-brand-gray-700/50 relative">
-                      {v.daysOnLot <= 7 && (
-                        <span className="absolute top-2 left-2 bg-brand-green text-white text-xs font-semibold px-2 py-0.5 rounded-full">
-                          Just Arrived
-                        </span>
-                      )}
-                    </div>
-                    <div className="p-3">
-                      <h3 className="font-bold text-white text-sm group-hover:text-brand-red-light transition-colors">
-                        {v.year} {v.make} {v.model}
-                      </h3>
-                      <div className="flex items-baseline justify-between mt-1.5">
-                        <span className="text-brand-red-light font-bold">
-                          {price}
-                        </span>
-                        <span className="text-xs text-brand-gray-400">
-                          {miles} mi
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-          </div>
+          <HomeOnTheLot />
         </div>
       </section>
 
