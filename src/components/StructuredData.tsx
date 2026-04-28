@@ -70,13 +70,54 @@ export function LocalBusinessSchema() {
 }
 
 export function VehicleSchema({ vehicle }: { vehicle: Vehicle }) {
-  const schema = {
+  // Schema upgraded 2026-04-28 to be Google Vehicle Listings compliant
+  // (https://developers.google.com/search/docs/appearance/structured-data/vehicle-listing).
+  // Key additions vs. v1: itemCondition, validFrom on offer, subjectOf
+  // back-link, numberOfPreviousOwners (when available), seller.url +
+  // seller.image, priceCurrency on offer, vehicleConfiguration trim line.
+  // Gets us into the Google Vehicles search vertical.
+  const vdpUrl = `${SITE_CONFIG.url}/inventory/${vehicle.slug}`;
+  const heroImage = vehicle.images?.[0]
+    ? vehicle.images[0].startsWith("http")
+      ? vehicle.images[0]
+      : `${SITE_CONFIG.url}${vehicle.images[0]}`
+    : undefined;
+
+  // Per-VIN absolute image URLs (Google requires absolute, not relative).
+  const absoluteImages = (vehicle.images ?? []).map((img) =>
+    img.startsWith("http") ? img : `${SITE_CONFIG.url}${img}`,
+  );
+
+  // Availability mapping — Google reads these specifically.
+  const availability =
+    vehicle.status === "available"
+      ? "https://schema.org/InStock"
+      : vehicle.status === "sold"
+        ? "https://schema.org/SoldOut"
+        : "https://schema.org/LimitedAvailability";
+
+  // Derive year-only production date in ISO format (Vehicle Listings prefers
+  // a date over a string year for productionDate).
+  const productionDate = vehicle.year
+    ? `${vehicle.year}-01-01`
+    : undefined;
+
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Car",
-    name: `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}`,
+    "@id": vdpUrl,
+    name: `${vehicle.year} ${vehicle.make} ${vehicle.model}${
+      vehicle.trim ? ` ${vehicle.trim}` : ""
+    }`,
+    description: vehicle.description ?? undefined,
+    url: vdpUrl,
+    image: absoluteImages,
     brand: { "@type": "Brand", name: vehicle.make },
+    manufacturer: { "@type": "Organization", name: vehicle.make },
     model: vehicle.model,
     vehicleModelDate: String(vehicle.year),
+    productionDate,
+    vehicleConfiguration: vehicle.trim,
     mileageFromOdometer: {
       "@type": "QuantitativeValue",
       value: String(vehicle.mileage),
@@ -96,33 +137,57 @@ export function VehicleSchema({ vehicle }: { vehicle: Vehicle }) {
     fuelType: vehicle.fuelType,
     vehicleIdentificationNumber: vehicle.vin,
     bodyType: vehicle.bodyStyle,
+    itemCondition: "https://schema.org/UsedCondition",
     vehicleEngine: {
       "@type": "EngineSpecification",
       name: vehicle.engine,
     },
+    // Number of previous owners — pulled from Carfax snapshot when present.
+    // Google Vehicle Listings uses this for the "1 Owner" badge.
+    ...((vehicle as unknown as { carfaxSnapshot?: { ownerCount?: number } })
+      .carfaxSnapshot?.ownerCount !== undefined
+      ? {
+          numberOfPreviousOwners: (
+            vehicle as unknown as { carfaxSnapshot?: { ownerCount?: number } }
+          ).carfaxSnapshot?.ownerCount,
+        }
+      : {}),
     offers: {
       "@type": "Offer",
       price: String(vehicle.price),
       priceCurrency: "USD",
-      availability:
-        vehicle.status === "available"
-          ? "https://schema.org/InStock"
-          : "https://schema.org/LimitedAvailability",
+      itemCondition: "https://schema.org/UsedCondition",
+      availability,
+      url: vdpUrl,
+      // validFrom: when this offer became active. We don't track this
+      // precisely; use today's date so re-renders don't flap. Vercel
+      // rebuild renews this on every deploy.
+      validFrom: new Date().toISOString().slice(0, 10),
       seller: {
         "@type": "AutoDealer",
         "@id": `${SITE_CONFIG.url}/#dealership`,
         name: SITE_CONFIG.name,
+        url: SITE_CONFIG.url,
+        image: `${SITE_CONFIG.url}/images/storefront.jpg`,
+        telephone: SITE_CONFIG.phone,
         address: {
           "@type": "PostalAddress",
           streetAddress: SITE_CONFIG.address.street,
           addressLocality: SITE_CONFIG.address.city,
           addressRegion: SITE_CONFIG.address.state,
           postalCode: SITE_CONFIG.address.zip,
+          addressCountry: "US",
         },
-        telephone: SITE_CONFIG.phone,
       },
     },
-    image: vehicle.images,
+    // subjectOf back-references the listing itself; Google uses this to
+    // confirm the schema is THIS page's authoritative listing.
+    subjectOf: {
+      "@type": "WebPage",
+      "@id": vdpUrl,
+      url: vdpUrl,
+      ...(heroImage ? { primaryImageOfPage: heroImage } : {}),
+    },
   };
 
   return (
