@@ -22,6 +22,12 @@ export interface Vehicle {
   status: "available" | "sale-pending" | "sold" | "coming-soon";
   dateInStock: string;
   daysOnLot: number;
+  /** Public feed flag — true if vehicle had a price decrease in the
+   *  last 14 days. Powers the "Recently Reduced" badge on cards + VDP.
+   *  Backend logs decreases via pricing_history.log_price_change()
+   *  on every dashboard PATCH that changes asking_price. Defaults to
+   *  false when absent (back-compat with seed inventory). */
+  recentlyReduced?: boolean;
 }
 
 export interface ContactFormData {

@@ -329,15 +329,22 @@ export const MERCHANDISING: MerchandisingConfig = {
 export function resolveOverlay(
   vin: string,
   daysOnLot: number,
-  vehicleStatus: "available" | "sale-pending" | "sold" | "coming-soon"
+  vehicleStatus: "available" | "sale-pending" | "sold" | "coming-soon",
+  recentlyReduced = false
 ): VehicleOverlay & { effectiveStatus?: StatusBadgeKind } {
   const override = MERCHANDISING.overlays[vin] ?? {};
 
-  // Priority: manual status > Sale Pending > Just Arrived (new inventory)
+  // Priority: coming-soon > manual status > sale-pending > price-reduced
+  //   > just-arrived. price-reduced auto-fires when the DMS public feed
+  //   reports a price decrease in the last 14 days. Beats just-arrived
+  //   because a documented drop is a stronger buying signal.
   let effectiveStatus: StatusBadgeKind | undefined =
     vehicleStatus === "coming-soon" ? "coming-soon" : override.status;
   if (!effectiveStatus && vehicleStatus === "sale-pending") {
     effectiveStatus = "sale-pending";
+  }
+  if (!effectiveStatus && recentlyReduced) {
+    effectiveStatus = "price-reduced";
   }
   if (!effectiveStatus && daysOnLot <= 14) {
     effectiveStatus = "just-arrived";

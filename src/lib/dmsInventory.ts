@@ -46,6 +46,10 @@ interface DmsVehicle {
   features?: string[] | null;
   photos?: DmsPhoto[] | null;
   dateInStock?: string | null;
+  /** Recently Reduced flag from dms-inventory-api public feed.
+   *  True if asking_price decreased in the last 14 days. Optional —
+   *  older deploys of the DMS may omit it; treat absent as false. */
+  recently_reduced?: boolean | null;
 }
 
 interface DmsResponse {
@@ -151,6 +155,7 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     images,
     dealerCenterFirstSeen: "",
     dealerCenterLastSeen: "",
+    recentlyReduced: Boolean(v.recently_reduced),
   };
 }
 
@@ -220,5 +225,6 @@ export function syncedToVehicle(s: SyncedVehicle): Vehicle {
     status: s.status,
     dateInStock: s.dateInStock,
     daysOnLot: s.daysOnLot,
+    recentlyReduced: s.recentlyReduced,
   };
 }

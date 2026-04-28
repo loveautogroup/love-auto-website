@@ -92,17 +92,25 @@ export function useMerchandising(): MerchandisingConfig {
 export function useResolveOverlay(
   vin: string,
   daysOnLot: number,
-  vehicleStatus: "available" | "sale-pending" | "sold" | "coming-soon"
+  vehicleStatus: "available" | "sale-pending" | "sold" | "coming-soon",
+  recentlyReduced = false
 ): VehicleOverlay & { effectiveStatus?: StatusBadgeKind } {
   const config = useMerchandising();
   const override = config.overlays?.[vin] ?? {};
 
   // Same logic as the synchronous resolveOverlay() in src/data/merchandising.ts:
-  // Priority: manual status > Sale Pending > Just Arrived (new inventory)
+  // Priority: coming-soon > manual status > sale-pending > price-reduced
+  //   > just-arrived. The price-reduced auto-flag fires when the DMS public
+  //   feed reports a price decrease in the last 14 days (recentlyReduced=true).
+  //   It outranks just-arrived because a documented drop is a stronger
+  //   buying signal than mere recency on the lot.
   let effectiveStatus: StatusBadgeKind | undefined =
     vehicleStatus === "coming-soon" ? "coming-soon" : override.status;
   if (!effectiveStatus && vehicleStatus === "sale-pending") {
     effectiveStatus = "sale-pending";
+  }
+  if (!effectiveStatus && recentlyReduced) {
+    effectiveStatus = "price-reduced";
   }
   if (!effectiveStatus && daysOnLot <= 14) {
     effectiveStatus = "just-arrived";
@@ -123,4 +131,22 @@ export function useResolveOverlay(
 export function useGlobalTextPhone(): string | undefined {
   const config = useMerchandising();
   return config.textPhone;
+}
+
+/**
+ * Drop vehicles whose merchandising overlay has `hidden: true` in the
+ * RUNTIME (KV-backed) config. The static `sortWithFeaturedFirst` helper
+ * can only see build-time overlays; this hook is what the DMS "Hide from
+ * website" toggle relies on to actually pull cars off the public site
+ * within ~60s of save (no site rebuild needed).
+ *
+ * Pure filter — preserves order. Call this BEFORE sortWithFeaturedFirst
+ * in any client component that renders a vehicle list.
+ */
+export function useVisibleVehicles<T extends { vin: string }>(
+  vehicles: T[]
+): T[] {
+  const config = useMerchandising();
+  const overlays = config.overlays ?? {};
+  return vehicles.filter((v) => overlays[v.vin]?.hidden !== true);
 }

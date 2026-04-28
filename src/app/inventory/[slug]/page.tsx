@@ -18,6 +18,7 @@ import VDPReviews from "@/components/VDPReviews";
 import VDPInquireButton from "@/components/VDPInquireButton";
 import VDPTextUsLink from "@/components/VDPTextUsLink";
 import VDPVinSignal from "@/components/VDPVinSignal";
+import VDPTracker from "@/components/VDPTracker";
 import {
   VDPLivePrice,
   VDPLiveMileage,
@@ -135,7 +136,16 @@ export default async function VehicleDetailPage({
   const monthlyPayment = estimateMonthlyPayment(vehicle.price);
 
   // Pull merchandising overlay for market estimate (Jordan-researched).
-  const overlay = resolveOverlay(vehicle.vin, vehicle.daysOnLot, vehicle.status);
+  // Pass `recentlyReduced` so the build-time hero status pill auto-flips to
+  // "Price Reduced" when the DMS public feed reports a price drop in the
+  // last 14 days (PhotoGallery's runtime hook also receives the same flag,
+  // so the SSR + hydrated states agree).
+  const overlay = resolveOverlay(
+    vehicle.vin,
+    vehicle.daysOnLot,
+    vehicle.status,
+    vehicle.recentlyReduced ?? false
+  );
 
   // Default Text Us number for the build-time render. The VDPTextUsLink
   // client component will fetch /api/merchandising on mount and override
@@ -161,6 +171,17 @@ export default async function VehicleDetailPage({
           we're on, so it can pick up overlay.textPhone from the merchandising
           config. Renders nothing. */}
       <VDPVinSignal vin={vehicle.vin} />
+      <VDPTracker
+        vehicle={{
+          vin: vehicle.vin,
+          year: vehicle.year,
+          make: vehicle.make,
+          model: vehicle.model,
+          trim: vehicle.trim,
+          price: vehicle.price,
+          stockNumber: vehicle.stockNumber,
+        }}
+      />
       <VehicleSchema vehicle={vehicle} />
       <BreadcrumbSchema
         items={[
