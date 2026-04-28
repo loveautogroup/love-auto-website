@@ -121,24 +121,25 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const noPhotosAnywhere = !hasRealImage && !liveHasImages;
 
   // Per-vehicle toggle (DMS merchandising panel) — when on, force the
-  // branded Coming Soon placeholder as the hero, regardless of whether
-  // real photos exist for the vehicle.
+  // branded Coming Soon placeholder as the hero. This is an explicit
+  // opt-in per vehicle. The previous AUTO-fallback for "no photos
+  // anywhere" was removed: cars without pictures now render the
+  // empty-state SVG instead of the branded placeholder.
   const forcePlaceholder = overlay.useComingSoonPlaceholder === true;
 
   const initialHero = forcePlaceholder
     ? COMING_SOON_PLACEHOLDER
-    : noPhotosAnywhere
-      ? COMING_SOON_PLACEHOLDER
-      : (heroOverride ?? orderedImages[0]);
+    : (heroOverride ?? orderedImages[0] ?? "");
 
   // onError fallback — if the chosen hero URL 404s or fails to load
-  // (DealerCenter CDN flake, deleted seed asset, etc.), swap to the
-  // "Coming Soon" SVG. Local state so the swap survives re-render.
+  // (DealerCenter CDN flake, deleted seed asset, etc.), drop to the
+  // empty-state SVG by clearing heroSrc. Local state so the swap
+  // survives re-render.
   const [heroSrc, setHeroSrc] = useState<string>(initialHero);
   const heroImage = heroSrc;
-  // We treat the placeholder as a "real" image for rendering purposes
-  // so <Image> renders it (instead of the gray empty-state SVG).
-  const showImage = hasRealImage || liveHasImages || noPhotosAnywhere || forcePlaceholder;
+  // Render the <Image> only when there's a real source. Empty string
+  // means "no photo, no placeholder" → fall through to the SVG branch.
+  const showImage = (hasRealImage || liveHasImages || forcePlaceholder) && heroSrc !== "";
 
   return (
     <article
@@ -158,9 +159,10 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             onError={() => {
-              if (heroSrc !== COMING_SOON_PLACEHOLDER) {
-                setHeroSrc(COMING_SOON_PLACEHOLDER);
-              }
+              // Drop to the empty-state SVG by clearing the source.
+              // Previously fell back to the branded Coming Soon image —
+              // removed per the "no default image" change.
+              if (heroSrc !== "") setHeroSrc("");
             }}
             unoptimized={heroSrc.endsWith(".svg") || heroSrc.endsWith("/coming-soon.png")}
           />
