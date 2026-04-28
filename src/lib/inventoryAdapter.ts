@@ -45,6 +45,11 @@ export interface SyncedVehicle {
   images: string[];
   dealerCenterFirstSeen: string;
   dealerCenterLastSeen: string;
+  /** Public feed flag — true if asking_price decreased in the last 14 days.
+   *  Source of truth: dms-inventory-api pricing_history.is_recently_reduced(),
+   *  surfaced as `recently_reduced` on the public DMS feed. Optional for
+   *  back-compat with snapshots that predate the flag. */
+  recentlyReduced?: boolean;
 }
 
 export interface InventorySnapshot {
@@ -82,6 +87,7 @@ export function adaptVehicle(v: SyncedVehicle): Vehicle {
     status: v.status,
     dateInStock: v.dateInStock,
     daysOnLot: v.daysOnLot,
+    recentlyReduced: Boolean(v.recentlyReduced),
   };
 }
 

@@ -61,7 +61,8 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
   const overlayLive = useResolveOverlay(
     vehicle?.vin ?? "",
     vehicle?.daysOnLot ?? 0,
-    vehicle?.status ?? "available"
+    vehicle?.status ?? "available",
+    vehicle?.recentlyReduced ?? false
   );
   const overlay = vehicle ? overlayLive : null;
   const showBadges = vehicle && selectedIndex === 0;
@@ -153,7 +154,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
                   Inner div wraps the shield because we only scale down
                   the shield on mobile, not the pills below it. */}
               <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 flex flex-col items-start gap-1.5">
-                <div className="[&_>*]:scale-[0.7] sm:[&_>*]:scale-100 [&_>*]:origin-top-left">
+                <div className="[&_>*]:scale-[0.55] sm:[&_>*]:scale-[0.65] [&_>*]:origin-top-left">
                   <CarfaxBadge vin={vehicle.vin} />
                 </div>
                 <CarfaxPillStack overlay={overlay} />

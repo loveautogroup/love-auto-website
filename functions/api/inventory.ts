@@ -73,6 +73,10 @@ interface DmsVehicle {
   features?: string[] | null;
   photos?: DmsPhoto[] | null;
   dateInStock?: string | null;
+  // True if asking_price decreased in the last 14 days (DMS public feed
+  // reads this from VehiclePriceHistory). Optional — older deploys omit
+  // the field, treat absent as false for back-compat.
+  recently_reduced?: boolean | null;
 }
 
 interface DmsResponse {
@@ -105,6 +109,7 @@ interface SyncedVehicle {
   dealerCenterFirstSeen: string;
   dealerCenterLastSeen: string;
   description?: string;
+  recentlyReduced?: boolean;
 }
 
 interface InventorySnapshot {
@@ -189,6 +194,7 @@ function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     dealerCenterFirstSeen: "",
     dealerCenterLastSeen: "",
     description: v.description ?? undefined,
+    recentlyReduced: Boolean(v.recently_reduced),
   };
 }
 

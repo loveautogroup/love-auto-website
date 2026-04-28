@@ -60,7 +60,8 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const overlay = useResolveOverlay(
     vehicle.vin,
     vehicle.daysOnLot,
-    vehicle.status
+    vehicle.status,
+    vehicle.recentlyReduced ?? false
   );
 
   const priceHasCents = Math.round(vehicle.price * 100) % 100 !== 0;
@@ -191,10 +192,10 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         {/* Top-left column: full Carfax + status cluster — shield,
             active Carfax pills, status pill (in that vertical order).
             Mirrors the VDP hero so the inventory grid feels consistent.
-            Shield scaled 40% on mobile / 50% on sm+ (smaller for tighter card overlay); pills + status
+            Shield scaled 32% on mobile / 40% on sm+ (smaller for tighter card overlay); pills + status
             render at compact size. */}
         <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 flex flex-col items-start gap-1">
-          <div className="cf [&_.cf]:scale-[0.40] sm:[&_.cf]:scale-[0.50] [&_.cf]:origin-top-left">
+          <div className="cf [&_.cf]:scale-[0.32] sm:[&_.cf]:scale-[0.40] [&_.cf]:origin-top-left">
             <CarfaxBadge vin={vehicle.vin} />
           </div>
           <CarfaxPillStack overlay={overlay} compact />
