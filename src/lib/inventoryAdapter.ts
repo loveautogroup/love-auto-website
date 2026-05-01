@@ -50,6 +50,13 @@ export interface SyncedVehicle {
    *  surfaced as `recently_reduced` on the public DMS feed. Optional for
    *  back-compat with snapshots that predate the flag. */
   recentlyReduced?: boolean;
+  /** Phase 2 photo pipeline — VDPWalkaround source URLs.
+   *  Source of truth: dms-inventory-api media.walkaround_url and
+   *  walkaround_poster_url. Both null in Phase 1; VDPWalkaround
+   *  renders nothing when null. Added 2026-05-01 to align with
+   *  the ab5ebff Phase 2 walkaround commit. */
+  walkaroundUrl?: string | null;
+  walkaroundPosterUrl?: string | null;
 }
 
 export interface InventorySnapshot {
