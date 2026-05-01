@@ -1,0 +1,83 @@
+# Verifies every URL advertised in the production sitemap.xml resolves to
+# HTTP 200. Catches regressions like the 2026-04-30 incident where
+# `/inventory`, `/reviews`, and the brand-inventory pages were 404-ing
+# even though the sitemap was healthy — Search Console flagged it before
+# we did. Runs on every push to main and on a daily cron so a stale
+# DealerCenter slug or a rogue `_redirects` change can't sit broken in
+# production for more than 24 hours.
+
+name: Sitemap URL check
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Daily at 13:00 UTC (08:00 America/Chicago)
+    - cron: "0 13 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  check-sitemap:
+    name: Crawl every <loc> in production sitemap.xml
+    runs-on: ubuntu-latest
+    # Give Cloudflare Pages ~5 min to roll out a fresh build before we
+    # hammer it on push. No-op for cron / manual runs.
+    timeout-minutes: 10
+    steps:
+      - name: Wait for Cloudflare Pages deploy (push only)
+        if: github.event_name == 'push'
+        run: sleep 300
+
+      - name: Install xmllint
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libxml2-utils
+
+      - name: Fetch + crawl sitemap
+        id: crawl
+        run: |
+          set -uo pipefail
+          SITEMAP_URL="${SITEMAP_URL:-https://www.loveautogroup.net/sitemap.xml}"
+          echo "::group::Fetching $SITEMAP_URL"
+          curl -fsSL "$SITEMAP_URL" -o /tmp/sitemap.xml
+          echo "::endgroup::"
+
+          # Extract every <loc> entry. xmllint --xpath emits all matches
+          # space-separated; the sed strips the surrounding tags.
+          mapfile -t URLS < <(xmllint --xpath '//*[local-name()="loc"]/text()' /tmp/sitemap.xml \
+            | tr -d '\r' \
+            | tr ' ' '\n' \
+            | sed '/^[[:space:]]*$/d')
+
+          if [ "${#URLS[@]}" -eq 0 ]; then
+            echo "::error::No <loc> entries parsed from sitemap"
+            exit 1
+          fi
+
+          echo "Found ${#URLS[@]} URLs in sitemap"
+          FAILED=0
+          FAIL_LIST=""
+          for url in "${URLS[@]}"; do
+            # HEAD first; some static hosts return 405 on HEAD so retry GET.
+            CODE=$(curl -s -o /dev/null -w "%{http_code}" -A "love-auto-sitemap-check/1.0" --max-time 20 -I "$url")
+            if [ "$CODE" != "200" ]; then
+              CODE=$(curl -s -o /dev/null -w "%{http_code}" -A "love-auto-sitemap-check/1.0" --max-time 20 -L "$url")
+            fi
+            if [ "$CODE" != "200" ]; then
+              echo "::error::$url -> HTTP $CODE"
+              FAIL_LIST+="$url -> $CODE"$'\n'
+              FAILED=$((FAILED+1))
+            else
+              echo "ok  $url"
+            fi
+          done
+
+          echo
+          echo "Total URLs:   ${#URLS[@]}"
+          echo "Failed URLs:  $FAILED"
+          if [ "$FAILED" -gt 0 ]; then
+            echo "::error::Sitemap contains $FAILED URLs that are not returning HTTP 200"
+            echo "$FAIL_LIST"
+            exit 1
+          fi
