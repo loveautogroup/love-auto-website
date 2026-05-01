@@ -71,7 +71,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/inventory/used-sedans/`,   lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     // Brand landing pages — short-form variants at /brands/{slug}/, content
     // from Mark's 5-brand rewrite (task #19). Distinct from the longer-form
-    // /inventory/used-{slug}/ pages above.
+    // /inventory/used-{slug}/ pages above. /brands/ is the parent index hub.
+    { url: `${BASE}/brands/`,                  lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${BASE}/brands/honda/`,            lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${BASE}/brands/subaru/`,           lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${BASE}/brands/lexus/`,            lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
