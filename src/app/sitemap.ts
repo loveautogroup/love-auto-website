@@ -69,6 +69,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Body styles
     { url: `${BASE}/inventory/used-suvs/`,     lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${BASE}/inventory/used-sedans/`,   lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
+    // Brand landing pages — short-form variants at /brands/{slug}/, content
+    // from Mark's 5-brand rewrite (task #19). Distinct from the longer-form
+    // /inventory/used-{slug}/ pages above.
+    { url: `${BASE}/brands/honda/`,            lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
+    { url: `${BASE}/brands/subaru/`,           lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
+    { url: `${BASE}/brands/lexus/`,            lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
+    { url: `${BASE}/brands/acura/`,            lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
+    { url: `${BASE}/brands/mazda/`,            lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     // Service areas — adjacent towns within 10 miles
     { url: `${BASE}/serving/lombard-il/`,      lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/serving/elmhurst-il/`,     lastModified: now, changeFrequency: "monthly", priority: 0.7 },
