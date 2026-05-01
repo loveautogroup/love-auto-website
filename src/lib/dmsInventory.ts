@@ -165,7 +165,15 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
  * fallback for an empty result.
  */
 export async function fetchDmsInventory(
-  timeoutMs = 8000
+  // Bumped 8s → 20s on 2026-04-30 after a build shipped without
+  // pre-rendered VDPs for two Coming Soon vehicles (Crosstrek + MKZ).
+  // Root cause: Railway free-tier hibernation cold-start can run 15-25s,
+  // and 8s wasn't enough during the build's parallel generateStaticParams
+  // call. The sitemap got the slugs (it ran later, after warm-up) but
+  // pages did not — clicking through from the inventory grid 404'd.
+  // 20s is comfortably above observed cold-start. If we move to a paid
+  // Railway plan with always-on, this can come back down.
+  timeoutMs = 20000
 ): Promise<SyncedVehicle[]> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);

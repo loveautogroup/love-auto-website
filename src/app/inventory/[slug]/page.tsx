@@ -237,6 +237,95 @@ export default async function VehicleDetailPage({
               vehicle={vehicle}
             />
 
+            {/* Desktop price + CTAs + Carfax + payment calculator —
+                lives directly under the gallery (per Jeremiah, 2026-04-30).
+                Previously sat at the bottom of the page below FAQ/Reviews;
+                moving it up keeps the buying decision stack adjacent to
+                the photos without burying it. Hidden on mobile — the
+                existing lg:hidden title block + sticky CTA bar already
+                cover that case. */}
+            <div className="hidden lg:block mt-6 mb-8">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="bg-white rounded-xl border border-brand-gray-200 p-6 space-y-5">
+                  <div>
+                    <h1 className="text-xl font-bold text-brand-gray-900">
+                      {vehicle.year} {vehicle.make} {vehicle.model}
+                    </h1>
+                    <p className="text-sm text-brand-gray-500">{vehicle.trim}</p>
+                    <p className="text-3xl font-bold text-brand-red mt-3">
+                      <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
+                    </p>
+                    <p className="text-sm text-brand-gray-500 mt-1">
+                      Est. <span className="font-semibold">${monthlyPayment}/mo</span>*
+                    </p>
+                    <p className="text-sm text-brand-gray-500 mt-1">
+                      <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles · {vehicle.drivetrain}
+                    </p>
+                  </div>
+
+                  <VDPLiveStatus vin={vehicle.vin} fallback={vehicle.status} />
+
+                  <div className="space-y-3">
+                    <a
+                      href={`tel:${SITE_CONFIG.phoneRaw}`}
+                      className="flex items-center justify-center gap-2 w-full bg-brand-green hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition-colors"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                        />
+                      </svg>
+                      Call {SITE_CONFIG.phone}
+                    </a>
+                    <VDPTextUsLink
+                      vin={vehicle.vin}
+                      defaultPhone={textPhoneDefault}
+                      bodyText={textBodyRaw}
+                      className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors"
+                    >
+                      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
+                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
+                      </svg>
+                      Text Us
+                    </VDPTextUsLink>
+                    <VDPInquireButton
+                      vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.trim ? " " + vehicle.trim : ""}`}
+                      vehicleVin={vehicle.vin}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+
+                {/* Card 2 — Carfax shield CTA */}
+                <div className="bg-white rounded-xl border border-brand-gray-200 p-6 flex flex-col justify-center">
+                  <VDPCarfaxButton
+                    vin={vehicle.vin}
+                    daysOnLot={vehicle.daysOnLot}
+                    vehicleStatus={vehicle.status}
+                    variant="wide"
+                  />
+                </div>
+
+                {/* Card 3 — payment calculator */}
+                <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
+                  <VDPPaymentCalculator
+                    vehiclePrice={vehicle.price}
+                    vehicleSlug={vehicle.slug}
+                    vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Vehicle Title (mobile) */}
             <div className="lg:hidden mt-6 mb-4">
               <h1 className="text-2xl font-bold text-brand-gray-900">
@@ -300,104 +389,6 @@ export default async function VehicleDetailPage({
             </div>
           </div>
 
-          {/* Sidebar block — moved BELOW the hero so the gallery gets
-              the full content width on desktop. On lg+, the contents render
-              as a row of three cards (price/CTA, Carfax shield, payment
-              estimator) rather than a tall stack. The mobile title block
-              above the gallery still handles the small-viewport flow, so
-              this entire block is hidden on mobile (the existing mobile
-              title + sticky CTA bar already cover that case). */}
-          <div className="hidden lg:block">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="bg-white rounded-xl border border-brand-gray-200 p-6 space-y-5">
-              <div>
-                <h1 className="text-xl font-bold text-brand-gray-900">
-                  {vehicle.year} {vehicle.make} {vehicle.model}
-                </h1>
-                <p className="text-sm text-brand-gray-500">{vehicle.trim}</p>
-                <p className="text-3xl font-bold text-brand-red mt-3">
-                  <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
-                </p>
-                <p className="text-sm text-brand-gray-500 mt-1">
-                  Est. <span className="font-semibold">${monthlyPayment}/mo</span>*
-                </p>
-                <p className="text-sm text-brand-gray-500 mt-1">
-                  <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles · {vehicle.drivetrain}
-                </p>
-              </div>
-
-              <VDPLiveStatus vin={vehicle.vin} fallback={vehicle.status} />
-
-              <div className="space-y-3">
-                <a
-                  href={`tel:${SITE_CONFIG.phoneRaw}`}
-                  className="flex items-center justify-center gap-2 w-full bg-brand-green hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition-colors"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-5 h-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    />
-                  </svg>
-                  Call {SITE_CONFIG.phone}
-                </a>
-                <VDPTextUsLink
-                  vin={vehicle.vin}
-                  defaultPhone={textPhoneDefault}
-                  bodyText={textBodyRaw}
-                  className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors"
-                >
-                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
-                    <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
-                  </svg>
-                  Text Us
-                </VDPTextUsLink>
-                <VDPInquireButton
-                  vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.trim ? " " + vehicle.trim : ""}`}
-                  vehicleVin={vehicle.vin}
-                  className="w-full"
-                />
-                {/* Replaced previous /contact?vehicle Link with inline
-                    modal — keeps the user on the VDP and posts directly
-                    to the DMS public-leads endpoint. */}
-              </div>
-              </div>
-
-              {/* Card 2 — Carfax shield CTA on its own card so the row
-                  reads as three equal-weight blocks. */}
-              <div className="bg-white rounded-xl border border-brand-gray-200 p-6 flex flex-col justify-center">
-                <VDPCarfaxButton
-                  vin={vehicle.vin}
-                  daysOnLot={vehicle.daysOnLot}
-                  vehicleStatus={vehicle.status}
-                  variant="wide"
-                />
-              </div>
-
-              {/* Card 3 — payment calculator. */}
-              <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
-                <VDPPaymentCalculator
-                  vehiclePrice={vehicle.price}
-                  vehicleSlug={vehicle.slug}
-                  vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
-                />
-              </div>
-
-              <div className="lg:col-span-3 pt-4 border-t border-brand-gray-100 text-center">
-                <p className="text-xs text-brand-gray-400">
-                  Love Auto Group · Villa Park, IL
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Mobile sticky CTA bar — Call + Text + Calculate */}
