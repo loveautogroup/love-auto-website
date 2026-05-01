@@ -28,6 +28,7 @@ import {
   VDPCarfaxButton,
   VDPMarketPriceWrap,
 } from "@/components/VDPMerchandisingWrappers";
+import VDPWalkaround from "@/components/VDPWalkaround";
 import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
 
 function estimateMonthlyPayment(
@@ -373,6 +374,19 @@ export default async function VehicleDetailPage({
               formattedMileage={formattedMileage}
               monthlyPayment={monthlyPayment}
             />
+
+            {/* Walkaround video — Phase 2 photo pipeline. Renders nothing
+                when walkaroundUrl is null (all of Phase 1). Once
+                WalkAroundScreen uploads to R2, the DMS public detail
+                endpoint populates walkaround_url and this slot activates
+                automatically without a code change. */}
+            {vehicle.walkaroundUrl && (
+              <VDPWalkaround
+                walkaroundUrl={vehicle.walkaroundUrl}
+                posterUrl={vehicle.walkaroundPosterUrl ?? vehicle.images?.[0]}
+                vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+              />
+            )}
 
             {/* Vehicle-specific FAQ — emits FAQPage JSON-LD for rich-result
                 eligibility in SERPs. Generated dynamically from the

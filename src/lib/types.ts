@@ -28,6 +28,13 @@ export interface Vehicle {
    *  on every dashboard PATCH that changes asking_price. Defaults to
    *  false when absent (back-compat with seed inventory). */
   recentlyReduced?: boolean;
+  /** Phase 2 photo pipeline — R2-hosted walkaround video URL.
+   *  Null in Phase 1 (VDPWalkaround renders nothing when null).
+   *  Populated once Lisa's WalkAroundScreen uploads to R2. */
+  walkaroundUrl?: string | null;
+  /** Phase 2 photo pipeline — poster frame URL shown before video loads.
+   *  Falls back to hero image when null. */
+  walkaroundPosterUrl?: string | null;
 }
 
 export interface ContactFormData {

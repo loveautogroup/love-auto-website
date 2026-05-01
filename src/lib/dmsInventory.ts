@@ -50,6 +50,16 @@ interface DmsVehicle {
    *  True if asking_price decreased in the last 14 days. Optional —
    *  older deploys of the DMS may omit it; treat absent as false. */
   recently_reduced?: boolean | null;
+  /** V2 photo pipeline media shape — optional, absent on older responses. */
+  media?: {
+    hero_url?: string | null;
+    hero_thumbnail_url?: string | null;
+    walkaround_url?: string | null;
+    walkaround_poster_url?: string | null;
+    gallery?: Array<{ url: string; thumbnail_url: string }> | null;
+    photo_count?: number;
+    video_present?: boolean;
+  } | null;
 }
 
 interface DmsResponse {
@@ -156,6 +166,9 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     dealerCenterFirstSeen: "",
     dealerCenterLastSeen: "",
     recentlyReduced: Boolean(v.recently_reduced),
+    // Phase 2 photo pipeline — null in Phase 1 (VDPWalkaround renders nothing).
+    walkaroundUrl: v.media?.walkaround_url ?? null,
+    walkaroundPosterUrl: v.media?.walkaround_poster_url ?? null,
   };
 }
 
