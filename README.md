@@ -81,3 +81,4 @@ This is the official, production-ready brand kit for Love Auto Group. All agents
 ---
 
 *For the full design system with component mapping and photo standards, see DESIGN-SYSTEM.md*
+
