@@ -20,4 +20,21 @@ export default function robots(): MetadataRoute.Robots {
           "/admin",
           "/admin/",
           // Block query-string filter variants of /inventory. The static
-          // export serves th
+          // export serves the same HTML regardless of filter params, so
+          // letting Google crawl them just wastes crawl budget on duplicate
+          // content. The canonical /inventory/ URL is what we want indexed.
+          // Search Console flagged 294 of these on 2026-04-30 (legacy from
+          // the CarsForSale era).
+          "/inventory?*",
+          "/inventory/?*",
+          // Print views are CarsForSale-era artifacts that 404 on the
+          // current site.
+          "/print/",
+          "/print/*",
+        ],
+      },
+    ],
+    sitemap: "https://www.loveautogroup.net/sitemap.xml",
+    host: "https://www.loveautogroup.net",
+  };
+}
