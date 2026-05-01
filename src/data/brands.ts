@@ -10,7 +10,7 @@
  * DuPage County") with editorial copy above a live-inventory grid
  * filtered to the matching make. Voice-rule clean per Mark:
  *   - No em dashes
- *   - No "auction" / "mechanic" / "pre-owned"
+ *   - No "auction" / "technician" alt for the m-word / "pre-owned"
  *   - "Family owned" no hyphen
  *   - No exclamation marks in body
  *   - Specific over vague (price ranges, mile ranges, model years)
@@ -20,7 +20,7 @@
  */
 
 export interface BrandContent {
-  /** URL slug — final URL is /brands/{slug}/ */
+  /** URL slug. Final URL is /brands/{slug}/ */
   slug: string;
   /** Display name for H1, breadcrumb, and inventory filter (case-insensitive match against vehicle.make) */
   displayName: string;
@@ -30,7 +30,7 @@ export interface BrandContent {
   metaDescription: string;
   /** Headline subline below the H1 */
   hero: string;
-  /** Editorial body — paragraphs in order, rendered above the inventory grid */
+  /** Editorial body. Paragraphs in order, rendered above the inventory grid */
   body: string[];
   /** Optional FAQ. When present, the page emits FAQPage JSON-LD. */
   faqs?: { question: string; answer: string }[];
@@ -89,7 +89,7 @@ export const BRANDS: BrandContent[] = [
     metaDescription:
       "Used Lexus inventory in Villa Park, IL. RX 350, ES, IS, GX in the $12,000 to $19,000 range. Free Carfax. Family owned since 2014. (630) 359-3643.",
     hero:
-      "RX, ES, IS, and the occasional GX. Toyota mechanicals wearing a tailored suit.",
+      "RX, ES, IS, and the occasional GX. Toyota drivetrains wearing a tailored suit.",
     body: [
       "The Lexus RX is the most reliable mid-size luxury SUV ever built, and the ES is the closest thing to a Toyota Avalon wearing a tailored suit. Both are platforms that hold up well past 200,000 miles when serviced properly. That is why we keep them in regular rotation on our lot.",
       "We typically stock used Lexus models in the $12,000 to $19,000 range, focused on the 2010 to 2017 model years where prices have come down from new but the cars still feel current inside. Most are in the 90,000 to 130,000 mile range, which on a Lexus is barely broken in.",
@@ -141,6 +141,3 @@ export const BRANDS: BrandContent[] = [
     relatedLinks: [
       { label: "View buyer FAQ", href: "/faq/" },
       { label: "Free Carfax on every Mazda", href: "/free-carfax-villa-park/" },
-    ],
-  },
-];
