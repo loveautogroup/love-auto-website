@@ -14,12 +14,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        // /admin is the merchandising console — gated by Cloudflare Access
-        // anyway, but no reason to invite crawlers in.
-        disallow: ["/admin", "/admin/"],
-      },
-    ],
-    sitemap: "https://www.loveautogroup.net/sitemap.xml",
-    host: "https://www.loveautogroup.net",
-  };
-}
+        disallow: [
+          // /admin is the merchandising console, gated by Cloudflare Access
+          // anyway, but no reason to invite crawlers in.
+          "/admin",
+          "/admin/",
+          // Block query-string filter variants of /inventory. The static
+          // export serves th
