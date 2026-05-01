@@ -10,11 +10,18 @@
  *
  * Posts to https://dms.loveautogroup.net/api/v1/public/leads which writes
  * to Prisma's customer table with leadStatus='NEW' so leads appear in
- * /dashboard/leads on the DMS side. The endpoint also fires SMS + email
- * notifications via a Railway webhook (Commit 3).
+ * /dashboard/leads on the DMS side.
  *
- * Honeypot: hidden 'website' field for bot traps.
- * TCPA: consent checkbox required for SMS follow-up.
+ * Auth: x-intake-key header (ENG-107). Key is baked in at build time via
+ *   NEXT_PUBLIC_DMS_INTAKE_KEY env var on Cloudflare Pages. Bridge mode on
+ *   the DMS accepts missing keys until the env var is wired.
+ *
+ * Honeypot: hidden 'honeypot' field. Bots fill it; humans don't see it.
+ *   The DMS silently accepts and drops honeypot-flagged submissions (200, no row).
+ * TCPA: marketingOptIn checkbox required by schema.
+ *
+ * Phone normalization: user may type any US format; we normalize to E.164
+ *   (+1XXXXXXXXXX) before sending so the DMS regex validates cleanly.
  */
 
 import { useState } from "react";
@@ -22,12 +29,36 @@ import { useState } from "react";
 const DMS_API_BASE =
   process.env.NEXT_PUBLIC_DMS_API_BASE ?? "https://dms.loveautogroup.net";
 
+/** Intake key baked in at Cloudflare Pages build time. Empty = bridge mode. */
+const INTAKE_KEY = process.env.NEXT_PUBLIC_DMS_INTAKE_KEY ?? "";
+
+/** Version tag for the TCPA consent language shown in this form. */
+const OPT_IN_LANGUAGE_VERSION = "v1-2026-04";
+
+/**
+ * Normalize any US phone string to E.164 (+1XXXXXXXXXX).
+ * Strips all non-digits; prepends +1 if 10 digits remain.
+ * Returns the cleaned string unchanged if it can't be normalized
+ * (DMS schema will reject it and surface a validation error).
+ */
+function normalizePhone(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  if (digits.length === 10) return `+1${digits}`;
+  if (digits.length === 11 && digits.startsWith("1")) return `+${digits}`;
+  // Already E.164-ish or non-US — return as-is, DMS validates
+  return raw.trim();
+}
+
 export interface LeadFormProps {
   /** Where this form lives — used as the leadSource tag. */
   source?: string;
   /** Pre-filled vehicle interest (e.g. "2017 Subaru Forester"). */
   initialVehicleInterest?: string;
-  /** VIN context for VDP form. Sent to backend, included in lead notes. */
+  /**
+   * VIN context for VDP form. Reserved for a future vehicle-id lookup
+   * (when the site can resolve a VIN to a DMS vehicleId). Currently unused
+   * in the payload — vehicleInterestText carries the human-readable label.
+   */
   vehicleVin?: string;
   /** Submit-button label override. */
   submitLabel?: string;
@@ -43,9 +74,9 @@ interface FormValues {
   email: string;
   vehicleInterest: string;
   message: string;
-  tcpaConsent: boolean;
-  // Honeypot — bots fill, humans don't see
-  website: string;
+  marketingOptIn: boolean;
+  // Honeypot — hidden via CSS; bots fill it, humans leave it blank
+  honeypot: string;
 }
 
 const INITIAL: FormValues = {
@@ -54,14 +85,14 @@ const INITIAL: FormValues = {
   email: "",
   vehicleInterest: "",
   message: "",
-  tcpaConsent: false,
-  website: "",
+  marketingOptIn: false,
+  honeypot: "",
 };
 
 export default function LeadForm({
   source = "website",
   initialVehicleInterest = "",
-  vehicleVin,
+  vehicleVin: _vehicleVin,  // reserved — see prop comment
   submitLabel = "Send message",
   onSuccess,
   compact = false,
@@ -73,6 +104,14 @@ export default function LeadForm({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  // Derive firstName / lastName from a single name field at submission time.
+  function splitName(full: string): { firstName: string; lastName: string } {
+    const parts = full.trim().split(/\s+/);
+    const firstName = parts[0] ?? "";
+    const lastName = parts.slice(1).join(" ");
+    return { firstName, lastName };
+  }
 
   function update<K extends keyof FormValues>(key: K, value: FormValues[K]) {
     setValues((v) => ({ ...v, [key]: value }));
@@ -89,7 +128,7 @@ export default function LeadForm({
       setError("Please enter your phone number.");
       return;
     }
-    if (!values.tcpaConsent) {
+    if (!values.marketingOptIn) {
       setError("Please agree to be contacted before submitting.");
       return;
     }
@@ -98,23 +137,60 @@ export default function LeadForm({
     setError(null);
 
     try {
+      const { firstName, lastName } = splitName(values.name);
+      const phone = normalizePhone(values.phone);
+
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      // Send intake key when present (bridge mode: key optional on DMS side
+      // until REQUIRE_INTAKE_KEY=true is set in Vercel env).
+      if (INTAKE_KEY) {
+        headers["x-intake-key"] = INTAKE_KEY;
+      }
+
       const res = await fetch(`${DMS_API_BASE}/api/v1/public/leads`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers,
         body: JSON.stringify({
-          name: values.name,
-          phone: values.phone,
+          firstName,
+          lastName,
+          phone,
           email: values.email || undefined,
-          vehicleInterest: values.vehicleInterest || undefined,
-          vehicleVin,
+          vehicleInterestText: values.vehicleInterest || undefined,
           message: values.message || undefined,
           source,
-          tcpaConsent: values.tcpaConsent,
-          // honeypot — leave empty for humans; bots will fill it and trip
-          // the schema's max-length check
-          ...(values.website ? { website: values.website } : {}),
+          marketingOptIn: values.marketingOptIn,
+          optInLanguageVersion: OPT_IN_LANGUAGE_VERSION,
+          // Honeypot — always sent; real users leave it blank.
+          // DMS silently drops submissions where it's non-empty.
+          honeypot: values.honeypot,
+          // UTM / referrer attribution
+          referrer:
+            typeof window !== "undefined" ? document.referrer || undefined : undefined,
+          sourceMetadata:
+            typeof window !== "undefined"
+              ? (() => {
+                  const p = new URLSearchParams(window.location.search);
+                  const meta: Record<string, string> = {};
+                  for (const key of [
+                    "utm_source",
+                    "utm_medium",
+                    "utm_campaign",
+                    "utm_term",
+                    "utm_content",
+                    "gclid",
+                    "fbclid",
+                  ] as const) {
+                    const v = p.get(key);
+                    if (v) meta[key] = v;
+                  }
+                  if (typeof window !== "undefined") {
+                    meta.landingPage = window.location.href;
+                  }
+                  return Object.keys(meta).length ? meta : undefined;
+                })()
+              : undefined,
         }),
       });
 
@@ -127,13 +203,14 @@ export default function LeadForm({
       }
 
       const body = await res.json();
+      const leadId: string | null = body?.data?.leadId ?? null;
       setSuccess(
-        `Thanks ${values.name.split(" ")[0]}! We'll reach out shortly. ` +
+        `Thanks ${firstName}! We'll reach out shortly. ` +
           "If you don't hear back within an hour during business hours, " +
           "call or text (630) 359-3643."
       );
-      setValues({ ...INITIAL });
-      if (onSuccess) onSuccess(body.leadId);
+      setValues({ ...INITIAL, vehicleInterest: "" });
+      if (onSuccess && leadId) onSuccess(leadId);
     } catch (err) {
       setError(
         err instanceof Error
@@ -176,16 +253,16 @@ export default function LeadForm({
 
   return (
     <form onSubmit={handleSubmit} className={compact ? "space-y-3" : "space-y-4"}>
-      {/* Honeypot — hidden via CSS, bots fill it */}
+      {/* Honeypot — hidden via CSS; bots fill it, real users never see it */}
       <div aria-hidden="true" className="absolute -left-[9999px] -top-[9999px]">
         <label>
-          Website
+          Leave blank
           <input
             type="text"
             tabIndex={-1}
             autoComplete="off"
-            value={values.website}
-            onChange={(e) => update("website", e.target.value)}
+            value={values.honeypot}
+            onChange={(e) => update("honeypot", e.target.value)}
           />
         </label>
       </div>
@@ -270,8 +347,8 @@ export default function LeadForm({
           type="checkbox"
           required
           className="mt-0.5 h-4 w-4 rounded border-brand-gray-300 text-brand-red focus:ring-brand-red"
-          checked={values.tcpaConsent}
-          onChange={(e) => update("tcpaConsent", e.target.checked)}
+          checked={values.marketingOptIn}
+          onChange={(e) => update("marketingOptIn", e.target.checked)}
         />
         <span>
           I agree that Love Auto Group may contact me by phone, text, or email
