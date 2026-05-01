@@ -78,6 +78,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/brands/lexus/`,            lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${BASE}/brands/acura/`,            lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${BASE}/brands/mazda/`,            lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
+    { url: `${BASE}/brands/toyota/`,           lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     // Service areas — adjacent towns within 10 miles
     { url: `${BASE}/serving/lombard-il/`,      lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/serving/elmhurst-il/`,     lastModified: now, changeFrequency: "monthly", priority: 0.7 },
