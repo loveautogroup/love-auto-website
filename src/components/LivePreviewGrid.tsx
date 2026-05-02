@@ -11,11 +11,14 @@
 
 import { useInventory } from "@/lib/useInventory";
 import { sortWithFeaturedFirst, filterFeatured } from "@/data/merchandising";
+import { useVisibleVehicles } from "@/data/useMerchandising";
 import VehicleCard from "@/components/VehicleCard";
 
 export default function LivePreviewGrid() {
   const { vehicles } = useInventory();
-  const available = vehicles.filter((v) => v.status !== "sold");
+  // Respect the DMS "Hide from website" toggle via live KV config.
+  const visible = useVisibleVehicles(vehicles);
+  const available = visible.filter((v) => v.status !== "sold");
   const featured = filterFeatured(available);
   const previewVehicles =
     featured.length >= 6

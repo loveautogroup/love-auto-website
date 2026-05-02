@@ -12,11 +12,14 @@
 import Link from "next/link";
 import { useInventory } from "@/lib/useInventory";
 import { filterFeatured, sortWithFeaturedFirst } from "@/data/merchandising";
+import { useVisibleVehicles } from "@/data/useMerchandising";
 import VehicleCard from "@/components/VehicleCard";
 
 export default function HomeFeaturedGrid() {
   const { vehicles } = useInventory();
-  const available = vehicles.filter((v) => v.status !== "sold");
+  // Respect the DMS "Hide from website" toggle via live KV config.
+  const visible = useVisibleVehicles(vehicles);
+  const available = visible.filter((v) => v.status !== "sold");
   const featured = filterFeatured(available);
   const topUp = sortWithFeaturedFirst(available).slice(0, 6);
   const featuredVehicles = featured.length >= 6 ? featured.slice(0, 6) : topUp;
@@ -32,8 +35,9 @@ export default function HomeFeaturedGrid() {
 
 export function HomeOnTheLot() {
   const { vehicles } = useInventory();
+  const visible = useVisibleVehicles(vehicles);
   const ordered = sortWithFeaturedFirst(
-    vehicles.filter((v) => v.status !== "sold")
+    visible.filter((v) => v.status !== "sold")
   );
   return (
     <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">

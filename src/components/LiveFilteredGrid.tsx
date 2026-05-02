@@ -14,6 +14,7 @@
 
 import { useInventory } from "@/lib/useInventory";
 import { sortWithFeaturedFirst, filterFeatured } from "@/data/merchandising";
+import { useVisibleVehicles } from "@/data/useMerchandising";
 import VehicleCard from "@/components/VehicleCard";
 import type { Vehicle } from "@/lib/types";
 
@@ -33,7 +34,9 @@ export default function LiveFilteredGrid({
   emptyMessage,
 }: LiveFilteredGridProps) {
   const { vehicles } = useInventory();
-  const matched = vehicles.filter(
+  // Filter KV-hidden vehicles first so hidden cars don't appear on brand/area pages.
+  const visibleVehicles = useVisibleVehicles(vehicles);
+  const matched = visibleVehicles.filter(
     (v) => v.status === "available" && predicate(v)
   );
   const ordered = sortWithFeaturedFirst(matched);
@@ -68,7 +71,8 @@ export function LiveFilteredCount({
   fallbackCount: number;
 }) {
   const { vehicles, source } = useInventory();
+  const visibleForCount = useVisibleVehicles(vehicles);
   if (source === "fallback") return <>{fallbackCount}</>;
-  const n = vehicles.filter((v) => v.status === "available" && predicate(v)).length;
+  const n = visibleForCount.filter((v) => v.status === "available" && predicate(v)).length;
   return <>{n}</>;
 }

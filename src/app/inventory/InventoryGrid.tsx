@@ -6,6 +6,7 @@ import type { Vehicle } from "@/lib/types";
 import VehicleCard from "@/components/VehicleCard";
 import { useInventory } from "@/lib/useInventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
+import { useVisibleVehicles } from "@/data/useMerchandising";
 
 interface InventoryGridProps {
   /**
@@ -20,6 +21,9 @@ interface InventoryGridProps {
 function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) {
   const searchParams = useSearchParams();
   const { vehicles: liveVehicles, source, syncedAt } = useInventory();
+  // Filter out KV-hidden vehicles before any further processing.
+  // This is what makes the DMS "Hide from website" toggle work in real time.
+  const visibleLiveVehicles = useVisibleVehicles(liveVehicles);
 
   // Use live snapshot when present, otherwise stick with the SSR'd fallback.
   // Either way, run them through the same merchandising sort + availability
@@ -29,7 +33,7 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
     source === "fallback"
       ? fallbackVehicles
       : sortWithFeaturedFirst(
-          liveVehicles.filter((v) => v.status !== "sold")
+          visibleLiveVehicles.filter((v) => v.status !== "sold")
         );
 
   const filtered = useMemo(() => {
