@@ -270,6 +270,16 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           </span>
         </p>
 
+        {/* CarGurus Deal Rating Badge — replaced in-place by the async SDK.
+            Renders nothing until hydrated so there is zero layout shift. */}
+        {vehicle.vin && vehicle.price > 0 && (
+          <span
+            data-cg-vin={vehicle.vin}
+            data-cg-price={String(Math.round(vehicle.price))}
+            className="block mt-2"
+          />
+        )}
+
         {/* Spec chips — drivetrain + first 2 features */}
         <div className="flex flex-wrap gap-1.5 mt-3">
           {vehicle.drivetrain !== "FWD" && (

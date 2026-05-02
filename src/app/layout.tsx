@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TextUsButton from "@/components/TextUsButton";
@@ -89,6 +90,19 @@ export default function RootLayout({
         <Footer />
         <TextUsButton />
         <StickyCTA />
+        {/* CarGurus Deal Rating Badge SDK
+            Settings: style1, minRating=good, height=60, live=true,
+            liveInterval=500ms, showContactForm=true — configured by Jeremiah. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.cgAsyncInit=function(){CG.init({style:'style1',minRating:'good',height:60,live:true,liveInterval:500,showContactForm:true})};`,
+          }}
+        />
+        <Script
+          id="cg-badge-sdk"
+          src="https://www.cargurus.com/js/coshopper/cg-deal-rating-badge.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

@@ -262,6 +262,14 @@ export default async function VehicleDetailPage({
                     <p className="text-sm text-brand-gray-500 mt-1">
                       <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles · {vehicle.drivetrain}
                     </p>
+                    {/* CarGurus Deal Rating Badge — SDK replaces this span in-place */}
+                    {vehicle.vin && vehicle.price > 0 && (
+                      <span
+                        data-cg-vin={vehicle.vin}
+                        data-cg-price={String(Math.round(vehicle.price))}
+                        className="block mt-3"
+                      />
+                    )}
                   </div>
 
                   <VDPLiveStatus vin={vehicle.vin} fallback={vehicle.status} />
@@ -346,6 +354,14 @@ export default async function VehicleDetailPage({
               <p className="text-sm text-brand-gray-500 mt-1">
                 <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles · {vehicle.drivetrain} · {vehicle.exteriorColor}
               </p>
+              {/* CarGurus Deal Rating Badge — mobile */}
+              {vehicle.vin && vehicle.price > 0 && (
+                <span
+                  data-cg-vin={vehicle.vin}
+                  data-cg-price={String(Math.round(vehicle.price))}
+                  className="block mt-3"
+                />
+              )}
               {/* Mobile Show Carfax — inline next to the title so it's
                   impossible to miss. Client wrapper picks up runtime overlay
                   changes from the DMS panel without a site rebuild. */}
