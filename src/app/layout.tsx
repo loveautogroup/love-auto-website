@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Script from "next/script";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TextUsButton from "@/components/TextUsButton";
@@ -90,19 +90,29 @@ export default function RootLayout({
         <Footer />
         <TextUsButton />
         <StickyCTA />
-        {/* CarGurus Deal Rating Badge SDK
-            Settings: style1, minRating=good, height=60, live=true,
-            liveInterval=500ms, showContactForm=true — configured by Jeremiah. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.cgAsyncInit=function(){CG.init({style:'style1',minRating:'good',height:60,live:true,liveInterval:500,showContactForm:true})};`,
-          }}
-        />
-        <Script
-          id="cg-badge-sdk"
-          src="https://www.cargurus.com/js/coshopper/cg-deal-rating-badge.js"
-          strategy="afterInteractive"
-        />
+        {/* CarGurus Deal Rating Badge SDK — self-injecting IIFE.
+            Settings match Jeremiah's configurator: STYLE1, GOOD_PRICE minimum,
+            60px height, live updates every 500ms, showContactForm enabled. */}
+        <script dangerouslySetInnerHTML={{ __html: `
+var CarGurus=window.CarGurus||{};window.CarGurus=CarGurus;
+CarGurus.DealRatingBadge=window.CarGurus.DealRatingBadge||{};
+CarGurus.DealRatingBadge.options={
+  "style":"STYLE1",
+  "minRating":"GOOD_PRICE",
+  "showContactForm":true,
+  "debug":false,
+  "live":true,
+  "liveIntervalMS":"500",
+  "defaultHeight":"60"
+};
+(function(){
+  var s=document.createElement('script');
+  s.src="https://static.cargurus.com/js/api/en_US/1.0/dealratingbadge.js";
+  s.async=true;
+  var e=document.getElementsByTagName('script')[0];
+  e.parentNode.insertBefore(s,e);
+})();
+`}} />
       </body>
     </html>
   );
