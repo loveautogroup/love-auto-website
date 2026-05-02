@@ -26,7 +26,7 @@
  * HYDRATION NOTE: useState initializer must NOT touch sessionStorage.
  * Reading sessionStorage in the lazy initializer causes React error #418
  * because the server-rendered HTML is built against sampleInventory but
- * the client re-renders with cached live vehicles on first mount —
+ * the client re-renders with cached live vehicles on first mount --
  * server/client mismatch. Instead, we always start with sampleInventory
  * (matching the SSG output) and promote to cache/live inside useEffect.
  */
@@ -72,7 +72,7 @@ function readCache(): InventoryState | null {
 }
 
 export function useInventory(): InventoryState {
-  // Always initialise with sampleInventory — this matches the SSG output
+  // Always initialise with sampleInventory -- this matches the SSG output
   // exactly, so React hydration succeeds on every first load. Cache and
   // live data are promoted inside useEffect (browser-only, post-hydration).
   const [state, setState] = useState<InventoryState>({
@@ -92,20 +92,20 @@ export function useInventory(): InventoryState {
     const cached = readCache();
     if (cached) {
       setState(cached);
-      return; // cache is fresh — skip the network fetch
+      return; // cache is fresh -- skip the network fetch
     }
 
-    // Step 2: no fresh cache — fetch live inventory.
+    // Step 2: no fresh cache -- fetch live inventory.
     fetch("/api/inventory")
       .then(async (res) => {
         if (cancelled) return;
         if (res.status === 204) {
-          // KV empty — keep fallback. Not an error.
+          // KV empty -- keep fallback. Not an error.
           setState((s) => ({ ...s, loading: false, source: "fallback" }));
           return;
         }
         if (!res.ok) {
-          throw new Error(`HTTP ${res.status}`);
+          throw new Error("HTTP " + res.status);
         }
         const snapshot = (await res.json()) as InventorySnapshot;
         if (!Array.isArray(snapshot.vehicles) || snapshot.vehicles.length === 0) {
@@ -120,8 +120,36 @@ export function useInventory(): InventoryState {
             CACHE_KEY,
             JSON.stringify({ fetchedAt: Date.now(), snapshot })
           );
-        } catch {
-          // ignore — cache is best-effort
+        } catch (_e) {
+          // ignore -- cache is best-effort
         }
         setState({
-          vehicles: 
+          vehicles: adapted,
+          source: "live",
+          syncedAt: snapshot.syncedAt,
+          loading: false,
+          error: null,
+        });
+      })
+      .catch((err: Error) => {
+        if (cancelled) return;
+        // Keep fallback inventory; report the error so admins can see it
+        // in DevTools but don't break the UI.
+        console.warn("[useInventory] Live fetch failed; using fallback.", err);
+        setState((s) => ({
+          ...s,
+          loading: false,
+          error: err.message,
+          source: "fallback",
+        }));
+      });
+
+    return () => {
+      cancelled = true;
+    };
+    // We deliberately only re-run when source changes (effectively once).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return state;
+}
