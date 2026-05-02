@@ -324,7 +324,7 @@ export default function DuPageCountyPage() {
             Live from our Villa Park lot. Updated as vehicles are added or
             sold.
           </p>
-          <LivePreviewGrid limit={6} />
+          <LivePreviewGrid />
           <div className="mt-6 text-center">
             <Link
               href="/inventory"
@@ -390,3 +390,4 @@ export default function DuPageCountyPage() {
     </>
   );
 }
+          
