@@ -117,21 +117,21 @@ export default function AboutPage() {
                 name: "Jeremiah Johnson",
                 role: "Owner / Dealer Principal",
                 description:
-                  "Founded Love Auto Group in 2014. Runs the show from sourcing to sale. Hands-on, detail-oriented, and genuinely passionate about putting people in the right vehicle.",
+                  "Sole owner of Love Auto Group Inc. Founded the dealership in 2014 and runs it day to day, from sourcing and reconditioning to the final handshake. Hands-on, detail-oriented, and genuinely passionate about putting people in the right vehicle.",
               },
               {
                 id: "ivan",
                 name: "Ivan",
-                role: "Reconditioning",
+                role: "Reconditioning Partner",
                 description:
-                  "Keeps every vehicle on the lot in top shape. If it's not right, it doesn't go out.",
+                  "Outside reconditioning vendor we trust to keep every vehicle on the lot in top shape. If it's not right, it doesn't go out.",
               },
               {
                 id: "jimmy",
                 name: "Jimmy",
-                role: "Partner",
+                role: "Business Partner",
                 description:
-                  "Co-pilot from the beginning. Helps keep the operation running smooth and the standards high.",
+                  "Friend and business partner from the beginning. Helps keep the operation running smooth and the standards high. Not an equity owner; Love Auto Group Inc. is solely owned by Jeremiah.",
               },
             ].map((person) => (
               <div

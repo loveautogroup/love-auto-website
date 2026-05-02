@@ -148,7 +148,7 @@ export function PersonSchema() {
       name: SITE_CONFIG.name,
     },
     description:
-      "Owner and dealer principal of Love Auto Group, a family owned used car dealership in Villa Park, IL operating since 2014. Specialist in Japanese makes including Subaru, Lexus, Acura, Honda, Toyota, and Mazda.",
+      "Sole owner and dealer principal of Love Auto Group Inc., a family owned used car dealership in Villa Park, IL operating since 2014. Specialist in Japanese makes including Subaru, Lexus, Acura, Honda, Toyota, and Mazda.",
     url: `${SITE_CONFIG.url}/about/`,
   };
 

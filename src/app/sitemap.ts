@@ -88,6 +88,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // County hub — 2026-05-02, closes the AEO Q4 gap (every engine missed
     // us on "best used car dealer in DuPage County")
     { url: `${BASE}/serving/dupage-county-il/`,   lastModified: now, changeFrequency: "weekly",  priority: 0.85 },
+    // Buying guides — 2026-05-02, closes the AEO Q5 / Q6 gaps (every
+    // engine surfaces only franchise dealers on Subaru-near-Chicago and
+    // Lexus-in-Chicago-suburbs queries)
+    { url: `${BASE}/buying-guides/used-subaru-near-chicago/`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/buying-guides/used-lexus-dupage-county/`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     // Differentiator landing
     { url: `${BASE}/free-carfax-villa-park/`,  lastModified: now, changeFrequency: "monthly", priority: 0.7 },
   ];
