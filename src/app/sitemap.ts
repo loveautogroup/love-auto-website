@@ -80,11 +80,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/brands/mazda/`,            lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${BASE}/brands/toyota/`,           lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     // Service areas — adjacent towns within 10 miles
-    { url: `${BASE}/serving/lombard-il/`,      lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE}/serving/elmhurst-il/`,     lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE}/serving/oak-brook-il/`,    lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE}/serving/glen-ellyn-il/`,   lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE}/serving/addison-il/`,      lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/serving/lombard-il/`,         lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/serving/elmhurst-il/`,        lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/serving/oak-brook-il/`,       lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/serving/glen-ellyn-il/`,      lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/serving/addison-il/`,         lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    // County hub — 2026-05-02, closes the AEO Q4 gap (every engine missed
+    // us on "best used car dealer in DuPage County")
+    { url: `${BASE}/serving/dupage-county-il/`,   lastModified: now, changeFrequency: "weekly",  priority: 0.85 },
     // Differentiator landing
     { url: `${BASE}/free-carfax-villa-park/`,  lastModified: now, changeFrequency: "monthly", priority: 0.7 },
   ];

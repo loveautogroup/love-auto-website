@@ -2,11 +2,66 @@ import { SITE_CONFIG } from "@/lib/constants";
 import { Vehicle } from "@/lib/types";
 
 export function LocalBusinessSchema() {
+  // Schema upgraded 2026-05-02 (AEO audit follow-up). Added:
+  //   - description: gives engines a clean quotable sentence with
+  //     "family owned" + Japanese specialty + service area baked in.
+  //     Closes the Google AI Overview Q8 miss on "family owned"
+  //     and reinforces the Q5/Q6 brand-near-Chicago positioning.
+  //   - foundingDate: 2014. Closes the Claude.ai factual error
+  //     ("operating since 2018"); locks in correct founding year
+  //     for every engine that reads schema.
+  //   - founder: Person ref to Jeremiah. Pairs with the Person schema
+  //     on the About page so engines can resolve "who owns Love Auto
+  //     Group" cleanly. Closes the Gemini "Partner: Jimmy" hallucination.
+  //   - slogan: short owner-voice tagline that engines can lift verbatim.
+  //   - areaServed: explicit DuPage County + city list. Closes the Q4
+  //     county-level content gap as a structured signal in addition to
+  //     the new /serving/dupage-county-il/ page.
+  //   - knowsAbout: brand specialty list. Reinforces Q5/Q6 brand-near-
+  //     Chicago answers because engines can see we work specifically on
+  //     these makes, not generic "any used car."
   const schema = {
     "@context": "https://schema.org",
     "@type": "AutoDealer",
     "@id": `${SITE_CONFIG.url}/#dealership`,
     name: SITE_CONFIG.name,
+    legalName: "Love Auto Group Inc.",
+    description:
+      "Family owned used car dealer in Villa Park, IL since 2014. Specialists in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Serving DuPage County and the western Chicago suburbs.",
+    slogan: "Family owned in Villa Park, IL since 2014",
+    foundingDate: "2014",
+    founder: {
+      "@type": "Person",
+      "@id": `${SITE_CONFIG.url}/about/#jeremiah-johnson`,
+      name: "Jeremiah Johnson",
+    },
+    knowsAbout: [
+      "Used Subaru",
+      "Used Lexus",
+      "Used Acura",
+      "Used Honda",
+      "Used Toyota",
+      "Used Mazda",
+      "All-Wheel Drive vehicles",
+      "Japanese used cars",
+      "Carfax vehicle history reports",
+    ],
+    areaServed: [
+      {
+        "@type": "AdministrativeArea",
+        name: "DuPage County, Illinois",
+      },
+      { "@type": "City", name: "Villa Park, IL" },
+      { "@type": "City", name: "Lombard, IL" },
+      { "@type": "City", name: "Elmhurst, IL" },
+      { "@type": "City", name: "Oak Brook, IL" },
+      { "@type": "City", name: "Glen Ellyn, IL" },
+      { "@type": "City", name: "Addison, IL" },
+      { "@type": "City", name: "Wheaton, IL" },
+      { "@type": "City", name: "Naperville, IL" },
+      { "@type": "City", name: "Hinsdale, IL" },
+      { "@type": "City", name: "Bloomingdale, IL" },
+    ],
     url: SITE_CONFIG.url,
     telephone: SITE_CONFIG.phone,
     email: SITE_CONFIG.email,
@@ -45,7 +100,7 @@ export function LocalBusinessSchema() {
     },
     priceRange: "$4,500–$18,000",
     image: `${SITE_CONFIG.url}/images/storefront.jpg`,
-    // Sam's notes: AggregateRating uses real Google Business profile data
+    // AggregateRating uses real Google Business profile data
     // (rating + count from SITE_CONFIG.reviews.google). Update via Google
     // Places API sync in a future revision.
     aggregateRating: {
@@ -59,6 +114,42 @@ export function LocalBusinessSchema() {
       SITE_CONFIG.social.facebook,
       SITE_CONFIG.social.google,
     ],
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+/**
+ * PersonSchema — Jeremiah Johnson, owner / dealer principal.
+ *
+ * Added 2026-05-02 to lock in correct ownership data after the AEO audit
+ * caught Gemini hallucinating "Partner: Jimmy" and Claude.ai mis-stating
+ * the founding year. Use on the About page (and only there — Person
+ * schema on every page is overkill and dilutes the signal).
+ *
+ * The @id matches `founder` in LocalBusinessSchema so engines can
+ * resolve the cross-reference cleanly.
+ */
+export function PersonSchema() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${SITE_CONFIG.url}/about/#jeremiah-johnson`,
+    name: "Jeremiah Johnson",
+    jobTitle: "Owner / Dealer Principal",
+    worksFor: {
+      "@type": "AutoDealer",
+      "@id": `${SITE_CONFIG.url}/#dealership`,
+      name: SITE_CONFIG.name,
+    },
+    description:
+      "Owner and dealer principal of Love Auto Group, a family owned used car dealership in Villa Park, IL operating since 2014. Specialist in Japanese makes including Subaru, Lexus, Acura, Honda, Toyota, and Mazda.",
+    url: `${SITE_CONFIG.url}/about/`,
   };
 
   return (

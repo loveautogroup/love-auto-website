@@ -1,24 +1,31 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
+import { PersonSchema } from "@/components/StructuredData";
 
 export const metadata: Metadata = {
   title: "About Love Auto Group, Family Owned in Villa Park IL",
   description:
-    "Family owned in Villa Park, IL since 2014. We specialize in quality Japanese used cars, every one carefully selected, fully reconditioned, and inspected.",
+    "Family owned in Villa Park, IL since 2014. Owner Jeremiah Johnson. We specialize in quality Japanese used cars, every one carefully selected, fully reconditioned, and inspected.",
   alternates: { canonical: "https://www.loveautogroup.net/about" },
 };
 
 export default function AboutPage() {
   return (
     <>
+      {/* Person schema for Jeremiah — added 2026-05-02 to lock in
+          ownership data after the AEO audit caught Gemini hallucinating
+          "Partner: Jimmy" and Claude.ai mis-stating the founding year. */}
+      <PersonSchema />
+
       <section className="bg-brand-navy text-white py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold">
             About Love Auto Group
           </h1>
           <p className="mt-4 text-lg text-brand-gray-300">
-            Family owned in Villa Park, IL since {SITE_CONFIG.established}
+            Family owned in Villa Park, IL since {SITE_CONFIG.established}.
+            Owner: Jeremiah Johnson.
           </p>
         </div>
       </section>
@@ -106,18 +113,21 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               {
-                name: "Jeremiah",
+                id: "jeremiah-johnson",
+                name: "Jeremiah Johnson",
                 role: "Owner / Dealer Principal",
                 description:
-                  "Runs the show from sourcing to sale. Hands-on, detail-oriented, and genuinely passionate about putting people in the right vehicle.",
+                  "Founded Love Auto Group in 2014. Runs the show from sourcing to sale. Hands-on, detail-oriented, and genuinely passionate about putting people in the right vehicle.",
               },
               {
+                id: "ivan",
                 name: "Ivan",
                 role: "Reconditioning",
                 description:
                   "Keeps every vehicle on the lot in top shape. If it's not right, it doesn't go out.",
               },
               {
+                id: "jimmy",
                 name: "Jimmy",
                 role: "Partner",
                 description:
@@ -125,8 +135,9 @@ export default function AboutPage() {
               },
             ].map((person) => (
               <div
-                key={person.name}
-                className="bg-white rounded-xl border border-brand-gray-200 overflow-hidden"
+                key={person.id}
+                id={person.id}
+                className="bg-white rounded-xl border border-brand-gray-200 overflow-hidden scroll-mt-20"
               >
                 <div className="aspect-square bg-brand-gray-100 flex items-center justify-center">
                   <svg
