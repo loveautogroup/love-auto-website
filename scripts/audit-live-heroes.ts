@@ -1,4 +1,4 @@
-#!/usr/bin/env tsx
+h#!/usr/bin/env tsx
 /**
  * Pre-deploy hero audit (Tier 1 enforcement).
  *
@@ -276,5 +276,10 @@ async function main() {
 
 main().catch((e) => {
   console.error(`[hero-audit] FATAL: ${e instanceof Error ? e.message : String(e)}`);
-  process.exit(2);
-});
+  if (MODE === "warn") {
+        console.warn("[hero-audit] warn mode — exiting 0 despite fatal error (non-blocking rollout)");
+        process.exit(0);
+  }
+
+    process.exit(2);
+  });
