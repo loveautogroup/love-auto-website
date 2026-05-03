@@ -72,6 +72,13 @@ export const onRequestOptions: PagesFunction = async () =>
 function renderGoogleCsv(vehicles: FeedVehicle[]): string {
   const headers = [
     // Required
+    // Merchant Center Next runs every product feed through the universal
+    // Shopping parser first, which requires `id` even for Vehicle Listings
+    // sources. We also keep `vehicle_id` for the standalone Google Vehicle
+    // Listings spec consumers. Both columns hold the same value (v.id).
+    // Discovered 2026-05-03 after Merchant Center rejected all 9 vehicles
+    // with: "Invalid or missing required attribute: id".
+    "id",
     "vehicle_id",
     "store_code",
     "make",
@@ -126,7 +133,8 @@ function renderGoogleCsv(vehicles: FeedVehicle[]): string {
     const availability = "in stock";
 
     return [
-      v.id, // vehicle_id
+      v.id, // id (Shopping spec required field)
+      v.id, // vehicle_id (Vehicle Listings spec required field — same value)
       DEALER.id, // store_code (must match Merchant Center store)
       v.make,
       v.model,
