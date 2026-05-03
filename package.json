@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "tsx scripts/validate-photo-order.ts",
+    "prebuild": "tsx scripts/validate-photo-order.ts && tsx scripts/audit-live-heroes.ts --warn",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "validate:photos": "tsx scripts/validate-photo-order.ts",
-    "classify:photos": "tsx scripts/classify-photos.ts"
+    "classify:photos": "tsx scripts/classify-photos.ts",
+    "audit:heroes": "tsx scripts/audit-live-heroes.ts",
+    "audit:heroes-html": "tsx scripts/generate-hero-audit-html.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -26,12 +28,4 @@
     "@cloudflare/workers-types": "^4.20260420.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.4",
-    "tailwindcss": "^4",
-    "tsx": "^4.21.0",
-    "typescript": "^5"
-  }
-}
+    "@types/react": "^1
