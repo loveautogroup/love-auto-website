@@ -1,4 +1,4 @@
-h#!/usr/bin/env tsx
+#!/usr/bin/env tsx
 /**
  * Pre-deploy hero audit (Tier 1 enforcement).
  *
