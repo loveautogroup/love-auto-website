@@ -219,7 +219,10 @@ async function fetchDms(): Promise<InventorySnapshot | null> {
     }
     const vehicles = json.data
       .filter((v) => v && v.vin && v.year && v.make && v.model)
-      .map(adaptDmsVehicle);
+      .map(adaptDmsVehicle)
+      // Only surface vehicles Jeremiah has explicitly marked Listed (available)
+      // or Sale Pending. Coming Soon / In Recon vehicles stay off the public site.
+      .filter((v) => v.status === "available" || v.status === "sale-pending");
     return {
       syncedAt: new Date().toISOString(),
       syncedBy: "live-dms",
