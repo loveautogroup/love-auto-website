@@ -170,40 +170,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Vehicles */}
-      <section className="max-w-7xl mx-auto px-4 py-16" aria-labelledby="featured-heading">
-        <div className="text-center mb-10">
-          <h2 id="featured-heading" className="text-3xl font-bold text-brand-gray-900">
-            Featured Vehicles
-          </h2>
-          <p className="mt-2 text-brand-gray-500">
-            Hand-picked from our inventory, inspected and ready to drive
-          </p>
-        </div>
-        <HomeFeaturedGrid />
-        <div className="text-center mt-10">
-          <Link
-            href="/inventory"
-            className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3 rounded-xl font-semibold transition-colors"
-          >
-            View All Inventory
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="ml-2 w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-          </Link>
-        </div>
-      </section>
+      {/* Featured Vehicles — self-hides when nothing is featured in KV */}
+      <HomeFeaturedGrid />
 
       {/* On the Lot Now â€” horizontal scroll carousel */}
       <section className="bg-brand-navy py-12" aria-labelledby="lot-heading">
@@ -436,3 +404,4 @@ export default function HomePage() {
     </>
   );
 }
+

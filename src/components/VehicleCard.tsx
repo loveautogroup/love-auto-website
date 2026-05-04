@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Vehicle } from "@/lib/types";
@@ -137,6 +137,19 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   // empty-state SVG by clearing heroSrc. Local state so the swap
   // survives re-render.
   const [heroSrc, setHeroSrc] = useState<string>(initialHero);
+
+  // Sync heroSrc when forcePlaceholder changes after KV hydrates.
+  // useState(initialHero) only runs on mount — if the KV config loads
+  // after the component mounts, the toggle flip from false → true
+  // was previously silently ignored. This effect keeps heroSrc in sync.
+  useEffect(() => {
+    setHeroSrc(
+      forcePlaceholder
+        ? COMING_SOON_PLACEHOLDER
+        : (heroOverride ?? orderedImages[0] ?? "")
+    );
+  }, [forcePlaceholder]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const heroImage = heroSrc;
   // Render the <Image> only when there's a real source. Empty string
   // means "no photo, no placeholder" → fall through to the SVG branch.
