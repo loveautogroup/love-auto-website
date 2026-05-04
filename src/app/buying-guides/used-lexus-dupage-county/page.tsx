@@ -168,8 +168,8 @@ export default function UsedLexusDuPageCountyPage() {
           <p>
             Love Auto Group is family owned, has operated in Villa Park
             since 2014, and specializes in Japanese makes. Lexus is one
-            of the makes we know best. Owner Jeremiah Johnson personally
-            inspects every vehicle before it goes on the lot.
+            of the makes we know best. Every vehicle is personally
+            inspected by the owner before it goes on the lot.
           </p>
 
           <h2>The Value Sweet Spot: 2010 to 2017 Lexus</h2>
@@ -419,3 +419,4 @@ export default function UsedLexusDuPageCountyPage() {
     </>
   );
 }
+      
