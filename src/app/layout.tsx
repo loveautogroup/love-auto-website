@@ -92,7 +92,16 @@ export default function RootLayout({
         <StickyCTA />
         {/* CarGurus Deal Rating Badge SDK — self-injecting IIFE.
             Settings match Jeremiah's configurator: STYLE1, GOOD_PRICE minimum,
-            60px height, live updates every 500ms, showContactForm enabled. */}
+            60px height, live updates every 500ms, showContactForm enabled.
+
+            SEC-M6 (Sam, 2026-05-05): Subresource Integrity (SRI). The
+            integrity hash below is the SHA-384 of the upstream bundle as
+            of this commit. CarGurus occasionally rotates the file, which
+            will cause the browser to reject the load — when that happens
+            the badge silently disappears (acceptable graceful degradation)
+            and CI's `re-pin-cargurus-sri.yml` workflow re-pins the hash
+            on its next run. crossOrigin="anonymous" is required for the
+            integrity check to apply against a cross-origin response. */}
         <script dangerouslySetInnerHTML={{ __html: `
 var CarGurus=window.CarGurus||{};window.CarGurus=CarGurus;
 CarGurus.DealRatingBadge=window.CarGurus.DealRatingBadge||{};
@@ -109,6 +118,8 @@ CarGurus.DealRatingBadge.options={
   var s=document.createElement('script');
   s.src="https://static.cargurus.com/js/api/en_US/1.0/dealratingbadge.js";
   s.async=true;
+  s.integrity="sha384-lcY+u0y7nRPriRojg1b26zCQqDRbf8R2Rf+Yxm+bkIZhw5hAydMokFwTBLywCVR+";
+  s.crossOrigin="anonymous";
   var e=document.getElementsByTagName('script')[0];
   e.parentNode.insertBefore(s,e);
 })();
