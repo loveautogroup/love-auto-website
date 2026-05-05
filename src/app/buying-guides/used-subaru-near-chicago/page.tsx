@@ -68,8 +68,9 @@ const FAQS = [
 export const metadata: Metadata = {
   title:
     "Where to Buy a Used Subaru Near Chicago | Love Auto Group, Villa Park IL",
+  // 2026-05-05 — trimmed from 248 to 154 chars per Charlotte SEO audit (≤160 SERP rule).
   description:
-    "Used Subaru Forester, Outback, and Crosstrek near Chicago. Family owned independent dealer in Villa Park, IL serving DuPage County and the western suburbs since 2014. Value sweet spot 2014 to 2018 models, $9,000 to $15,000. Free Carfax. (630) 359-3643.",
+    "Used Subaru Forester, Outback, and Crosstrek near Chicago. Family owned independent dealer in Villa Park, IL serving DuPage County since 2014. Free Carfax.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Where to Buy a Used Subaru Near Chicago | Love Auto Group",
@@ -428,4 +429,3 @@ export default function UsedSubaruNearChicagoPage() {
     </>
   );
 }
-      

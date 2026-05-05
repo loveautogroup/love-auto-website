@@ -19,6 +19,10 @@ export default function robots(): MetadataRoute.Robots {
           // anyway, but no reason to invite crawlers in.
           "/admin",
           "/admin/",
+          // 2026-05-05 — block /api/ explicitly. Pages Functions live under
+          // this prefix and never want to be indexed (Charlotte SEO audit).
+          "/api/",
+          "/api/*",
           // Block query-string filter variants of /inventory. The static
           // export serves the same HTML regardless of filter params, so
           // letting Google crawl them just wastes crawl budget on duplicate

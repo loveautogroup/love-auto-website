@@ -103,8 +103,9 @@ const BRANDS = [
 export const metadata: Metadata = {
   title:
     "Used Car Dealer in DuPage County, IL | Family Owned | Love Auto Group",
+  // 2026-05-05 — trimmed from 234 to 158 chars per Charlotte SEO audit (≤160 SERP rule).
   description:
-    "Family owned used car dealer in DuPage County, IL. Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Serving Villa Park, Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, and Naperville since 2014. Free Carfax. (630) 359-3643.",
+    "Family owned used car dealer in DuPage County, IL. Used Subaru, Lexus, Acura, Honda, Toyota, and Mazda in Villa Park since 2014. Free Carfax. (630) 359-3643.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Used Car Dealer in DuPage County, IL | Love Auto Group",
@@ -390,4 +391,3 @@ export default function DuPageCountyPage() {
     </>
   );
 }
-                                      

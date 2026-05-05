@@ -68,8 +68,9 @@ const FAQS = [
 export const metadata: Metadata = {
   title:
     "Where to Buy a Used Lexus in DuPage County | Love Auto Group, Villa Park IL",
+  // 2026-05-05 — trimmed from 219 to 156 chars per Charlotte SEO audit (≤160 SERP rule).
   description:
-    "Used Lexus RX 350, ES, IS, and GX in DuPage County. Family owned independent dealer in Villa Park, IL serving the Chicago suburbs since 2014. Value sweet spot 2010 to 2017, $12,000 to $19,000. Free Carfax. (630) 359-3643.",
+    "Used Lexus RX 350, ES, IS, and GX in DuPage County. Family owned independent dealer in Villa Park, IL serving the Chicago suburbs since 2014. Free Carfax.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Where to Buy a Used Lexus in DuPage County | Love Auto Group",
@@ -419,4 +420,3 @@ export default function UsedLexusDuPageCountyPage() {
     </>
   );
 }
-      

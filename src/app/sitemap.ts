@@ -41,6 +41,20 @@ const BASE = "https://www.loveautogroup.net";
 // DEAL_PENDING → "sale-pending").
 const INDEXABLE_STATUSES = new Set(["available", "sale-pending"]);
 
+// 2026-05-05 — defense-in-depth deny list for known-dead VDP slugs that
+// somehow leaked into the live sitemap. These are old DMS vehicles
+// (Prisma IDs 7, 9, 12) that have been sold but their slugs were sticky
+// in the build artifact. Each returned HTTP 200 with the homepage HTML
+// (canonical=/), wasting Google crawl budget on duplicate content. The
+// next build that fetches `live` from DMS will naturally drop them, but
+// this filter is cheap insurance against future build-cache surprises.
+// Source: marketing-audit-2026-05-05/seo-audit.md.
+const KNOWN_DEAD_SLUGS = new Set<string>([
+  "2019-subaru-crosstrek-2-0i-limited-12",
+  "2014-lincoln-mkz-hybrid-9",
+  "2017-chrysler-pacifica-touring-l-plus-7",
+]);
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
@@ -93,6 +107,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Lexus-in-Chicago-suburbs queries)
     { url: `${BASE}/buying-guides/used-subaru-near-chicago/`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/buying-guides/used-lexus-dupage-county/`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    // 2026-05-05 — closes the AEO Q8 gap (engines were returning JDM importers
+    // for "Japanese car dealer near Chicago" instead of independent US-market dealers)
+    { url: `${BASE}/buying-guides/independent-japanese-makes-dealer-chicago/`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     // Differentiator landing
     { url: `${BASE}/free-carfax-villa-park/`,  lastModified: now, changeFrequency: "monthly", priority: 0.7 },
   ];
@@ -115,10 +132,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   for (const v of sampleInventory) {
     if (!INDEXABLE_STATUSES.has(v.status)) continue;
+    if (KNOWN_DEAD_SLUGS.has(v.slug)) continue;
     slugMap.set(v.slug, { lastModified: now });
   }
   for (const v of live) {
     if (!INDEXABLE_STATUSES.has(v.status)) continue;
+    if (KNOWN_DEAD_SLUGS.has(v.slug)) continue;
     let stamp = now;
     if (v.dateInStock) {
       const d = new Date(v.dateInStock);

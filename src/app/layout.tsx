@@ -56,6 +56,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    // 2026-05-05 — added site/creator handles per Charlotte SEO audit.
+    // X/Twitter is not a primary channel for us, but having the handles
+    // wired makes the cards parse cleanly for any engine that reads them.
+    site: "@loveautogroup",
+    creator: "@loveautogroup",
     title: "Quality Used Cars in Villa Park, IL | Love Auto Group",
     description:
       "Family owned used car dealership in Villa Park, IL since 2014. Quality Japanese vehicles, carefully selected and fully reconditioned.",
