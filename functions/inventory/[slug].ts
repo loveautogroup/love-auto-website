@@ -87,6 +87,17 @@ function isComingSoon(status: string | null | undefined): boolean {
   );
 }
 
+function isAvailable(status: string | null | undefined): boolean {
+  const s = (status ?? "").toLowerCase().trim();
+  return (
+    s === "available" ||
+    s === "retail_ready" ||
+    s === "listed" ||
+    s === "sale pending" ||
+    s === "deal_pending"
+  );
+}
+
 function formatCurrency(n: number | null | undefined): string {
   if (!n || n === 0) return "Call for price";
   return new Intl.NumberFormat("en-US", {
@@ -110,6 +121,7 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
   const heroUrl =
     v.photos?.find((p) => p.isPrimary)?.url ?? v.photos?.[0]?.url ?? "";
   const canonicalUrl = `https://www.loveautogroup.net/inventory/${slug}/`;
+  const available = isAvailable(v.status);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -198,7 +210,7 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
             ? `<img src="${heroUrl}" alt="${title}" loading="eager" />`
             : `<div class="photo-placeholder"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z"/></svg></div>`
         }
-        <span class="coming-soon-badge">COMING SOON</span>
+        <span class="coming-soon-badge">${available ? "AVAILABLE NOW" : "COMING SOON"}</span>
       </div>
 
       <div class="info">
@@ -208,16 +220,18 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
         <div class="chips">
           ${mileage ? `<span class="chip">${mileage}</span>` : ""}
           ${color ? `<span class="chip">${color}</span>` : ""}
-          <span class="chip">In Reconditioning</span>
+          <span class="chip">${available ? "Available" : "In Reconditioning"}</span>
         </div>
 
         <p class="price">${price}</p>
 
         <div class="cta-box">
-          <p class="cta-title">This vehicle is being prepared for sale</p>
+          <p class="cta-title">${available ? "Ready to make a deal?" : "This vehicle is being prepared for sale"}</p>
           <p class="cta-body">
-            We're finishing up reconditioning on this ${v.year} ${make} ${model}.
-            Contact us to get first dibs — we'll reach out the moment it's lot-ready.
+            ${available
+              ? `This ${v.year} ${make} ${model} is available now on our lot in Villa Park, IL. Call or text us to schedule a test drive.`
+              : `We're finishing up reconditioning on this ${v.year} ${make} ${model}. Contact us to get first dibs — we'll reach out the moment it's lot-ready.`
+            }
           </p>
           <div class="cta-buttons">
             <a class="btn btn-primary" href="tel:+16303593643">
@@ -267,21 +281,4 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     const match = vehicles.find((v) => vehicleSlug(v) === slug);
     if (!match) return staticResponse; // Truly doesn't exist — serve 404
 
-    // Only render Coming Soon pages for IN_RECON vehicles.
-    // Available / sale-pending vehicles should always have a static VDP.
-    if (!isComingSoon(match.status)) return staticResponse;
-
-    const html = renderComingSoonPage(match, slug);
-    return new Response(html, {
-      status: 200,
-      headers: {
-        "Content-Type": "text/html;charset=UTF-8",
-        // Short cache so the page updates when the vehicle goes retail-ready.
-        "Cache-Control": "public, max-age=60, s-maxage=60",
-      },
-    });
-  } catch {
-    // DMS unreachable — fall through to the static 404
-    return staticResponse;
-  }
-};
+    // Render a bridge page for any vehi
