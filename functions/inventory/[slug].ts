@@ -282,4 +282,31 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     if (!res.ok) return staticResponse;
 
     const json = (await res.json()) as { data?: DmsVehicle[] };
-    const vehicles = Array.is
+    const vehicles = Array.isArray(json.data) ? json.data : [];
+
+    // Find the vehicle whose computed slug matches the requested slug.
+    const match = vehicles.find((v) => vehicleSlug(v) === slug);
+    if (!match) return staticResponse; // Truly doesn't exist — serve 404
+
+    // Render a bridge page for any vehicle found in the API.
+    // Available vehicles get here when they were listed after the last CF Pages
+    // build (race condition). IN_RECON vehicles get a Coming Soon page.
+    // Any other status falls through to 404.
+    if (!isComingSoon(match.status) && !isAvailable(match.status)) {
+      return staticResponse;
+    }
+
+    const html = renderComingSoonPage(match, slug);
+    return new Response(html, {
+      status: 200,
+      headers: {
+        "Content-Type": "text/html;charset=UTF-8",
+        // Short cache so the page updates when the vehicle goes retail-ready.
+        "Cache-Control": "public, max-age=60, s-maxage=60",
+      },
+    });
+  } catch {
+    // DMS unreachable — fall through to the static 404
+    return staticResponse;
+  }
+};
