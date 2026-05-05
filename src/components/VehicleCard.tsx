@@ -122,11 +122,10 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const noPhotosAnywhere = !hasRealImage && !liveHasImages;
 
   // Per-vehicle toggle (DMS merchandising panel) — when on, force the
-  // branded Coming Soon placeholder as the hero. This is an explicit
-  // opt-in per vehicle. The previous AUTO-fallback for "no photos
-  // anywhere" was removed: cars without pictures now render the
-  // empty-state SVG instead of the branded placeholder.
-  const forcePlaceholder = overlay.useComingSoonPlaceholder === true;
+  // branded Coming Soon placeholder as the hero. Also auto-applies when
+  // the vehicle has no photos anywhere so the grid never shows an empty box.
+  const forcePlaceholder =
+    overlay.useComingSoonPlaceholder === true || noPhotosAnywhere;
 
   const initialHero = forcePlaceholder
     ? COMING_SOON_PLACEHOLDER
@@ -317,3 +316,4 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     </article>
   );
 }
+                                                                                    

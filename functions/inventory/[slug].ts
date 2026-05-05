@@ -118,10 +118,17 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
     ? new Intl.NumberFormat("en-US").format(v.mileage) + " mi"
     : "";
   const color = v.exteriorColor ?? "";
-  const heroUrl =
-    v.photos?.find((p) => p.isPrimary)?.url ?? v.photos?.[0]?.url ?? "";
-  const canonicalUrl = `https://www.loveautogroup.net/inventory/${slug}/`;
   const available = isAvailable(v.status);
+  const vehiclePhotoUrl =
+    v.photos?.find((p) => p.isPrimary)?.url ?? v.photos?.[0]?.url ?? "";
+  // For coming-soon / in-recon vehicles with no photos, use the branded
+  // coming-soon placeholder rather than leaving the frame empty.
+  const heroUrl = vehiclePhotoUrl
+    ? vehiclePhotoUrl
+    : available
+    ? ""
+    : "https://www.loveautogroup.net/images/coming-soon.png";
+  const canonicalUrl = `https://www.loveautogroup.net/inventory/${slug}/`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -275,10 +282,4 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     if (!res.ok) return staticResponse;
 
     const json = (await res.json()) as { data?: DmsVehicle[] };
-    const vehicles = Array.isArray(json.data) ? json.data : [];
-
-    // Find the vehicle whose computed slug matches the requested slug.
-    const match = vehicles.find((v) => vehicleSlug(v) === slug);
-    if (!match) return staticResponse; // Truly doesn't exist — serve 404
-
-    // Render a bridge page for any vehi
+    const vehicles = Array.is
