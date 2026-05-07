@@ -29,14 +29,8 @@ export const SITE_CONFIG = {
   },
   reviews: {
     google: {
-      // 2026-05-05 — bumped to 126 to match live Places API. Source of truth:
-      // dms.loveautogroup.net/api/v1/public/reputation/summary (Anna's GBP
-      // sync). Drift only grows; until we wire build-time fetch into
-      // StructuredData.tsx, this hand-bumped value drives AggregateRating.
-      // Follow-up (Charlotte): add a `prebuild` script that hits the Railway
-      // reputation endpoint and writes a JSON cache that constants.ts imports.
       rating: 4.7,
-      count: 126,
+      count: 125,
       readUrl: "https://g.page/loveautogroup",
       writeUrl: "https://g.page/loveautogroup/review",
     },

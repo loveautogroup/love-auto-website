@@ -30,6 +30,11 @@ export function LocalBusinessSchema() {
       "Family owned used car dealer in Villa Park, IL since 2014. Specialists in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Serving DuPage County and the western Chicago suburbs.",
     slogan: "Family owned in Villa Park, IL since 2014",
     foundingDate: "2014",
+    founder: {
+      "@type": "Person",
+      "@id": `${SITE_CONFIG.url}/about/#jeremiah-johnson`,
+      name: "Jeremiah Johnson",
+    },
     knowsAbout: [
       "Used Subaru",
       "Used Lexus",

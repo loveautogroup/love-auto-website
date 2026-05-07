@@ -44,7 +44,7 @@ const FAQS = [
   {
     question: "Are you a family owned dealer?",
     answer:
-      "Yes. Love Auto Group is family owned and has been operating in Villa Park since 2014. We are a small specialist team, not a corporate franchise group. The owner is involved in every deal and personally signs off on the inspection and recondition of every vehicle that goes on the lot.",
+      "Yes. Love Auto Group is family owned and has been operating in Villa Park since 2014. We are a small specialist team, not a corporate franchise group. The owner, Jeremiah Johnson, is involved in every deal and personally signs off on the inspection and recondition of every vehicle that goes on the lot.",
   },
   {
     question: "Why buy from a small DuPage County dealer instead of a big-name lot?",
@@ -103,9 +103,8 @@ const BRANDS = [
 export const metadata: Metadata = {
   title:
     "Used Car Dealer in DuPage County, IL | Family Owned | Love Auto Group",
-  // 2026-05-05 — trimmed from 234 to 158 chars per Charlotte SEO audit (≤160 SERP rule).
   description:
-    "Family owned used car dealer in DuPage County, IL. Used Subaru, Lexus, Acura, Honda, Toyota, and Mazda in Villa Park since 2014. Free Carfax. (630) 359-3643.",
+    "Family owned used car dealer in DuPage County, IL. Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Serving Villa Park, Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, and Naperville since 2014. Free Carfax. (630) 359-3643.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Used Car Dealer in DuPage County, IL | Love Auto Group",
@@ -241,9 +240,9 @@ export default function DuPageCountyPage() {
           Love Auto Group is a family owned used car dealer at 735 N Yale Ave in
           Villa Park, IL, central to all of DuPage County and the western
           Chicago suburbs. We&apos;re a small specialist team, not a corporate
-          franchise group. The owner is involved in every deal and personally
-          signs off on the inspection and recondition of every vehicle that
-          goes on the lot.
+          franchise group. The owner, Jeremiah Johnson, is involved in every
+          deal and personally signs off on the inspection and recondition of
+          every vehicle that goes on the lot.
         </p>
         <p className="text-brand-gray-700 leading-relaxed mb-4">
           Our specialty is Japanese makes, the cars built to run past 200,000

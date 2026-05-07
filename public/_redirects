@@ -60,6 +60,18 @@
 /parts                       /                                 301
 /specials                    /inventory/                       301
 
+# ─── Print views (CarsForSale-era artifacts) ────────────────────────
+# Old auto-CMS emitted /print/{stocknum} and /print/vehicle/{vin} for
+# print-friendly VDPs. Those routes don't exist on this Next.js build
+# and were previously blocked in robots.txt — but Google had old index
+# entries that kept failing "validate fix" forever (the validator
+# requires the URL to be reachable). 301 to inventory index so the
+# legacy URL deindexes cleanly and any residual link equity consolidates.
+# 2026-05-07 — Charlotte.
+/print                       /inventory/                       301
+/print/                      /inventory/                       301
+/print/*                     /inventory/                       301
+
 # ─── Blog routes (parked Apr 2026) ──────────────────────────────────
 # Blog removed from public site but content preserved in src/data/blog.ts.
 # Any inbound link to a blog post lands on /inventory rather than 404.

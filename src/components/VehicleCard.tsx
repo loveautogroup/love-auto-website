@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Vehicle } from "@/lib/types";
@@ -122,10 +122,11 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const noPhotosAnywhere = !hasRealImage && !liveHasImages;
 
   // Per-vehicle toggle (DMS merchandising panel) — when on, force the
-  // branded Coming Soon placeholder as the hero. Also auto-applies when
-  // the vehicle has no photos anywhere so the grid never shows an empty box.
-  const forcePlaceholder =
-    overlay.useComingSoonPlaceholder === true || noPhotosAnywhere;
+  // branded Coming Soon placeholder as the hero. This is an explicit
+  // opt-in per vehicle. The previous AUTO-fallback for "no photos
+  // anywhere" was removed: cars without pictures now render the
+  // empty-state SVG instead of the branded placeholder.
+  const forcePlaceholder = overlay.useComingSoonPlaceholder === true;
 
   const initialHero = forcePlaceholder
     ? COMING_SOON_PLACEHOLDER
@@ -136,19 +137,6 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   // empty-state SVG by clearing heroSrc. Local state so the swap
   // survives re-render.
   const [heroSrc, setHeroSrc] = useState<string>(initialHero);
-
-  // Sync heroSrc when forcePlaceholder changes after KV hydrates.
-  // useState(initialHero) only runs on mount — if the KV config loads
-  // after the component mounts, the toggle flip from false → true
-  // was previously silently ignored. This effect keeps heroSrc in sync.
-  useEffect(() => {
-    setHeroSrc(
-      forcePlaceholder
-        ? COMING_SOON_PLACEHOLDER
-        : (heroOverride ?? orderedImages[0] ?? "")
-    );
-  }, [forcePlaceholder]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const heroImage = heroSrc;
   // Render the <Image> only when there's a real source. Empty string
   // means "no photo, no placeholder" → fall through to the SVG branch.

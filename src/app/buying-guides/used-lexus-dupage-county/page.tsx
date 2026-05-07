@@ -68,9 +68,8 @@ const FAQS = [
 export const metadata: Metadata = {
   title:
     "Where to Buy a Used Lexus in DuPage County | Love Auto Group, Villa Park IL",
-  // 2026-05-05 — trimmed from 219 to 156 chars per Charlotte SEO audit (≤160 SERP rule).
   description:
-    "Used Lexus RX 350, ES, IS, and GX in DuPage County. Family owned independent dealer in Villa Park, IL serving the Chicago suburbs since 2014. Free Carfax.",
+    "Used Lexus RX 350, ES, IS, and GX in DuPage County. Family owned independent dealer in Villa Park, IL serving the Chicago suburbs since 2014. Value sweet spot 2010 to 2017, $12,000 to $19,000. Free Carfax. (630) 359-3643.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Where to Buy a Used Lexus in DuPage County | Love Auto Group",
@@ -169,8 +168,8 @@ export default function UsedLexusDuPageCountyPage() {
           <p>
             Love Auto Group is family owned, has operated in Villa Park
             since 2014, and specializes in Japanese makes. Lexus is one
-            of the makes we know best. Every vehicle is personally
-            inspected by the owner before it goes on the lot.
+            of the makes we know best. Owner Jeremiah Johnson personally
+            inspects every vehicle before it goes on the lot.
           </p>
 
           <h2>The Value Sweet Spot: 2010 to 2017 Lexus</h2>

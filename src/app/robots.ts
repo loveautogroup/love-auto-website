@@ -23,18 +23,19 @@ export default function robots(): MetadataRoute.Robots {
           // this prefix and never want to be indexed (Charlotte SEO audit).
           "/api/",
           "/api/*",
-          // Block query-string filter variants of /inventory. The static
-          // export serves the same HTML regardless of filter params, so
-          // letting Google crawl them just wastes crawl budget on duplicate
-          // content. The canonical /inventory/ URL is what we want indexed.
-          // Search Console flagged 294 of these on 2026-04-30 (legacy from
-          // the CarsForSale era).
-          "/inventory?*",
-          "/inventory/?*",
-          // Print views are CarsForSale-era artifacts that 404 on the
-          // current site.
-          "/print/",
-          "/print/*",
+          // 2026-05-07 — REMOVED the /inventory?* and /print/* blocks.
+          // Both were causing recurring "Blocked by robots.txt" failures in
+          // Search Console because Google had pre-existing index entries
+          // for these legacy URLs from the CarsForSale era. Validate-fix
+          // could not pass while we both indexed the URLs (in Google's
+          // history) AND blocked them — the validator requires the URL
+          // to be reachable.
+          //
+          // New strategy: let Google crawl them. The /inventory/ page
+          // has <link rel="canonical" href=".../inventory/"> so all
+          // query-string variants consolidate to the canonical URL.
+          // Legacy /print/* URLs are 301'd to /inventory/ via
+          // public/_redirects so they deindex with equity transfer.
         ],
       },
     ],
