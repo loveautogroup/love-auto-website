@@ -23,6 +23,8 @@
  * already writes to KV so consumers don't need a code change.
  */
 
+import { titleCase, vehicleSlug } from "../../shared/slug";
+
 interface Env {
   INVENTORY?: KVNamespace;
 }
@@ -31,19 +33,9 @@ const KV_KEY_CURRENT = "inventory:current";
 const DMS_URL = "https://dms.loveautogroup.net/api/v1/public/inventory";
 const DMS_TIMEOUT_MS = 5000;
 
-// VIN → canonical slug map seeded from src/data/inventory.ts so DMS-driven
-// vehicles keep their existing SEO URLs (DealerCenter doesn't return stock
-// numbers via the public API, but our build-time seed knows them). Add a row
-// here when you onboard a new vehicle that needs a custom slug; otherwise
-// the auto-generated `${year}-${make}-${model}-${trim}-${idTail}` slug applies.
-const SEED_SLUGS_BY_VIN: Record<string, string> = {
-  "1FA6P8TH6H5202495": "2017-ford-mustang-ecoboost-premium-11331",
-  "2HNYD2H63AH509874": "2010-acura-mdx-sport-11318",
-  "2GKALUEK6D6300009": "2013-gmc-terrain-slt-11316",
-  "KMHCT4AE6HU222547": "2017-hyundai-accent-se-11313",
-  "JTHHE5BC2G5011456": "2016-lexus-rc-350-11266",
-  "JF2SJAGC1HH553881": "2017-subaru-forester-premium-11340",
-};
+// SEED_SLUGS_BY_VIN now lives in shared/slug.ts. vehicleSlug() handles the
+// override → auto-slug fallback. Don't add overrides here — add them once
+// in shared/slug.ts and all three callers see the change.
 
 interface DmsPhoto {
   url: string;
@@ -118,25 +110,6 @@ interface InventorySnapshot {
   vehicles: SyncedVehicle[];
 }
 
-function titleCase(s: string): string {
-  return s
-    .toLowerCase()
-    .split(/(\s+|-)/)
-    .map((part) => {
-      if (/^\s+$/.test(part) || part === "-") return part;
-      if (!part) return part;
-      return part.charAt(0).toUpperCase() + part.slice(1);
-    })
-    .join("");
-}
-
-function slugify(input: string): string {
-  return input
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
 function mapStatus(
   raw: string | null | undefined
 ): "available" | "sale-pending" | "sold" | "coming-soon" {
@@ -160,9 +133,8 @@ function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
   const model = titleCase(v.model ?? "");
   const trim = v.trim ? titleCase(v.trim) : "";
   const stockNumber = v.stockNumber ? String(v.stockNumber) : "";
-  const idForSlug = stockNumber || String(v.id ?? "").trim() || v.vin.slice(-6);
-  const slugBase = `${v.year}-${slugify(make)}-${slugify(model)}${trim ? "-" + slugify(trim) : ""}-${slugify(idForSlug)}`;
-  const slug = SEED_SLUGS_BY_VIN[v.vin] ?? slugify(slugBase);
+  // Shared slug computer — see shared/slug.ts. Honors SEED_SLUGS_BY_VIN.
+  const slug = vehicleSlug(v);
   const photos = Array.isArray(v.photos) ? v.photos : [];
   // Sort primary photo first, preserve relative order otherwise.
   const ordered = [...photos];
@@ -219,7 +191,10 @@ async function fetchDms(): Promise<InventorySnapshot | null> {
     }
     const vehicles = json.data
       .filter((v) => v && v.vin && v.year && v.make && v.model)
-      .map(adaptDmsVehicle);
+      .map(adaptDmsVehicle)
+      // Only surface vehicles Jeremiah has explicitly marked Listed (available)
+      // or Sale Pending. Coming Soon / In Recon vehicles stay off the public site.
+      .filter((v) => v.status === "available" || v.status === "sale-pending");
     return {
       syncedAt: new Date().toISOString(),
       syncedBy: "live-dms",

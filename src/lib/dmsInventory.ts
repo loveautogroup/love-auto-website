@@ -14,6 +14,11 @@
  */
 import type { Vehicle } from "@/lib/types";
 import type { SyncedVehicle } from "@/lib/inventoryAdapter";
+import { titleCase, vehicleSlug, SEED_SLUGS_BY_VIN as SHARED_SEED_SLUGS } from "../../shared/slug";
+
+// Re-export for any external consumer that previously imported from here.
+// All slug logic lives in shared/slug.ts now — change there, not here.
+export const SEED_SLUGS_BY_VIN = SHARED_SEED_SLUGS;
 
 export const DMS_PUBLIC_INVENTORY_URL =
   "https://dms.loveautogroup.net/api/v1/public/inventory";
@@ -67,35 +72,6 @@ interface DmsResponse {
   count?: number;
 }
 
-// Keep in sync with functions/api/inventory.ts → SEED_SLUGS_BY_VIN.
-export const SEED_SLUGS_BY_VIN: Record<string, string> = {
-  "1FA6P8TH6H5202495": "2017-ford-mustang-ecoboost-premium-11331",
-  "2HNYD2H63AH509874": "2010-acura-mdx-sport-11318",
-  "2GKALUEK6D6300009": "2013-gmc-terrain-slt-11316",
-  "KMHCT4AE6HU222547": "2017-hyundai-accent-se-11313",
-  "JTHHE5BC2G5011456": "2016-lexus-rc-350-11266",
-  "JF2SJAGC1HH553881": "2017-subaru-forester-premium-11340",
-};
-
-function titleCase(s: string): string {
-  return s
-    .toLowerCase()
-    .split(/(\s+|-)/)
-    .map((part) => {
-      if (/^\s+$/.test(part) || part === "-") return part;
-      if (!part) return part;
-      return part.charAt(0).toUpperCase() + part.slice(1);
-    })
-    .join("");
-}
-
-function slugify(input: string): string {
-  return input
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
 function mapStatus(
   raw: string | null | undefined
 ): "available" | "sale-pending" | "sold" | "coming-soon" {
@@ -125,12 +101,9 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
   const model = titleCase(v.model ?? "");
   const trim = v.trim ? titleCase(v.trim) : "";
   const stockNumber = v.stockNumber ? String(v.stockNumber) : "";
-  const idForSlug =
-    stockNumber || String(v.id ?? "").trim() || v.vin.slice(-6);
-  const autoSlug = slugify(
-    `${v.year}-${slugify(make)}-${slugify(model)}${trim ? "-" + slugify(trim) : ""}-${slugify(idForSlug)}`
-  );
-  const slug = SEED_SLUGS_BY_VIN[v.vin] ?? autoSlug;
+  // Slug computed from raw DMS fields by the shared module so the sitemap,
+  // the public inventory feed, and the VDP bridge function all agree.
+  const slug = vehicleSlug(v);
 
   const photos = Array.isArray(v.photos) ? v.photos : [];
   const ordered = [...photos];
