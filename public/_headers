@@ -16,7 +16,12 @@
   # (POST /api/v1/public/leads) and any client-side inventory/merchandising
   # fetches. Without this, the browser blocks the cross-origin fetch with
   # "Failed to fetch" before the request even leaves — server logs stay empty.
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://dms.loveautogroup.net; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+  # 2026-05-05 — script-src + connect-src whitelisted for static.cargurus.com
+  # so the CarGurus deal-rating badge in layout.tsx can finally execute.
+  # Charlotte's audit (marketing-audit-2026-05-05/seo-audit.md) found CSP
+  # was silently blocking the badge — it had never rendered. The May-2 503
+  # finding was a red herring; the CDN is fine, our policy was the blocker.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cargurus.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://dms.loveautogroup.net https://static.cargurus.com; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
 
 # Admin routes — noindex, no cache. Gated by Cloudflare Zero Trust Access.
 /admin/*

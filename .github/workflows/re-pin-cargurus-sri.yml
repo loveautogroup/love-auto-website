@@ -1,0 +1,51 @@
+name: Re-pin CarGurus SRI hash
+
+# SEC-M6 (Sam, 2026-05-05). CarGurus occasionally rotates the
+# dealratingbadge.js bundle. When they do, the SRI integrity check in
+# layout.tsx rejects the load and the badge silently disappears. This
+# job runs daily, fetches the current bundle, computes its SHA-384,
+# and opens a PR if the hash differs from the one currently in
+# layout.tsx.
+
+on:
+  schedule:
+    - cron: "0 11 * * *"   # 11:00 UTC daily (~6am Central)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  re-pin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compute current upstream SHA-384
+        id: hash
+        run: |
+          curl -sSfL --max-time 30 \
+            https://static.cargurus.com/js/api/en_US/1.0/dealratingbadge.js \
+            -o /tmp/cg.js
+          NEW_HASH="sha384-$(openssl dgst -sha384 -binary /tmp/cg.js | base64 -w 0)"
+          echo "new_hash=$NEW_HASH" >> "$GITHUB_OUTPUT"
+          OLD_HASH=$(grep -oE 'sha384-[A-Za-z0-9+/=]+' src/app/layout.tsx | head -1 || echo "")
+          echo "old_hash=$OLD_HASH" >> "$GITHUB_OUTPUT"
+
+      - name: Open PR if hash changed
+        if: steps.hash.outputs.new_hash != steps.hash.outputs.old_hash && steps.hash.outputs.old_hash != ''
+        run: |
+          sed -i "s|${{ steps.hash.outputs.old_hash }}|${{ steps.hash.outputs.new_hash }}|" src/app/layout.tsx
+          BRANCH="bot/repin-cargurus-$(date +%Y%m%d)"
+          git config user.name "love-auto-bot"
+          git config user.email "loveautogroup@gmail.com"
+          git checkout -b "${BRANCH}"
+          git add src/app/layout.tsx
+          git commit -m "chore(security): re-pin CarGurus SRI hash (SEC-M6 automated)"
+          git push origin "${BRANCH}"
+          gh pr create --base main --head "${BRANCH}" \
+            --title "chore(security): re-pin CarGurus SRI hash" \
+            --body "Automated SRI hash refresh. Verify the badge still works in preview before merging."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
