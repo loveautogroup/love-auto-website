@@ -99,18 +99,17 @@ export function useResolveOverlay(
   const override = config.overlays?.[vin] ?? {};
 
   // Same logic as the synchronous resolveOverlay() in src/data/merchandising.ts:
-  // Priority: coming-soon > manual status > sale-pending > price-reduced
-  //   > just-arrived. The price-reduced auto-flag fires when the DMS public
-  //   feed reports a price decrease in the last 14 days (recentlyReduced=true).
-  //   It outranks just-arrived because a documented drop is a stronger
-  //   buying signal than mere recency on the lot.
+  // Priority: coming-soon > manual status > sale-pending > just-arrived.
+  // NOTE: the auto "price-reduced" flag (fired off the DMS public feed's
+  // recentlyReduced signal) was removed per Jeremiah 2026-05-09 — he doesn't
+  // want the Price Reduced pill surfacing on the website. The
+  // `recentlyReduced` arg + the `price-reduced` StatusPill variant are kept
+  // intact so the merchandising admin can still set it manually if desired.
+  void recentlyReduced;
   let effectiveStatus: StatusBadgeKind | undefined =
     vehicleStatus === "coming-soon" ? "coming-soon" : override.status;
   if (!effectiveStatus && vehicleStatus === "sale-pending") {
     effectiveStatus = "sale-pending";
-  }
-  if (!effectiveStatus && recentlyReduced) {
-    effectiveStatus = "price-reduced";
   }
   if (!effectiveStatus && daysOnLot <= 14) {
     effectiveStatus = "just-arrived";

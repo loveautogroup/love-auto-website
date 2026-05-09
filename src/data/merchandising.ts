@@ -334,17 +334,16 @@ export function resolveOverlay(
 ): VehicleOverlay & { effectiveStatus?: StatusBadgeKind } {
   const override = MERCHANDISING.overlays[vin] ?? {};
 
-  // Priority: coming-soon > manual status > sale-pending > price-reduced
-  //   > just-arrived. price-reduced auto-fires when the DMS public feed
-  //   reports a price decrease in the last 14 days. Beats just-arrived
-  //   because a documented drop is a stronger buying signal.
+  // Priority: coming-soon > manual status > sale-pending > just-arrived.
+  // NOTE: the auto "price-reduced" flag was removed per Jeremiah 2026-05-09.
+  // The `recentlyReduced` arg + the `price-reduced` StatusPill variant are
+  // kept intact so the merchandising admin can still pick it manually if
+  // desired — only the auto-flip from the DMS feed is suppressed.
+  void recentlyReduced;
   let effectiveStatus: StatusBadgeKind | undefined =
     vehicleStatus === "coming-soon" ? "coming-soon" : override.status;
   if (!effectiveStatus && vehicleStatus === "sale-pending") {
     effectiveStatus = "sale-pending";
-  }
-  if (!effectiveStatus && recentlyReduced) {
-    effectiveStatus = "price-reduced";
   }
   if (!effectiveStatus && daysOnLot <= 14) {
     effectiveStatus = "just-arrived";

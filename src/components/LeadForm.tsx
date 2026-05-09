@@ -30,27 +30,7 @@ const DMS_API_BASE =
   process.env.NEXT_PUBLIC_DMS_API_BASE ?? "https://dms.loveautogroup.net";
 
 /** Intake key baked in at Cloudflare Pages build time. Empty = bridge mode. */
-// EMERGENCY FALLBACK (Bill, 2026-05-08 ~03:00 UTC):
-// Cloudflare Pages was NOT passing NEXT_PUBLIC_DMS_INTAKE_KEY to the build
-// runner — every form submission since 2026-05-01 (when REQUIRE_INTAKE_KEY
-// went live on Vercel) returned 401, silently swallowing 7+ days of leads.
-// Customer Dawn Schlienz reported the bug May 7 7:13 AM. CF Pages dashboard
-// was unresponsive (maintenance window) and the API didn't surface the env
-// var in the build log no matter how I PATCH'd it.
-//
-// The intake key is a *public-bundled fingerprint*, not a secret — Next.js
-// inlines it into client JS that ships to every browser. The actual security
-// gate is the bcrypt-validated WebsiteLeadIntakeKey row on Vercel and the
-// per-key Origin allowlist. Hardcoding this fallback restores lead capture
-// immediately. Rotating the key is still possible (revoke the row in
-// WebsiteLeadIntakeKey via DMS dashboard, push a new fallback here).
-//
-// TODO (Charlotte/Bill): figure out why Cloudflare Pages stopped exposing
-// NEXT_PUBLIC_* env vars to `next build`. Until that's fixed, every rotation
-// requires a code push. Investigate via CF dashboard once it's responsive.
-const INTAKE_KEY =
-  process.env.NEXT_PUBLIC_DMS_INTAKE_KEY ??
-  "k_prod_dd45d4138e03e1bad8a416ef298ef1d1c3f22716f4928805";
+const INTAKE_KEY = process.env.NEXT_PUBLIC_DMS_INTAKE_KEY ?? "";
 
 /** Version tag for the TCPA consent language shown in this form. */
 const OPT_IN_LANGUAGE_VERSION = "v1-2026-04";
