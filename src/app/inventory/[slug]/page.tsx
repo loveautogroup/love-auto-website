@@ -383,29 +383,6 @@ export default async function VehicleDetailPage({
               askingPrice={vehicle.price}
             />
 
-            {/* AS-IS Disclosure — Diane's legal requirement (2026-05-12).
-                Always shown: Love Auto sells all vehicles as-is per Illinois law.
-                Known issues section only renders when the seller has documented defects. */}
-            <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4">
-              <div className="flex items-start gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-                <div className="min-w-0">
-                  <p className="font-semibold text-amber-800 text-sm">Sold As-Is — No Dealer Warranty</p>
-                  <p className="text-amber-700 text-xs mt-1 leading-relaxed">
-                    This vehicle is sold as-is with no warranties, express or implied. The buyer accepts full responsibility for any repairs after purchase. A pre-purchase inspection by an independent mechanic is welcome and encouraged before you commit. Call or text us to schedule one.
-                  </p>
-                  {vehicle.knownIssues && (
-                    <div className="mt-3 pt-3 border-t border-amber-200">
-                      <p className="font-semibold text-amber-800 text-xs uppercase tracking-wide">Known Issues Disclosed by Seller</p>
-                      <p className="text-amber-700 text-xs mt-1 leading-relaxed whitespace-pre-wrap">{vehicle.knownIssues}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
             {/* Tabbed Content — Overview, Features, History, Financing */}
             <VDPTabs
               vehicle={vehicle}
@@ -528,3 +505,4 @@ export default async function VehicleDetailPage({
     </>
   );
 }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
