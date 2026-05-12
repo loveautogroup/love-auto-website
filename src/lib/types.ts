@@ -35,6 +35,14 @@ export interface Vehicle {
   /** Phase 2 photo pipeline — poster frame URL shown before video loads.
    *  Falls back to hero image when null. */
   walkaroundPosterUrl?: string | null;
+  /** AS-IS sale flag. True for all Love Auto vehicles (no dealer warranty).
+   *  Surfaced from Railway public feed as `as_is`. Defaults to true when
+   *  absent (back-compat with KV snapshots that predate the field). */
+  asIs?: boolean;
+  /** Known defects disclosed by the seller per Diane's legal workflow.
+   *  Null when none have been documented. Shown on the VDP so buyers
+   *  can make an informed decision before purchase. */
+  knownIssues?: string | null;
 }
 
 export interface ContactFormData {

@@ -55,6 +55,11 @@ interface DmsVehicle {
    *  True if asking_price decreased in the last 14 days. Optional —
    *  older deploys of the DMS may omit it; treat absent as false. */
   recently_reduced?: boolean | null;
+  /** AS-IS flag — true when vehicle is sold as-is (no dealer warranty).
+   *  Added in Railway commit 83e3af6; optional for back-compat. */
+  as_is?: boolean | null;
+  /** Known defects documented by the seller. Null when none. */
+  known_issues?: string | null;
   /** V2 photo pipeline media shape — optional, absent on older responses. */
   media?: {
     hero_url?: string | null;
@@ -142,6 +147,9 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     // Phase 2 photo pipeline — null in Phase 1 (VDPWalkaround renders nothing).
     walkaroundUrl: v.media?.walkaround_url ?? null,
     walkaroundPosterUrl: v.media?.walkaround_poster_url ?? null,
+    // AS-IS / legal disclosure fields (Diane, 2026-05-12)
+    asIs: v.as_is ?? true,
+    knownIssues: v.known_issues ?? null,
   };
 }
 
@@ -220,5 +228,7 @@ export function syncedToVehicle(s: SyncedVehicle): Vehicle {
     dateInStock: s.dateInStock,
     daysOnLot: s.daysOnLot,
     recentlyReduced: s.recentlyReduced,
+    asIs: s.asIs ?? true,
+    knownIssues: s.knownIssues ?? null,
   };
 }

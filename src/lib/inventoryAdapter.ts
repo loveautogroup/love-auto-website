@@ -57,6 +57,11 @@ export interface SyncedVehicle {
    *  the ab5ebff Phase 2 walkaround commit. */
   walkaroundUrl?: string | null;
   walkaroundPosterUrl?: string | null;
+  /** AS-IS flag from Railway public feed. Optional — KV snapshots from
+   *  the DC sync worker don't carry this field; treat absent as true. */
+  asIs?: boolean;
+  /** Known defects disclosed by the seller. Null when none documented. */
+  knownIssues?: string | null;
 }
 
 export interface InventorySnapshot {
@@ -95,6 +100,8 @@ export function adaptVehicle(v: SyncedVehicle): Vehicle {
     dateInStock: v.dateInStock,
     daysOnLot: v.daysOnLot,
     recentlyReduced: Boolean(v.recentlyReduced),
+    asIs: v.asIs ?? true,
+    knownIssues: v.knownIssues ?? null,
   };
 }
 
