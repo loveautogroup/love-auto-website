@@ -300,7 +300,7 @@ export const blogPosts: BlogPost[] = [
       <h2>How Love Auto Group Handles Financing</h2>
       <p>We work with multiple lending partners including prime banks, credit unions, and subprime specialists — which means we can shop your application to find approvals where a single-bank dealer couldn't. Every deal is built with transparent pricing: the vehicle price, the tax, the title, and the doc fee, on paper, before you sign. No hidden add-ons, no line items that appear at closing.</p>
 
-      <p>If your credit is less than perfect, start with our <a href="/financing">pre-approval form</a>. It's a soft credit pull — doesn't affect your score — and gives us a clear picture of what lenders will approve before you commit to a vehicle. Or call us directly at (630) 359-3643 and talk to Jeremiah. We help real buyers in real situations every week.</p>
+      <p>If your credit is less than perfect, start with our <a href="/financing">pre-approval form</a>. It's a soft credit pull — doesn't affect your score — and gives us a clear picture of what lenders will approve before you commit to a vehicle. Or call us directly at (630) 359-3643. We help real buyers in real situations every week.</p>
     `,
   },
 ];

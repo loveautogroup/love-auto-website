@@ -10,9 +10,6 @@ export function LocalBusinessSchema() {
   //   - foundingDate: 2014. Closes the Claude.ai factual error
   //     ("operating since 2018"); locks in correct founding year
   //     for every engine that reads schema.
-  //   - founder: Person ref to Jeremiah. Pairs with the Person schema
-  //     on the About page so engines can resolve "who owns Love Auto
-  //     Group" cleanly. Closes the Gemini "Partner: Jimmy" hallucination.
   //   - slogan: short owner-voice tagline that engines can lift verbatim.
   //   - areaServed: explicit DuPage County + city list. Closes the Q4
   //     county-level content gap as a structured signal in addition to
@@ -30,11 +27,6 @@ export function LocalBusinessSchema() {
       "Family owned used car dealer in Villa Park, IL since 2014. Specialists in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Serving DuPage County and the western Chicago suburbs.",
     slogan: "Family owned in Villa Park, IL since 2014",
     foundingDate: "2014",
-    founder: {
-      "@type": "Person",
-      "@id": `${SITE_CONFIG.url}/about/#jeremiah-johnson`,
-      name: "Jeremiah Johnson",
-    },
     knowsAbout: [
       "Used Subaru",
       "Used Lexus",
@@ -124,41 +116,6 @@ export function LocalBusinessSchema() {
   );
 }
 
-/**
- * PersonSchema — Jeremiah Johnson, owner / dealer principal.
- *
- * Added 2026-05-02 to lock in correct ownership data after the AEO audit
- * caught Gemini hallucinating "Partner: Jimmy" and Claude.ai mis-stating
- * the founding year. Use on the About page (and only there — Person
- * schema on every page is overkill and dilutes the signal).
- *
- * The @id matches `founder` in LocalBusinessSchema so engines can
- * resolve the cross-reference cleanly.
- */
-export function PersonSchema() {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "@id": `${SITE_CONFIG.url}/about/#jeremiah-johnson`,
-    name: "Jeremiah Johnson",
-    jobTitle: "Owner / Dealer Principal",
-    worksFor: {
-      "@type": "AutoDealer",
-      "@id": `${SITE_CONFIG.url}/#dealership`,
-      name: SITE_CONFIG.name,
-    },
-    description:
-      "Sole owner and dealer principal of Love Auto Group Inc., a family owned used car dealership in Villa Park, IL operating since 2014. Specialist in Japanese makes including Subaru, Lexus, Acura, Honda, Toyota, and Mazda.",
-    url: `${SITE_CONFIG.url}/about/`,
-  };
-
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
-}
 
 export function VehicleSchema({ vehicle }: { vehicle: Vehicle }) {
   // Schema upgraded 2026-04-28 to be Google Vehicle Listings compliant
