@@ -96,7 +96,11 @@ export async function generateMetadata({
   // the Facebook/iMessage preview is the front 3/4 — not whatever
   // Dealer Center happened to export as image #1.
   const orderedImages = applyPhotoOrder(vehicle.slug, vehicle.images ?? []);
-  const ogImage = orderedImages[0];
+  // Fall back to site-wide OG image for vehicles with no photos yet so
+  // Facebook/iMessage always renders *something* instead of a blank card.
+  const ogImageUrl =
+    orderedImages[0] ?? "https://www.loveautogroup.net/og-image.png";
+  const ogImageAlt = `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim} — Love Auto Group`;
 
   return {
     title,
@@ -108,7 +112,9 @@ export async function generateMetadata({
       url,
       type: "website",
       siteName: "Love Auto Group",
-      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
+      // width/height are required for Facebook crawler to reliably render
+      // the preview card without timing out on a dimension-detection fetch.
+      images: [{ url: ogImageUrl, width: 1200, height: 900, alt: ogImageAlt }],
     },
   };
 }
