@@ -115,8 +115,7 @@ CarGurus.DealRatingBadge.options={
   "minRating":"GOOD_PRICE",
   "showContactForm":true,
   "debug":false,
-  "live":true,
-  "liveIntervalMS":"500",
+  "live":false,
   "defaultHeight":"60"
 };
 (function(){
@@ -130,6 +129,4 @@ CarGurus.DealRatingBadge.options={
 })();
 `}} />
       </body>
-    </html>
-  );
-}
+    </html
