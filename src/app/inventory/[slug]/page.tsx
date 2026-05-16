@@ -267,6 +267,7 @@ export default async function VehicleDetailPage({
                       <span
                         data-cg-vin={vehicle.vin}
                         data-cg-price={String(Math.round(vehicle.price))}
+                        data-cg-zip="60181"
                         className="block mt-3"
                       />
                     )}
@@ -359,6 +360,7 @@ export default async function VehicleDetailPage({
                 <span
                   data-cg-vin={vehicle.vin}
                   data-cg-price={String(Math.round(vehicle.price))}
+                  data-cg-zip="60181"
                   className="block mt-3"
                 />
               )}
@@ -498,6 +500,7 @@ export default async function VehicleDetailPage({
                   </p>
                 </Link>
               ))}
+
             </div>
           </section>
         )}
