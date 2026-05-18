@@ -171,15 +171,20 @@ export default async function VehicleDetailPage({
     ...liveRaw.map(syncedToVehicle),
   ];
 
-  const similarVehicles = allVehicles
+  // Use ONLY live DMS vehicles for similar — sampleInventory contains stale seed
+  // data that is no longer on the lot. fetchDmsInventory already returns only
+  // active (RETAIL_READY / DEAL_PENDING) vehicles from the public endpoint, so
+  // no sold or hidden vehicles can leak through.
+  const similarVehicles = liveRaw
+    .map(syncedToVehicle)
     .filter(
       (v) =>
         v.id !== vehicle.id &&
-        v.status === "available" &&
+        v.status !== "sold" &&
         v.images && v.images.length > 0 &&
         (v.make === vehicle.make || v.bodyStyle === vehicle.bodyStyle)
     )
-    .slice(0, 3);
+    .slice(0, 8);
 
   return (
     <>
@@ -489,42 +494,44 @@ export default async function VehicleDetailPage({
             >
               Similar Vehicles
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {similarVehicles.map((v) => (
-                <Link
-                  key={v.id}
-                  href={`/inventory/${v.slug}`}
-                  className="bg-white rounded-xl border border-brand-gray-200 p-4 hover:shadow-md hover:border-brand-red/30 transition-all"
-                >
-                  <div className="aspect-[4/3] bg-brand-gray-100 rounded-lg mb-3 overflow-hidden">
-                    {v.images?.[0] && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={v.images[0]}
-                        alt={`${v.year} ${v.make} ${v.model}`}
-                        className="w-full h-full object-cover"
-                      />
-                    )}
-                  </div>
-                  <h3 className="font-bold text-brand-gray-900">
-                    {v.year} {v.make} {v.model}
-                  </h3>
-                  <p className="text-brand-red font-bold mt-1">
-                    {new Intl.NumberFormat("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                      minimumFractionDigits:
-                        Math.round(v.price * 100) % 100 !== 0 ? 2 : 0,
-                      maximumFractionDigits: 2,
-                    }).format(v.price)}
-                  </p>
-                  <p className="text-sm text-brand-gray-500">
-                    {new Intl.NumberFormat().format(v.mileage)} mi ·{" "}
-                    {v.drivetrain}
-                  </p>
-                </Link>
-              ))}
-
+            <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+              {similarVehicles.map((v) => {
+                const priceHasCents = Math.round(v.price * 100) % 100 !== 0;
+                const price = new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: priceHasCents ? 2 : 0,
+                  maximumFractionDigits: 2,
+                }).format(v.price);
+                const miles = new Intl.NumberFormat("en-US").format(v.mileage);
+                return (
+                  <Link
+                    key={v.id}
+                    href={`/inventory/${v.slug}`}
+                    className="w-[260px] sm:w-[280px] min-w-[260px] sm:min-w-[280px] bg-white border border-brand-gray-200 hover:border-brand-red/40 rounded-xl overflow-hidden transition-all snap-start shrink-0 group hover:shadow-md"
+                  >
+                    <div className="aspect-[4/3] bg-brand-gray-100 overflow-hidden">
+                      {v.images?.[0] && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={v.images[0]}
+                          alt={`${v.year} ${v.make} ${v.model}`}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      )}
+                    </div>
+                    <div className="p-3">
+                      <h3 className="font-bold text-brand-gray-900 text-sm group-hover:text-brand-red transition-colors">
+                        {v.year} {v.make} {v.model}
+                      </h3>
+                      <div className="flex items-baseline justify-between mt-1.5">
+                        <span className="text-brand-red font-bold">{price}</span>
+                        <span className="text-xs text-brand-gray-500">{miles} mi</span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </section>
         )}
