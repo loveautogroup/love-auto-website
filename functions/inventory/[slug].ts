@@ -285,17 +285,31 @@ function renderGonePage(v: DmsVehicle): string {
 }
 
 export const onRequest: PagesFunction<Env> = async (context) => {
-  // Try the static pre-rendered page first. If the build included this slug
-  // (vehicle was IN_RECON or RETAIL_READY at build time), this returns 200
-  // and we're done.
   const staticResponse = await context.next();
-  if (staticResponse.status !== 404) return staticResponse;
-
-  // Static page not found — vehicle moved between statuses after the last
-  // build, or is gone entirely. Fetch live DMS data and decide.
   const slug = (context.params as Record<string, string>).slug as string;
   if (!slug) return staticResponse;
 
+  // If the build produced a genuine pre-rendered VDP for this slug, return it.
+  // Guard: when Railway hibernates during a CF Pages build, Next.js can't
+  // resolve live-only vehicles and calls notFound() — which generates a static
+  // file served as HTTP 200 (it IS a file, just the not-found page). Detect
+  // this by checking whether the body contains the stock number (last segment
+  // of the slug). A real VDP always embeds it; the not-found page never does.
+  if (staticResponse.status === 200) {
+    const stockNumber = slug.split("-").pop() ?? "";
+    if (stockNumber) {
+      const body = await staticResponse.clone().text();
+      if (body.includes(stockNumber)) {
+        return staticResponse; // Real pre-rendered VDP — serve it directly.
+      }
+      // Body lacks the stock number → not-found page masquerading as 200.
+      // Fall through to DMS bridge below.
+    } else {
+      return staticResponse; // Can't parse slug; serve static as-is.
+    }
+  }
+
+  // Static returned 404, or was a 200 not-found placeholder — try the DMS.
   try {
     const res = await fetch(DMS_PUBLIC_URL, {
       headers: { Accept: "application/json" },
@@ -343,21 +357,4 @@ export const onRequest: PagesFunction<Env> = async (context) => {
         status: 410,
         headers: {
           "Content-Type": "text/html;charset=UTF-8",
-          // Short edge cache so a vehicle that comes back (rare) refreshes
-          // quickly. noindex meta + 410 status do the deindex work — the
-          // cache is just here to keep upstream load low.
-          "Cache-Control": "public, max-age=300, s-maxage=300",
-          "X-Robots-Tag": "noindex, follow",
-        },
-      });
-    }
-
-    // Unknown status that isn't available/coming-soon/gone (shouldn't
-    // happen — DMS public feed only emits the canonical statuses — but
-    // belt-and-suspenders fall through to the static 404).
-    return staticResponse;
-  } catch {
-    // DMS unreachable — fall through to the static 404
-    return staticResponse;
-  }
-};
+ 
