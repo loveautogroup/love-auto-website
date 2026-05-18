@@ -471,4 +471,16 @@ export default async function VehicleDetailPage({
           />
         </div>
 
-        {/* Similar Vehicles — client co
+        {/* Similar Vehicles — client component backed by CF KV via useInventory().
+            Immune to Railway build-time hibernation because it reads from KV,
+            not from the FastAPI backend. Renders nothing while loading or when
+            no matches exist. */}
+        <SimilarVehiclesCarousel
+          currentId={vehicle.id}
+          make={vehicle.make}
+          bodyStyle={vehicle.bodyStyle ?? ""}
+        />
+      </article>
+    </>
+  );
+}
