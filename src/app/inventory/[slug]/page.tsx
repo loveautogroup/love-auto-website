@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { sampleInventory, getVehicleBySlug } from "@/data/inventory";
@@ -488,15 +487,13 @@ export default async function VehicleDetailPage({
                   href={`/inventory/${v.slug}`}
                   className="bg-white rounded-xl border border-brand-gray-200 p-4 hover:shadow-md hover:border-brand-red/30 transition-all"
                 >
-                  <div className="relative aspect-[4/3] bg-brand-gray-100 rounded-lg mb-3 overflow-hidden">
+                  <div className="aspect-[4/3] bg-brand-gray-100 rounded-lg mb-3 overflow-hidden">
                     {v.images?.[0] && (
-                      <Image
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
                         src={v.images[0]}
                         alt={`${v.year} ${v.make} ${v.model}`}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        unoptimized
+                        className="w-full h-full object-cover"
                       />
                     )}
                   </div>
