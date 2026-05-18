@@ -189,7 +189,7 @@ export default function HomePage() {
               href="/inventory"
               className="text-brand-red-light hover:text-white text-sm font-semibold transition-colors"
             >
-              View All â†’
+              View All →
             </Link>
           </div>
           <HomeOnTheLot />
@@ -404,4 +404,3 @@ export default function HomePage() {
     </>
   );
 }
-

@@ -60,15 +60,13 @@ export async function generateStaticParams() {
 
 
 async function resolveVehicle(slug: string) {
-  const seedHit = getVehicleBySlug(slug);
-  if (seedHit) return seedHit;
-  // Slug exists in the static-params list but not in the seed file
-  // (live-only vehicle from DMS). Fetch DMS and adapt one record.
+  // Prefer live DMS — has current photos, price, and status.
+  // Fall back to seed only for vehicles absent from the DMS feed.
   const live = await fetchDmsInventory();
-  const match = live.find((v) => v.slug === slug);
-  if (!match) return undefined;
-  const { syncedToVehicle } = await import("@/lib/dmsInventory");
-  return syncedToVehicle(match);
+  const dmsMatch = live.find((v) => v.slug === slug);
+  if (dmsMatch) return syncedToVehicle(dmsMatch);
+
+  return getVehicleBySlug(slug);
 }
 
 export async function generateMetadata({
@@ -178,6 +176,7 @@ export default async function VehicleDetailPage({
       (v) =>
         v.id !== vehicle.id &&
         v.status === "available" &&
+        v.images && v.images.length > 0 &&
         (v.make === vehicle.make || v.bodyStyle === vehicle.bodyStyle)
     )
     .slice(0, 3);
@@ -532,4 +531,4 @@ export default async function VehicleDetailPage({
       </article>
     </>
   );
-}
+}
