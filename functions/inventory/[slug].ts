@@ -303,8 +303,15 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     });
     if (!res.ok) return staticResponse;
 
-    const json = (await res.json()) as { data?: DmsVehicle[] };
-    const vehicles = Array.isArray(json.data) ? json.data : [];
+    // The Railway public inventory endpoint returns a plain array at the
+    // top level (not { data: [...] }). Handle both shapes defensively so
+    // a future API refactor doesn't silently break the bridge again.
+    const raw = (await res.json()) as DmsVehicle[] | { data?: DmsVehicle[] };
+    const vehicles: DmsVehicle[] = Array.isArray(raw)
+      ? raw
+      : Array.isArray((raw as { data?: DmsVehicle[] }).data)
+      ? (raw as { data: DmsVehicle[] }).data
+      : [];
 
     // Find the vehicle whose computed slug matches the requested slug.
     // Uses the SHARED vehicleSlug() so this matches what the sitemap and
