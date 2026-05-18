@@ -1,22 +1,15 @@
 "use client";
 
 /**
- * SimilarVehiclesCarousel — live client-side "You may also like" strip.
+ * SimilarVehiclesCarousel — live client-side "You may also like" strip
+ * with prev/next arrow navigation.
  *
  * Uses useInventory() which reads from Cloudflare KV via /api/inventory.
- * This is Railway-hibernation-proof: CF KV is always available even when
- * the FastAPI backend is cold-starting. Server-side fetchDmsInventory()
- * was the prior approach but returned [] on cold builds, making the
- * section disappear entirely.
- *
- * Matching logic (in priority order):
- *   1. Same make — strongest signal
- *   2. Same body style — fallback when fewer same-make vehicles exist
- *
- * Filters out: the current vehicle, sold vehicles, hidden (KV overlay),
- * and vehicles with no photos.
+ * Railway-hibernation-proof: CF KV is always available even when the
+ * FastAPI backend is cold-starting.
  */
 
+import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useInventory } from "@/lib/useInventory";
 import { useVisibleVehicles } from "@/data/useMerchandising";
@@ -33,8 +26,11 @@ export default function SimilarVehiclesCarousel({
   bodyStyle,
 }: Props) {
   const { vehicles, loading } = useInventory();
-  // Respect the DMS "Hide from website" toggle via live KV config.
   const visible = useVisibleVehicles(vehicles);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
   const pool = visible.filter(
     (v) =>
@@ -44,28 +40,100 @@ export default function SimilarVehiclesCarousel({
       v.images.length > 0
   );
 
-  // Prefer same make; fall back to same body style if we'd get fewer than 3.
   const sameMake = pool.filter((v) => v.make === make);
   const sameBody = pool.filter(
     (v) => v.make !== make && v.bodyStyle === bodyStyle
   );
-
-  const candidates = sameMake.length >= 3
-    ? sameMake
-    : [...sameMake, ...sameBody];
-
+  const candidates = sameMake.length >= 3 ? sameMake : [...sameMake, ...sameBody];
   const similar = candidates.slice(0, 8);
 
-  // Don't render while loading (avoids flash of sampleInventory stale cards)
-  // and don't render if there's genuinely nothing.
+  // Update arrow visibility whenever scroll position changes.
+  const updateArrows = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 4);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    updateArrows();
+    el.addEventListener("scroll", updateArrows, { passive: true });
+    // Also re-check on resize (viewport changes, images load, etc.)
+    const ro = new ResizeObserver(updateArrows);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", updateArrows);
+      ro.disconnect();
+    };
+  }, [similar.length, updateArrows]);
+
+  const scroll = (dir: "left" | "right") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    // Scroll by ~1 card width (288px + 16px gap)
+    el.scrollBy({ left: dir === "left" ? -304 : 304, behavior: "smooth" });
+  };
+
   if (loading || similar.length === 0) return null;
 
   return (
     <section className="mt-12">
-      <h2 className="text-2xl font-bold text-brand-gray-900 mb-6">
-        Similar Vehicles
-      </h2>
-      <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold text-brand-gray-900">
+          Similar Vehicles
+        </h2>
+
+        {/* Arrow buttons — only shown when there are enough cards to scroll */}
+        {(canScrollLeft || canScrollRight) && (
+          <div className="flex gap-2">
+            <button
+              onClick={() => scroll("left")}
+              disabled={!canScrollLeft}
+              aria-label="Scroll left"
+              className="w-9 h-9 rounded-full border border-brand-gray-200 flex items-center justify-center transition-colors
+                disabled:opacity-30 disabled:cursor-not-allowed
+                enabled:hover:border-brand-red enabled:hover:text-brand-red enabled:hover:bg-red-50"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              onClick={() => scroll("right")}
+              disabled={!canScrollRight}
+              aria-label="Scroll right"
+              className="w-9 h-9 rounded-full border border-brand-gray-200 flex items-center justify-center transition-colors
+                disabled:opacity-30 disabled:cursor-not-allowed
+                enabled:hover:border-brand-red enabled:hover:text-brand-red enabled:hover:bg-red-50"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div
+        ref={scrollRef}
+        className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide"
+      >
         {similar.map((v) => {
           const priceHasCents = Math.round(v.price * 100) % 100 !== 0;
           const price = new Intl.NumberFormat("en-US", {
