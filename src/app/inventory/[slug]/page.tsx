@@ -30,6 +30,7 @@ import {
 } from "@/components/VDPMerchandisingWrappers";
 import VDPWalkaround from "@/components/VDPWalkaround";
 import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
+import SimilarVehiclesCarousel from "@/components/SimilarVehiclesCarousel";
 
 function estimateMonthlyPayment(
   price: number,
@@ -160,31 +161,6 @@ export default async function VehicleDetailPage({
   const textPhoneDefault =
     overlay.textPhone ?? MERCHANDISING.textPhone ?? SITE_CONFIG.phoneRaw;
   const textBodyRaw = `Hi! I'm interested in the ${vehicle.year} ${vehicle.make} ${vehicle.model} on your website.`;
-
-  // Combine seed + live DMS vehicles so all makes (Mazda, Nissan, Acura,
-  // etc.) can surface similar suggestions — not just the handful of makes
-  // baked into the seed file. fetchDmsInventory is deduplicated by Next.js
-  // fetch cache so this is a no-cost second call at build time.
-  const liveRaw = await fetchDmsInventory();
-  const allVehicles = [
-    ...sampleInventory,
-    ...liveRaw.map(syncedToVehicle),
-  ];
-
-  // Use ONLY live DMS vehicles for similar — sampleInventory contains stale seed
-  // data that is no longer on the lot. fetchDmsInventory already returns only
-  // active (RETAIL_READY / DEAL_PENDING) vehicles from the public endpoint, so
-  // no sold or hidden vehicles can leak through.
-  const similarVehicles = liveRaw
-    .map(syncedToVehicle)
-    .filter(
-      (v) =>
-        v.id !== vehicle.id &&
-        v.status !== "sold" &&
-        v.images && v.images.length > 0 &&
-        (v.make === vehicle.make || v.bodyStyle === vehicle.bodyStyle)
-    )
-    .slice(0, 8);
 
   return (
     <>
@@ -485,56 +461,15 @@ export default async function VehicleDetailPage({
           />
         </div>
 
-        {/* Similar Vehicles */}
-        {similarVehicles.length > 0 && (
-          <section className="mt-16" aria-labelledby="similar-heading">
-            <h2
-              id="similar-heading"
-              className="text-2xl font-bold text-brand-gray-900 mb-6"
-            >
-              Similar Vehicles
-            </h2>
-            <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
-              {similarVehicles.map((v) => {
-                const priceHasCents = Math.round(v.price * 100) % 100 !== 0;
-                const price = new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  minimumFractionDigits: priceHasCents ? 2 : 0,
-                  maximumFractionDigits: 2,
-                }).format(v.price);
-                const miles = new Intl.NumberFormat("en-US").format(v.mileage);
-                return (
-                  <Link
-                    key={v.id}
-                    href={`/inventory/${v.slug}`}
-                    className="w-[260px] sm:w-[280px] min-w-[260px] sm:min-w-[280px] bg-white border border-brand-gray-200 hover:border-brand-red/40 rounded-xl overflow-hidden transition-all snap-start shrink-0 group hover:shadow-md"
-                  >
-                    <div className="aspect-[4/3] bg-brand-gray-100 overflow-hidden">
-                      {v.images?.[0] && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={v.images[0]}
-                          alt={`${v.year} ${v.make} ${v.model}`}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      )}
-                    </div>
-                    <div className="p-3">
-                      <h3 className="font-bold text-brand-gray-900 text-sm group-hover:text-brand-red transition-colors">
-                        {v.year} {v.make} {v.model}
-                      </h3>
-                      <div className="flex items-baseline justify-between mt-1.5">
-                        <span className="text-brand-red font-bold">{price}</span>
-                        <span className="text-xs text-brand-gray-500">{miles} mi</span>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-        )}
+        {/* Similar Vehicles — client component backed by CF KV via useInventory().
+            Immune to Railway build-time hibernation because it reads from KV,
+            not from the FastAPI backend. Renders nothing while loading or when
+            no matches exist. */}
+        <SimilarVehiclesCarousel
+          currentId={vehicle.id}
+          make={vehicle.make}
+          bodyStyle={vehicle.bodyStyle ?? ""}
+        />
       </article>
     </>
   );
