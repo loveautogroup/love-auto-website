@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Vehicle } from "@/lib/types";
@@ -137,18 +137,27 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   // the branded Coming Soon placeholder. Local state so the swap
   // survives re-render.
   const [heroSrc, setHeroSrc] = useState<string>(initialHero);
+  // Latch: once an image URL has errored and we've shown the placeholder,
+  // don't keep retrying the same bad URL (would cause an infinite loop).
+  const [heroErrored, setHeroErrored] = useState<boolean>(false);
 
-  // Reactive hydration — heroOverride is null on first render (live
-  // data still loading) and becomes the real DC URL once useInventory()
-  // resolves. useState() only runs its initializer once on mount, so
-  // without this effect the live photo never replaces the seed URL.
-  // We only upgrade heroSrc; a previously-errored COMING_SOON_PLACEHOLDER
-  // can also be replaced if the live URL is actually reachable.
+  // Reactive hydration — two paths:
+  // 1. heroOverride: useInventory() resolved and the live first image differs
+  //    from the seed image (only happens when InventoryGrid passes the *seed*
+  //    vehicle and the hook fetches a different live URL separately).
+  // 2. vehicle.images[0] changed: InventoryGrid passed a *live* vehicle as
+  //    the prop directly (both live.images[0] and vehicle.images[0] are the
+  //    same URL, so heroOverride stays null — we must watch the prop itself).
+  // In both cases, skip if a prior load already errored (heroErrored latch).
   useEffect(() => {
-    if (heroOverride && heroSrc !== heroOverride) {
-      setHeroSrc(heroOverride);
+    if (heroErrored) return;
+    const candidate =
+      heroOverride ??
+      (!forcePlaceholder && hasRealImage ? orderedImages[0] : null);
+    if (candidate && candidate !== heroSrc) {
+      setHeroSrc(candidate);
     }
-  }, [heroOverride]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [heroOverride, vehicle.images[0]]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const heroImage = heroSrc;
   // Render the <Image> only when there's a real source. Empty string
@@ -174,9 +183,13 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             onError={() => {
               // Fall back to the branded Coming Soon placeholder so the
-              // card never shows a broken gray box. Guarded to prevent
-              // an infinite error loop if the placeholder itself 404s.
-              if (heroSrc !== COMING_SOON_PLACEHOLDER) setHeroSrc(COMING_SOON_PLACEHOLDER);
+              // card never shows a broken gray box. Set heroErrored to
+              // prevent the reactive effect from re-trying the same URL
+              // (which would loop: effect → load → 404 → onError → effect…).
+              if (heroSrc !== COMING_SOON_PLACEHOLDER) {
+                setHeroSrc(COMING_SOON_PLACEHOLDER);
+                setHeroErrored(true);
+              }
             }}
             unoptimized={heroSrc.endsWith(".svg") || heroSrc.endsWith("/coming-soon.png")}
           />
@@ -278,23 +291,4 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             ${monthlyPayment}/mo
           </span>
           <span
-            className="text-xs text-brand-gray-400 ml-1"
-            title="Based on $1,000 down, 6.99% APR, 60 months"
-          >
-            *
-          </span>
-        </p>
-
-        {/* CarGurus Deal Rating Badge — replaced in-place by the async SDK.
-            Renders nothing until hydrated so there is zero layout shift. */}
-        {vehicle.vin && vehicle.price > 0 && (
-          <span
-            data-cg-vin={vehicle.vin}
-            data-cg-price={String(Math.round(vehicle.price))}
-            className="block mt-2"
-          />
-        )}
-
-        {/* Spec chips — drivetrain + first 2 features */}
-        <div className="flex flex-wrap gap-1.5 mt-3">
-          {vehicle.drivetrai
+           
