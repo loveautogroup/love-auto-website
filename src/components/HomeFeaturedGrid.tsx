@@ -89,14 +89,21 @@ export function HomeOnTheLot() {
             href={`/inventory/${v.slug}`}
             className="min-w-[260px] sm:min-w-[280px] bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-xl overflow-hidden transition-all snap-start shrink-0 group"
           >
-            <div className="aspect-[4/3] bg-brand-gray-700/50 relative">
+            <div className="aspect-[4/3] bg-brand-gray-700/50 relative overflow-hidden">
+              {v.images && v.images[0] && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={v.images[0]}
+                  alt={`${v.year} ${v.make} ${v.model}`}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              )}
               {v.daysOnLot <= 7 && (
                 <span className="absolute top-2 left-2 bg-brand-green text-white text-xs font-semibold px-2 py-0.5 rounded-full">
                   Just Arrived
                 </span>
               )}
-            </div>
-            <div className="p-3">
+            </div>            <div className="p-3">
               <h3 className="font-bold text-white text-sm group-hover:text-brand-red-light transition-colors">
                 {v.year} {v.make} {v.model}
               </h3>
