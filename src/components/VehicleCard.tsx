@@ -128,7 +128,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   // empty-state SVG instead of the branded placeholder.
   const forcePlaceholder = overlay.useComingSoonPlaceholder === true;
 
-  const initialHero = forcePlaceholder
+  const initialHero = (forcePlaceholder || noPhotosAnywhere)
     ? COMING_SOON_PLACEHOLDER
     : (heroOverride ?? orderedImages[0] ?? "");
 
@@ -140,7 +140,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const heroImage = heroSrc;
   // Render the <Image> only when there's a real source. Empty string
   // means "no photo, no placeholder" → fall through to the SVG branch.
-  const showImage = (hasRealImage || liveHasImages || forcePlaceholder) && heroSrc !== "";
+  const showImage = (hasRealImage || liveHasImages || forcePlaceholder || noPhotosAnywhere) && heroSrc !== "";
 
   return (
     <article
@@ -160,10 +160,10 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             onError={() => {
-              // Drop to the empty-state SVG by clearing the source.
-              // Previously fell back to the branded Coming Soon image —
-              // removed per the "no default image" change.
-              if (heroSrc !== "") setHeroSrc("");
+              // Fall back to the branded Coming Soon placeholder so the
+              // card never shows a broken gray box. Guarded to prevent
+              // an infinite error loop if the placeholder itself 404s.
+              if (heroSrc !== COMING_SOON_PLACEHOLDER) setHeroSrc(COMING_SOON_PLACEHOLDER);
             }}
             unoptimized={heroSrc.endsWith(".svg") || heroSrc.endsWith("/coming-soon.png")}
           />
@@ -299,10 +299,4 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           ))}
         </div>
 
-        <div className="mt-3 text-sm text-brand-red font-semibold group-hover:underline">
-          View Details →
-        </div>
-      </div>
-    </article>
-  );
-}
+        <div className="mt-3 text-sm text-brand-red font-semibold group-hover
