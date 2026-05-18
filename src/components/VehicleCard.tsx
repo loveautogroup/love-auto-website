@@ -275,6 +275,11 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           </Link>
         </h3>
         <p className="text-sm text-brand-gray-500 mt-0.5">{vehicle.trim}</p>
+        {vehicle.vin && (
+          <p className="text-xs text-brand-gray-400 mt-0.5 font-mono tracking-wide">
+            VIN: {vehicle.vin}
+          </p>
+        )}
 
         <div className="flex items-baseline justify-between mt-3">
           <span className="text-xl font-bold text-brand-red">
@@ -324,11 +329,3 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             </span>
           ))}
         </div>
-
-        <div className="mt-3 text-sm text-brand-red font-semibold group-hover:underline">
-          View Details →
-        </div>
-      </div>
-    </article>
-  );
-}

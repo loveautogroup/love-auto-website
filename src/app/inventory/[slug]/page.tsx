@@ -249,6 +249,11 @@ export default async function VehicleDetailPage({
                       {vehicle.year} {vehicle.make} {vehicle.model}
                     </h1>
                     <p className="text-sm text-brand-gray-500">{vehicle.trim}</p>
+                    {vehicle.vin && (
+                      <p className="text-xs text-brand-gray-400 mt-1 font-mono tracking-wide">
+                        VIN: {vehicle.vin}
+                      </p>
+                    )}
                     <p className="text-3xl font-bold text-brand-red mt-3">
                       <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
                     </p>
@@ -340,6 +345,11 @@ export default async function VehicleDetailPage({
                   {vehicle.trim}
                 </span>
               </h1>
+              {vehicle.vin && (
+                <p className="text-xs text-brand-gray-400 mt-1 font-mono tracking-wide">
+                  VIN: {vehicle.vin}
+                </p>
+              )}
               <div className="flex items-baseline gap-3 mt-2">
                 <p className="text-3xl font-bold text-brand-red">
                   <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
@@ -461,16 +471,4 @@ export default async function VehicleDetailPage({
           />
         </div>
 
-        {/* Similar Vehicles — client component backed by CF KV via useInventory().
-            Immune to Railway build-time hibernation because it reads from KV,
-            not from the FastAPI backend. Renders nothing while loading or when
-            no matches exist. */}
-        <SimilarVehiclesCarousel
-          currentId={vehicle.id}
-          make={vehicle.make}
-          bodyStyle={vehicle.bodyStyle ?? ""}
-        />
-      </article>
-    </>
-  );
-}
+        {/* Similar Vehicles — client co
