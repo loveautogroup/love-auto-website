@@ -137,9 +137,10 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   // the branded Coming Soon placeholder. Local state so the swap
   // survives re-render.
   const [heroSrc, setHeroSrc] = useState<string>(initialHero);
-  // Latch: once an image URL has errored and we've shown the placeholder,
-  // don't keep retrying the same bad URL (would cause an infinite loop).
-  const [heroErrored, setHeroErrored] = useState<boolean>(false);
+  // Track the specific URL that 404'd so we can prevent retrying it while
+  // still allowing a *different* (live) URL to replace it. A boolean latch
+  // would block the upgrade from a failed seed path to a working R2/DC URL.
+  const [erroredUrl, setErroredUrl] = useState<string | null>(null);
 
   // Reactive hydration — two paths:
   // 1. heroOverride: useInventory() resolved and the live first image differs
@@ -148,13 +149,12 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   // 2. vehicle.images[0] changed: InventoryGrid passed a *live* vehicle as
   //    the prop directly (both live.images[0] and vehicle.images[0] are the
   //    same URL, so heroOverride stays null — we must watch the prop itself).
-  // In both cases, skip if a prior load already errored (heroErrored latch).
+  // Skip if the candidate is the same URL that already errored (loop guard).
   useEffect(() => {
-    if (heroErrored) return;
     const candidate =
       heroOverride ??
       (!forcePlaceholder && hasRealImage ? orderedImages[0] : null);
-    if (candidate && candidate !== heroSrc) {
+    if (candidate && candidate !== heroSrc && candidate !== erroredUrl) {
       setHeroSrc(candidate);
     }
   }, [heroOverride, vehicle.images[0]]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -182,13 +182,13 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             onError={() => {
-              // Fall back to the branded Coming Soon placeholder so the
-              // card never shows a broken gray box. Set heroErrored to
-              // prevent the reactive effect from re-trying the same URL
-              // (which would loop: effect → load → 404 → onError → effect…).
+              // Fall back to branded Coming Soon placeholder. Remember the
+              // specific URL that failed so the reactive effect can still
+              // upgrade heroSrc if a *different* (live) URL arrives later —
+              // only the exact errored URL is blocked from retrying.
               if (heroSrc !== COMING_SOON_PLACEHOLDER) {
+                setErroredUrl(heroSrc);
                 setHeroSrc(COMING_SOON_PLACEHOLDER);
-                setHeroErrored(true);
               }
             }}
             unoptimized={heroSrc.endsWith(".svg") || heroSrc.endsWith("/coming-soon.png")}
@@ -288,7 +288,4 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         <p className="text-sm text-brand-gray-500 mt-1">
           Est.{" "}
           <span className="font-semibold text-brand-gray-700">
-            ${monthlyPayment}/mo
-          </span>
-          <span
-           
+    
