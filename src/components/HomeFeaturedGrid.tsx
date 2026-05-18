@@ -87,7 +87,7 @@ export function HomeOnTheLot() {
           <Link
             key={v.id}
             href={`/inventory/${v.slug}`}
-            className="min-w-[260px] sm:min-w-[280px] bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-xl overflow-hidden transition-all snap-start shrink-0 group"
+            className="w-[260px] sm:w-[280px] min-w-[260px] sm:min-w-[280px] bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-xl overflow-hidden transition-all snap-start shrink-0 group"
           >
             <div className="aspect-[4/3] bg-brand-gray-700/50 relative overflow-hidden">
               {v.images && v.images[0] && (
@@ -118,3 +118,4 @@ export function HomeOnTheLot() {
     </div>
   );
 }
+     
