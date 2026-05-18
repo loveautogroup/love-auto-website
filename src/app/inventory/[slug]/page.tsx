@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { sampleInventory, getVehicleBySlug } from "@/data/inventory";
-import { fetchDmsInventory } from "@/lib/dmsInventory";
+import { fetchDmsInventory, syncedToVehicle } from "@/lib/dmsInventory";
 import { VehicleSchema, BreadcrumbSchema } from "@/components/StructuredData";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -163,7 +163,17 @@ export default async function VehicleDetailPage({
     overlay.textPhone ?? MERCHANDISING.textPhone ?? SITE_CONFIG.phoneRaw;
   const textBodyRaw = `Hi! I'm interested in the ${vehicle.year} ${vehicle.make} ${vehicle.model} on your website.`;
 
-  const similarVehicles = sampleInventory
+  // Combine seed + live DMS vehicles so all makes (Mazda, Nissan, Acura,
+  // etc.) can surface similar suggestions — not just the handful of makes
+  // baked into the seed file. fetchDmsInventory is deduplicated by Next.js
+  // fetch cache so this is a no-cost second call at build time.
+  const liveRaw = await fetchDmsInventory();
+  const allVehicles = [
+    ...sampleInventory,
+    ...liveRaw.map(syncedToVehicle),
+  ];
+
+  const similarVehicles = allVehicles
     .filter(
       (v) =>
         v.id !== vehicle.id &&
@@ -522,4 +532,4 @@ export default async function VehicleDetailPage({
       </article>
     </>
   );
-}
+}
