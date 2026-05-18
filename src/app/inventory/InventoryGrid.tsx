@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, Suspense } from "react";
+import { useMemo, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Vehicle } from "@/lib/types";
 import VehicleCard from "@/components/VehicleCard";
@@ -18,8 +18,18 @@ interface InventoryGridProps {
   vehicles: Vehicle[];
 }
 
+const PRICE_TABS = [
+  { id: "all",     label: "All Vehicles", min: null,  max: null  },
+  { id: "under5",  label: "Under $5K",   min: null,  max: 5000  },
+  { id: "5to10",   label: "$5K–$10K",    min: 5000,  max: 10000 },
+  { id: "10to20",  label: "$10K–$20K",   min: 10000, max: 20000 },
+  { id: "over20",  label: "$20K+",       min: 20000, max: null  },
+] as const;
+type TabId = (typeof PRICE_TABS)[number]["id"];
+
 function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) {
   const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState<TabId>("all");
   const { vehicles: liveVehicles, source, syncedAt } = useInventory();
   // Filter out KV-hidden vehicles before any further processing.
   // This is what makes the DMS "Hide from website" toggle work in real time.
@@ -47,6 +57,9 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
     const maxYear = Number(searchParams.get("maxYear")) || null;
     const q = searchParams.get("q")?.toLowerCase();
 
+    // Active price tab adds an additional price band on top of sidebar filters.
+    const tab = PRICE_TABS.find((t) => t.id === activeTab)!;
+
     return vehicles.filter((v) => {
       if (make && v.make.toLowerCase() !== make) return false;
       if (bodyStyle && v.bodyStyle.toLowerCase() !== bodyStyle) return false;
@@ -56,6 +69,9 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
       if (maxMileage !== null && v.mileage > maxMileage) return false;
       if (minYear !== null && v.year < minYear) return false;
       if (maxYear !== null && v.year > maxYear) return false;
+      // Tab price band (only applied when a specific tab is active)
+      if (tab.min !== null && v.price < tab.min) return false;
+      if (tab.max !== null && v.price >= tab.max) return false;
       if (q) {
         const tokens = q.split(/\s+/).filter(Boolean);
         const haystack = [
@@ -73,70 +89,47 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
       }
       return true;
     });
-  }, [vehicles, searchParams]);
+  }, [vehicles, searchParams, activeTab]);
+
+  // Per-tab counts — lets users see how many vehicles are in each band
+  // before clicking, without a full re-render.
+  const tabCounts = useMemo(() => {
+    return Object.fromEntries(
+      PRICE_TABS.map((t) => [
+        t.id,
+        vehicles.filter((v) => {
+          if (t.min !== null && v.price < t.min) return false;
+          if (t.max !== null && v.price >= t.max) return false;
+          return true;
+        }).length,
+      ])
+    );
+  }, [vehicles]);
 
   return (
     <>
-      <div className="flex items-center justify-between mb-6">
-        <p className="text-brand-gray-500 text-sm">
-          Showing{" "}
-          <span className="font-semibold text-brand-gray-900">{filtered.length}</span>{" "}
-          {filtered.length === 1 ? "vehicle" : "vehicles"}
-          {source === "live" && syncedAt && (
-            <span
-              className="ml-2 text-[11px] text-brand-gray-400"
-              title={`Live from Dealer Center, synced ${new Date(syncedAt).toLocaleString()}`}
-            >
-              · live
-            </span>
-          )}
-        </p>
-        <select
-          className="text-sm border border-brand-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-red"
-          aria-label="Sort vehicles"
-        >
-          <option value="recent">Recently Added</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="mileage-asc">Mileage: Low to High</option>
-          <option value="newest">Year: Newest First</option>
-        </select>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-        {filtered.map((vehicle) => (
-          <VehicleCard key={vehicle.id} vehicle={vehicle} />
-        ))}
-      </div>
-
-      {filtered.length === 0 && (
-        <div className="text-center py-16">
-          <p className="text-xl font-semibold text-brand-gray-700">
-            No vehicles match your filters
-          </p>
-          <p className="mt-2 text-brand-gray-500">
-            Try adjusting your search, or{" "}
-            <a href="/contact" className="text-brand-red hover:underline">
-              contact us
-            </a>{" "}
-            . We source vehicles to order.
-          </p>
-        </div>
-      )}
-    </>
-  );
-}
-
-/**
- * Inventory grid — client component so it can read URL search params
- * (required for static export, where server-side searchParams isn't
- * available at build time). Wraps in Suspense because useSearchParams
- * requires it under Next 15+.
- */
-export default function InventoryGrid({ vehicles }: InventoryGridProps) {
-  return (
-    <Suspense fallback={<div className="py-16 text-center text-brand-gray-500">Loading inventory...</div>}>
-      <InventoryGridInner vehicles={vehicles} />
-    </Suspense>
-  );
-}
+      {/* Price range tabs */}
+      <div className="mb-6 -mx-1">
+        <div className="flex flex-wrap gap-1.5" role="tablist" aria-label="Filter by price">
+          {PRICE_TABS.map((tab) => {
+            const isActive = activeTab === tab.id;
+            const count = tabCounts[tab.id] ?? 0;
+            return (
+              <button
+                key={tab.id}
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveTab(tab.id)}
+                className={`
+                  px-4 py-2 rounded-full text-sm font-medium transition-colors
+                  ${isActive
+                    ? "bg-brand-red text-white shadow-sm"
+                    : "bg-white text-brand-gray-600 border border-brand-gray-200 hover:border-brand-red/40 hover:text-brand-red"
+                  }
+                `}
+              >
+                {tab.label}
+                <span
+                  className={`ml-1.5 text-xs font-normal ${isActive ? "text-red-100" : "text-brand-gray-400"}`}
+                >
+                  {coun
