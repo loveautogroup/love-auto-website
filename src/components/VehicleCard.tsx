@@ -329,3 +329,11 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             </span>
           ))}
         </div>
+
+        <div className="mt-3 text-sm text-brand-red font-semibold group-hover:underline">
+          View Details →
+        </div>
+      </div>
+    </article>
+  );
+}
