@@ -133,10 +133,23 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     : (heroOverride ?? orderedImages[0] ?? "");
 
   // onError fallback — if the chosen hero URL 404s or fails to load
-  // (DealerCenter CDN flake, deleted seed asset, etc.), drop to the
-  // empty-state SVG by clearing heroSrc. Local state so the swap
+  // (DealerCenter CDN flake, deleted seed asset, etc.), fall back to
+  // the branded Coming Soon placeholder. Local state so the swap
   // survives re-render.
   const [heroSrc, setHeroSrc] = useState<string>(initialHero);
+
+  // Reactive hydration — heroOverride is null on first render (live
+  // data still loading) and becomes the real DC URL once useInventory()
+  // resolves. useState() only runs its initializer once on mount, so
+  // without this effect the live photo never replaces the seed URL.
+  // We only upgrade heroSrc; a previously-errored COMING_SOON_PLACEHOLDER
+  // can also be replaced if the live URL is actually reachable.
+  useEffect(() => {
+    if (heroOverride && heroSrc !== heroOverride) {
+      setHeroSrc(heroOverride);
+    }
+  }, [heroOverride]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const heroImage = heroSrc;
   // Render the <Image> only when there's a real source. Empty string
   // means "no photo, no placeholder" → fall through to the SVG branch.
@@ -284,19 +297,4 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
 
         {/* Spec chips — drivetrain + first 2 features */}
         <div className="flex flex-wrap gap-1.5 mt-3">
-          {vehicle.drivetrain !== "FWD" && (
-            <span className="text-xs bg-brand-gray-100 text-brand-gray-700 px-2 py-0.5 rounded-full">
-              {vehicle.drivetrain}
-            </span>
-          )}
-          {vehicle.features.slice(0, 2).map((feature) => (
-            <span
-              key={feature}
-              className="text-xs bg-brand-gray-100 text-brand-gray-700 px-2 py-0.5 rounded-full"
-            >
-              {feature.length > 20 ? feature.slice(0, 18) + "..." : feature}
-            </span>
-          ))}
-        </div>
-
-        <div className="mt-3 text-sm text-brand-red font-semibold group-hover
+          {vehicle.drivetrai
