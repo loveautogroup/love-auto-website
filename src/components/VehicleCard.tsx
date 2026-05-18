@@ -288,4 +288,47 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         <p className="text-sm text-brand-gray-500 mt-1">
           Est.{" "}
           <span className="font-semibold text-brand-gray-700">
-    
+            ${monthlyPayment}/mo
+          </span>
+          <span
+            className="text-xs text-brand-gray-400 ml-1"
+            title="Based on $1,000 down, 6.99% APR, 60 months"
+          >
+            *
+          </span>
+        </p>
+
+        {/* CarGurus Deal Rating Badge — replaced in-place by the async SDK.
+            Renders nothing until hydrated so there is zero layout shift. */}
+        {vehicle.vin && vehicle.price > 0 && (
+          <span
+            data-cg-vin={vehicle.vin}
+            data-cg-price={String(Math.round(vehicle.price))}
+            className="block mt-2"
+          />
+        )}
+
+        {/* Spec chips — drivetrain + first 2 features */}
+        <div className="flex flex-wrap gap-1.5 mt-3">
+          {vehicle.drivetrain !== "FWD" && (
+            <span className="text-xs bg-brand-gray-100 text-brand-gray-700 px-2 py-0.5 rounded-full">
+              {vehicle.drivetrain}
+            </span>
+          )}
+          {vehicle.features.slice(0, 2).map((feature) => (
+            <span
+              key={feature}
+              className="text-xs bg-brand-gray-100 text-brand-gray-700 px-2 py-0.5 rounded-full"
+            >
+              {feature.length > 20 ? feature.slice(0, 18) + "..." : feature}
+            </span>
+          ))}
+        </div>
+
+        <div className="mt-3 text-sm text-brand-red font-semibold group-hover:underline">
+          View Details →
+        </div>
+      </div>
+    </article>
+  );
+}

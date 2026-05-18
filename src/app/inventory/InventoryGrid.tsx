@@ -132,4 +132,74 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
                 <span
                   className={`ml-1.5 text-xs font-normal ${isActive ? "text-red-100" : "text-brand-gray-400"}`}
                 >
-                  {coun
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between mb-6">
+        <p className="text-brand-gray-500 text-sm">
+          Showing{" "}
+          <span className="font-semibold text-brand-gray-900">{filtered.length}</span>{" "}
+          {filtered.length === 1 ? "vehicle" : "vehicles"}
+          {source === "live" && syncedAt && (
+            <span
+              className="ml-2 text-[11px] text-brand-gray-400"
+              title={`Live from Dealer Center, synced ${new Date(syncedAt).toLocaleString()}`}
+            >
+              · live
+            </span>
+          )}
+        </p>
+        <select
+          className="text-sm border border-brand-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-red"
+          aria-label="Sort vehicles"
+        >
+          <option value="recent">Recently Added</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="mileage-asc">Mileage: Low to High</option>
+          <option value="newest">Year: Newest First</option>
+        </select>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+        {filtered.map((vehicle) => (
+          <VehicleCard key={vehicle.id} vehicle={vehicle} />
+        ))}
+      </div>
+
+      {filtered.length === 0 && (
+        <div className="text-center py-16">
+          <p className="text-xl font-semibold text-brand-gray-700">
+            No vehicles match your filters
+          </p>
+          <p className="mt-2 text-brand-gray-500">
+            Try adjusting your search, or{" "}
+            <a href="/contact" className="text-brand-red hover:underline">
+              contact us
+            </a>{" "}
+            . We source vehicles to order.
+          </p>
+        </div>
+      )}
+    </>
+  );
+}
+
+/**
+ * Inventory grid — client component so it can read URL search params
+ * (required for static export, where server-side searchParams isn't
+ * available at build time). Wraps in Suspense because useSearchParams
+ * requires it under Next 15+.
+ */
+export default function InventoryGrid({ vehicles }: InventoryGridProps) {
+  return (
+    <Suspense fallback={<div className="py-16 text-center text-brand-gray-500">Loading inventory...</div>}>
+      <InventoryGridInner vehicles={vehicles} />
+    </Suspense>
+  );
+}
