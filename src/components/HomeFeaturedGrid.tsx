@@ -98,7 +98,7 @@ export function HomeOnTheLot() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               )}
-              {v.daysOnLot <= 7 && (
+              {v.daysOnLot > 0 && v.daysOnLot <= 7 && (
                 <span className="absolute top-2 left-2 bg-brand-green text-white text-xs font-semibold px-2 py-0.5 rounded-full">
                   Just Arrived
                 </span>

@@ -345,7 +345,7 @@ export function resolveOverlay(
   if (!effectiveStatus && vehicleStatus === "sale-pending") {
     effectiveStatus = "sale-pending";
   }
-  if (!effectiveStatus && daysOnLot <= 14) {
+  if (!effectiveStatus && daysOnLot > 0 && daysOnLot <= 14) {
     effectiveStatus = "just-arrived";
   }
 
@@ -388,6 +388,5 @@ export function sortWithFeaturedFirst<T extends { vin: string }>(
   const visible = vehicles.filter((v) => !hiddenSet.has(v.vin));
   const featured = filterFeatured(visible);
   const rest = visible.filter((v) => !featuredSet.has(v.vin));
-
   return [...featured, ...rest];
 }
