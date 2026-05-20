@@ -111,7 +111,7 @@ export function useResolveOverlay(
   if (!effectiveStatus && vehicleStatus === "sale-pending") {
     effectiveStatus = "sale-pending";
   }
-  if (!effectiveStatus && daysOnLot <= 14) {
+  if (!effectiveStatus && daysOnLot > 0 && daysOnLot <= 14) {
     effectiveStatus = "just-arrived";
   }
 

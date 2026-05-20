@@ -20,16 +20,28 @@ interface InventoryGridProps {
 
 function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) {
   const searchParams = useSearchParams();
-  const { vehicles: liveVehicles, source, syncedAt } = useInventory();
+  const { vehicles: liveVehicles, source, loading } = useInventory();
   // Filter out KV-hidden vehicles before any further processing.
+  // Both hooks called unconditionally (Rules of Hooks).
   const visibleLiveVehicles = useVisibleVehicles(liveVehicles);
+  const visibleFallbackVehicles = useVisibleVehicles(fallbackVehicles);
 
-  const vehicles =
-    source === "fallback"
-      ? fallbackVehicles
-      : sortWithFeaturedFirst(
-          visibleLiveVehicles.filter((v) => v.status !== "sold")
-        );
+  // When source is "fallback" AND loading is still true we're waiting on the
+  // live fetch. Show skeletons — don't flash the stale seed data which may
+  // contain vehicles that have already been sold.
+  // If loading finishes and source is still "fallback" (fetch errored) we fall
+  // back to the seed, filtered for sold/hidden, so the page is never empty.
+  const isLoadingInitial = source === "fallback" && loading;
+
+  const vehicles = isLoadingInitial
+    ? [] // skeleton rendered below
+    : source !== "fallback"
+    ? sortWithFeaturedFirst(
+        visibleLiveVehicles.filter((v) => v.status !== "sold")
+      )
+    : sortWithFeaturedFirst(
+        visibleFallbackVehicles.filter((v) => v.status !== "sold")
+      );
 
   const filtered = useMemo(() => {
     const make = searchParams.get("make")?.toLowerCase();
@@ -70,6 +82,20 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
     });
   }, [vehicles, searchParams]);
 
+  if (isLoadingInitial) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6" aria-label="Loading inventory">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div
+            key={i}
+            className="rounded-2xl bg-brand-gray-100 animate-pulse overflow-hidden"
+            style={{ height: 380 }}
+          />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="flex items-center justify-between mb-6">
@@ -77,13 +103,8 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
           Showing{" "}
           <span className="font-semibold text-brand-gray-900">{filtered.length}</span>{" "}
           {filtered.length === 1 ? "vehicle" : "vehicles"}
-          {source === "live" && syncedAt && (
-            <span
-              className="ml-2 text-[11px] text-brand-gray-400"
-              title={`Live from Dealer Center, synced ${new Date(syncedAt).toLocaleString()}`}
-            >
-              · live
-            </span>
+          {source === "live" && (
+            <span className="ml-2 text-[11px] text-brand-gray-400">· live</span>
           )}
         </p>
         <select
