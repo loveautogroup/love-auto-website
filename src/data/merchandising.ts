@@ -230,7 +230,7 @@ export const MERCHANDISING: MerchandisingConfig = {
     //   - Acura MDX 2HNYD2H63AH509874: 4 accidents reported
     "KMHCT4AE6HU222547", // 2017 Hyundai Accent SE
     "2GKALUEK6D6300009", // 2013 GMC Terrain SLT-1
-    "JF2SJAGC1HH553881", // 2017 Subaru Forester 2.5i Premium
+    // 2026-05-20: Forester JF2SJAGC1HH553881 removed — status Photo Ready, not Listed
   ],
 
   overlays: {
@@ -390,3 +390,4 @@ export function sortWithFeaturedFirst<T extends { vin: string }>(
   const rest = visible.filter((v) => !featuredSet.has(v.vin));
   return [...featured, ...rest];
 }
+
