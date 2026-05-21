@@ -1,0 +1,16 @@
+{
+  "name": "railway-snapshot-trigger",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cloudflare Worker — daily trigger for the Railway SQLite snapshot endpoint. Phase 9 Wave 4.3.",
+  "scripts": {
+    "deploy": "wrangler deploy --config wrangler.toml",
+    "dev": "wrangler dev --config wrangler.toml",
+    "tail": "wrangler tail --config wrangler.toml"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250101.0",
+    "typescript": "^5.4.0",
+    "wrangler": "^4.85.0"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "turso-snapshot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cloudflare Worker — weekly Turso → R2 SQL dump. Phase 9 Wave 4.2.",
+  "scripts": {
+    "deploy": "wrangler deploy --config wrangler.toml",
+    "dev": "wrangler dev --config wrangler.toml",
+    "tail": "wrangler tail --config wrangler.toml"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.14.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250101.0",
+    "typescript": "^5.4.0",
+    "wrangler": "^4.85.0"
+  }
+}

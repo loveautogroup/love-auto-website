@@ -1,0 +1,38 @@
+# Cron Worker — Railway Snapshot Trigger
+#
+# Phase 9 Wave 4.3 daily trigger.
+#
+# Every day at 09:00 UTC (04:00 CT), POST to the Railway-side
+# /api/v1/admin/sqlite-snapshot endpoint. That endpoint does the
+# actual work: WAL checkpoint, stream the volume's SQLite file to
+# R2 at railway-snapshots/{YYYY-MM-DD}.db, prune 30+ day old
+# snapshots, ping Healthchecks.io.
+#
+# This Worker is just the trigger. Health monitoring lives on the
+# Railway endpoint side (it pings hc-ping.com/<railway-snapshot-uuid>
+# on success). If this Worker fails to call Railway, OR Railway
+# returns non-2xx, the Healthchecks ping doesn't fire and the grace
+# window alert catches it.
+#
+# Deploy:
+#   cd workers/railway-snapshot-trigger
+#   npm install
+#   wrangler secret put RAILWAY_API_KEY --config wrangler.toml
+#     # paste the bill agent key from Dashlane (or a fresh one)
+#   wrangler deploy --config wrangler.toml
+
+name = "railway-snapshot-trigger"
+main = "src/index.ts"
+compatibility_date = "2026-05-11"
+compatibility_flags = ["nodejs_compat"]
+
+# Daily at 09:00 UTC = 04:00 CT.
+# Note: CF Workers cron uses 1-7 for DOW; * is fine for daily.
+[triggers]
+crons = ["0 9 * * *"]
+
+[observability]
+enabled = true
+[observability.logs]
+enabled = true
+head_sampling_rate = 1

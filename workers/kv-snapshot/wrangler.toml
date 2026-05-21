@@ -1,0 +1,64 @@
+# Cron Worker — KV Snapshot
+#
+# Phase 9 Wave 4.1 (scoped at memory/projects/wave-4.1-cf-kv-snapshot.md).
+#
+# Daily off-platform snapshot of every KV namespace we own:
+#   - INVENTORY     (id 8e64e40dfeae483396a3b1eaa755c820)
+#   - MERCHANDISING (id fb1d2c022f45486ba77fd5ba0ab04b3a — config:v1 overlays)
+#
+# Output: gzipped JSON snapshot at love-auto-photos R2 bucket, key
+#   kv-snapshots/{YYYY-MM-DD}.json.gz
+#
+# Retention: 90 days. Older snapshots pruned in-cron each run.
+#
+# Healthchecks.io heartbeat on success only — failures fire no ping
+# and Healthchecks alerts after the grace window.
+#
+# Deploy:
+#   cd workers/kv-snapshot
+#   wrangler deploy
+#
+# Set the healthcheck URL (one-time):
+#   wrangler secret put HEALTHCHECK_URL
+#   # paste https://hc-ping.com/<uuid> when prompted
+#
+# Trigger manually (after deploy):
+#   curl -X POST https://kv-snapshot.<account>.workers.dev/run \
+#     -H "Authorization: Bearer <first-12-chars-of-MANUAL_TRIGGER_SECRET>"
+
+name = "kv-snapshot"
+main = "src/index.ts"
+compatibility_date = "2026-05-10"
+compatibility_flags = ["nodejs_compat"]
+
+# Daily at 07:00 UTC = 02:00 CT (outside business hours)
+[triggers]
+crons = ["0 7 * * *"]
+
+# KV bindings: both namespaces snapshot in a single run
+[[kv_namespaces]]
+binding = "INVENTORY_KV"
+id = "8e64e40dfeae483396a3b1eaa755c820"
+preview_id = "9cefd2c111df4fb78e80090ade013440"
+
+[[kv_namespaces]]
+binding = "MERCHANDISING_KV"
+id = "fb1d2c022f45486ba77fd5ba0ab04b3a"
+# preview_id intentionally same as id — MERCHANDISING namespace has no
+# separate preview variant. Wrangler dev will use the prod namespace.
+preview_id = "fb1d2c022f45486ba77fd5ba0ab04b3a"
+
+# R2 bucket for snapshot storage (reuses the existing photos bucket
+# under a dedicated prefix to avoid spinning up a separate bucket).
+[[r2_buckets]]
+binding = "SNAPSHOTS"
+bucket_name = "love-auto-photos"
+preview_bucket_name = "love-auto-photos-preview"
+
+# Observability — full sampling while feature is new; drop to 0.1 once
+# stable (~30 days after first deploy).
+[observability]
+enabled = true
+[observability.logs]
+enabled = true
+head_sampling_rate = 1

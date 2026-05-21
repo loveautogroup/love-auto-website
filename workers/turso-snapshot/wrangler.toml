@@ -1,0 +1,56 @@
+# Cron Worker — Turso Snapshot
+#
+# Phase 9 Wave 4.2 (scoped at memory/projects/wave-4.2-turso-snapshot.md).
+#
+# Weekly off-platform SQL dump of the prod Turso DB
+# (`love-auto-dms-prod`, libsql://love-auto-dms-prod-loveautogroup.aws-us-east-2.turso.io).
+#
+# Output: gzipped SQL dump at love-auto-photos R2 bucket, key
+#   turso-snapshots/{YYYY-MM-DD}.sql.gz
+#
+# Retention: 90 days. Older snapshots pruned in-cron each run.
+#
+# Healthchecks.io heartbeat on success only — failures fire no ping
+# and Healthchecks alerts after the grace window.
+#
+# Deploy:
+#   cd workers/turso-snapshot
+#   npm install
+#   wrangler deploy --config wrangler.toml
+#
+# Set secrets (one-time):
+#   wrangler secret put TURSO_DATABASE_URL --config wrangler.toml
+#     # paste libsql://love-auto-dms-prod-loveautogroup.aws-us-east-2.turso.io
+#   wrangler secret put TURSO_AUTH_TOKEN --config wrangler.toml
+#     # paste current Turso production auth token (from Vercel env or Dashlane)
+#   wrangler secret put HEALTHCHECK_URL --config wrangler.toml
+#     # paste https://hc-ping.com/<uuid> from Healthchecks dashboard
+
+name = "turso-snapshot"
+main = "src/index.ts"
+compatibility_date = "2026-05-11"
+compatibility_flags = ["nodejs_compat"]
+
+# Weekly on Sundays at 08:00 UTC = 03:00 CT (after kv-snapshot, before any
+# weekday traffic). Per scope doc: weekly is sufficient because Turso has
+# 14-day PITR; this off-platform dump is for catastrophic vendor-side scenarios.
+#
+# NOTE: Cloudflare Workers cron uses 1-7 for day-of-week (NOT 0-6 standard).
+# `7` = Sunday in this dialect. Standard POSIX cron would be `0 8 * * 0`.
+[triggers]
+crons = ["0 8 * * 7"]
+
+# R2 bucket for snapshot storage (reuses the existing photos bucket
+# under a dedicated prefix).
+[[r2_buckets]]
+binding = "SNAPSHOTS"
+bucket_name = "love-auto-photos"
+preview_bucket_name = "love-auto-photos-preview"
+
+# Observability — full sampling while feature is new; drop to 0.1 once
+# stable (~60 days after first deploy).
+[observability]
+enabled = true
+[observability.logs]
+enabled = true
+head_sampling_rate = 1

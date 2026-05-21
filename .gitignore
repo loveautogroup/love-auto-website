@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Nested worker dependencies + wrangler build cache (W4.x backup workers)
+node_modules/
+.wrangler/
