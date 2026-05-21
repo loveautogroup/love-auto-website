@@ -25,6 +25,7 @@
  */
 
 import { useState } from "react";
+import { LeadFormConsent } from "@/components/LeadFormConsent";
 
 const DMS_API_BASE =
   process.env.NEXT_PUBLIC_DMS_API_BASE ?? "https://dms.loveautogroup.net";
@@ -356,6 +357,11 @@ export default function LeadForm({
           a purchase. Standard rates may apply.
         </span>
       </label>
+
+      {/* CRM Phase 1 — Diane-approved informational disclosure about Jordan
+          auto-responses + unsubscribe rights. Sits between the TCPA opt-in
+          checkbox and the submit button so users see it before submitting. */}
+      <LeadFormConsent />
 
       {error && (
         <div className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
