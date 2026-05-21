@@ -316,6 +316,12 @@ export const MERCHANDISING: MerchandisingConfig = {
       ],
       marketEstimate: 3200, // priced at $2,499 — Great Deal
     },
+
+    // 2017 Subaru Forester 2.5i Premium — hidden: Photo Ready in Railway, not Listed
+    // 2026-05-21: pulled from site until photos are approved and status flips to Listed
+    "JF2SJAGC1HH553881": {
+      hidden: true,
+    },
   },
 
   lastUpdated: "2026-04-20",
@@ -390,4 +396,3 @@ export function sortWithFeaturedFirst<T extends { vin: string }>(
   const rest = visible.filter((v) => !featuredSet.has(v.vin));
   return [...featured, ...rest];
 }
-
