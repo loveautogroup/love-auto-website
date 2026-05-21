@@ -353,4 +353,19 @@ export const onRequest: PagesFunction<Env> = async (context) => {
           "Content-Type": "text/html;charset=UTF-8",
           // Short edge cache so a vehicle that comes back (rare) refreshes
           // quickly. noindex meta + 410 status do the deindex work — the
-          // cache is just here to keep upstream load 
+          // cache is just here to keep upstream load low.
+          "Cache-Control": "public, max-age=300, s-maxage=300",
+          "X-Robots-Tag": "noindex, follow",
+        },
+      });
+    }
+
+    // Unknown status that isn't available/coming-soon/gone (shouldn't
+    // happen — DMS public feed only emits the canonical statuses — but
+    // belt-and-suspenders fall through to the static 404).
+    return staticResponse;
+  } catch {
+    // DMS unreachable — fall through to the static 404
+    return staticResponse;
+  }
+};
