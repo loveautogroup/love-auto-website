@@ -175,9 +175,11 @@ export async function fetchDmsInventory(
     const res = await fetch(DMS_PUBLIC_INVENTORY_URL, {
       signal: ctrl.signal,
       headers: { Accept: "application/json" },
-      // Pin Next.js's fetch cache: 60s during build, force-cache stable
-      // across the same build run.
-      cache: "no-store",
+      // force-cache: required for output:"export" static generation.
+      // Shares one Railway response across all 3 SSG workers in the same
+      // build run. The static HTML is rebuilt on every CF Pages deploy, so
+      // staleness is bounded by deploy cadence, not cache TTL.
+      cache: "force-cache",
     });
     if (!res.ok) {
       console.warn("[dmsInventory] DMS upstream non-OK:", res.status);
