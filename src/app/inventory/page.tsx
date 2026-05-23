@@ -3,6 +3,7 @@ import { sampleInventory } from "@/data/inventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
 import InventoryFilters from "./InventoryFilters";
 import InventoryGrid from "./InventoryGrid";
+import VDPTrustStrip from "@/components/VDPTrustStrip";
 
 export const metadata: Metadata = {
   title: "Used Cars for Sale in Villa Park, IL | Love Auto Group",
@@ -29,6 +30,10 @@ export default function InventoryPage() {
           </p>
         </div>
       </section>
+
+      <div className="max-w-7xl mx-auto px-4 pt-4">
+        <VDPTrustStrip />
+      </div>
 
       <section className="max-w-7xl mx-auto px-4 py-8">
         <div className="lg:grid lg:grid-cols-[280px_1fr] lg:gap-8">

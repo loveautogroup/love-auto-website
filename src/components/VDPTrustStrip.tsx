@@ -1,19 +1,16 @@
 /**
- * Trust strip displayed above the photo gallery on the VDP.
+ * Trust strip — displayed on the VDP, homepage, and inventory page.
  *
- * Three pillars matching the Love Auto Group Difference card:
- *   1. Total Protection — inspection + warranty + Carfax
- *   2. Japanese Specialists — over a decade of expertise
- *   3. Honest Pricing — no hidden fees, all credit welcome
- *
- * Inspired by the Maxim Autos VDP trust strip but using Love's brand
- * (red accents on dark navy) rather than orange-on-orange.
+ * Three credibility pillars for Love Auto Group:
+ *   1. Fully Inspected · Free CARFAX Included
+ *   2. Japanese Makes Specialist · Over a Decade in Villa Park
+ *   3. No Hidden Fees · All Credit Welcome · Same-Day Title & Plates
  */
 
 export default function VDPTrustStrip() {
   return (
     <section
-      aria-label="Why buyers trust Love Auto Group"
+      aria-label="Love Auto Group trust pillars"
       className="
         bg-gradient-to-r from-brand-red to-brand-red-dark text-white
         rounded-xl shadow-sm
@@ -22,26 +19,22 @@ export default function VDPTrustStrip() {
     >
       <div className="max-w-7xl mx-auto px-4 py-3">
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
-          <span className="hidden sm:inline-flex items-center gap-2 font-bold tracking-wide uppercase text-[12px]">
-            Why Buyers Trust Us
-          </span>
-          <span className="hidden sm:inline-block w-px h-5 bg-white/30" aria-hidden="true" />
 
           <span className="inline-flex items-center gap-2">
             <Shield />
             <span>
-              <strong className="font-bold">Total Protection</strong>
-              <span className="hidden md:inline text-white/80"> — Thorough Inspection &amp; Free CARFAX Report</span>
+              <strong className="font-bold">Fully Inspected</strong>
+              <span className="hidden md:inline text-white/80"> · Free CARFAX Included</span>
             </span>
           </span>
 
           <span className="hidden md:inline-block w-px h-5 bg-white/30" aria-hidden="true" />
 
           <span className="inline-flex items-center gap-2">
-            <SunIcon />
+            <WrenchIcon />
             <span>
-              <strong className="font-bold">Japanese Specialists</strong>
-              <span className="hidden md:inline text-white/80"> — Over a Decade of Expertise</span>
+              <strong className="font-bold">Japanese Makes Specialist</strong>
+              <span className="hidden md:inline text-white/80"> · Over a Decade in Villa Park</span>
             </span>
           </span>
 
@@ -50,10 +43,11 @@ export default function VDPTrustStrip() {
           <span className="inline-flex items-center gap-2">
             <DollarIcon />
             <span>
-              <strong className="font-bold">Honest Pricing</strong>
-              <span className="hidden md:inline text-white/80"> — No Hidden Fees · All Credit Welcome</span>
+              <strong className="font-bold">No Hidden Fees</strong>
+              <span className="hidden md:inline text-white/80"> · All Credit Welcome · Same-Day Title &amp; Plates</span>
             </span>
           </span>
+
         </div>
       </div>
     </section>
@@ -68,11 +62,10 @@ function Shield() {
   );
 }
 
-function SunIcon() {
+function WrenchIcon() {
   return (
     <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white flex-shrink-0" aria-hidden="true">
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
+      <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
     </svg>
   );
 }

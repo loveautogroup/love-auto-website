@@ -4,6 +4,7 @@ import HomeFeaturedGrid, { HomeOnTheLot } from "@/components/HomeFeaturedGrid";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 import PaymentCalculator from "@/components/PaymentCalculator";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
+import VDPTrustStrip from "@/components/VDPTrustStrip";
 import { SERVICE_AREAS } from "@/data/serviceAreas";
 import { BRANDS } from "@/data/brands";
 
@@ -171,6 +172,11 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Trust ticker — 3 credibility pillars, visible on every page */}
+      <div className="max-w-7xl mx-auto px-4 pt-4">
+        <VDPTrustStrip />
+      </div>
 
       {/* Featured Vehicles — self-hides when nothing is featured in KV */}
       <HomeFeaturedGrid />
