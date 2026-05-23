@@ -269,7 +269,7 @@ export default async function VehicleDetailPage({
                         data-cg-vin={vehicle.vin}
                         data-cg-price={String(Math.round(vehicle.price))}
                         data-cg-zip="60181"
-                        className="block mt-3"
+                        className="block mt-3 empty:hidden"
                       />
                     )}
                   </div>
@@ -367,7 +367,7 @@ export default async function VehicleDetailPage({
                   data-cg-vin={vehicle.vin}
                   data-cg-price={String(Math.round(vehicle.price))}
                   data-cg-zip="60181"
-                  className="block mt-3"
+                  className="block mt-3 empty:hidden"
                 />
               )}
               {/* Mobile Show Carfax — inline next to the title so it's
@@ -484,3 +484,4 @@ export default async function VehicleDetailPage({
     </>
   );
 }
+      
