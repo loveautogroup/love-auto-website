@@ -1,11 +1,26 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { SITE_CONFIG, NAV_LINKS } from "@/lib/constants";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
+import { useLanguage } from "@/context/LanguageContext";
 
-export default async function Footer() {
+// Maps NAV_LINKS href → translation key
+const NAV_KEY_MAP: Record<string, string> = {
+  "/": "home",
+  "/inventory": "inventory",
+  "/financing": "financing",
+  "/sell-your-car": "sellYourCar",
+  "/about": "about",
+  "/faq": "faq",
+  "/contact": "contact",
+};
+
+export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
 
   return (
     <footer className="bg-brand-navy text-white" role="contentinfo">
@@ -23,13 +38,10 @@ export default async function Footer() {
               />
             </div>
             <p className="text-brand-gray-300 text-sm leading-relaxed">
-              Family owned since {SITE_CONFIG.established}. We specialize in
-              quality Japanese vehicles, carefully selected and fully
-              reconditioned in Villa Park, IL.
+              {t.footer.about}
             </p>
 
-            {/* Carfax Advantage Dealer accreditation — persistent footer
-                trust mark, visible on every page. */}
+            {/* Carfax Advantage Dealer accreditation */}
             <div className="mt-5">
               <CarfaxAdvantageBadge size="sm" />
             </div>
@@ -38,26 +50,30 @@ export default async function Footer() {
           {/* Column 2: Quick Links */}
           <div>
             <h3 className="font-semibold text-sm uppercase tracking-wider text-brand-gray-300 mb-4">
-              Quick Links
+              {t.footer.quickLinks}
             </h3>
             <ul className="space-y-2">
-              {NAV_LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-brand-gray-200 hover:text-white text-sm transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+              {NAV_LINKS.map((link) => {
+                const key = NAV_KEY_MAP[link.href] as keyof typeof t.nav | undefined;
+                const label = key ? t.nav[key] : link.label;
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-brand-gray-200 hover:text-white text-sm transition-colors"
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
           {/* Column 3: Hours */}
           <div>
             <h3 className="font-semibold text-sm uppercase tracking-wider text-brand-gray-300 mb-4">
-              Business Hours
+              {t.footer.businessHours}
             </h3>
             <ul className="space-y-1.5 text-sm">
               {SITE_CONFIG.hours.map((h) => (
@@ -80,7 +96,7 @@ export default async function Footer() {
           {/* Column 4: Contact */}
           <div>
             <h3 className="font-semibold text-sm uppercase tracking-wider text-brand-gray-300 mb-4">
-              Contact Us
+              {t.footer.contactUs}
             </h3>
             <ul className="space-y-3 text-sm">
               <li>
@@ -88,42 +104,16 @@ export default async function Footer() {
                   href={`tel:${SITE_CONFIG.phoneRaw}`}
                   className="flex items-center gap-2 text-brand-gold hover:text-brand-gold-light font-semibold transition-colors"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   {SITE_CONFIG.phone}
                 </a>
               </li>
               <li className="flex items-start gap-2 text-brand-gray-200">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 mt-0.5 shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <span>
                   {SITE_CONFIG.address.street}
@@ -137,19 +127,8 @@ export default async function Footer() {
                   href={`mailto:${SITE_CONFIG.email}`}
                   className="flex items-center gap-2 text-brand-gray-200 hover:text-white transition-colors"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   {SITE_CONFIG.email}
                 </a>
@@ -164,14 +143,14 @@ export default async function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-brand-gray-500">
           <p>
-            &copy; {currentYear} {SITE_CONFIG.name}. All rights reserved.
+            &copy; {currentYear} {SITE_CONFIG.name}. {t.footer.rights}
           </p>
           <div className="flex gap-4">
             <Link href="/privacy-policy" className="hover:text-brand-gray-300">
-              Privacy Policy
+              {t.footer.privacy}
             </Link>
             <Link href="/terms" className="hover:text-brand-gray-300">
-              Terms of Service
+              {t.footer.terms}
             </Link>
           </div>
         </div>

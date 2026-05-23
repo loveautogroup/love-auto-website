@@ -5,10 +5,20 @@ import Link from "next/link";
 import Image from "next/image";
 import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
+import { useLanguage } from "@/context/LanguageContext";
 
-// Simple Carfax wordmark for the mobile-only banner — same SVG used inside
-// the per-vehicle FREE REPORT button on photo overlays. Shows up on phones
-// where the Advantage Dealer shield is too tall to fit the slim header bar.
+// Maps NAV_LINKS href → translation key so we can look up the right label.
+const NAV_KEY_MAP: Record<string, keyof ReturnType<typeof useLanguage>["t"]["nav"]> = {
+  "/": "home",
+  "/inventory": "inventory",
+  "/financing": "financing",
+  "/sell-your-car": "sellYourCar",
+  "/about": "about",
+  "/faq": "faq",
+  "/contact": "contact",
+};
+
+// Simple Carfax wordmark for the mobile-only banner.
 function CarfaxWordmark() {
   return (
     <span
@@ -28,12 +38,44 @@ function CarfaxWordmark() {
   );
 }
 
+/** EN/ES toggle pill — compact, accessible. */
+function LangToggle() {
+  const { locale, setLocale } = useLanguage();
+  return (
+    <button
+      onClick={() => setLocale(locale === "en" ? "es" : "en")}
+      className="flex items-center gap-0.5 text-xs font-semibold rounded-full border border-white/30 overflow-hidden"
+      aria-label={locale === "en" ? "Switch to Spanish" : "Cambiar a inglés"}
+    >
+      <span
+        className={`px-2 py-0.5 transition-colors ${
+          locale === "en"
+            ? "bg-brand-red text-white"
+            : "text-brand-gray-400 hover:text-white"
+        }`}
+      >
+        EN
+      </span>
+      <span
+        className={`px-2 py-0.5 transition-colors ${
+          locale === "es"
+            ? "bg-brand-red text-white"
+            : "text-brand-gray-400 hover:text-white"
+        }`}
+      >
+        ES
+      </span>
+    </button>
+  );
+}
+
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <header className="bg-brand-navy text-white sticky top-0 z-50">
-      {/* Top bar — phone + hours */}
+      {/* Top bar — phone + hours + lang toggle */}
       <div className="bg-brand-gray-900 text-sm py-1.5 px-4 hidden md:block">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
@@ -61,27 +103,26 @@ export default function Header() {
               <span className="font-semibold text-white">{SITE_CONFIG.reviews.google.rating}</span>
               <span className="text-brand-gray-400">({SITE_CONFIG.reviews.google.count} reviews)</span>
             </a>
-            <span className="text-brand-gray-300">
-              Mon 2PM–7PM | Tue–Fri 11AM–7PM | Sat 12PM–7PM
-            </span>
+            <span className="text-brand-gray-300">{t.header.hours}</span>
             <a
               href={`tel:${SITE_CONFIG.phoneRaw}`}
               className="text-brand-red-light hover:text-white font-semibold"
             >
               {SITE_CONFIG.phone}
             </a>
+            <LangToggle />
           </div>
         </div>
       </div>
 
-      {/* Mobile-only credibility strip — desktop top bar is hidden on phones,
-          so surface a simple Carfax wordmark + tagline as a persistent trust
-          signal. Replaces the Advantage Dealer shield, which was too tall
-          for this slim row on mobile and was 404'ing on click. */}
-      <div className="md:hidden bg-brand-gray-900 px-4 py-1.5 flex items-center justify-center gap-2 text-[11px]">
-        <CarfaxWordmark />
-        <span className="text-brand-gray-400">·</span>
-        <span className="text-brand-gray-300 font-medium">Free Carfax on every vehicle</span>
+      {/* Mobile-only credibility strip */}
+      <div className="md:hidden bg-brand-gray-900 px-4 py-1.5 flex items-center justify-between gap-2 text-[11px]">
+        <div className="flex items-center gap-2">
+          <CarfaxWordmark />
+          <span className="text-brand-gray-400">·</span>
+          <span className="text-brand-gray-300 font-medium">{t.header.freeCarfax}</span>
+        </div>
+        <LangToggle />
       </div>
 
       {/* Main nav */}
@@ -89,7 +130,7 @@ export default function Header() {
         className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between"
         aria-label="Main navigation"
       >
-        {/* Logo — SVG primary (red LOVE on dark background) */}
+        {/* Logo */}
         <Link href="/" className="flex items-center group">
           <Image
             src="/images/logo-primary.svg"
@@ -103,15 +144,19 @@ export default function Header() {
 
         {/* Desktop nav links */}
         <div className="hidden lg:flex items-center gap-1">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="px-3 py-2 rounded-md text-sm font-medium text-brand-gray-200 hover:text-white hover:bg-white/10 transition-colors"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const key = NAV_KEY_MAP[link.href];
+            const label = key ? t.nav[key] : link.label;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="px-3 py-2 rounded-md text-sm font-medium text-brand-gray-200 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                {label}
+              </Link>
+            );
+          })}
         </div>
 
         {/* CTA + Phone (desktop) */}
@@ -126,7 +171,7 @@ export default function Header() {
             href="/inventory"
             className="bg-brand-red hover:bg-brand-red-dark text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
           >
-            Browse Inventory
+            {t.header.browseInventory}
           </Link>
         </div>
 
@@ -159,34 +204,12 @@ export default function Header() {
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
           </button>
@@ -197,16 +220,20 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="lg:hidden bg-brand-navy border-t border-white/10 pb-4">
           <div className="px-4 pt-2 space-y-1">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2.5 rounded-md text-base font-medium text-brand-gray-200 hover:text-white hover:bg-white/10"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const key = NAV_KEY_MAP[link.href];
+              const label = key ? t.nav[key] : link.label;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-2.5 rounded-md text-base font-medium text-brand-gray-200 hover:text-white hover:bg-white/10"
+                >
+                  {label}
+                </Link>
+              );
+            })}
           </div>
           <div className="px-4 mt-3">
             <Link
@@ -214,7 +241,7 @@ export default function Header() {
               onClick={() => setMobileMenuOpen(false)}
               className="block w-full text-center bg-brand-red hover:bg-brand-red-dark text-white px-4 py-3 rounded-lg font-semibold transition-colors"
             >
-              Browse Inventory
+              {t.header.browseInventory}
             </Link>
           </div>
         </div>
