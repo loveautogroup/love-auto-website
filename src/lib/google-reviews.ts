@@ -92,7 +92,12 @@ export async function getGoogleReviews(): Promise<GoogleReviewData> {
 
     const reviews: GoogleReviewSnippet[] =
       (data.reviews ?? [])
-        .filter((r) => r.text?.text && r.authorAttribution?.displayName)
+        .filter(
+          (r) =>
+            r.text?.text &&
+            r.authorAttribution?.displayName &&
+            (r.rating ?? 0) >= 4
+        )
         .map((r) => ({
           author: r.authorAttribution!.displayName!,
           authorPhoto: r.authorAttribution?.photoUri,
@@ -112,4 +117,4 @@ export async function getGoogleReviews(): Promise<GoogleReviewData> {
     console.error("[google-reviews] Failed to fetch:", error);
     return FALLBACK;
   }
-}
+}
