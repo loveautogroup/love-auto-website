@@ -1,7 +1,7 @@
 /**
- * Ivan's Recon Highlights — inspection checklist for the VDP.
+ * Love Auto Recon Highlights — inspection checklist for the VDP.
  *
- * Static component: every Love Auto vehicle goes through Ivan's full
+ * Static component: every Love Auto vehicle goes through our full
  * multi-point reconditioning before it hits the lot. This makes that
  * process visible to the customer as a trust signal. It doesn't require
  * per-vehicle API data — the process is identical for every car.
@@ -51,7 +51,7 @@ export default function VDPReconHighlights() {
             id="recon-heading"
             className="text-sm font-bold text-brand-gray-900 uppercase tracking-wide"
           >
-            Ivan&rsquo;s Recon Checklist
+            Love Auto Recon Checklist
           </h2>
           <p className="text-xs text-brand-gray-500 mt-0.5">
             Every car inspected &amp; reconditioned before it leaves our lot
@@ -83,8 +83,8 @@ export default function VDPReconHighlights() {
 
       {/* Footer note */}
       <p className="mt-4 text-[11px] text-brand-gray-400 leading-snug">
-        Ivan is our in-house reconditioning specialist. Every vehicle is inspected and
-        approved before we list it. Not happy with something? We&rsquo;ll fix it before you drive off.
+        Every vehicle is fully inspected and reconditioned by our team before we list it.
+        Not happy with something? We&rsquo;ll fix it before you drive off.
       </p>
     </section>
   );

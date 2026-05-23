@@ -83,7 +83,7 @@ export const translations = {
       ctaPhone: "Or call us",
     },
     trust: {
-      reconTitle: "Ivan’s Recon Checklist",
+      reconTitle: "Love Auto Recon Checklist",
       reconSub: "Every car inspected & reconditioned before it leaves our lot",
     },
   },
@@ -159,7 +159,7 @@ export const translations = {
       ctaPhone: "O llámenos",
     },
     trust: {
-      reconTitle: "Lista de Revisión de Ivan",
+      reconTitle: "Lista de Revisión de Love Auto",
       reconSub:
         "Cada auto es inspeccionado y reacondicionado antes de salir de nuestro lote",
     },
