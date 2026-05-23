@@ -38,32 +38,32 @@ function CarfaxWordmark() {
   );
 }
 
-/** EN/ES toggle pill — compact, accessible. */
+/** Language toggle pill — full language names, accessible. */
 function LangToggle() {
   const { locale, setLocale } = useLanguage();
   return (
     <button
       onClick={() => setLocale(locale === "en" ? "es" : "en")}
-      className="flex items-center gap-0.5 text-xs font-semibold rounded-full border border-white/30 overflow-hidden"
+      className="flex items-center gap-1 text-sm font-semibold rounded-full border border-white/30 overflow-hidden"
       aria-label={locale === "en" ? "Switch to Spanish" : "Cambiar a inglés"}
     >
       <span
-        className={`px-2 py-0.5 transition-colors ${
+        className={`px-4 py-1 transition-colors ${
           locale === "en"
             ? "bg-brand-red text-white"
             : "text-brand-gray-400 hover:text-white"
         }`}
       >
-        EN
+        English
       </span>
       <span
-        className={`px-2 py-0.5 transition-colors ${
+        className={`px-4 py-1 transition-colors ${
           locale === "es"
             ? "bg-brand-red text-white"
             : "text-brand-gray-400 hover:text-white"
         }`}
       >
-        ES
+        Español
       </span>
     </button>
   );
@@ -249,3 +249,4 @@ export default function Header() {
     </header>
   );
 }
+ 
