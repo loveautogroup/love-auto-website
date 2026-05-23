@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
 import HomeFeaturedGrid, { HomeOnTheLot } from "@/components/HomeFeaturedGrid";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
+import HomepageReviewWall from "@/components/HomepageReviewWall";
 import PaymentCalculator from "@/components/PaymentCalculator";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
@@ -304,9 +305,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Google Reviews Badge â€” live data from Places API, refreshed hourly */}
-      <GoogleReviewsBadge variant="full" />
-
       {/* Interactive Payment Calculator â€” CarMax-inspired */}
       <PaymentCalculator />
 
@@ -409,6 +407,11 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      {/* Review wall — social proof before the SEO hub. Positioned at the
+          bottom of the page so it closes strong, distinct from mid-page
+          placement used by competitors. */}
+      <HomepageReviewWall />
+
       {/* Internal-linking hub section — feeds homepage authority to brand,
           geo, and buying-guide pages. Added 2026-05-23 as part of Anna v2
           SEO push. Per the GSC deep-dive, the homepage carries 80% of
@@ -539,7 +542,7 @@ export default function HomePage() {
                     href="/faq/"
                     className="text-brand-red font-semibold hover:text-brand-red-dark"
                   >
-                    All FAQs →
+s →
                   </Link>
                 </li>
               </ul>
@@ -547,7 +550,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
     </>
   );
 }
