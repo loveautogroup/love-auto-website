@@ -107,9 +107,19 @@ export function HomeOnTheLot() {
                   Just Arrived
                 </span>
               )}
-            </div>            <div className="p-3">
+            </div>
+            <div className="p-3">
               <h3 className="font-bold text-white text-sm group-hover:text-brand-red-light transition-colors">
                 {v.year} {v.make} {v.model}
               </h3>
               <div className="flex items-baseline justify-between mt-1.5">
-                <span cl
+                <span className="text-brand-red-light font-bold">{price}</span>
+                <span className="text-xs text-brand-gray-400">{miles} mi</span>
+              </div>
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
