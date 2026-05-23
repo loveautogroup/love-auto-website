@@ -61,6 +61,133 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
     ],
   },
   {
+    slug: "wheaton-il",
+    town: "Wheaton",
+    title: "Used Car Dealer Near Wheaton, IL | Love Auto Group",
+    description:
+      "Used cars for Wheaton, IL buyers. Independent Japanese-makes specialist, free Carfax on every vehicle, 4.7 stars on Google. About 15 minutes east via Roosevelt Road.",
+    proximity: "About 15 minutes east via Roosevelt Road or North Avenue.",
+    intro:
+      "Love Auto Group is the closest independent Japanese-vehicle specialist to Wheaton, IL, and we've been Carfax Advantage accredited and family owned since 2014. The drive from downtown Wheaton is about 15 minutes east on Roosevelt Road. Most Wheaton buyers find us when they want a used Lexus, Subaru, Acura, Mazda, or Honda but don't want to deal with the volume-driven franchise dealers along the Butterfield Road corridor.",
+    sections: [
+      {
+        heading: "Why Wheaton Buyers Drive East",
+        body: [
+          "Wheaton has a deep market for franchise dealers, but the Japanese makes most Wheaton drivers actually want — Subaru for AWD winter security, Lexus for luxury that doesn't break down, Acura and Honda for resale, Mazda for buyers who care about driving feel — are often easier to find at an independent dealer that specializes in those brands rather than carries them as a footnote. We hand-pick our inventory at auction, focus on what holds value, and pull a free Carfax history report on every vehicle before it gets listed.",
+          "The drive is straightforward: Roosevelt Road east through Glen Ellyn and Lombard, into Villa Park, then north on Yale Avenue. About 15 minutes on a normal afternoon, less on a Saturday morning.",
+        ],
+      },
+      {
+        heading: "What We Specialize In",
+        body: [
+          "Subaru Outback and Forester for Wheaton families who deal with the same Illinois winters we do. Lexus RX, ES, IS, and GX for buyers stepping out of franchise luxury cars and into something that won't depreciate to nothing in three years. Acura MDX with SH-AWD for the three-row family-SUV market. Mazda CX-5 and CX-30 for buyers who actually want to enjoy the drive. Honda Civic, Accord, CR-V, Pilot, and Odyssey for the highest-resale, lowest-headache picks in their segments.",
+          "We're a Carfax Advantage Dealer, so every vehicle ships with a free, full Carfax history report you can pull directly from our website.",
+        ],
+      },
+      {
+        heading: "Visit Us From Wheaton",
+        body: [
+          "We're at 735 N Yale Ave in Villa Park, IL. From most of Wheaton, head east on Roosevelt Road or North Avenue, then north on Yale Avenue when you hit Villa Park. Free parking, no appointment necessary, and our hours run afternoons into evenings most weekdays plus Saturday afternoons.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "westmont-il",
+    town: "Westmont",
+    title: "Used Car Dealer Near Westmont, IL | Love Auto Group",
+    description:
+      "Used cars for Westmont, IL drivers. Independent Japanese-makes specialist with free Carfax, family owned in Villa Park since 2014. Quick drive north on Cass Avenue.",
+    proximity: "About 10 minutes north via Cass Avenue or Ogden Avenue.",
+    intro:
+      "Love Auto Group is one of the closest independent Japanese-vehicle specialists to Westmont, IL — about a 10-minute drive north via Cass Avenue. We're Carfax Advantage accredited, family owned since 2014, and have built a reputation among Westmont buyers as the go-to spot for used Subaru, Lexus, Acura, Mazda, and Honda when the franchise option doesn't fit.",
+    sections: [
+      {
+        heading: "Why Westmont Residents Drive North",
+        body: [
+          "Westmont's used-car options inside town are limited, and most local buyers either go to a franchise dealer in Oak Brook or Lombard or drive farther west to chains like CarMax. We're a third path — small, family-run, focused on the Japanese makes that hold their value, and run by people who actually know the cars they sell.",
+          "From most of Westmont, the fastest route is Cass Avenue north to 31st, then east on Ogden Avenue, then north on Highland Road to North Avenue, then a quick west to Yale. About 10 minutes door-to-door.",
+        ],
+      },
+      {
+        heading: "What We Carry",
+        body: [
+          "Inventory rotates but the through-line is Japanese makes. Subaru Outback, Forester, and Crosstrek for AWD-and-snow buyers. Lexus RX, ES, IS, and GX for luxury without German-style repair bills. Acura MDX, RDX, and TLX for buyers who want Honda reliability with a step up in refinement. Mazda CX-5 and CX-30 for the driver's-car crowd. Honda Civic, Accord, CR-V, Pilot, and Odyssey for the highest-resale picks in their segments.",
+          "Every vehicle includes a free Carfax history report. We're a Carfax Advantage Dealer, which means Carfax has independently verified our reporting compliance.",
+        ],
+      },
+      {
+        heading: "Find Us From Westmont",
+        body: [
+          "735 N Yale Ave, Villa Park, IL 60181. About 10 minutes north of downtown Westmont via Cass Avenue. Free parking, no appointment needed, afternoons-into-evenings hours most weekdays plus Saturday afternoons.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "lisle-il",
+    town: "Lisle",
+    title: "Used Car Dealer Near Lisle, IL | Love Auto Group",
+    description:
+      "Used cars for Lisle, IL buyers. Independent Japanese-makes specialist, free Carfax on every vehicle, family owned in Villa Park since 2014. About 12 minutes north.",
+    proximity: "About 12 minutes north via Naperville Road and Roosevelt Road.",
+    intro:
+      "Love Auto Group serves Lisle, IL buyers from our Villa Park lot at 735 N Yale Ave, about 12 minutes north. We specialize in used Japanese vehicles — Lexus, Subaru, Acura, Mazda, Honda, Toyota — and we've been Carfax Advantage accredited and family owned since 2014. Lisle residents shopping for a used car that holds its value regularly make the short drive north.",
+    sections: [
+      {
+        heading: "Why Lisle Buyers Make the Trip",
+        body: [
+          "Lisle is well-positioned between several large franchise-dealer corridors, but the used Japanese vehicles most Lisle drivers actually want are often easier to find at an independent specialist than at a franchise dealer who treats them as off-make trades. We focus on what we know works long-term: AWD Subarus for Chicago winters, Lexus and Acura for the value sweet spot in the luxury market, Honda and Mazda for daily-driver duty.",
+          "The drive from Lisle is straightforward: Naperville Road north to Roosevelt Road, east through Lombard into Villa Park, then north on Yale Avenue. About 12 minutes.",
+        ],
+      },
+      {
+        heading: "The Carfax Advantage Standard",
+        body: [
+          "Every vehicle we list comes with a free Carfax history report. We're a Carfax-verified Advantage Dealer, which is a transparency commitment most independent dealers don't make. Lisle buyers consistently tell us the free Carfax is one of the main reasons they made the drive instead of buying closer to home.",
+        ],
+      },
+      {
+        heading: "How to Find Us From Lisle",
+        body: [
+          "735 N Yale Ave, Villa Park, IL 60181. From downtown Lisle, head north on Naperville Road, east on Roosevelt Road, and look for Yale Avenue once you're in Villa Park. Free parking and afternoons-into-evenings hours most weekdays plus Saturday afternoons. Call (630) 359-3643 to confirm a specific vehicle is available before the drive.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "downers-grove-il",
+    town: "Downers Grove",
+    title: "Used Car Dealer Near Downers Grove, IL | Love Auto Group",
+    description:
+      "Used cars for Downers Grove, IL drivers. Independent Japanese-makes specialist with free Carfax, family owned since 2014. About 10 minutes north on Ogden Avenue.",
+    proximity: "About 10 minutes north via Ogden Avenue or Route 53.",
+    intro:
+      "Love Auto Group is one of the closest independent Japanese-vehicle specialists to Downers Grove, IL — about 10 minutes north via Ogden Avenue. We're family owned, Carfax Advantage accredited, and have been operating in Villa Park since 2014. Downers Grove buyers regularly drive up when they're shopping used Lexus, Subaru, Acura, Mazda, or Honda and want an independent dealer who specializes in those brands.",
+    sections: [
+      {
+        heading: "Why Downers Grove Residents Drive North",
+        body: [
+          "Downers Grove sits in the middle of a heavy franchise-dealer corridor along Ogden Avenue and Butterfield Road, but the used Japanese vehicles most Downers Grove drivers actually want are easier to find at an independent specialist than at a franchise lot. We hand-pick our inventory at auction, focus on what holds value, and pull a free Carfax history report on every vehicle.",
+          "The drive is straightforward: north on Ogden Avenue or Route 53 to North Avenue, then east a short distance to Yale Avenue. About 10 minutes door-to-door.",
+        ],
+      },
+      {
+        heading: "What We Specialize In",
+        body: [
+          "Subaru Outback, Forester, and Crosstrek for AWD winter security. Lexus RX, ES, IS, and GX for luxury without German-style repair bills. Acura MDX with SH-AWD for the three-row family-SUV market. Mazda CX-5 and CX-30 for the driver's-car crowd. Honda Civic, Accord, CR-V, Pilot, and Odyssey for the highest-resale, lowest-headache picks in their segments.",
+          "Every vehicle includes a free Carfax history report. We're an officially-recognized Carfax Advantage Dealer.",
+        ],
+      },
+      {
+        heading: "Visit Us From Downers Grove",
+        body: [
+          "735 N Yale Ave, Villa Park, IL 60181. Best route from Downers Grove is north on Ogden Avenue or Route 53 to North Avenue. Free parking, no appointment needed, afternoons-into-evenings hours most weekdays plus Saturday afternoons.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "lombard-il",
     town: "Lombard",
     title: "Used Car Dealer Near Lombard, IL | Love Auto Group",

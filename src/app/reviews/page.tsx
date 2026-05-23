@@ -23,7 +23,7 @@ import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 import { SITE_CONFIG } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Customer Reviews — Love Auto Group | Villa Park, IL",
+  title: "Customer Reviews, 4.7 Stars on Google | Love Auto Group",
   description:
     "Read real Google reviews from Love Auto Group customers. 4.7-star rating across 125+ reviews from buyers in Villa Park, Lombard, Elmhurst, Oak Brook and the surrounding DuPage County area.",
   alternates: { canonical: "https://www.loveautogroup.net/reviews/" },

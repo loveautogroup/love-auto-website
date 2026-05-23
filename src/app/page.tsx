@@ -4,6 +4,8 @@ import HomeFeaturedGrid, { HomeOnTheLot } from "@/components/HomeFeaturedGrid";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 import PaymentCalculator from "@/components/PaymentCalculator";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
+import { SERVICE_AREAS } from "@/data/serviceAreas";
+import { BRANDS } from "@/data/brands";
 
 export default function HomePage() {
   return (
@@ -401,6 +403,145 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      {/* Internal-linking hub section — feeds homepage authority to brand,
+          geo, and buying-guide pages. Added 2026-05-23 as part of Anna v2
+          SEO push. Per the GSC deep-dive, the homepage carries 80% of
+          ranked queries; this block transfers some of that authority to
+          the specialist landing pages we want to win specific intents. */}
+      <section
+        className="bg-brand-gray-50 py-16 border-t border-brand-gray-200"
+        aria-labelledby="serving-heading"
+      >
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-10">
+            <h2
+              id="serving-heading"
+              className="text-3xl font-bold text-brand-gray-900 mb-3"
+            >
+              Serving Used Car Buyers Across DuPage County
+            </h2>
+            <p className="text-brand-gray-600 max-w-2xl mx-auto">
+              We're family owned in Villa Park, IL, and we draw buyers from
+              every neighboring town. Find your route below, or browse by
+              brand or buying guide.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Towns we serve */}
+            <div>
+              <h3 className="font-semibold text-brand-gray-900 mb-4 text-lg">
+                Towns We Serve
+              </h3>
+              <ul className="space-y-2">
+                {SERVICE_AREAS.map((area) => (
+                  <li key={area.slug}>
+                    <Link
+                      href={`/serving/${area.slug}/`}
+                      className="text-brand-navy hover:text-brand-red transition-colors"
+                    >
+                      Used Cars in {area.town}, IL
+                    </Link>
+                  </li>
+                ))}
+                <li className="pt-2 border-t border-brand-gray-200 mt-3">
+                  <Link
+                    href="/serving/dupage-county-il/"
+                    className="text-brand-red font-semibold hover:text-brand-red-dark"
+                  >
+                    All of DuPage County →
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Browse by brand */}
+            <div>
+              <h3 className="font-semibold text-brand-gray-900 mb-4 text-lg">
+                Browse by Brand
+              </h3>
+              <ul className="space-y-2">
+                {BRANDS.map((brand) => (
+                  <li key={brand.slug}>
+                    <Link
+                      href={`/brands/${brand.slug}/`}
+                      className="text-brand-navy hover:text-brand-red transition-colors"
+                    >
+                      Used {brand.displayName}
+                    </Link>
+                  </li>
+                ))}
+                <li className="pt-2 border-t border-brand-gray-200 mt-3">
+                  <Link
+                    href="/inventory/"
+                    className="text-brand-red font-semibold hover:text-brand-red-dark"
+                  >
+                    View full inventory →
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Buying guides */}
+            <div>
+              <h3 className="font-semibold text-brand-gray-900 mb-4 text-lg">
+                Buying Guides
+              </h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    href="/buying-guides/used-lexus-dupage-county/"
+                    className="text-brand-navy hover:text-brand-red transition-colors"
+                  >
+                    Used Lexus in DuPage County
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/buying-guides/used-subaru-near-chicago/"
+                    className="text-brand-navy hover:text-brand-red transition-colors"
+                  >
+                    Used Subaru Near Chicago
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/buying-guides/independent-japanese-makes-dealer-chicago/"
+                    className="text-brand-navy hover:text-brand-red transition-colors"
+                  >
+                    Why an Independent Japanese-Makes Dealer
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/free-carfax-villa-park/"
+                    className="text-brand-navy hover:text-brand-red transition-colors"
+                  >
+                    Free Carfax on Every Vehicle
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/financing/"
+                    className="text-brand-navy hover:text-brand-red transition-colors"
+                  >
+                    Used Car Financing, All Credit Welcome
+                  </Link>
+                </li>
+                <li className="pt-2 border-t border-brand-gray-200 mt-3">
+                  <Link
+                    href="/faq/"
+                    className="text-brand-red font-semibold hover:text-brand-red-dark"
+                  >
+                    All FAQs →
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </>
   );
 }

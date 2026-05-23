@@ -98,7 +98,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     make: "Lexus",
     title: "Used Lexus for Sale in Villa Park, IL | Love Auto Group",
     description:
-      "Pre-owned Lexus sedans, SUVs, and coupes in Villa Park, IL. Inspected, reconditioned, free Carfax. Japanese-vehicle specialists serving DuPage County since 2014.",
+      "Used Lexus sedans, SUVs, and coupes in Villa Park, IL. Inspected, reconditioned, free Carfax. Japanese-vehicle specialists serving DuPage County since 2014.",
     hero:
       "Toyota reliability with the materials and refinement of a German luxury car — at half the depreciation curve.",
     intro:
