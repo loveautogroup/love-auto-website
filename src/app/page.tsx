@@ -135,7 +135,7 @@ export default function HomePage() {
             </form>
           </div>
 
-          {/* Quick-Filter Pills â€” CarMax-inspired one-tap shortcuts */}
+          {/* Quick-Filter Pills â€" CarMax-inspired one-tap shortcuts */}
           <div className="mt-6 flex flex-wrap gap-2">
             {[
               { label: "Under $10K", href: "/inventory?maxPrice=10000" },
@@ -182,7 +182,7 @@ export default function HomePage() {
       {/* Featured Vehicles — self-hides when nothing is featured in KV */}
       <HomeFeaturedGrid />
 
-      {/* On the Lot Now â€” horizontal scroll carousel */}
+      {/* On the Lot Now â€" horizontal scroll carousel */}
       <section className="bg-brand-navy py-12" aria-labelledby="lot-heading">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-baseline justify-between mb-6">
@@ -305,7 +305,78 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Interactive Payment Calculator â€” CarMax-inspired */}
+      {/* We Buy Cars — private party acquisition CTA */}
+      <section
+        className="bg-brand-navy py-14"
+        aria-labelledby="we-buy-heading"
+      >
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-brand-red font-bold uppercase tracking-widest text-xs mb-3">
+              Selling Your Car?
+            </p>
+            <h2
+              id="we-buy-heading"
+              className="text-3xl md:text-4xl font-bold text-white mb-4"
+            >
+              We Buy Cars — Any Make, Any Model
+            </h2>
+            <p className="text-brand-gray-300 text-base md:text-lg leading-relaxed mb-8 max-w-xl mx-auto">
+              Get a real cash offer from a real dealer. No pressure, no
+              obligation, no trade-in required. We buy private party vehicles
+              every week — bring it in and we&apos;ll make you an offer on
+              the spot.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                href="/sell-your-car"
+                className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-sm"
+              >
+                Get a Cash Offer
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="ml-2 w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+              <a
+                href={`tel:${SITE_CONFIG.phoneRaw}`}
+                className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z" />
+                </svg>
+                Or call {SITE_CONFIG.phone}
+              </a>
+            </div>
+
+            {/* Trust chips */}
+            <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-white/50">
+              {[
+                "Cash paid same day",
+                "No trade-in required",
+                "All makes & models",
+                "Free on-the-spot appraisal",
+              ].map((chip) => (
+                <span key={chip} className="inline-flex items-center gap-1.5">
+                  <svg className="w-3 h-3 text-brand-red flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  {chip}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Interactive Payment Calculator â€" CarMax-inspired */}
       <PaymentCalculator />
 
       {/* Location & Hours */}
@@ -542,7 +613,7 @@ export default function HomePage() {
                     href="/faq/"
                     className="text-brand-red font-semibold hover:text-brand-red-dark"
                   >
-s →
+                    FAQ →
                   </Link>
                 </li>
               </ul>
