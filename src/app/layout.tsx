@@ -13,11 +13,11 @@ const inter = Inter({ subsets: ["latin"], display: "swap" });
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.loveautogroup.net"),
   title: {
-    default: "Quality Used Cars in Villa Park, IL | Love Auto Group",
+    default: "Used Cars in Villa Park IL, Japanese Makes Specialist | Love Auto Group",
     template: "%s",
   },
   description:
-    "Family owned used car dealership in Villa Park, IL since 2014. Quality Japanese vehicles, carefully selected and fully reconditioned. Browse inventory.",
+    "Independent dealer specializing in used Lexus, Subaru, Acura, Mazda, and Honda in Villa Park IL. 4.7 stars on Google with 125+ reviews. Family owned since 2014. View inventory.",
   keywords: [
     "used cars Villa Park IL",
     "used car dealership Villa Park",
@@ -38,9 +38,9 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
   },
   openGraph: {
-    title: "Quality Used Cars in Villa Park, IL | Love Auto Group",
+    title: "Used Cars in Villa Park IL, Japanese Makes Specialist | Love Auto Group",
     description:
-      "Family owned used car dealership in Villa Park, IL since 2014. Quality Japanese vehicles, carefully selected and fully reconditioned. Browse inventory.",
+      "Independent dealer specializing in used Lexus, Subaru, Acura, Mazda, and Honda in Villa Park IL. 4.7 stars on Google with 125+ reviews. Family owned since 2014. View inventory.",
     url: "https://www.loveautogroup.net",
     siteName: "Love Auto Group",
     locale: "en_US",
@@ -61,9 +61,9 @@ export const metadata: Metadata = {
     // wired makes the cards parse cleanly for any engine that reads them.
     site: "@loveautogroup",
     creator: "@loveautogroup",
-    title: "Quality Used Cars in Villa Park, IL | Love Auto Group",
+    title: "Used Cars in Villa Park IL, Japanese Makes Specialist | Love Auto Group",
     description:
-      "Family owned used car dealership in Villa Park, IL since 2014. Quality Japanese vehicles, carefully selected and fully reconditioned.",
+      "Independent dealer specializing in used Lexus, Subaru, Acura, Mazda, and Honda in Villa Park IL. Family owned since 2014. View inventory.",
     images: ["https://www.loveautogroup.net/og-image.png"],
   },
   verification: {

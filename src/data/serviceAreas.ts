@@ -27,6 +27,40 @@ export interface ServiceAreaContent {
 
 export const SERVICE_AREAS: ServiceAreaContent[] = [
   {
+    slug: "villa-park-il",
+    town: "Villa Park",
+    title: "Used Cars in Villa Park, IL | Love Auto Group",
+    description:
+      "Independent used car dealer in Villa Park IL since 2014. Japanese specialists, free Carfax on every vehicle, 4.7 stars on Google with 125+ reviews. Visit our lot at 735 N Yale Ave.",
+    proximity:
+      "We're located at 735 N Yale Ave, just north of North Avenue between Yale and Westmore.",
+    intro:
+      "Love Auto Group is the family-owned used car dealer in Villa Park, IL. We've operated from 735 N Yale Avenue since 2014, specializing in quality used Lexus, Subaru, Acura, Mazda, Honda, and Toyota at independent-dealer prices. Free Carfax on every vehicle, 4.7 stars on Google with 125+ reviews, and a no-pressure approach to test drives. If you're a Villa Park resident shopping for a used car, you don't need to leave town.",
+    sections: [
+      {
+        heading: "Villa Park's Used Car Dealer",
+        body: [
+          "Villa Park has roughly 22,000 residents and one independent used-car dealer that specializes in Japanese vehicles. That's us. We've been here since 2014 at 735 N Yale Ave, two blocks north of North Avenue and a five-minute drive from anywhere in town. Our customers include neighbors who've bought multiple cars from us over the years, families upgrading from a kid's first car to a third-row SUV, and Villa Park residents who tried a franchise dealer first and came back for the smaller, slower, more honest experience.",
+          "When people search 'used cars Villa Park IL' or 'Villa Park car dealerships', the answer they're looking for is usually us. If you'd rather not drive to Oak Brook, Schaumburg, or Naperville for your next used car, browse our inventory online and then come walk the lot.",
+        ],
+      },
+      {
+        heading: "What We Stock",
+        body: [
+          "Our inventory rotates but the through-line is Japanese makes. Used Lexus RX, ES, IS, and GX for buyers who want luxury without German-style repair bills. Subaru Outback, Forester, and Crosstrek for AWD winter security in the Chicago suburbs. Acura MDX with SH-AWD for the three-row family-SUV pick that holds its value. Mazda CX-5 and CX-30 for buyers who care about how the car actually drives. Honda Civic, Accord, CR-V, Pilot, and Odyssey for the highest-resale, lowest-headache picks in their segments. We also carry opportunistic non-Japanese stock when the right vehicle comes through.",
+          "Most of our inventory sits in the $4,500 to $18,000 range. Every vehicle is hand-picked at auction, reconditioned in-house, and listed with a free Carfax history report.",
+        ],
+      },
+      {
+        heading: "Visit Us in Villa Park",
+        body: [
+          "We're at 735 N Yale Ave Unit A, two blocks north of North Avenue between Yale and Westmore. Free parking, no appointment necessary, and our hours run afternoons into evenings most weekdays plus Saturday afternoons. Browse the current inventory online or just stop by — there's always someone on the lot who can walk you through whatever's available.",
+          "Call us at (630) 359-3643 to confirm a specific vehicle is still available before you make the drive, or text any photo you have a question about. We respond quickly during business hours.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "lombard-il",
     town: "Lombard",
     title: "Used Car Dealer Near Lombard, IL | Love Auto Group",

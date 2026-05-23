@@ -52,6 +52,9 @@
 /financing-application       /financing/                       301
 /credit-application          /financing/                       301
 /apply                       /financing/                       301
+/apply/                      /financing/                       301
+/apply-online                /financing/                       301
+/apply-online/               /financing/                       301
 /apply-for-financing         /financing/                       301
 /value-your-trade            /sell-your-car/                   301
 /trade-in                    /sell-your-car/                   301
@@ -59,6 +62,16 @@
 /services                    /                                 301
 /parts                       /                                 301
 /specials                    /inventory/                       301
+
+# ─── GSC-indexed legacy URLs (added 2026-05-22, Anna v2 deep-dive) ──
+# These three URLs are in Google's index from the CarsForSale era
+# but don't exist on this Next.js site. Combined they absorbed 5,939
+# impressions over the last 365 days with ~0% CTR — users were hitting
+# 404 or homepage and bouncing. 301 to the closest equivalent.
+/car-finder                  /inventory/                       301
+/car-finder/                 /inventory/                       301
+/warranty                    /faq/                             301
+/warranty/                   /faq/                             301
 
 # ─── Print views (CarsForSale-era artifacts) ────────────────────────
 # Old auto-CMS emitted /print/{stocknum} and /print/vehicle/{vin} for
@@ -80,15 +93,4 @@
 /blog/                       /inventory/                       301
 /blog/*                      /inventory/                       301
 
-# ─── Old VDP slug pattern (best-effort) ─────────────────────────────
-# Legacy CMS likely used /vehicle-details/{stocknum} or /vehicle/{vin}.
-# These force-redirect to the inventory index since slug-to-slug
-# mapping isn't possible without the legacy slug list. Better than 404.
-/vehicle-details/*           /inventory/                       301
-/vehicle/*                   /inventory/                       301
-
-# ─── E-signature flow — serve shell for any session ID ─────────────
-# Static export generates only /sign/shell/; every real session ID
-# rewrites (200) to the shell which then fetches the session at runtime
-# from /api/sign/:id based on the actual window.location path.
-/sign/*                      /sign/shell/index.html            200
+# ─── Old VDP slug patte
