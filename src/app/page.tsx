@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
 import HomeFeaturedGrid, { HomeOnTheLot } from "@/components/HomeFeaturedGrid";
-import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 import HomepageReviewWall from "@/components/HomepageReviewWall";
 import PaymentCalculator from "@/components/PaymentCalculator";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
@@ -540,3 +539,4 @@ export default function HomePage() {
     </>
   );
 }
+                                                                  
