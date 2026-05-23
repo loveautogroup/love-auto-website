@@ -376,8 +376,83 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Interactive Payment Calculator â€" CarMax-inspired */}
+      {/* Interactive Payment Calculator — CarMax-inspired */}
       <PaymentCalculator />
+
+      {/* Nationwide Delivery */}
+      <section className="bg-brand-navy py-14" aria-labelledby="delivery-heading">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            {/* Left — copy */}
+            <div>
+              <p className="text-brand-red font-bold uppercase tracking-widest text-xs mb-3">
+                Can&rsquo;t Make It to Villa Park?
+              </p>
+              <h2 id="delivery-heading" className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-4">
+                We Ship Anywhere in the US
+              </h2>
+              <p className="text-white/75 text-base leading-relaxed mb-6">
+                Found your car but live out of state? No problem. We arrange
+                door-to-door transport with a vetted carrier — you pay the
+                shipping, we handle everything else. Hundreds of customers
+                have bought from us sight-unseen. We&rsquo;ll walk you through
+                every detail over the phone before you commit.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a
+                  href={`tel:${SITE_CONFIG.phoneRaw}`}
+                  className="inline-flex items-center justify-center gap-2 bg-brand-red text-white font-bold px-6 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm"
+                  aria-label={`Call ${SITE_CONFIG.phone} to ask about delivery`}
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  Call {SITE_CONFIG.phone}
+                </a>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center gap-2 bg-white/10 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/20 transition-colors text-sm border border-white/20"
+                >
+                  Ask About Delivery
+                </Link>
+              </div>
+            </div>
+            {/* Right — trust points */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                {
+                  icon: "M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+                  title: "Vetted Carriers",
+                  body: "We work with licensed, insured transport carriers — not random Craigslist haulers.",
+                },
+                {
+                  icon: "M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z",
+                  title: "Personal Walkthrough",
+                  body: "We’ll video-call you and walk the car bumper-to-bumper before it ships.",
+                },
+                {
+                  icon: "M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z",
+                  title: "All Paperwork Handled",
+                  body: "We e-sign the title, bill of sale, and shipping docs — nothing left hanging.",
+                },
+                {
+                  icon: "M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12",
+                  title: "Door-to-Door",
+                  body: "Carrier picks up from our lot and delivers straight to your driveway — no middleman terminal.",
+                },
+              ].map(({ icon, title, body }) => (
+                <div key={title} className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <svg className="w-5 h-5 text-brand-red mb-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
+                  </svg>
+                  <p className="text-sm font-bold text-white mb-1">{title}</p>
+                  <p className="text-xs text-white/60 leading-relaxed">{body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Location & Hours */}
       <section className="max-w-7xl mx-auto px-4 py-16" aria-labelledby="visit-heading">
