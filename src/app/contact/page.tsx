@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/constants";
 import ContactForm from "./ContactForm";
+import ContactHero from "./ContactHero";
 
 export const metadata: Metadata = {
   title: "Contact Love Auto Group in Villa Park, IL | Visit Us",
@@ -12,15 +13,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <section className="bg-brand-navy text-white py-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold">Contact Us</h1>
-          <p className="mt-4 text-lg text-brand-gray-300">
-            Stop by, give us a call, or send a message. We&apos;d love to hear
-            from you
-          </p>
-        </div>
-      </section>
+      <ContactHero />
 
       <section className="max-w-7xl mx-auto px-4 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

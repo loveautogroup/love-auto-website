@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { SITE_CONFIG } from "@/lib/constants";
+import { FAQHero, FAQCta } from "./FAQHero";
 
 export const metadata: Metadata = {
   title: "Used Car FAQ, Financing and Trade-Ins | Love Auto Group",
@@ -134,16 +133,7 @@ export default function FAQPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <section className="bg-brand-navy text-white py-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold">
-            Frequently Asked Questions
-          </h1>
-          <p className="mt-4 text-lg text-brand-gray-300">
-            Everything you need to know about buying from Love Auto Group
-          </p>
-        </div>
-      </section>
+      <FAQHero />
 
       <section className="max-w-3xl mx-auto px-4 py-16">
         <div className="space-y-6">
@@ -162,29 +152,7 @@ export default function FAQPage() {
           ))}
         </div>
 
-        {/* CTA */}
-        <div className="mt-16 bg-brand-red rounded-2xl p-8 md:p-12 text-center text-white">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            Still Have Questions?
-          </h2>
-          <p className="text-red-100 mb-6 max-w-xl mx-auto">
-            We're happy to help. Give us a call or send us a message.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center bg-white text-brand-red px-8 py-3 rounded-xl font-bold hover:bg-brand-gray-100 transition-colors"
-            >
-              Contact Us
-            </Link>
-            <a
-              href={`tel:${SITE_CONFIG.phoneRaw}`}
-              className="inline-flex items-center justify-center border-2 border-white/30 hover:bg-white/10 text-white px-8 py-3 rounded-xl font-semibold transition-colors"
-            >
-              Call {SITE_CONFIG.phone}
-            </a>
-          </div>
-        </div>
+        <FAQCta />
       </section>
     </>
   );

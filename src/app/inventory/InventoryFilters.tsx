@@ -3,6 +3,7 @@
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useLanguage } from "@/context/LanguageContext";
 
 const MAKES = ["Subaru", "Lexus", "Acura", "Mazda", "Honda", "Toyota"];
 const BODY_STYLES = ["SUV", "Sedan", "Wagon", "Truck", "Coupe"];
@@ -22,6 +23,8 @@ const PRICE_TABS = [
  * shareable + indexable.
  */
 function InventoryFiltersInner() {
+  const { t } = useLanguage();
+  const f = t.filters;
   const searchParams = useSearchParams();
   const current = {
     make: searchParams.get("make") ?? "",
@@ -49,14 +52,14 @@ function InventoryFiltersInner() {
       {/* Browse by Price */}
       <div className="mb-6">
         <h3 className="text-xs font-semibold uppercase tracking-wider text-brand-gray-400 mb-2 px-1">
-          Browse by Price
+          {f.browseByPrice}
         </h3>
         <nav>
-          {PRICE_TABS.map((tab) => {
+          {PRICE_TABS.map((tab, idx) => {
             const isActive = tab === activePriceTab;
             return (
               <Link
-                key={tab.label}
+                key={tab.href}
                 href={tab.href}
                 className={`
                   flex items-center justify-between w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors mb-0.5
@@ -66,7 +69,7 @@ function InventoryFiltersInner() {
                   }
                 `}
               >
-                {tab.label}
+                {f.priceTabs[idx]}
                 {isActive && (
                   <svg className="w-4 h-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -93,7 +96,7 @@ function InventoryFiltersInner() {
         {/* Make */}
         <div>
           <label htmlFor="filter-make" className="block text-sm font-semibold text-brand-gray-900 mb-2">
-            Make
+            {f.make}
           </label>
           <select
             id="filter-make"
@@ -101,7 +104,7 @@ function InventoryFiltersInner() {
             defaultValue={current.make ?? ""}
             className="w-full border border-brand-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-red"
           >
-            <option value="">All Makes</option>
+            <option value="">{f.allMakes}</option>
             {MAKES.map((make) => (
               <option key={make} value={make.toLowerCase()}>
                 {make}
@@ -113,13 +116,13 @@ function InventoryFiltersInner() {
         {/* Price Range — manual min/max (only shown when no price tab is active) */}
         {activePriceTab === PRICE_TABS[0] && (
           <div>
-            <label className="block text-sm font-semibold text-brand-gray-900 mb-2">Price Range</label>
+            <label className="block text-sm font-semibold text-brand-gray-900 mb-2">{f.priceRange}</label>
             <div className="flex gap-2">
               <input
                 type="number"
                 name="minPrice"
                 defaultValue={current.minPrice ?? ""}
-                placeholder="Min"
+                placeholder={f.minPlaceholder}
                 aria-label="Minimum price"
                 className="w-1/2 border border-brand-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red"
               />
@@ -127,7 +130,7 @@ function InventoryFiltersInner() {
                 type="number"
                 name="maxPrice"
                 defaultValue={current.maxPrice ?? ""}
-                placeholder="Max"
+                placeholder={f.maxPlaceholder}
                 aria-label="Maximum price"
                 className="w-1/2 border border-brand-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red"
               />
@@ -138,7 +141,7 @@ function InventoryFiltersInner() {
         {/* Mileage */}
         <div>
           <label htmlFor="filter-mileage" className="block text-sm font-semibold text-brand-gray-900 mb-2">
-            Max Mileage
+            {f.maxMileage}
           </label>
           <select
             id="filter-mileage"
@@ -146,18 +149,18 @@ function InventoryFiltersInner() {
             defaultValue={current.maxMileage ?? ""}
             className="w-full border border-brand-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-red"
           >
-            <option value="">Any Mileage</option>
-            <option value="50000">Under 50,000</option>
-            <option value="75000">Under 75,000</option>
-            <option value="100000">Under 100,000</option>
-            <option value="125000">Under 125,000</option>
-            <option value="150000">Under 150,000</option>
+            <option value="">{f.mileageLabels[0]}</option>
+            <option value="50000">{f.mileageLabels[1]}</option>
+            <option value="75000">{f.mileageLabels[2]}</option>
+            <option value="100000">{f.mileageLabels[3]}</option>
+            <option value="125000">{f.mileageLabels[4]}</option>
+            <option value="150000">{f.mileageLabels[5]}</option>
           </select>
         </div>
 
         {/* Year Range */}
         <div>
-          <label className="block text-sm font-semibold text-brand-gray-900 mb-2">Year</label>
+          <label className="block text-sm font-semibold text-brand-gray-900 mb-2">{f.year}</label>
           <div className="flex gap-2">
             <select
               name="minYear"
@@ -165,7 +168,7 @@ function InventoryFiltersInner() {
               aria-label="Minimum year"
               className="w-1/2 border border-brand-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-red"
             >
-              <option value="">Min Year</option>
+              <option value="">{f.minYear}</option>
               {Array.from({ length: 15 }, (_, i) => 2026 - i).map((year) => (
                 <option key={year} value={year}>
                   {year}
@@ -178,7 +181,7 @@ function InventoryFiltersInner() {
               aria-label="Maximum year"
               className="w-1/2 border border-brand-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-red"
             >
-              <option value="">Max Year</option>
+              <option value="">{f.maxYear}</option>
               {Array.from({ length: 15 }, (_, i) => 2026 - i).map((year) => (
                 <option key={year} value={year}>
                   {year}
@@ -191,7 +194,7 @@ function InventoryFiltersInner() {
         {/* Body Style */}
         <div>
           <label htmlFor="filter-body" className="block text-sm font-semibold text-brand-gray-900 mb-2">
-            Body Style
+            {f.bodyStyle}
           </label>
           <select
             id="filter-body"
@@ -199,7 +202,7 @@ function InventoryFiltersInner() {
             defaultValue={current.bodyStyle ?? ""}
             className="w-full border border-brand-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-red"
           >
-            <option value="">All Styles</option>
+            <option value="">{f.allStyles}</option>
             {BODY_STYLES.map((style) => (
               <option key={style} value={style.toLowerCase()}>
                 {style}
@@ -211,7 +214,7 @@ function InventoryFiltersInner() {
         {/* Drivetrain */}
         <div>
           <label htmlFor="filter-drivetrain" className="block text-sm font-semibold text-brand-gray-900 mb-2">
-            Drivetrain
+            {f.drivetrain}
           </label>
           <select
             id="filter-drivetrain"
@@ -219,7 +222,7 @@ function InventoryFiltersInner() {
             defaultValue={current.drivetrain ?? ""}
             className="w-full border border-brand-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-red"
           >
-            <option value="">Any Drivetrain</option>
+            <option value="">{f.anyDrivetrain}</option>
             <option value="AWD">AWD</option>
             <option value="4WD">4WD</option>
             <option value="FWD">FWD</option>
@@ -233,14 +236,14 @@ function InventoryFiltersInner() {
             type="submit"
             className="flex-1 bg-brand-red hover:bg-brand-red-dark text-white py-2.5 rounded-lg text-sm font-semibold transition-colors"
           >
-            Apply Filters
+            {f.applyFilters}
           </button>
           {hasAnyFilter && (
             <Link
               href="/inventory"
               className="px-4 py-2.5 border border-brand-gray-200 rounded-lg text-sm text-brand-gray-500 hover:text-brand-gray-700 hover:border-brand-gray-300 transition-colors"
             >
-              Reset
+              {f.reset}
             </Link>
           )}
         </div>
@@ -270,7 +273,7 @@ function InventoryFiltersInner() {
               d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
             />
           </svg>
-          {mobileOpen ? "Hide Filters" : "Show Filters"}
+          {mobileOpen ? f.hideFilters : f.showFilters}
         </button>
         {mobileOpen && (
           <div className="mt-4 bg-white rounded-xl border border-brand-gray-200 p-5">{sidebarContent}</div>
@@ -279,7 +282,7 @@ function InventoryFiltersInner() {
 
       {/* Desktop filter sidebar */}
       <div className="hidden lg:block bg-white rounded-xl border border-brand-gray-200 p-5 sticky top-24">
-        <h2 className="font-bold text-brand-gray-900 mb-4">Filter Vehicles</h2>
+        <h2 className="font-bold text-brand-gray-900 mb-4">{f.filterVehicles}</h2>
         {sidebarContent}
       </div>
     </>

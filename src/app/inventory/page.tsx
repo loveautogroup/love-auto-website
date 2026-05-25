@@ -4,6 +4,7 @@ import { sortWithFeaturedFirst } from "@/data/merchandising";
 import InventoryFilters from "./InventoryFilters";
 import InventoryGrid from "./InventoryGrid";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
+import InventoryHero from "./InventoryHero";
 
 export const metadata: Metadata = {
   title: "Used Cars for Sale in Villa Park, IL | Love Auto Group",
@@ -22,14 +23,7 @@ export default function InventoryPage() {
 
   return (
     <>
-      <section className="bg-brand-navy text-white py-10">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-3xl md:text-4xl font-bold">Our Inventory</h1>
-          <p className="mt-2 text-brand-gray-300">
-            Every vehicle inspected and reconditioned. Ready to drive home today.
-          </p>
-        </div>
-      </section>
+      <InventoryHero />
 
       <div className="max-w-7xl mx-auto px-4 pt-4">
         <VDPTrustStrip />

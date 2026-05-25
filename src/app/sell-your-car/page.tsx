@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/constants";
 import TradeInForm from "./TradeInForm";
+import SellHero from "./SellHero";
 
 export const metadata: Metadata = {
   title: "Sell or Trade Your Car in Villa Park | Love Auto Group",
@@ -12,17 +13,7 @@ export const metadata: Metadata = {
 export default function SellYourCarPage() {
   return (
     <>
-      <section className="bg-brand-navy text-white py-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold">
-            Sell Your Car to Us
-          </h1>
-          <p className="mt-4 text-lg text-brand-gray-300">
-            Fair offers, no hassle. Tell us about your vehicle and we&apos;ll
-            get back to you with an offer.
-          </p>
-        </div>
-      </section>
+      <SellHero />
 
       <section className="max-w-4xl mx-auto px-4 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">

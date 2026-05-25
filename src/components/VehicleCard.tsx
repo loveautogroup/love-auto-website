@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Vehicle } from "@/lib/types";
 import { SITE_CONFIG } from "@/lib/constants";
 import { useInventory } from "@/lib/useInventory";
+import { useLanguage } from "@/context/LanguageContext";
 import { useResolveOverlay } from "@/data/useMerchandising";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import {
@@ -54,6 +55,9 @@ function estimateMonthlyPayment(
  * The VDP gallery uses the full-size badges (PhotoGallery component).
  */
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
+  const { t } = useLanguage();
+  const c = t.card;
+
   // Runtime hook — re-renders when /api/merchandising resolves so DMS-saved
   // overlays (carfax shield, feature pills, status badge, hidden flag) take
   // effect immediately instead of waiting for a Cloudflare Pages rebuild.
@@ -277,7 +281,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         <p className="text-sm text-brand-gray-500 mt-0.5">{vehicle.trim}</p>
         {vehicle.vin && (
           <p className="text-xs text-brand-gray-400 mt-0.5 font-mono tracking-wide">
-            VIN: {vehicle.vin}
+            {c.vin}: {vehicle.vin}
           </p>
         )}
 
@@ -286,18 +290,18 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             {formattedPrice}
           </span>
           <span className="text-sm text-brand-gray-500">
-            {formattedMileage} mi
+            {formattedMileage} {c.mi}
           </span>
         </div>
 
         <p className="text-sm text-brand-gray-500 mt-1">
-          Est.{" "}
+          {c.est}{" "}
           <span className="font-semibold text-brand-gray-700">
-            ${monthlyPayment}/mo
+            ${monthlyPayment}{c.perMo}
           </span>
           <span
             className="text-xs text-brand-gray-400 ml-1"
-            title="Based on $1,000 down, 6.99% APR, 60 months"
+            title={c.disclaimer}
           >
             *
           </span>
@@ -332,7 +336,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         </div>
 
         <div className="mt-3 text-sm text-brand-red font-semibold group-hover:underline">
-          View Details →
+          {c.viewDetails}
         </div>
       </div>
     </article>

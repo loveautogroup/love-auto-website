@@ -3,6 +3,7 @@
 import { useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Vehicle } from "@/lib/types";
+import { useLanguage } from "@/context/LanguageContext";
 import VehicleCard from "@/components/VehicleCard";
 import { useInventory } from "@/lib/useInventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
@@ -19,6 +20,8 @@ interface InventoryGridProps {
 }
 
 function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) {
+  const { t } = useLanguage();
+  const g = t.grid;
   const searchParams = useSearchParams();
   const { vehicles: liveVehicles, source, loading } = useInventory();
   // Filter out KV-hidden vehicles before any further processing.
@@ -100,22 +103,22 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
     <>
       <div className="flex items-center justify-between mb-6">
         <p className="text-brand-gray-500 text-sm">
-          Showing{" "}
+          {g.showing}{" "}
           <span className="font-semibold text-brand-gray-900">{filtered.length}</span>{" "}
-          {filtered.length === 1 ? "vehicle" : "vehicles"}
+          {filtered.length === 1 ? g.vehicle : g.vehicles}
           {source === "live" && (
-            <span className="ml-2 text-[11px] text-brand-gray-400">· live</span>
+            <span className="ml-2 text-[11px] text-brand-gray-400">· {g.live}</span>
           )}
         </p>
         <select
           className="text-sm border border-brand-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-red"
           aria-label="Sort vehicles"
         >
-          <option value="recent">Recently Added</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="mileage-asc">Mileage: Low to High</option>
-          <option value="newest">Year: Newest First</option>
+          <option value="recent">{g.sortRecent}</option>
+          <option value="price-asc">{g.sortPriceAsc}</option>
+          <option value="price-desc">{g.sortPriceDesc}</option>
+          <option value="mileage-asc">{g.sortMileageAsc}</option>
+          <option value="newest">{g.sortNewest}</option>
         </select>
       </div>
 
@@ -128,14 +131,14 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
       {filtered.length === 0 && (
         <div className="text-center py-16">
           <p className="text-xl font-semibold text-brand-gray-700">
-            No vehicles match your filters
+            {g.noResults}
           </p>
           <p className="mt-2 text-brand-gray-500">
-            Try adjusting your search, or{" "}
+            {g.noResultsSub}{" "}
             <a href="/contact" className="text-brand-red hover:underline">
-              contact us
+              {g.noResultsContact}
             </a>{" "}
-            . We source vehicles to order.
+            {g.noResultsSource}
           </p>
         </div>
       )}

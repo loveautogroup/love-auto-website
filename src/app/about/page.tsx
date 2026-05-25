@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
+import AboutHero from "./AboutHero";
 
 export const metadata: Metadata = {
   title: "About Love Auto Group, Family Owned in Villa Park IL",
@@ -12,16 +13,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <section className="bg-brand-navy text-white py-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold">
-            About Love Auto Group
-          </h1>
-          <p className="mt-4 text-lg text-brand-gray-300">
-            Family owned in Villa Park, IL since {SITE_CONFIG.established}.
-          </p>
-        </div>
-      </section>
+      <AboutHero />
 
       <section className="max-w-4xl mx-auto px-4 py-16">
         {/* Story */}
