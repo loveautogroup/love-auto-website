@@ -33,7 +33,7 @@ export const translations = {
       businessHours: "Business Hours",
       contactUs: "Contact Us",
       about:
-        "Family owned since 2014. We specialize in quality Japanese vehicles, carefully selected and fully reconditioned in Villa Park, IL.",
+        "Japanese makes specialist in Villa Park, IL — 20 miles from Chicago. Family owned since 2014. Every vehicle inspected and fully reconditioned before it leaves our lot.",
       rights: "All rights reserved.",
       privacy: "Privacy Policy",
       terms: "Terms",
@@ -42,7 +42,7 @@ export const translations = {
       headline: "Find Your Next Ride",
       headlineSub: "at Love Auto Group",
       subtext:
-        "Quality used vehicles, inspected, reconditioned and ready to drive. Family owned in Villa Park, IL since 2014.",
+        "Japanese makes specialist — Lexus, Subaru, Acura, Mazda, Honda. Inspected, reconditioned, and ready to drive. Villa Park, IL — 20 miles from Chicago.",
       cta: "Browse Inventory",
       ctaFinancing: "Get Pre-Approved",
       searchLabel: "Search",
@@ -190,7 +190,7 @@ export const translations = {
       businessHours: "Horario",
       contactUs: "Contáctenos",
       about:
-        "Negocio familiar desde 2014. Nos especializamos en vehículos japoneses de calidad, seleccionados y recondiconados en Villa Park, IL.",
+        "Especialistas en vehículos japoneses en Villa Park, IL — a 20 millas de Chicago. Negocio familiar desde 2014. Cada vehículo inspeccionado y reacondicionado antes de salir de nuestro lote.",
       rights: "Todos los derechos reservados.",
       privacy: "Política de Privacidad",
       terms: "Términos",
@@ -199,7 +199,7 @@ export const translations = {
       headline: "Encuentra Tu Próximo Auto",
       headlineSub: "en Love Auto Group",
       subtext:
-        "Vehículos usados de calidad, inspeccionados, reacondicionados y listos para manejar. Negocio familiar en Villa Park, IL desde 2014.",
+        "Especialistas en marcas japonesas — Lexus, Subaru, Acura, Mazda, Honda. Inspeccionados, reacondicionados y listos para manejar. Villa Park, IL — a 20 millas de Chicago.",
       cta: "Ver Inventario",
       ctaFinancing: "Pre-Aprobación",
       searchLabel: "Buscar",
@@ -322,10 +322,4 @@ export const translations = {
       stillSubtext: "Llámanos o visítanos. Estamos felices de ayudar.",
     },
     sellYourCar: {
-      heading: "Vende Tu Auto a Love Auto Group",
-      subtext: "Obtén una oferta real de un concesionario real. Rápido, fácil, sin presión.",
-    },
-  },
-} as const;
-
-export type Translations = typeof translations.en;
+      heading: "Vende Tu Auto a Love Auto Gr

@@ -24,8 +24,8 @@ export function LocalBusinessSchema() {
     name: SITE_CONFIG.name,
     legalName: "Love Auto Group Inc.",
     description:
-      "Family owned used car dealer in Villa Park, IL since 2014. Specialists in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Serving DuPage County and the western Chicago suburbs.",
-    slogan: "Family owned in Villa Park, IL since 2014",
+      "Japanese makes specialist in Villa Park, IL — 20 miles from Chicago. Family owned since 2014. Specializing in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Serving DuPage County and the western Chicago suburbs.",
+    slogan: "Japanese Makes Specialist in Villa Park, IL — 20 miles from Chicago",
     foundingDate: "2014",
     knowsAbout: [
       "Used Subaru",
@@ -291,7 +291,4 @@ export function FAQSchema({ items }: { items: { question: string; answer: string
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
-}
+      dangerouslySe

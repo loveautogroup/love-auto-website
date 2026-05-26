@@ -416,7 +416,7 @@ export default function HomePage() {
               Serving Used Car Buyers Across DuPage County
             </h2>
             <p className="text-brand-gray-600 max-w-2xl mx-auto">
-              We're family owned in Villa Park, IL, and we draw buyers from
+              We're family owned in Villa Park, IL — 20 miles from Chicago — and we draw buyers from
               every neighboring town. Find your route below, or browse by
               brand or buying guide.
             </p>
@@ -535,7 +535,4 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
-    </>
-  );
-}
+   
