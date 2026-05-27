@@ -122,6 +122,12 @@ export interface VehicleOverlay {
    *  view it; auto-built from VIN at panel save time using the standard
    *  Carfax pattern. */
   carfaxReportUrl?: string;
+
+  /**
+   * Show the Google Reviews badge on the VDP hero photo. Default true.
+   * Set false to hide per-vehicle (e.g. for coming-soon or off-market units).
+   */
+  showGoogleReviewsBadge?: boolean;
 }
 
 /**

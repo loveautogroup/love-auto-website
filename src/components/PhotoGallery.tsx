@@ -201,7 +201,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
                   rating={SITE_CONFIG.reviews.google.rating}
                   reviewCount={SITE_CONFIG.reviews.google.count}
                   reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
-                  compact
+                  showBadge={overlay.showGoogleReviewsBadge !== false}
                 />
               </div>
             </>

@@ -14,7 +14,7 @@ interface PhoneCTAProps {
   phone: string;
   /** Raw digits for tel: link, e.g. "6303593643". */
   phoneRaw: string;
-  /** Compact mode for inventory cards — smaller, no "Call/Txt" prefix. */
+  /** Compact mode for inventory cards — smaller font. */
   compact?: boolean;
 }
 
@@ -33,11 +33,6 @@ export default function PhoneCTA({ phone, phoneRaw, compact }: PhoneCTAProps) {
       }}
       aria-label={`Call or text us at ${phone}`}
     >
-      {!compact && (
-        <span className="text-[16px] sm:text-[18px] font-semibold mr-2 text-[#E2E8F0]">
-          Call/Txt
-        </span>
-      )}
       <span
         className={
           compact
