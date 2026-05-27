@@ -48,7 +48,7 @@ jobs:
 
       - name: JSON parse check
         run: |
-          for f in $(git ls-files '*.json'); do
+          for f in $(git ls-files '*.json' | grep -vE 'tsconfig.*\.json$|jsconfig.*\.json$|\.vscode/'); do
             python3 -c "import json; json.load(open('$f'))" 2>&1 || {
               echo "::error file=$f::Invalid JSON"
               exit 1
