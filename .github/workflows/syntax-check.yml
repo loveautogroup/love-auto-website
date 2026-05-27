@@ -1,0 +1,74 @@
+name: Syntax check
+# Layer B: defense against FUSE-truncated files reaching production.
+# See memory/fuse-truncation-recovery-plan.md
+# Installed 2026-05-27 by Bill.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  truncation-check:
+    name: Truncation + tail-character check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Tail-character heuristic
+        run: |
+          FAIL=0
+          for f in $(git ls-files '*.ts' '*.tsx' '*.js' '*.jsx' '*.json' '*.yaml' '*.yml' '*.toml' '*.css' '*.scss'); do
+            LAST=$(tail -c 500 "$f" | tr -d '[:space:]' | tail -c 1)
+            case "$LAST" in
+              '}'|';'|'>'|'/'|')'|'"'|"'"|'`'|']'|0|1|2|3|4|5|6|7|8|9) ;;
+              *)
+                TAIL=$(tail -c 80 "$f" | tr '\n' ' ')
+                echo "::error file=$f::Truncated tail: file ends with '$LAST' — tail: ...$TAIL"
+                FAIL=1
+                ;;
+            esac
+          done
+          exit $FAIL
+
+      - name: Trailing newline check (warn-only)
+        run: |
+          MISSING=0
+          for f in $(git ls-files '*.ts' '*.tsx' '*.js' '*.jsx' '*.json' '*.yaml' '*.yml' '*.toml' '*.css' '*.scss'); do
+            LB=$(tail -c 1 "$f" | od -An -c | tr -d ' ')
+            if [ "$LB" != "\\n" ] && [ -n "$LB" ]; then
+              echo "::warning file=$f::No trailing newline — possible FUSE truncation signature"
+              MISSING=$((MISSING + 1))
+            fi
+          done
+          echo "$MISSING file(s) without trailing newline (review if recently changed)"
+
+      - name: JSON parse check
+        run: |
+          for f in $(git ls-files '*.json'); do
+            python3 -c "import json; json.load(open('$f'))" 2>&1 || {
+              echo "::error file=$f::Invalid JSON"
+              exit 1
+            }
+          done
+
+  tsc:
+    name: TypeScript syntax (project-wide tsc --noEmit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      - name: tsc --noEmit
+        run: |
+          npx tsc --noEmit 2>&1 | grep -v "src/generated/prisma" | tee tsc.log
+          if grep -q "error TS" tsc.log; then
+            echo "::error::TypeScript errors detected (see annotations)"
+            exit 1
+          fi
