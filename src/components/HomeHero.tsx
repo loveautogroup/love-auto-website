@@ -21,7 +21,6 @@ export default function HomeHero() {
     { key: "suvs" as const, href: "/inventory?bodyStyle=suv" },
     { key: "sedans" as const, href: "/inventory?bodyStyle=sedan" },
     { key: "lowMiles" as const, href: "/inventory?maxMileage=60000" },
-    { key: "justArrived" as const, href: "/inventory?sortBy=recent" },
   ];
 
   return (

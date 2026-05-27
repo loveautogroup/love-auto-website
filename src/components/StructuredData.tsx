@@ -291,4 +291,7 @@ export function FAQSchema({ items }: { items: { question: string; answer: string
   return (
     <script
       type="application/ld+json"
-      dangerouslySe
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}

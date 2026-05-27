@@ -322,4 +322,10 @@ export const translations = {
       stillSubtext: "Llámanos o visítanos. Estamos felices de ayudar.",
     },
     sellYourCar: {
-      heading: "Vende Tu Auto a Love Auto Gr
+      heading: "Vende Tu Auto a Love Auto Group",
+      subtext: "Obtén una oferta real de un concesionario real. Rápido, fácil, sin presión.",
+    },
+  },
+} as const;
+
+export type Translations = typeof translations.en;
