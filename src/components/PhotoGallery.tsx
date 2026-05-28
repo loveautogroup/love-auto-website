@@ -168,7 +168,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
                   the photo's right edge, separate visual block from
                   the trust-signal Carfax/status cluster on the left. */}
               <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 flex flex-col items-end gap-1.5">
-                <FeaturePillCluster pills={overlay.featurePills} compact stack="inline" />
+                <FeaturePillCluster pills={overlay.featurePills} stack="inline" />
               </div>
 
               {/* Bottom-left: phone CTA (anchored left so the dealer
