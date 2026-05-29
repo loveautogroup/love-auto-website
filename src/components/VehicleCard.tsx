@@ -163,6 +163,17 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     }
   }, [heroOverride, vehicle.images[0]]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // The Coming Soon toggle lives in live KV, not the baked config, so
+  // forcePlaceholder flips true only AFTER the merch fetch resolves
+  // post-hydration. heroSrc was locked to the real photo at init and the
+  // upgrade effect above never downgrades, so without this the toggle never
+  // registers on the card. Watch forcePlaceholder and swap to the placeholder.
+  useEffect(() => {
+    if (forcePlaceholder && heroSrc !== COMING_SOON_PLACEHOLDER) {
+      setHeroSrc(COMING_SOON_PLACEHOLDER);
+    }
+  }, [forcePlaceholder]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const heroImage = heroSrc;
   // Render the <Image> only when there's a real source. Empty string
   // means "no photo, no placeholder" → fall through to the SVG branch.

@@ -69,12 +69,20 @@ export default function HomeFeaturedGrid() {
 export function HomeOnTheLot() {
   const { vehicles } = useInventory();
   const visible = useVisibleVehicles(vehicles);
+  const config = useMerchandising();
   const ordered = sortWithFeaturedFirst(
     visible.filter((v) => v.status !== "sold")
   );
   return (
     <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
       {ordered.map((v) => {
+        const forcePh =
+          config.overlays?.[v.vin]?.useComingSoonPlaceholder === true;
+        const heroImg = forcePh
+          ? "/images/coming-soon.png"
+          : v.images && v.images[0]
+            ? v.images[0]
+            : "/images/coming-soon.png";
         const priceHasCents = Math.round(v.price * 100) % 100 !== 0;
         const price = new Intl.NumberFormat("en-US", {
           style: "currency",
@@ -92,7 +100,7 @@ export function HomeOnTheLot() {
             <div className="aspect-[4/3] bg-brand-gray-700/50 relative overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={v.images && v.images[0] ? v.images[0] : "/images/coming-soon.png"}
+                src={heroImg}
                 alt={`${v.year} ${v.make} ${v.model}`}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 onError={(e) => {
