@@ -1,0 +1,74 @@
+# Pin line endings on commit so cross-OS contributors stop generating
+# CRLF/LF noise in `git status`. Added 2026-05-29 (Bill) after a
+# 53-file phantom-modification mess on love-auto-dms — same pattern
+# Sam fixed on dms-inventory-api 2026-05-08.
+#
+# Behavior: text files normalized to LF in the repo, written as LF on
+# checkout regardless of OS. Existing files that are already CRLF stay
+# CRLF until someone touches them; for big-bang normalization run:
+#   git add --renormalize . && git commit -m "chore: normalize EOL to LF"
+
+# Default: detect text vs binary, force LF on commit and checkout
+* text=auto eol=lf
+
+# Explicit text file types — TypeScript / Next.js stack
+*.ts            text eol=lf
+*.tsx           text eol=lf
+*.js            text eol=lf
+*.jsx           text eol=lf
+*.mjs           text eol=lf
+*.cjs           text eol=lf
+*.json          text eol=lf
+*.md            text eol=lf
+*.mdx           text eol=lf
+*.css           text eol=lf
+*.scss          text eol=lf
+*.html          text eol=lf
+*.htm           text eol=lf
+*.svg           text eol=lf
+*.yaml          text eol=lf
+*.yml           text eol=lf
+*.toml          text eol=lf
+*.txt           text eol=lf
+*.example       text eol=lf
+*.sh            text eol=lf
+*.ps1           text eol=lf
+*.sql           text eol=lf
+*.prisma        text eol=lf
+*.graphql       text eol=lf
+*.gql           text eol=lf
+
+# Files without extensions
+Procfile        text eol=lf
+Dockerfile      text eol=lf
+Makefile        text eol=lf
+.gitignore      text eol=lf
+.gitattributes  text eol=lf
+.dockerignore   text eol=lf
+.env.example    text eol=lf
+.nvmrc          text eol=lf
+.node-version   text eol=lf
+
+# Explicit binary (don't try to LF-normalize these)
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.webp          binary
+*.ico           binary
+*.pdf           binary
+*.zip           binary
+*.gz            binary
+*.tar           binary
+*.tgz           binary
+*.7z            binary
+*.bz2           binary
+*.woff          binary
+*.woff2         binary
+*.ttf           binary
+*.eot           binary
+*.otf           binary
+*.mp4           binary
+*.mp3           binary
+*.mov           binary
+*.webm          binary
