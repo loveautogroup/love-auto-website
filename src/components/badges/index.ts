@@ -11,6 +11,7 @@
 export { default as CarfaxBadge } from "./CarfaxBadge";
 export { default as CarfaxPillStack } from "./CarfaxPillStack";
 export { default as DealerCluster } from "./DealerCluster";
+export { GoogleReviewsLockup } from "./DealerCluster";
 export { default as FeaturePillCluster } from "./FeaturePillCluster";
 export { default as PhoneCTA } from "./PhoneCTA";
 export { default as PhotoScrim } from "./PhotoScrim";

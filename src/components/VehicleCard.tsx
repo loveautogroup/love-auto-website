@@ -12,7 +12,7 @@ import { applyPhotoOrder } from "@/data/photoOrder";
 import {
   CarfaxBadge,
   CarfaxPillStack,
-  DealerCluster,
+  GoogleReviewsLockup,
   FeaturePillCluster,
   PhoneCTA,
   PhotoScrim,
@@ -268,14 +268,17 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           />
         </div>
 
-        {/* Bottom-right: compact dealer + Google */}
+        {/* Bottom-right: full Google Reviews lockup, scaled down to fit the
+            card corner (transform-scale keeps the same legible lockup as the
+            VDP, just smaller). origin-bottom-right keeps it pinned in-bounds. */}
         <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
-          <DealerCluster
-            rating={SITE_CONFIG.reviews.google.rating}
-            reviewCount={SITE_CONFIG.reviews.google.count}
-            reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
-            compact
-          />
+          <div className="scale-[0.6] sm:scale-[0.68] origin-bottom-right">
+            <GoogleReviewsLockup
+              rating={SITE_CONFIG.reviews.google.rating}
+              reviewCount={SITE_CONFIG.reviews.google.count}
+              reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
+            />
+          </div>
         </div>
       </div>
 
