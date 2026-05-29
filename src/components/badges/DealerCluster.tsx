@@ -41,7 +41,7 @@ const GLASS_STYLE = {
 
 /** Stacked "Google Reviews" lockup — multicolor wordmark + gold stars + our
  *  real rating/count. Sits on a frosted dark chip so it reads over any photo. */
-function GoogleReviewsLockup({
+export function GoogleReviewsLockup({
   rating,
   reviewCount,
   reviewsUrl,

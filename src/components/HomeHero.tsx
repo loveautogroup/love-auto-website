@@ -10,6 +10,8 @@
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
+import { GoogleReviewsLockup } from "@/components/badges/DealerCluster";
+import { SITE_CONFIG } from "@/lib/constants";
 
 export default function HomeHero() {
   const { t } = useLanguage();
@@ -162,11 +164,13 @@ export default function HomeHero() {
         {/* Trust strip */}
         <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center gap-4">
           <CarfaxAdvantageBadge size="sm" />
-          <span className="text-brand-gray-400 text-xs hidden sm:block" aria-hidden="true">
-            |
-          </span>
+          <GoogleReviewsLockup
+            rating={SITE_CONFIG.reviews.google.rating}
+            reviewCount={SITE_CONFIG.reviews.google.count}
+            reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
+          />
           <span className="text-brand-gray-300 text-sm">
-            4.7★ on Google · 125+ reviews · Family owned since 2014
+            Family owned since 2014
           </span>
         </div>
       </div>
