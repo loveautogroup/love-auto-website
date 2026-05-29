@@ -40,10 +40,10 @@ export default function FeaturePillCluster({
   const visible = (pills ?? []).filter((p): p is string => Boolean(p && p.trim()));
   if (visible.length === 0) return null;
 
-  // Compact mode: cap to 2 pills max (inventory cards stay clean).
-  // Full mode: render up to 5 — with the merchandising panel now offering
-  // 5 slots, the VDP photo overlay needs to surface them all.
-  const limit = compact ? 2 : 5;
+  // Render up to 5 in BOTH modes so preview cards match the VDP exactly.
+  // Cards previously capped at 2, silently dropping selected pills (Jeremiah
+  // 2026-05-29). Compact pills are smaller + single-line, so 5 still fit.
+  const limit = 5;
   const shown = visible.slice(0, limit);
 
   // Container layout differs by stack mode. Left-stack mode is inline
