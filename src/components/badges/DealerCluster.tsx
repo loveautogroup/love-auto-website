@@ -3,9 +3,9 @@
 /**
  * Dealer logo + Google review cluster — bottom-right slot.
  *
- * Non-compact (VDP hero): stacked LOVE AUTO GROUP pill + Option 2
- * gradient-circle Google badge. The circle uses a conic gradient ring
- * in Google brand colours with a frosted-glass interior.
+ * Non-compact (VDP hero): stacked LOVE AUTO GROUP pill + a "Google
+ * Reviews" lockup (multicolor wordmark + gold stars + rating) on a
+ * frosted-glass chip.
  *
  * Compact (inventory cards): single combined pill — heart + star + rating.
  *
@@ -39,8 +39,9 @@ const GLASS_STYLE = {
     "0 0 1px rgba(0,0,0,0.95), 1px 1px 1px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.7)",
 } as const;
 
-/** Option 2 — thin conic-gradient ring circle badge. */
-function GoogleCircleBadge({
+/** Stacked "Google Reviews" lockup — multicolor wordmark + gold stars + our
+ *  real rating/count. Sits on a frosted dark chip so it reads over any photo. */
+function GoogleReviewsLockup({
   rating,
   reviewCount,
   reviewsUrl,
@@ -55,73 +56,57 @@ function GoogleCircleBadge({
       target="_blank"
       rel="noopener noreferrer"
       onClick={(e) => e.stopPropagation()}
-      aria-label={`Read Love Auto Group's ${rating} star Google reviews — ${reviewCount}+ reviews`}
+      aria-label={`Read Love Auto Group's ${rating} star Google reviews, ${reviewCount}+ reviews`}
       className="
-        block no-underline
-        hover:scale-[1.06] active:scale-100
+        block no-underline text-right
+        rounded-lg px-3 py-2 border border-white/20
+        hover:scale-[1.04] active:scale-100
         transition-transform duration-150
         focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white
       "
       style={{
-        /* Gradient ring — Google brand colours as a conic gradient */
-        background:
-          "conic-gradient(#4285F4 0%, #34A853 25%, #FBBC05 50%, #EA4335 75%, #4285F4 100%)",
-        borderRadius: "50%",
-        padding: "2.5px",
-        width: 58,
-        height: 58,
-        boxShadow: "0 3px 10px rgba(0,0,0,0.45)",
+        backgroundColor: "rgba(10, 18, 36, 0.55)",
+        backdropFilter: "blur(10px) saturate(1.3)",
+        WebkitBackdropFilter: "blur(10px) saturate(1.3)",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
+        textShadow: "0 1px 2px rgba(0,0,0,0.7)",
         flexShrink: 0,
       }}
     >
-      {/* Inner frosted circle */}
+      {/* Google wordmark + "Reviews" */}
+      <div
+        style={{ fontWeight: 700, fontSize: 18, lineHeight: 1, letterSpacing: "-0.01em" }}
+        aria-hidden="true"
+      >
+        <span style={{ color: "#4285F4" }}>G</span>
+        <span style={{ color: "#EA4335" }}>o</span>
+        <span style={{ color: "#FBBC05" }}>o</span>
+        <span style={{ color: "#4285F4" }}>g</span>
+        <span style={{ color: "#34A853" }}>l</span>
+        <span style={{ color: "#EA4335" }}>e</span>
+        <span style={{ color: "#C7CDD6", fontWeight: 600 }}> Reviews</span>
+      </div>
+
+      {/* Gold stars + rating + count */}
       <div
         style={{
-          background: "rgba(10, 18, 36, 0.82)",
-          backdropFilter: "blur(10px) saturate(1.3)",
-          WebkitBackdropFilter: "blur(10px) saturate(1.3)",
-          borderRadius: "50%",
-          width: "100%",
-          height: "100%",
+          marginTop: 5,
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
-          gap: 1,
+          justifyContent: "flex-end",
+          gap: 6,
         }}
       >
-        {/* Google G */}
-        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
-          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-        </svg>
-        {/* Stars */}
-        <span style={{ color: "#F59E0B", fontSize: 8, lineHeight: 1 }} aria-hidden="true">
+        <span
+          style={{ color: "#FBBC05", fontSize: 13, letterSpacing: "1px" }}
+          aria-hidden="true"
+        >
           ★★★★★
         </span>
-        {/* Rating */}
-        <span
-          style={{
-            color: "#FFFFFF",
-            fontSize: 12,
-            fontWeight: 800,
-            lineHeight: 1,
-            textShadow: "0 1px 2px rgba(0,0,0,0.8)",
-            letterSpacing: "-0.02em",
-          }}
-        >
+        <span style={{ color: "#FFFFFF", fontSize: 13, fontWeight: 800 }}>
           {rating.toFixed(1)}
         </span>
-        {/* Review count */}
-        <span
-          style={{
-            color: "#CBD5E1",
-            fontSize: 7.5,
-            lineHeight: 1,
-          }}
-        >
+        <span style={{ color: "#CBD5E1", fontSize: 11 }}>
           {reviewCount}+ reviews
         </span>
       </div>
@@ -190,9 +175,9 @@ export default function DealerCluster({
         </span>
       </div>
 
-      {/* Option 2: gradient circle Google Reviews badge */}
+      {/* Stacked Google Reviews lockup */}
       {showBadge && (
-        <GoogleCircleBadge
+        <GoogleReviewsLockup
           rating={rating}
           reviewCount={reviewCount}
           reviewsUrl={reviewsUrl}
