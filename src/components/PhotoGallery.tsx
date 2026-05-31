@@ -154,10 +154,10 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
                   Inner div wraps the shield because we only scale down
                   the shield on mobile, not the pills below it. */}
               <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 flex flex-col items-start gap-1.5">
-                <div className="[&_>*]:scale-[0.26] sm:[&_>*]:scale-[0.52] [&_>*]:origin-top-left">
+                <div className="[&_>*]:scale-[0.45] sm:[&_>*]:scale-[0.52] [&_>*]:origin-top-left">
                   <CarfaxBadge vin={vehicle.vin} />
                 </div>
-                <div className="scale-[0.7] sm:scale-100 origin-top-left"><CarfaxPillStack overlay={overlay} /></div>
+                <CarfaxPillStack overlay={overlay} />
                 {overlay.effectiveStatus && (
                   <StatusPill kind={overlay.effectiveStatus} />
                 )}
@@ -193,7 +193,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
                   on the gallery photo and only when Jordan has set a
                   warranty string for this VIN. Vehicles sold as-is
                   render no warranty pill anywhere. */}
-              <div className="absolute bottom-3 right-3 z-10 flex flex-col items-end gap-1.5 scale-[0.6] sm:scale-100 origin-bottom-right">
+              <div className="absolute bottom-3 right-3 z-10 flex flex-col items-end gap-1.5">
                 {warrantyCopy && (
                   <WarrantyBadge copy={warrantyCopy} compact />
                 )}
