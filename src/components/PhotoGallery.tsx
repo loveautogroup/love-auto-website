@@ -27,6 +27,22 @@ interface PhotoGalleryProps {
 const COMING_SOON_PLACEHOLDER = "/images/coming-soon.png";
 
 // ─────────────────────────────────────────────────────────────────────────────
+// useIsMobile — true when viewport < 768 px (Tailwind md breakpoint).
+// Gates the lightbox to mobile only; desktop keeps thumbnail-swap behaviour.
+// ─────────────────────────────────────────────────────────────────────────────
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return isMobile;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Lightbox — full-screen photo viewer, mobile-first with swipe support
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -107,35 +123,11 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
           unoptimized
           priority
         />
-
-        {/* Prev / Next arrows — desktop only; mobile uses swipe */}
-        {count > 1 && (
-          <>
-            <button
-              onClick={prev}
-              aria-label="Previous photo"
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white rounded-full p-2.5 transition-colors hidden md:flex items-center justify-center"
-            >
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-              </svg>
-            </button>
-            <button
-              onClick={next}
-              aria-label="Next photo"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white rounded-full p-2.5 transition-colors hidden md:flex items-center justify-center"
-            >
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-              </svg>
-            </button>
-          </>
-        )}
       </div>
 
-      {/* Swipe hint — mobile only, fades after a moment via CSS animation */}
+      {/* Swipe hint */}
       {count > 1 && (
-        <div className="absolute bottom-20 inset-x-0 flex justify-center pointer-events-none md:hidden">
+        <div className="absolute bottom-20 inset-x-0 flex justify-center pointer-events-none">
           <span className="text-white/40 text-xs animate-pulse">swipe to navigate</span>
         </div>
       )}
@@ -182,16 +174,16 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
  * Below the hero sits a horizontal scrollable thumbnail strip — every
  * photo in the manifest, click any to swap it into the hero.
  *
- * Tapping / clicking the hero opens a full-screen lightbox. On mobile
- * photos are swipeable left/right inside the lightbox. Badge elements
- * (phone CTA, Carfax link, etc.) stopPropagation so they don't trigger
- * the lightbox accidentally.
+ * On mobile: tapping the hero opens a full-screen lightbox with swipe
+ * navigation. On desktop the lightbox is not triggered — clicking a
+ * thumbnail still swaps the hero as before.
  */
 export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [erroredSrcs, setErroredSrcs] = useState<Set<string>>(new Set());
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const isMobile = useIsMobile();
 
   const hasRealPhotos = rawImages.length > 0 && !rawImages[0]?.includes("placeholder");
   const images = hasRealPhotos && vehicle
@@ -211,16 +203,16 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
   const warrantyCopy = overlay?.warranty;
   const remaining = Math.max(0, photoCount - 5);
 
+  // Only open on mobile; desktop keeps thumbnail-swap-only behaviour
   const openLightbox = (index: number) => {
-    if (!hasRealPhotos || forcePlaceholder) return;
+    if (!hasRealPhotos || forcePlaceholder || !isMobile) return;
     setLightboxIndex(index);
     setLightboxOpen(true);
   };
 
   return (
     <>
-      {/* Full-screen lightbox — rendered outside the gallery flow so
-          it layers above everything on the page */}
+      {/* Full-screen lightbox — mobile only */}
       {lightboxOpen && hasRealPhotos && (
         <Lightbox
           images={images}
@@ -233,17 +225,17 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
       <div className="space-y-3">
         {/* Full-width hero photo */}
         <div>
-          {/* Tap / click the hero to open the lightbox */}
+          {/* On mobile: tapping opens lightbox. On desktop: no-op (thumbnails swap hero). */}
           <div
-            role={hasRealPhotos && !forcePlaceholder ? "button" : undefined}
-            tabIndex={hasRealPhotos && !forcePlaceholder ? 0 : undefined}
-            aria-label={hasRealPhotos && !forcePlaceholder ? `View all ${photoCount} photos fullscreen` : undefined}
+            role={hasRealPhotos && !forcePlaceholder && isMobile ? "button" : undefined}
+            tabIndex={hasRealPhotos && !forcePlaceholder && isMobile ? 0 : undefined}
+            aria-label={hasRealPhotos && !forcePlaceholder && isMobile ? `View all ${photoCount} photos fullscreen` : undefined}
             onClick={() => openLightbox(selectedIndex)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") openLightbox(selectedIndex);
             }}
             className={`relative aspect-[3/2] bg-brand-gray-100 rounded-xl overflow-hidden ${
-              hasRealPhotos && !forcePlaceholder ? "cursor-pointer" : ""
+              hasRealPhotos && !forcePlaceholder && isMobile ? "cursor-pointer" : ""
             }`}
           >
             {(hasRealPhotos || forcePlaceholder) ? (
@@ -297,9 +289,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
               </div>
             )}
 
-            {/* Badge overlay — wrapped in stopPropagation so badge clicks
-                (phone CTA, Carfax link, Google reviews) don't also open
-                the lightbox */}
+            {/* Badge overlay — stopPropagation so badge clicks don't open lightbox */}
             {showBadges && vehicle && overlay && (
               <div onClick={(e) => e.stopPropagation()}>
                 <PhotoScrim />
@@ -348,10 +338,9 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
               </div>
             )}
 
-            {/* Expand icon — bottom-right, shown on all photos when no
-                badge overlay is active (non-first photo or no vehicle) */}
+            {/* Expand icon — mobile only, non-first photos (first photo has badge overlay) */}
             {hasRealPhotos && !forcePlaceholder && !showBadges && (
-              <div className="absolute bottom-3 right-3 z-10 pointer-events-none">
+              <div className="absolute bottom-3 right-3 z-10 pointer-events-none md:hidden">
                 <div className="bg-black/60 text-white rounded-full p-1.5">
                   <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                     <path d="M3 3h7v2H5v5H3V3zm11 0h7v7h-2V5h-5V3zM3 14h2v5h5v2H3v-7zm16 5h-5v2h7v-7h-2v5z" />
@@ -360,14 +349,14 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
               </div>
             )}
 
-            {/* Photo counter — bottom-left when no badge overlay */}
+            {/* Photo counter — shown when no badge overlay */}
             {!showBadges && (
               <span className="absolute bottom-3 left-3 bg-black/70 text-white text-xs font-medium px-2.5 py-1 rounded-full inline-flex items-center gap-1">
                 <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current">
                   <path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
                   <circle cx="12" cy="13" r="3" />
                 </svg>
-                {photoCount} photos · Tap to expand
+                {photoCount} photos
               </span>
             )}
           </div>
