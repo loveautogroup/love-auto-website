@@ -445,7 +445,7 @@ export default async function VehicleDetailPage({
                 eligibility in SERPs. Generated dynamically from the
                 vehicle's specs + warranty overlay. */}
             <div className="mt-8">
-              <VDPFAQ vehicle={vehicle} warranty={overlay.warranty} />
+              <VDPFAQ vehicle={vehicle} />
             </div>
 
             {/* Customer reviews — live data from Google Places API, with

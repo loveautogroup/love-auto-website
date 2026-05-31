@@ -19,11 +19,9 @@ import { FAQSchema } from "@/components/StructuredData";
 
 interface VDPFAQProps {
   vehicle: Vehicle;
-  /** Optional warranty copy from the merchandising overlay. */
-  warranty?: string;
 }
 
-function generateFAQs(vehicle: Vehicle, warranty?: string) {
+function generateFAQs(vehicle: Vehicle) {
   const yearMakeModel = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
   const formattedMileage = new Intl.NumberFormat("en-US").format(vehicle.mileage);
   const formattedPrice = new Intl.NumberFormat("en-US", {
@@ -66,15 +64,7 @@ function generateFAQs(vehicle: Vehicle, warranty?: string) {
       "Yes. Love Auto Group is a Carfax Advantage Dealer, which means we provide a free Carfax history report on every vehicle in our inventory. The report shows accident history, service records, ownership chain, and title status. You can pull it directly from the CARFAX badge on this vehicle's photo.",
   });
 
-  // 4. Warranty / as-is
-  faqs.push({
-    question: `Does this ${yearMakeModel} come with a warranty?`,
-    answer: warranty
-      ? `Yes — this ${yearMakeModel} comes with our ${warranty}. Extended coverage options are also available; ask us at the lot or by phone.`
-      : `This ${yearMakeModel} is sold as-is. We've inspected the vehicle for known issues on the platform and disclose what we find — but for vehicles in this price range, we don't add warranty coverage that would otherwise inflate the price. Extended third-party warranty options are available if you'd like one.`,
-  });
-
-  // 5. Pricing / financing
+  // 4. Pricing / financing
   faqs.push({
     question: `What's the price and can I finance this ${yearMakeModel}?`,
     answer: `This ${yearMakeModel} is priced at ${formattedPrice}. We work with multiple lenders including options for buyers with less-than-perfect credit. Our quick estimator on this page shows monthly payments by down payment, term, and credit tier — or stop by and we'll run an actual approval in about 15 minutes.`,
@@ -90,8 +80,8 @@ function generateFAQs(vehicle: Vehicle, warranty?: string) {
   return faqs;
 }
 
-export default function VDPFAQ({ vehicle, warranty }: VDPFAQProps) {
-  const faqs = generateFAQs(vehicle, warranty);
+export default function VDPFAQ({ vehicle }: VDPFAQProps) {
+  const faqs = generateFAQs(vehicle);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
