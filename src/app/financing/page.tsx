@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
-import { SITE_CONFIG } from "@/lib/constants";
-import FinancingForm from "./FinancingForm";
-import PaymentCalculator from "./PaymentCalculator";
 import FinancingHero from "./FinancingHero";
 
 export const metadata: Metadata = {
   title: "Used Car Financing, All Credit Welcome | Love Auto",
   description:
-    "All credit welcome. Multiple lenders, competitive rates, and fast pre-approval with no impact on your credit score. Apply online with Love Auto Group.",
+    "All credit welcome. Multiple lenders, competitive rates, and fast pre-approval. Apply online with Love Auto Group in Villa Park, IL.",
   alternates: { canonical: "https://www.loveautogroup.net/financing" },
 };
 
@@ -16,101 +13,17 @@ export default function FinancingPage() {
     <>
       <FinancingHero />
 
-      {/* Payment calculator */}
-      <section className="max-w-5xl mx-auto px-4 -mt-8 relative z-10">
-        <PaymentCalculator />
-      </section>
-
       <section
         id="apply"
-        className="max-w-7xl mx-auto px-4 py-16 scroll-mt-20"
+        className="max-w-5xl mx-auto px-4 py-12 scroll-mt-20"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12">
-          <div>
-            <FinancingForm />
-          </div>
-
-          {/* Sidebar info */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
-              <h2 className="font-bold text-brand-gray-900 mb-4">
-                How It Works
-              </h2>
-              <ol className="space-y-4">
-                {[
-                  {
-                    step: "1",
-                    title: "Submit Your Info",
-                    desc: "Fill out the quick form. It takes less than 2 minutes.",
-                  },
-                  {
-                    step: "2",
-                    title: "We Find Options",
-                    desc: "We work with multiple lenders to find competitive rates for your situation.",
-                  },
-                  {
-                    step: "3",
-                    title: "Pick Your Vehicle",
-                    desc: "Browse our inventory knowing your budget and get behind the wheel faster.",
-                  },
-                ].map((item) => (
-                  <li key={item.step} className="flex gap-3">
-                    <span className="w-8 h-8 bg-brand-red text-white rounded-full flex items-center justify-center font-bold text-sm shrink-0">
-                      {item.step}
-                    </span>
-                    <div>
-                      <p className="font-semibold text-brand-gray-900">
-                        {item.title}
-                      </p>
-                      <p className="text-sm text-brand-gray-500">{item.desc}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-
-            <div className="bg-brand-red/5 border border-brand-red/20 rounded-xl p-6">
-              <h3 className="font-bold text-brand-gray-900 mb-2">
-                Your Information Is Safe
-              </h3>
-              <p className="text-sm text-brand-gray-600 leading-relaxed">
-                This is a pre-qualification form, not a full credit application.
-                Your information is kept confidential and used only to explore
-                financing options for you.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
-              <h3 className="font-bold text-brand-gray-900 mb-2">
-                Questions?
-              </h3>
-              <p className="text-sm text-brand-gray-600 mb-3">
-                Prefer to talk to a person? We&apos;re happy to walk you through
-                the process.
-              </p>
-              <a
-                href={`tel:${SITE_CONFIG.phoneRaw}`}
-                className="inline-flex items-center gap-2 text-brand-red hover:text-brand-red-dark font-semibold"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                  />
-                </svg>
-                {SITE_CONFIG.phone}
-              </a>
-            </div>
-          </div>
-        </div>
+        <iframe
+          src="https://dwssecuredforms.dealercenter.net/CreditApplication/index/9079472?themecolor=8C8C8C&formtype=l&frameId=dws_frame_0&standalone=true"
+          scrolling="auto"
+          style={{ height: "1093px", width: "100%" }}
+          frameBorder={0}
+          title="Apply for Financing — Love Auto Group"
+        />
       </section>
     </>
   );
