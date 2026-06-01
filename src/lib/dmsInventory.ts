@@ -23,6 +23,54 @@ export const SEED_SLUGS_BY_VIN = SHARED_SEED_SLUGS;
 export const DMS_PUBLIC_INVENTORY_URL =
   "https://dms.loveautogroup.net/api/v1/public/inventory";
 
+const RAILWAY_BADGE_CONFIG_URL =
+  "https://web-production-d5f3a.up.railway.app/api/badge-config/global-public";
+
+export interface GlobalBadgeConfig {
+  dealer_badge_enabled: boolean;
+  dealer_badge_position: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+  dealer_badge_size_pct: number;
+  google_badge_enabled: boolean;
+  google_badge_position: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+  phone_badge_enabled: boolean;
+  phone_number: string;
+  phone_badge_position: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+  carfax_badge_enabled: boolean;
+  carfax_badge_position: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+  margin_pct: number;
+}
+
+const BADGE_CONFIG_FALLBACK: GlobalBadgeConfig = {
+  dealer_badge_enabled: true,
+  dealer_badge_position: "bottom-right",
+  dealer_badge_size_pct: 28,
+  google_badge_enabled: true,
+  google_badge_position: "bottom-right",
+  phone_badge_enabled: true,
+  phone_number: "(630) 359-3643",
+  phone_badge_position: "bottom-left",
+  carfax_badge_enabled: true,
+  carfax_badge_position: "top-left",
+  margin_pct: 2.2,
+};
+
+/**
+ * Fetch global badge config from Railway (no auth required).
+ * Called at build time from VDP pages. Falls back to safe defaults on error.
+ */
+export async function fetchGlobalBadgeConfig(): Promise<GlobalBadgeConfig> {
+  try {
+    const res = await fetch(RAILWAY_BADGE_CONFIG_URL, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return BADGE_CONFIG_FALLBACK;
+    const data = (await res.json()) as Partial<GlobalBadgeConfig>;
+    return { ...BADGE_CONFIG_FALLBACK, ...data };
+  } catch {
+    return BADGE_CONFIG_FALLBACK;
+  }
+}
+
 interface DmsPhoto {
   url: string;
   isPrimary?: boolean;

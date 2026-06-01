@@ -27,6 +27,12 @@ interface DealerClusterProps {
    * Pass false to hide (controlled from DMS merchandising panel).
    */
   showBadge?: boolean;
+  /**
+   * Hide the "LOVE AUTO GROUP" text pill.
+   * Pass true when the dealer logo has been baked into the hero photo
+   * pixels — showing the HTML pill on top would double-stamp it.
+   */
+  hideDealerPill?: boolean;
 }
 
 // Shared frosted-glass surface — same recipe as FeaturePillCluster /
@@ -120,6 +126,7 @@ export default function DealerCluster({
   reviewsUrl,
   compact,
   showBadge = true,
+  hideDealerPill = false,
 }: DealerClusterProps) {
   if (compact) {
     // Compact: single combined pill — heart mono + Google rating.
@@ -154,26 +161,29 @@ export default function DealerCluster({
     );
   }
 
-  // Non-compact (VDP hero): LOVE AUTO GROUP pill + Option 2 gradient circle
+  // Non-compact (VDP hero): LOVE AUTO GROUP pill + Google Reviews lockup.
+  // hideDealerPill=true when the logo is already baked into the photo pixels.
   return (
     <div className="flex flex-col items-end gap-2">
-      {/* Dealer logo pill */}
-      <div
-        className="
-          flex items-center gap-1.5
-          rounded-md px-3 py-1.5
-          text-white border border-white/25
-          shadow-[0_2px_6px_rgba(0,0,0,0.35)]
-        "
-        style={GLASS_STYLE}
-      >
-        <span className="text-[14px] font-black text-[#EF4444]" aria-hidden="true">
-          ♥
-        </span>
-        <span className="text-[12px] font-extrabold tracking-[0.05em]">
-          LOVE AUTO GROUP
-        </span>
-      </div>
+      {/* Dealer logo text pill — hidden when logo is baked into the photo */}
+      {!hideDealerPill && (
+        <div
+          className="
+            flex items-center gap-1.5
+            rounded-md px-3 py-1.5
+            text-white border border-white/25
+            shadow-[0_2px_6px_rgba(0,0,0,0.35)]
+          "
+          style={GLASS_STYLE}
+        >
+          <span className="text-[14px] font-black text-[#EF4444]" aria-hidden="true">
+            ♥
+          </span>
+          <span className="text-[12px] font-extrabold tracking-[0.05em]">
+            LOVE AUTO GROUP
+          </span>
+        </div>
+      )}
 
       {/* Stacked Google Reviews lockup */}
       {showBadge && (

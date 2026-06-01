@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { Vehicle } from "@/lib/types";
 import { SITE_CONFIG } from "@/lib/constants";
+import type { GlobalBadgeConfig } from "@/lib/dmsInventory";
 import { useResolveOverlay } from "@/data/useMerchandising";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import {
@@ -22,6 +23,12 @@ interface PhotoGalleryProps {
   alt: string;
   /** Optional — when provided, the main hero photo gets the full overlay system. */
   vehicle?: Vehicle;
+  /**
+   * Global badge config fetched from Railway at SSR time.
+   * Controls which overlay badges are visible and positions them using
+   * the same %-based coordinates as the baked photo layer.
+   */
+  badgeConfig?: GlobalBadgeConfig;
 }
 
 const COMING_SOON_PLACEHOLDER = "/images/coming-soon.png";
@@ -178,7 +185,7 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
  * navigation. On desktop the lightbox is not triggered — clicking a
  * thumbnail still swaps the hero as before.
  */
-export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoGalleryProps) {
+export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeConfig }: PhotoGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [erroredSrcs, setErroredSrcs] = useState<Set<string>>(new Set());
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -202,6 +209,19 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
   const forcePlaceholder = overlay?.useComingSoonPlaceholder === true;
   const warrantyCopy = overlay?.warranty;
   const remaining = Math.max(0, photoCount - 5);
+
+  // Badge config derived values — fall back to "show everything" when absent.
+  const MARGIN_PCT = badgeConfig?.margin_pct ?? 2.2;
+  // Hero is baked when Railway has composited the dealer logo into the photo pixels.
+  // Detected by the "hero-baked" prefix in the R2 object key embedded in the URL.
+  const hasBakedHero = Boolean(images[0]?.includes("hero-baked"));
+  // Hide the HTML "LOVE AUTO GROUP" text pill when the logo is already baked.
+  const hideDealerPill = hasBakedHero && (badgeConfig?.dealer_badge_enabled !== false);
+  const showGoogleBadge =
+    (badgeConfig?.google_badge_enabled !== false) &&
+    (overlay?.showGoogleReviewsBadge !== false);
+  const showPhoneBadge = badgeConfig?.phone_badge_enabled !== false;
+  const showCarfaxBadge = badgeConfig?.carfax_badge_enabled !== false;
 
   // Only open on mobile; desktop keeps thumbnail-swap-only behaviour
   const openLightbox = (index: number) => {
@@ -289,42 +309,71 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
               </div>
             )}
 
-            {/* Badge overlay — stopPropagation so badge clicks don't open lightbox */}
+            {/* Badge overlay — stopPropagation so badge clicks don't open lightbox.
+                Positions use %-based inline styles (matching badge_spec.json from Railway)
+                so the HTML overlay layer aligns exactly with the baked pixel layer. */}
             {showBadges && vehicle && overlay && (
               <div onClick={(e) => e.stopPropagation()}>
                 <PhotoScrim />
 
-                <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 flex flex-col items-start gap-1.5">
-                  <div className="[&_>*]:scale-[0.26] sm:[&_>*]:scale-[0.52] [&_>*]:origin-top-left">
-                    <CarfaxBadge vin={vehicle.vin} />
+                {/* Top-left: CARFAX logo + feature pills (1-Owner, No Accidents…) + status */}
+                {showCarfaxBadge && (
+                  <div
+                    className="absolute z-10 flex flex-col items-start gap-1.5"
+                    style={{ top: `${MARGIN_PCT}%`, left: `${MARGIN_PCT}%` }}
+                  >
+                    <div className="[&_>*]:scale-[0.26] sm:[&_>*]:scale-[0.52] [&_>*]:origin-top-left">
+                      <CarfaxBadge vin={vehicle.vin} />
+                    </div>
+                    <div className="scale-[0.7] sm:scale-100 origin-top-left">
+                      <CarfaxPillStack overlay={overlay} />
+                    </div>
+                    {overlay.effectiveStatus && (
+                      <StatusPill kind={overlay.effectiveStatus} />
+                    )}
                   </div>
-                  <div className="scale-[0.7] sm:scale-100 origin-top-left">
-                    <CarfaxPillStack overlay={overlay} />
-                  </div>
-                  {overlay.effectiveStatus && (
-                    <StatusPill kind={overlay.effectiveStatus} />
-                  )}
-                </div>
+                )}
 
-                <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 flex flex-col items-end gap-1.5">
+                {/* Top-right: merchandising feature pills */}
+                <div
+                  className="absolute z-10 flex flex-col items-end gap-1.5"
+                  style={{ top: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
+                >
                   <FeaturePillCluster pills={overlay.featurePills} stack="inline" />
                 </div>
 
-                <div className="absolute bottom-3 left-3 z-10 md:hidden">
-                  <PhoneCTA
-                    phone={SITE_CONFIG.phone}
-                    phoneRaw={SITE_CONFIG.phoneRaw}
-                    compact
-                  />
-                </div>
-                <div className="absolute bottom-4 left-4 z-10 hidden md:block">
-                  <PhoneCTA
-                    phone={SITE_CONFIG.phone}
-                    phoneRaw={SITE_CONFIG.phoneRaw}
-                  />
-                </div>
+                {/* Bottom-left: phone number (mobile compact / desktop full) */}
+                {showPhoneBadge && (
+                  <>
+                    <div
+                      className="absolute z-10 md:hidden"
+                      style={{ bottom: `${MARGIN_PCT}%`, left: `${MARGIN_PCT}%` }}
+                    >
+                      <PhoneCTA
+                        phone={SITE_CONFIG.phone}
+                        phoneRaw={SITE_CONFIG.phoneRaw}
+                        compact
+                      />
+                    </div>
+                    <div
+                      className="absolute z-10 hidden md:block"
+                      style={{ bottom: `${MARGIN_PCT}%`, left: `${MARGIN_PCT}%` }}
+                    >
+                      <PhoneCTA
+                        phone={SITE_CONFIG.phone}
+                        phoneRaw={SITE_CONFIG.phoneRaw}
+                      />
+                    </div>
+                  </>
+                )}
 
-                <div className="absolute bottom-3 right-3 z-10 flex flex-col items-end gap-1.5 scale-[0.6] sm:scale-100 origin-bottom-right">
+                {/* Bottom-right: warranty chip + dealer cluster.
+                    hideDealerPill suppresses the HTML text pill when
+                    the dealer logo is already composited into the photo pixels. */}
+                <div
+                  className="absolute z-10 flex flex-col items-end gap-1.5 scale-[0.6] sm:scale-100 origin-bottom-right"
+                  style={{ bottom: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
+                >
                   {warrantyCopy && (
                     <WarrantyBadge copy={warrantyCopy} compact />
                   )}
@@ -332,7 +381,8 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
                     rating={SITE_CONFIG.reviews.google.rating}
                     reviewCount={SITE_CONFIG.reviews.google.count}
                     reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
-                    showBadge={overlay.showGoogleReviewsBadge !== false}
+                    showBadge={showGoogleBadge}
+                    hideDealerPill={hideDealerPill}
                   />
                 </div>
               </div>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { sampleInventory, getVehicleBySlug } from "@/data/inventory";
-import { fetchDmsInventory, syncedToVehicle } from "@/lib/dmsInventory";
+import { fetchDmsInventory, syncedToVehicle, fetchGlobalBadgeConfig } from "@/lib/dmsInventory";
 import { VehicleSchema, BreadcrumbSchema } from "@/components/StructuredData";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -125,7 +125,10 @@ export default async function VehicleDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const vehicle = await resolveVehicle(slug);
+  const [vehicle, badgeConfig] = await Promise.all([
+    resolveVehicle(slug),
+    fetchGlobalBadgeConfig(),
+  ]);
   if (!vehicle) notFound();
 
   const priceHasCents = Math.round(vehicle.price * 100) % 100 !== 0;
@@ -233,6 +236,7 @@ export default async function VehicleDetailPage({
               images={vehicle.images}
               alt={`${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim} ${vehicle.exteriorColor}`}
               vehicle={vehicle}
+              badgeConfig={badgeConfig}
             />
 
             {/* Desktop price + CTAs + Carfax + payment calculator —
