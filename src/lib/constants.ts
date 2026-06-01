@@ -1,3 +1,5 @@
+import googleReviewsData from "@/data/google-reviews.json";
+
 export const SITE_CONFIG = {
   name: "Love Auto Group",
   tagline: "Quality Used Vehicles in Villa Park, IL",
@@ -29,14 +31,11 @@ export const SITE_CONFIG = {
   },
   reviews: {
     google: {
-      // 2026-05-05 — bumped to 126 to match live Places API. Source of truth:
-      // dms.loveautogroup.net/api/v1/public/reputation/summary (Anna's GBP
-      // sync). Drift only grows; until we wire build-time fetch into
-      // StructuredData.tsx, this hand-bumped value drives AggregateRating.
-      // Follow-up (Charlotte): add a `prebuild` script that hits the Railway
-      // reputation endpoint and writes a JSON cache that constants.ts imports.
-      rating: 4.7,
-      count: 126,
+      // Live data fetched at build time by scripts/fetch-google-reviews.ts.
+      // The script writes src/data/google-reviews.json which is imported here.
+      // Fallback values are used when Railway is unreachable during build.
+      rating: googleReviewsData.rating,
+      count: googleReviewsData.count,
       readUrl: "https://g.page/loveautogroup",
       writeUrl: "https://g.page/loveautogroup/review",
     },

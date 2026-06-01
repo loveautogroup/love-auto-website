@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "tsx scripts/validate-photo-order.ts && tsx scripts/audit-live-heroes.ts --warn",
+    "prebuild": "tsx scripts/fetch-google-reviews.ts && tsx scripts/validate-photo-order.ts && tsx scripts/audit-live-heroes.ts --warn",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
