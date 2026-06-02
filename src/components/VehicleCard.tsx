@@ -250,6 +250,20 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           )}
         </div>
 
+        {/* Top-center: dealer logo pill — not shown on coming-soon placeholder. */}
+        {!forcePlaceholder && (
+          <div className="absolute top-1.5 left-0 right-0 flex justify-center z-10 pointer-events-none">
+            <div className="pointer-events-auto scale-[0.62] origin-top">
+              <DealerCluster
+                compact
+                rating={googleReviews.rating}
+                reviewCount={googleReviews.reviewCount}
+                reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
+              />
+            </div>
+          </div>
+        )}
+
         {/* Top-right column: compact feature pill stack only. Right-
             aligned, mirrors the VDP. */}
         <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 flex flex-col items-end gap-1">
@@ -271,16 +285,13 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           />
         </div>
 
-        {/* Bottom-right: dealer cluster (compact) — ♥ dealer pill + Google Reviews.
-            On by default; gated on dealer_badge_enabled when badge config is wired.
-            scale-[0.6] keeps the same legible lockup as the VDP, just smaller. */}
+        {/* Bottom-right: Google Reviews lockup (dealer logo is now top-center). */}
         <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
           <div className="scale-[0.6] sm:scale-[0.68] origin-bottom-right">
-            <DealerCluster
+            <GoogleReviewsLockup
               rating={googleReviews.rating}
               reviewCount={googleReviews.reviewCount}
               reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
-              compact
             />
           </div>
         </div>

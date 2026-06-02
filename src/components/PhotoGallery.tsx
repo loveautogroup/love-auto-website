@@ -12,6 +12,7 @@ import {
   CarfaxBadge,
   CarfaxPillStack,
   DealerCluster,
+  GoogleReviewsLockup,
   FeaturePillCluster,
   PhoneCTA,
   PhotoScrim,
@@ -336,6 +337,25 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                   </div>
                 )}
 
+                {/* Top-center: dealer logo pill — hidden when baked into hero pixels
+                    or when the photo is the coming-soon placeholder. */}
+                {!hideDealerPill && hasRealPhotos && !forcePlaceholder && (
+                  <div
+                    className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
+                    style={{ top: `${MARGIN_PCT}%` }}
+                  >
+                    <div className="pointer-events-auto">
+                      <DealerCluster
+                        showBadge={false}
+                        hideDealerPill={false}
+                        rating={googleReviews.rating}
+                        reviewCount={googleReviews.reviewCount}
+                        reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {/* Top-right: merchandising feature pills */}
                 <div
                   className="absolute z-10 flex flex-col items-end gap-1.5"
@@ -369,9 +389,8 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                   </>
                 )}
 
-                {/* Bottom-right: warranty chip + dealer cluster.
-                    hideDealerPill suppresses the HTML text pill when
-                    the dealer logo is already composited into the photo pixels. */}
+                {/* Bottom-right: warranty chip + Google Reviews lockup.
+                    Logo is now top-center; only reviews badge lives here. */}
                 <div
                   className="absolute z-10 flex flex-col items-end gap-1.5 scale-[0.6] sm:scale-100 origin-bottom-right"
                   style={{ bottom: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
@@ -379,13 +398,13 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                   {warrantyCopy && (
                     <WarrantyBadge copy={warrantyCopy} compact />
                   )}
-                  <DealerCluster
-                    rating={googleReviews.rating}
-                    reviewCount={googleReviews.reviewCount}
-                    reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
-                    showBadge={showGoogleBadge}
-                    hideDealerPill={hideDealerPill}
-                  />
+                  {showGoogleBadge && (
+                    <GoogleReviewsLockup
+                      rating={googleReviews.rating}
+                      reviewCount={googleReviews.reviewCount}
+                      reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
+                    />
+                  )}
                 </div>
               </div>
             )}
