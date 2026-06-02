@@ -12,8 +12,10 @@ import { useLanguage } from "@/context/LanguageContext";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import { GoogleReviewsLockup } from "@/components/badges/DealerCluster";
 import { SITE_CONFIG } from "@/lib/constants";
+import { useReviews } from "@/context/ReviewsContext";
 
 export default function HomeHero() {
+  const googleReviews = useReviews();
   const { t } = useLanguage();
 
   const pills = [
@@ -165,8 +167,8 @@ export default function HomeHero() {
         <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center gap-4">
           <CarfaxAdvantageBadge size="sm" />
           <GoogleReviewsLockup
-            rating={SITE_CONFIG.reviews.google.rating}
-            reviewCount={SITE_CONFIG.reviews.google.count}
+            rating={googleReviews.rating}
+            reviewCount={googleReviews.reviewCount}
             reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
           />
           <span className="text-brand-gray-300 text-sm">

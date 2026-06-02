@@ -7,6 +7,7 @@ import { SITE_CONFIG } from "@/lib/constants";
 import type { GlobalBadgeConfig } from "@/lib/dmsInventory";
 import { useResolveOverlay } from "@/data/useMerchandising";
 import { applyPhotoOrder } from "@/data/photoOrder";
+import { useReviews } from "@/context/ReviewsContext";
 import {
   CarfaxBadge,
   CarfaxPillStack,
@@ -186,6 +187,7 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
  * thumbnail still swaps the hero as before.
  */
 export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeConfig }: PhotoGalleryProps) {
+  const googleReviews = useReviews();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [erroredSrcs, setErroredSrcs] = useState<Set<string>>(new Set());
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -378,8 +380,8 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     <WarrantyBadge copy={warrantyCopy} compact />
                   )}
                   <DealerCluster
-                    rating={SITE_CONFIG.reviews.google.rating}
-                    reviewCount={SITE_CONFIG.reviews.google.count}
+                    rating={googleReviews.rating}
+                    reviewCount={googleReviews.reviewCount}
                     reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
                     showBadge={showGoogleBadge}
                     hideDealerPill={hideDealerPill}

@@ -5,6 +5,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { ReviewsProvider } from "@/context/ReviewsContext";
+import { getGoogleReviews } from "@/lib/google-reviews";
 import TextUsButton from "@/components/TextUsButton";
 import StickyCTA from "@/components/StickyCTA";
 import { LocalBusinessSchema } from "@/components/StructuredData";
@@ -81,14 +83,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const googleReviews = await getGoogleReviews();
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <body className="bg-brand-gray-50 text-brand-gray-900 antialiased">
+        <ReviewsProvider value={googleReviews}>
         <LanguageProvider>
         <a href="#main-content" className="skip-link">
           Skip to main content
@@ -100,6 +104,7 @@ export default function RootLayout({
         <TextUsButton />
         <StickyCTA />
         </LanguageProvider>
+        </ReviewsProvider>
         {/* CarGurus Deal Rating Badge SDK — self-injecting IIFE.
             Settings match Jeremiah's configurator: STYLE1, GOOD_PRICE minimum,
             60px height, live updates every 500ms, showContactForm enabled.

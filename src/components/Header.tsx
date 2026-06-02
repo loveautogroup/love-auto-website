@@ -6,6 +6,7 @@ import Image from "next/image";
 import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import { useLanguage } from "@/context/LanguageContext";
+import { useReviews } from "@/context/ReviewsContext";
 
 // Maps NAV_LINKS href → translation key so we can look up the right label.
 const NAV_KEY_MAP: Record<string, keyof ReturnType<typeof useLanguage>["t"]["nav"]> = {
@@ -70,6 +71,7 @@ function LangToggle() {
 }
 
 export default function Header() {
+  const googleReviews = useReviews();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
 
@@ -100,8 +102,8 @@ export default function Header() {
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
               </svg>
               <span className="text-yellow-400 text-xs leading-none">★★★★★</span>
-              <span className="font-semibold text-white">{SITE_CONFIG.reviews.google.rating}</span>
-              <span className="text-brand-gray-400">({SITE_CONFIG.reviews.google.count} reviews)</span>
+              <span className="font-semibold text-white">{googleReviews.rating}</span>
+              <span className="text-brand-gray-400">({googleReviews.reviewCount} reviews)</span>
             </a>
             <span className="text-brand-gray-300">{t.header.hours}</span>
             <a

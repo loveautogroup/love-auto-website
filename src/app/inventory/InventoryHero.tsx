@@ -3,8 +3,10 @@
 import { useLanguage } from "@/context/LanguageContext";
 import { GoogleReviewsLockup } from "@/components/badges/DealerCluster";
 import { SITE_CONFIG } from "@/lib/constants";
+import { useReviews } from "@/context/ReviewsContext";
 
 export default function InventoryHero() {
+  const googleReviews = useReviews();
   const { t } = useLanguage();
   const inv = t.inventory;
   return (
@@ -15,8 +17,8 @@ export default function InventoryHero() {
           <p className="mt-2 text-brand-gray-300">{inv.subheading}</p>
         </div>
         <GoogleReviewsLockup
-          rating={SITE_CONFIG.reviews.google.rating}
-          reviewCount={SITE_CONFIG.reviews.google.count}
+          rating={googleReviews.rating}
+          reviewCount={googleReviews.reviewCount}
           reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
         />
       </div>

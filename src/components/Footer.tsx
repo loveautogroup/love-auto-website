@@ -5,6 +5,7 @@ import Image from "next/image";
 import { SITE_CONFIG, NAV_LINKS } from "@/lib/constants";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import { useLanguage } from "@/context/LanguageContext";
+import { useReviews } from "@/context/ReviewsContext";
 
 // Maps NAV_LINKS href → translation key
 const NAV_KEY_MAP: Record<string, string> = {
@@ -18,6 +19,7 @@ const NAV_KEY_MAP: Record<string, string> = {
 };
 
 export default function Footer() {
+  const googleReviews = useReviews();
   const currentYear = new Date().getFullYear();
   const { t } = useLanguage();
 
@@ -148,7 +150,7 @@ export default function Footer() {
                   <span className="flex items-center gap-1">
                     <span className="text-yellow-400 text-xs">★★★★★</span>
                     <span className="text-xs">
-                      {SITE_CONFIG.reviews.google.rating} ({SITE_CONFIG.reviews.google.count} reviews)
+                      {googleReviews.rating} ({googleReviews.reviewCount} reviews)
                     </span>
                   </span>
                 </a>

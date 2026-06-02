@@ -1,120 +1,106 @@
 /**
- * Fetches live Google review data (rating, count, latest reviews) from
- * the Places API (New).
+ * Server-side Google review data fetcher.
  *
- * Required environment variables:
- *   GOOGLE_PLACES_API_KEY — Google Cloud API key with Places API enabled
- *   GOOGLE_PLACE_ID       — Place ID for Love Auto Group
- *
- * On static export (`output: "export"`), fetches run at build time — each
- * Cloudflare rebuild refreshes the embedded reviews, which is fine for a
- * dealership that doesn't accumulate dozens of new reviews per day.
- *
- * Sam's note: the Places API key must be restricted by referrer or IP in
- * Google Cloud Console to prevent abuse. Same key should NOT be checked
- * into the repo — set via Cloudflare Pages environment variables.
+ * Uses Next.js unstable_cache (1-hour revalidation) so the site serves
+ * live review data without a full rebuild. Falls back to static values
+ * if Railway is unreachable.
  */
+import { unstable_cache } from "next/cache";
+
+const RAILWAY_BASE = "https://web-production-d5f3a.up.railway.app";
 
 export interface GoogleReviewSnippet {
   author: string;
-  /** Author profile photo URL, if available */
   authorPhoto?: string;
-  /** 1-5 */
   rating: number;
-  /** Review body text */
   text: string;
-  /** Relative time description ("a week ago") */
   relativeTime: string;
-  /** ISO publish time, useful for structured data */
-  publishTime: string;
+  publishTime?: string;
 }
 
-export interface GoogleReviewData {
+export interface GoogleReviewsData {
   rating: number;
   reviewCount: number;
-  /** Up to 5 recent reviews from the Places API. Empty array on fallback. */
   reviews: GoogleReviewSnippet[];
-  updatedAt: string;
 }
 
-const FALLBACK: GoogleReviewData = {
+const FALLBACK: GoogleReviewsData = {
   rating: 4.7,
-  reviewCount: 125,
+  reviewCount: 127,
   reviews: [],
-  updatedAt: new Date().toISOString(),
 };
 
-interface PlacesApiResponse {
-  rating?: number;
-  userRatingCount?: number;
-  reviews?: Array<{
-    rating?: number;
-    text?: { text?: string };
-    relativePublishTimeDescription?: string;
-    publishTime?: string;
-    authorAttribution?: {
-      displayName?: string;
-      photoUri?: string;
-    };
-  }>;
-}
-
-export async function getGoogleReviews(): Promise<GoogleReviewData> {
-  const apiKey = process.env.GOOGLE_PLACES_API_KEY;
-  const placeId = process.env.GOOGLE_PLACE_ID;
-
-  if (!apiKey || !placeId) {
-    console.warn(
-      "[google-reviews] GOOGLE_PLACES_API_KEY or GOOGLE_PLACE_ID not set. Using fallback values."
-    );
-    return FALLBACK;
-  }
-
+async function _fetchGoogleReviews(): Promise<GoogleReviewsData> {
   try {
-    const url = `https://places.googleapis.com/v1/places/${placeId}`;
-    const res = await fetch(url, {
-      headers: {
-        "X-Goog-Api-Key": apiKey,
-        "X-Goog-FieldMask": "rating,userRatingCount,reviews",
-      },
-      next: { revalidate: 3600 },
-    });
+    // Fetch aggregate (rating + count) and recent reviews in parallel
+    const [summaryRes, reviewsRes] = await Promise.all([
+      fetch(`${RAILWAY_BASE}/api/v1/public/reputation/summary`, {
+        next: { revalidate: 3600 },
+        headers: { Accept: "application/json" },
+      }),
+      fetch(
+        `${RAILWAY_BASE}/api/v1/public/reputation/reviews?platform=Google&limit=5`,
+        {
+          next: { revalidate: 3600 },
+          headers: { Accept: "application/json" },
+        }
+      ).catch(() => null), // reviews are non-critical
+    ]);
 
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error(
-        `[google-reviews] Places API error ${res.status}: ${errorText}`
-      );
-      return FALLBACK;
+    if (!summaryRes.ok) return FALLBACK;
+
+    const summary = await summaryRes.json() as {
+      platforms?: { platform: string; star_avg: number; review_count: number }[];
+    };
+    const google = summary.platforms?.find((p) => p.platform === "Google");
+    if (!google || !google.review_count) return FALLBACK;
+
+    const rating = Math.round(google.star_avg * 10) / 10;
+    const reviewCount = google.review_count;
+
+    let reviews: GoogleReviewSnippet[] = [];
+    if (reviewsRes?.ok) {
+      const rawReviews = await reviewsRes.json() as {
+        author: string;
+        stars: number;
+        body: string;
+        review_date: string;
+      }[];
+      reviews = rawReviews.map((r) => ({
+        author: r.author,
+        rating: r.stars,
+        text: r.body,
+        relativeTime: _relativeTime(r.review_date),
+      }));
     }
 
-    const data = (await res.json()) as PlacesApiResponse;
-
-    const reviews: GoogleReviewSnippet[] =
-      (data.reviews ?? [])
-        .filter(
-          (r) =>
-            r.text?.text &&
-            r.authorAttribution?.displayName &&
-            (r.rating ?? 0) >= 4
-        )
-        .map((r) => ({
-          author: r.authorAttribution!.displayName!,
-          authorPhoto: r.authorAttribution?.photoUri,
-          rating: r.rating ?? 5,
-          text: r.text!.text!,
-          relativeTime: r.relativePublishTimeDescription ?? "",
-          publishTime: r.publishTime ?? new Date().toISOString(),
-        }));
-
-    return {
-      rating: data.rating ?? FALLBACK.rating,
-      reviewCount: data.userRatingCount ?? FALLBACK.reviewCount,
-      reviews,
-      updatedAt: new Date().toISOString(),
-    };
-  } catch (error) {
-    console.error("[google-reviews] Failed to fetch:", error);
+    return { rating, reviewCount, reviews };
+  } catch {
     return FALLBACK;
   }
-}
+}
+
+function _relativeTime(dateStr: string): string {
+  try {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffDays = Math.floor((now.getTime() - date.getTime()) / 86400000);
+    if (diffDays < 7) return `${diffDays} day${diffDays !== 1 ? "s" : ""} ago`;
+    if (diffDays < 30) {
+      const weeks = Math.floor(diffDays / 7);
+      return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
+    }
+    const months = Math.floor(diffDays / 30);
+    if (months < 12) return `${months} month${months !== 1 ? "s" : ""} ago`;
+    const years = Math.floor(months / 12);
+    return `${years} year${years !== 1 ? "s" : ""} ago`;
+  } catch {
+    return "";
+  }
+}
+
+export const getGoogleReviews = unstable_cache(
+  _fetchGoogleReviews,
+  ["google-reviews"],
+  { revalidate: 3600, tags: ["google-reviews"] }
+);
