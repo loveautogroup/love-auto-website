@@ -12,12 +12,14 @@ import { applyPhotoOrder } from "@/data/photoOrder";
 import {
   CarfaxBadge,
   CarfaxPillStack,
+  DealerCluster,
   GoogleReviewsLockup,
   FeaturePillCluster,
   PhoneCTA,
   PhotoScrim,
   StatusPill,
 } from "./badges";
+import { useReviews } from "@/context/ReviewsContext";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -55,6 +57,7 @@ function estimateMonthlyPayment(
  * The VDP gallery uses the full-size badges (PhotoGallery component).
  */
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
+  const googleReviews = useReviews();
   const { t } = useLanguage();
   const c = t.card;
 
@@ -268,15 +271,16 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           />
         </div>
 
-        {/* Bottom-right: full Google Reviews lockup, scaled down to fit the
-            card corner (transform-scale keeps the same legible lockup as the
-            VDP, just smaller). origin-bottom-right keeps it pinned in-bounds. */}
+        {/* Bottom-right: dealer cluster (compact) — ♥ dealer pill + Google Reviews.
+            On by default; gated on dealer_badge_enabled when badge config is wired.
+            scale-[0.6] keeps the same legible lockup as the VDP, just smaller. */}
         <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
           <div className="scale-[0.6] sm:scale-[0.68] origin-bottom-right">
-            <GoogleReviewsLockup
-              rating={SITE_CONFIG.reviews.google.rating}
-              reviewCount={SITE_CONFIG.reviews.google.count}
+            <DealerCluster
+              rating={googleReviews.rating}
+              reviewCount={googleReviews.reviewCount}
               reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
+              compact
             />
           </div>
         </div>
