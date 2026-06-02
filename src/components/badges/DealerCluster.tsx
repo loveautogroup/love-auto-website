@@ -21,8 +21,6 @@
  * on the Google Reviews lockup.
  */
 
-import Image from "next/image";
-
 /* ─── Google Reviews lockup ────────────────────────────────────────── */
 
 export function GoogleReviewsLockup({
@@ -124,10 +122,13 @@ export default function DealerCluster({
   showBadge = true,
   hideDealerPill = false,
 }: DealerClusterProps) {
-  /* ── Logo badge pill (same design as the baked photo overlay) ── */
+  /* ── Logo badge pill — inline SVG, lives in JS bundle so CF CDN cache-busts automatically ── */
+  const logoW = compact ? 110 : 160;
+  const logoH = compact ? 39  : 57;
+
   const logoPill = !hideDealerPill && (
     <div
-      className={compact ? "rounded-xl overflow-hidden" : "rounded-xl overflow-hidden"}
+      className="rounded-xl overflow-hidden"
       style={{
         backgroundColor: "rgba(6, 8, 18, 0.90)",
         boxShadow: "0 2px 8px rgba(0,0,0,0.45)",
@@ -136,14 +137,27 @@ export default function DealerCluster({
       }}
       aria-label="Love Auto Group"
     >
-      <Image
-        src="/images/logo-primary.svg"
-        alt="Love Auto Group"
-        width={compact ? 110 : 160}
-        height={compact ? 39 : 57}
-        style={{ display: "block" }}
-        priority={false}
-      />
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 100"
+        width={logoW} height={logoH} style={{ display: "block" }} aria-hidden="true">
+        <defs>
+          <linearGradient id="lag-accent" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stopColor="#dc2626" stopOpacity="0" />
+            <stop offset="30%"  stopColor="#dc2626" stopOpacity="1" />
+            <stop offset="70%"  stopColor="#dc2626" stopOpacity="1" />
+            <stop offset="100%" stopColor="#dc2626" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <text x="140" y="43" textAnchor="middle"
+          fontFamily="Montserrat, Arial Black, sans-serif"
+          fontWeight="900" fontSize="42" fill="#dc2626" letterSpacing="6">LOVE</text>
+        <rect x="70" y="51" width="140" height="2.5" rx="1.25" fill="url(#lag-accent)" />
+        <text x="140" y="69" textAnchor="middle"
+          fontFamily="Montserrat, Arial Black, sans-serif"
+          fontWeight="600" fontSize="14" fill="#ffffff" letterSpacing="10">AUTO GROUP</text>
+        <text x="140" y="88" textAnchor="middle"
+          fontFamily="Inter, Arial, sans-serif"
+          fontWeight="500" fontSize="16" fill="#cbd5e1" letterSpacing="2">loveautogroup.net</text>
+      </svg>
     </div>
   );
 
