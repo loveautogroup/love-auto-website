@@ -1,52 +1,30 @@
 "use client";
 
 /**
- * Dealer logo + Google review cluster — bottom-right slot.
+ * Dealer logo badge — the Love Auto Group logo in a dark navy rounded pill.
  *
- * Non-compact (VDP hero): stacked LOVE AUTO GROUP pill + a "Google
- * Reviews" lockup (multicolor wordmark + gold stars + rating) on a
- * frosted-glass chip.
+ * Matches the baked-photo badge exactly:
+ *   • logo-primary.svg (red LOVE, white AUTO GROUP, SINCE 2014)
+ *   • navy pill: rgba(6, 8, 18, ~0.90) background
+ *   • border-radius 18% of pill height (approximated via rounded-xl)
+ *   • 2.2% margin placement (handled by parent / PhotoGallery)
+ *   • 93% opacity composite
  *
- * Compact (inventory cards): single combined pill — heart + star + rating.
+ * compact=true → scaled-down version for inventory grid cards.
+ *   The parent (VehicleCard) applies scale-[0.6] so the logo itself
+ *   stays legible at card size.
  *
- * showBadge=false hides the Google circle entirely (controlled per-vehicle
- * from the DMS merchandising panel).
+ * hideBadge=true → hides the logo pill when it has been baked into
+ *   the hero photo pixels (avoids double-stamping).
  *
- * Client component because of the stopPropagation onClick handler.
+ * Client component because of the stopPropagation onClick handler
+ * on the Google Reviews lockup.
  */
 
-interface DealerClusterProps {
-  rating: number;
-  reviewCount: number;
-  /** URL to the dealership's public Google reviews page. */
-  reviewsUrl: string;
-  /** Compact mode for inventory cards — single combined pill, monogram only. */
-  compact?: boolean;
-  /**
-   * Show the Google Reviews badge. Default true.
-   * Pass false to hide (controlled from DMS merchandising panel).
-   */
-  showBadge?: boolean;
-  /**
-   * Hide the "LOVE AUTO GROUP" text pill.
-   * Pass true when the dealer logo has been baked into the hero photo
-   * pixels — showing the HTML pill on top would double-stamp it.
-   */
-  hideDealerPill?: boolean;
-}
+import Image from "next/image";
 
-// Shared frosted-glass surface — same recipe as FeaturePillCluster /
-// WarrantyBadge for a unified look.
-const GLASS_STYLE = {
-  backgroundColor: "rgba(15, 23, 42, 0.18)",
-  backdropFilter: "blur(10px) saturate(1.4)",
-  WebkitBackdropFilter: "blur(10px) saturate(1.4)",
-  textShadow:
-    "0 0 1px rgba(0,0,0,0.95), 1px 1px 1px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.7)",
-} as const;
+/* ─── Google Reviews lockup ────────────────────────────────────────── */
 
-/** Stacked "Google Reviews" lockup — multicolor wordmark + gold stars + our
- *  real rating/count. Sits on a frosted dark chip so it reads over any photo. */
 export function GoogleReviewsLockup({
   rating,
   reviewCount,
@@ -92,7 +70,6 @@ export function GoogleReviewsLockup({
         <span style={{ color: "#EA4335" }}>e</span>
         <span style={{ color: "#C7CDD6", fontWeight: 600 }}> Reviews</span>
       </div>
-
       {/* Gold stars + rating + count */}
       <div
         style={{
@@ -103,10 +80,7 @@ export function GoogleReviewsLockup({
           gap: 6,
         }}
       >
-        <span
-          style={{ color: "#FBBC05", fontSize: 13, letterSpacing: "1px" }}
-          aria-hidden="true"
-        >
+        <span style={{ color: "#FBBC05", fontSize: 13, letterSpacing: "1px" }} aria-hidden="true">
           ★★★★★
         </span>
         <span style={{ color: "#FFFFFF", fontSize: 13, fontWeight: 800 }}>
@@ -120,6 +94,28 @@ export function GoogleReviewsLockup({
   );
 }
 
+/* ─── Dealer logo badge ─────────────────────────────────────────────── */
+
+interface DealerClusterProps {
+  rating: number;
+  reviewCount: number;
+  /** URL to the dealership's public Google reviews page. */
+  reviewsUrl: string;
+  /** Compact mode for inventory grid cards. */
+  compact?: boolean;
+  /**
+   * Show the Google Reviews lockup. Default true.
+   * Pass false to hide (controlled from DMS merchandising panel).
+   */
+  showBadge?: boolean;
+  /**
+   * Hide the dealer logo pill.
+   * Pass true when the logo has been baked into the hero photo pixels
+   * to avoid double-stamping.
+   */
+  hideDealerPill?: boolean;
+}
+
 export default function DealerCluster({
   rating,
   reviewCount,
@@ -128,64 +124,41 @@ export default function DealerCluster({
   showBadge = true,
   hideDealerPill = false,
 }: DealerClusterProps) {
+  /* ── Logo badge pill (same design as the baked photo overlay) ── */
+  const logoPill = !hideDealerPill && (
+    <div
+      className={compact ? "rounded-xl overflow-hidden" : "rounded-xl overflow-hidden"}
+      style={{
+        backgroundColor: "rgba(6, 8, 18, 0.90)",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.45)",
+        padding: compact ? "6px 10px" : "8px 14px",
+        opacity: 0.93,
+      }}
+      aria-label="Love Auto Group"
+    >
+      <Image
+        src="/images/logo-primary.svg"
+        alt="Love Auto Group"
+        width={compact ? 110 : 160}
+        height={compact ? 39 : 57}
+        style={{ display: "block" }}
+        priority={false}
+      />
+    </div>
+  );
+
   if (compact) {
-    // Compact: single combined pill — heart mono + Google rating.
-    return (
-      <a
-        href={reviewsUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={(e) => e.stopPropagation()}
-        aria-label={`Read Love Auto Group's ${rating} star Google reviews (${reviewCount} or more)`}
-        className="
-          flex items-center gap-1 sm:gap-1.5
-          rounded-md px-1.5 py-0.5 sm:px-2 sm:py-1
-          text-white border border-white/25 no-underline
-          shadow-[0_2px_6px_rgba(0,0,0,0.35)]
-          text-[9px] sm:text-[10px] font-bold
-          hover:border-white/50 hover:scale-[1.03] active:scale-100
-          transition-all duration-150
-          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white
-        "
-        style={GLASS_STYLE}
-      >
-        <span className="text-[10px] sm:text-[12px] font-black text-[#EF4444]" aria-hidden="true">
-          ♥
-        </span>
-        <span className="text-[#F59E0B] text-[10px] sm:text-[11px]" aria-hidden="true">
-          ★
-        </span>
-        <span>{rating.toFixed(1)}</span>
-        <span className="text-[#CBD5E1]">· {reviewCount}+</span>
-      </a>
-    );
+    /* Inventory card: logo pill only (Google Reviews shown separately via
+       GoogleReviewsLockup in VehicleCard) */
+    return logoPill ? (
+      <div onClick={(e) => e.stopPropagation()}>{logoPill}</div>
+    ) : null;
   }
 
-  // Non-compact (VDP hero): LOVE AUTO GROUP pill + Google Reviews lockup.
-  // hideDealerPill=true when the logo is already baked into the photo pixels.
+  /* VDP hero: logo pill stacked above Google Reviews lockup */
   return (
     <div className="flex flex-col items-end gap-2">
-      {/* Dealer logo text pill — hidden when logo is baked into the photo */}
-      {!hideDealerPill && (
-        <div
-          className="
-            flex items-center gap-1.5
-            rounded-md px-3 py-1.5
-            text-white border border-white/25
-            shadow-[0_2px_6px_rgba(0,0,0,0.35)]
-          "
-          style={GLASS_STYLE}
-        >
-          <span className="text-[14px] font-black text-[#EF4444]" aria-hidden="true">
-            ♥
-          </span>
-          <span className="text-[12px] font-extrabold tracking-[0.05em]">
-            LOVE AUTO GROUP
-          </span>
-        </div>
-      )}
-
-      {/* Stacked Google Reviews lockup */}
+      {logoPill}
       {showBadge && (
         <GoogleReviewsLockup
           rating={rating}
