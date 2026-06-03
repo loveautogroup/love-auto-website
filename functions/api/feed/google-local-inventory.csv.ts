@@ -1,85 +1,83 @@
 /**
  * Public GET /api/feed/google-local-inventory.csv
  *
- * Google Local Inventory Feed — tells Merchant Center which products are
- * physically available at Love Auto Group's Villa Park store. This is the
- * "Point of Sale" data source that pairs with the primary vehicle feed
- * (google-vehicles.csv) to satisfy Google's local inventory requirement.
+ * Google Point-of-Sale (POS) store data file — tells Merchant Center
+ * about Love Auto Group's physical store location. This is registered
+ * under Settings > Data sources > Point of sale sources in GMC.
  *
- * Spec: https://support.google.com/merchants/answer/3061342
+ * The POS store file registers the physical store so that:
+ *  1. Google validates the store_code in the primary vehicle feed
+ *  2. Vehicles in the primary feed are treated as locally available
+ *     at this store (satisfying the "Missing local inventory data" check)
  *
- * Required fields: store_code, id (matches primary feed), availability
- * Recommended: price, quantity, sale_price
+ * Spec: https://support.google.com/merchants/answer/3227905
  *
- * The store_code here MUST match:
- *   1. The store_code column in google-vehicles.csv
- *   2. A verified store registered in Google Merchant Center
- *      (Settings → Business info or via Google Business Profile linking)
+ * Required fields: store_code, name, address1, city, region,
+ *                  postal_code, country
+ * Recommended: phone, website
+ *
+ * This file contains ONE row — Love Auto Group's single Villa Park location.
+ * If a second location ever opens, add a row here with a new store_code and
+ * update the primary vehicle feed to use the correct store_code per vehicle.
  */
 
 import {
-  fetchInventory,
-  csvCell,
   feedCorsHeaders,
   FEED_CACHE_HEADER,
   DEALER,
-  type FeedVehicle,
 } from "../../_lib/feed";
 
 export const onRequestGet: PagesFunction = async () => {
-  try {
-    const inventory = await fetchInventory();
-    const csv = renderLocalInventoryCsv(inventory);
-    return new Response(csv, {
-      status: 200,
-      headers: {
-        "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition":
-          'inline; filename="loveautogroup-google-local-inventory.csv"',
-        "Cache-Control": FEED_CACHE_HEADER,
-        ...feedCorsHeaders(),
-      },
-    });
-  } catch (err) {
-    console.error(
-      "[/api/feed/google-local-inventory.csv] fetch failed:",
-      err
-    );
-    return new Response(renderLocalInventoryCsv([]), {
-      status: 200,
-      headers: {
-        "Content-Type": "text/csv; charset=utf-8",
-        "Cache-Control": "public, max-age=30",
-        ...feedCorsHeaders(),
-      },
-    });
-  }
+  const csv = renderPosStoreCsv();
+  return new Response(csv, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/csv; charset=utf-8",
+      "Content-Disposition":
+        'inline; filename="loveautogroup-google-pos-store.csv"',
+      "Cache-Control": FEED_CACHE_HEADER,
+      ...feedCorsHeaders(),
+    },
+  });
 };
 
 export const onRequestOptions: PagesFunction = async () =>
   new Response(null, { status: 204, headers: feedCorsHeaders() });
 
-function renderLocalInventoryCsv(vehicles: FeedVehicle[]): string {
+function renderPosStoreCsv(): string {
   const headers = [
-    "store_code", // Must match primary feed + GMC store
-    "id",         // Must match `id` column in google-vehicles.csv
-    "availability", // "in stock" | "out of stock" | "preorder"
-    "price",      // Current price at this store
-    "quantity",   // 1 per unique used vehicle (each VIN is one unit)
+    "store_code",    // Unique store ID — must match store_code in vehicle feed
+    "name",          // Store display name
+    "address1",      // Street address line 1
+    "city",
+    "region",        // State abbreviation
+    "postal_code",
+    "country",       // ISO 3166-1 alpha-2
+    "phone",         // E.164 format
+    "website",
   ];
 
-  const rows = vehicles.map((v) => {
-    const price = v.retailPrice ? `${v.retailPrice} USD` : "";
-    return [
-      DEALER.id,   // store_code — "love-auto-group-villa-park-il"
-      v.id,        // product id — same value as in primary feed
-      "in stock",  // every vehicle in the feed is physically on the lot
-      price,
-      "1",         // one unit per VIN
-    ]
-      .map(csvCell)
-      .join(",");
-  });
+  // One row — Love Auto Group Villa Park (sole location)
+  const row = [
+    DEALER.id,                // "love-auto-group-villa-park-il"
+    DEALER.name,              // "Love Auto Group"
+    DEALER.street,            // "735 N Yale Ave"
+    DEALER.city,              // "Villa Park"
+    DEALER.state,             // "IL"
+    DEALER.zip,               // "60181"
+    DEALER.country,           // "US"
+    DEALER.phone,             // "+16303593643"
+    DEALER.website,           // "https://www.loveautogroup.net"
+  ].map(csvCell).join(",");
 
-  return [headers.join(","), ...rows].join("\r\n") + "\r\n";
+  return [headers.join(","), row].join("\r\n") + "\r\n";
+}
+
+function csvCell(s: string | number | null | undefined): string {
+  if (s === null || s === undefined) return "";
+  const str = String(s);
+  if (/[,"\r\n]/.test(str) || /^\s|\s$/.test(str)) {
+    return `"${str.replace(/"/g, '""')}"`;
+  }
+  return str;
 }
