@@ -109,6 +109,12 @@ function renderGoogleCsv(vehicles: FeedVehicle[]): string {
     "dealership_phone",
     // Multi-value: pipe-separated additional photo URLs inside one cell
     "additional_image_link",
+    // Required by Merchant Center Shopping validator (even for Vehicle Listings
+    // sources). Value must be the full taxonomy string or numeric ID 916.
+    "google_product_category",
+    // Required for local inventory / Vehicle Ads. Contains the VDP URL with a
+    // literal {store_code} placeholder that Google substitutes at query time.
+    "link_template",
   ];
 
   const rows = vehicles.map((v) => {
@@ -131,6 +137,7 @@ function renderGoogleCsv(vehicles: FeedVehicle[]): string {
     // back to available; if they sell, the upstream public/inventory
     // endpoint stops returning them and they drop out of the feed.
     const availability = "in stock";
+    const vdpUrl = v.vdpUrl ?? DEALER.website;
 
     return [
       v.id, // id (Shopping spec required field)
@@ -143,7 +150,7 @@ function renderGoogleCsv(vehicles: FeedVehicle[]): string {
       "used", // condition — every Love Auto vehicle is used
       title,
       v.description ?? "",
-      v.vdpUrl ?? DEALER.website,
+      vdpUrl,
       heroUrl,
       mileage,
       v.trim ?? "",
@@ -161,6 +168,10 @@ function renderGoogleCsv(vehicles: FeedVehicle[]): string {
       `${DEALER.street}, ${DEALER.city}, ${DEALER.state} ${DEALER.zip}`,
       DEALER.phoneFormatted,
       additional,
+      // Merchant Center Shopping validator requires the full taxonomy string.
+      "Vehicles & Parts > Vehicles > Motor Vehicles > Cars, Trucks & Vans",
+      // link_template: VDP URL with literal {store_code} placeholder.
+      `${vdpUrl}?store={store_code}`,
     ]
       .map(csvCell)
       .join(",");
