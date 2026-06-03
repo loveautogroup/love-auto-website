@@ -112,6 +112,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/buying-guides/independent-japanese-makes-dealer-chicago/`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     // Differentiator landing
     { url: `${BASE}/free-carfax-villa-park/`,  lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    // Geo keyword landing — "used cars villa park il" cluster (pos 12.3, 360 imp)
+    // Created 2026-06-03. Targets: "used cars villa park il", "used cars villa park",
+    // "villa park car dealerships", "villa park dealership". Exact-match URL
+    // mirrors Premium Motors' title-tag strategy that holds #1-2 for this cluster.
+    { url: `${BASE}/used-cars-villa-park-il/`, lastModified: now, changeFrequency: "weekly",  priority: 0.9 },
   ];
 
   // ── Per-vehicle VDPs ─────────────────────────────────────────────
