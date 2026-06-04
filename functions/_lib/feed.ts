@@ -60,6 +60,7 @@ export interface FeedVehicle {
   make: string;
   model: string;
   trim?: string | null;
+  stockNumber?: string | null;
   mileage?: number | null;
   retailPrice?: number | null;
   exteriorColor?: string | null;
@@ -113,7 +114,12 @@ function buildVdpUrl(v: FeedVehicle): string {
     .filter(Boolean)
     .map((s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""))
     .join("-");
-  return `${DEALER.website}/inventory/${slugParts}-${v.vin.toLowerCase()}/`;
+  // Must match shared/slug.ts formula (stockNumber > id > last-6-VIN).
+  // The website routes on stock number — VIN-based URLs 404 (discovered Jun 4 2026).
+  const tail = v.stockNumber
+    ? v.stockNumber.toLowerCase().replace(/[^a-z0-9]+/g, "-")
+    : String(v.id ?? "").trim() || v.vin.slice(-6).toLowerCase();
+  return `${DEALER.website}/inventory/${slugParts}-${tail}/`;
 }
 
 // ─────────────────────────────────────────────────────────────────────
