@@ -82,6 +82,7 @@ function renderGoogleCsv(vehicles: FeedVehicle[]): string {
     "vehicle_id",
     "store_code",
     "make",
+    "brand",
     "model",
     "year",
     "price",
@@ -98,6 +99,7 @@ function renderGoogleCsv(vehicles: FeedVehicle[]): string {
     "transmission",
     "fuel",
     "exterior_color",
+    "color",
     "interior_color",
     "engine",
     "drivetrain",
@@ -144,6 +146,7 @@ function renderGoogleCsv(vehicles: FeedVehicle[]): string {
       v.id, // vehicle_id (Vehicle Listings spec required field — same value)
       DEALER.id, // store_code (must match Merchant Center store)
       v.make,
+      v.make,       // brand — Google Shopping requires this even though we have make
       v.model,
       v.year,
       price,
@@ -158,6 +161,7 @@ function renderGoogleCsv(vehicles: FeedVehicle[]): string {
       v.transmission ?? "",
       v.fuelType ?? "",
       v.exteriorColor ?? "",
+      v.exteriorColor ?? "", // color — alias required by Shopping validator
       v.interiorColor ?? "",
       v.engine ?? "",
       v.drivetrain ?? "",
@@ -179,3 +183,4 @@ function renderGoogleCsv(vehicles: FeedVehicle[]): string {
 
   return [headers.join(","), ...rows].join("\r\n") + "\r\n";
 }
+
