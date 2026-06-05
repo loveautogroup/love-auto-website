@@ -220,11 +220,16 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
   const hasBakedHero = Boolean(images[0]?.includes("hero-baked"));
   // Hide the HTML "LOVE AUTO GROUP" text pill when the logo is already baked.
   const hideDealerPill = hasBakedHero && (badgeConfig?.dealer_badge_enabled !== false);
+  // When a badge is baked into the hero pixels, suppress its HTML twin —
+  // the baked badges are pixel replicas of these components (Session 17),
+  // so rendering both double-stamps the photo. Non-baked heroes keep the
+  // interactive HTML overlays.
   const showGoogleBadge =
+    !hasBakedHero &&
     (badgeConfig?.google_badge_enabled !== false) &&
     (overlay?.showGoogleReviewsBadge !== false);
-  const showPhoneBadge = badgeConfig?.phone_badge_enabled !== false;
-  const showCarfaxBadge = badgeConfig?.carfax_badge_enabled !== false;
+  const showPhoneBadge = !hasBakedHero && badgeConfig?.phone_badge_enabled !== false;
+  const showCarfaxBadge = !hasBakedHero && badgeConfig?.carfax_badge_enabled !== false;
 
   // Only open on mobile; desktop keeps thumbnail-swap-only behaviour
   const openLightbox = (index: number) => {
@@ -319,23 +324,32 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
               <div onClick={(e) => e.stopPropagation()}>
                 <PhotoScrim />
 
-                {/* Top-left: CARFAX logo + feature pills (1-Owner, No Accidents…) + status */}
-                {showCarfaxBadge && (
-                  <div
-                    className="absolute z-10 flex flex-col items-start gap-1.5"
-                    style={{ top: `${MARGIN_PCT}%`, left: `${MARGIN_PCT}%` }}
-                  >
+                {/* Top-left: CARFAX logo + feature pills (1-Owner, No Accidents…) + status.
+                    The CARFAX card hides when baked into the hero pixels; the
+                    feature/status pills are never baked so they always render. */}
+                <div
+                  className="absolute z-10 flex flex-col items-start gap-1.5"
+                  style={{
+                    top: `${MARGIN_PCT}%`,
+                    left: `${MARGIN_PCT}%`,
+                    paddingTop:
+                      hasBakedHero && badgeConfig?.carfax_badge_enabled !== false
+                        ? "5.5%"
+                        : undefined,
+                  }}
+                >
+                  {showCarfaxBadge && (
                     <div className="[&_>*]:scale-[0.26] sm:[&_>*]:scale-[0.52] [&_>*]:origin-top-left">
                       <CarfaxBadge vin={vehicle.vin} />
                     </div>
-                    <div className="scale-[0.7] sm:scale-100 origin-top-left">
-                      <CarfaxPillStack overlay={overlay} />
-                    </div>
-                    {overlay.effectiveStatus && (
-                      <StatusPill kind={overlay.effectiveStatus} />
-                    )}
+                  )}
+                  <div className="scale-[0.7] sm:scale-100 origin-top-left">
+                    <CarfaxPillStack overlay={overlay} />
                   </div>
-                )}
+                  {overlay.effectiveStatus && (
+                    <StatusPill kind={overlay.effectiveStatus} />
+                  )}
+                </div>
 
                 {/* Top-center: dealer logo pill — hidden when baked into hero pixels
                     or when the photo is the coming-soon placeholder. */}

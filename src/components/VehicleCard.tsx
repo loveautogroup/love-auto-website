@@ -144,6 +144,10 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   // the branded Coming Soon placeholder. Local state so the swap
   // survives re-render.
   const [heroSrc, setHeroSrc] = useState<string>(initialHero);
+  // Baked-hero detection: Railway bakes pixel replicas of the badge
+  // components into hero photos (Session 17). When the displayed image is
+  // baked, suppress the HTML twins below to avoid double-stamping.
+  const cardHasBakedHero = heroSrc.includes("hero-baked");
   // Track the specific URL that 404'd so we can prevent retrying it while
   // still allowing a *different* (live) URL to replace it. A boolean latch
   // would block the upgrade from a failed seed path to a working R2/DC URL.
@@ -240,18 +244,24 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             NOTE: target the descendant <a> directly — the prior [&_.cf]
             selector matched nothing (no descendant carried the `cf` class)
             so the badge had been rendering at full 140px on cards. */}
-        <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 flex flex-col items-start gap-1">
-          <div className="[&>a]:scale-[0.26] sm:[&>a]:scale-[0.32] [&>a]:origin-top-left">
-            <CarfaxBadge vin={vehicle.vin} />
-          </div>
+        <div
+          className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 flex flex-col items-start gap-1"
+          style={{ paddingTop: cardHasBakedHero ? "5.5%" : undefined }}
+        >
+          {!cardHasBakedHero && (
+            <div className="[&>a]:scale-[0.26] sm:[&>a]:scale-[0.32] [&>a]:origin-top-left">
+              <CarfaxBadge vin={vehicle.vin} />
+            </div>
+          )}
           <CarfaxPillStack overlay={overlay} compact />
           {overlay.effectiveStatus && (
             <StatusPill kind={overlay.effectiveStatus} />
           )}
         </div>
 
-        {/* Top-center: dealer logo pill — not shown on coming-soon placeholder. */}
-        {!forcePlaceholder && (
+        {/* Top-center: dealer logo pill — not shown on coming-soon placeholder
+            or when already baked into the hero pixels. */}
+        {!forcePlaceholder && !cardHasBakedHero && (
           <div className="absolute top-1.5 left-0 right-0 flex justify-center z-10 pointer-events-none">
             <div className="pointer-events-auto scale-[0.62] origin-top">
               <DealerCluster
@@ -277,24 +287,29 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
 
         {/* Bottom-left: compact phone CTA (anchored left so it can't collide
             with the dealer cluster on the right at narrow card widths). */}
-        <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 z-10">
-          <PhoneCTA
-            phone={SITE_CONFIG.phone}
-            phoneRaw={SITE_CONFIG.phoneRaw}
-            compact
-          />
-        </div>
-
-        {/* Bottom-right: Google Reviews lockup (dealer logo is now top-center). */}
-        <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
-          <div className="scale-[0.6] sm:scale-[0.68] origin-bottom-right">
-            <GoogleReviewsLockup
-              rating={googleReviews.rating}
-              reviewCount={googleReviews.reviewCount}
-              reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
+        {!cardHasBakedHero && (
+          <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 z-10">
+            <PhoneCTA
+              phone={SITE_CONFIG.phone}
+              phoneRaw={SITE_CONFIG.phoneRaw}
+              compact
             />
           </div>
-        </div>
+        )}
+
+        {/* Bottom-right: Google Reviews lockup (dealer logo is now top-center).
+            Hidden when baked into the hero pixels. */}
+        {!cardHasBakedHero && (
+          <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
+            <div className="scale-[0.6] sm:scale-[0.68] origin-bottom-right">
+              <GoogleReviewsLockup
+                rating={googleReviews.rating}
+                reviewCount={googleReviews.reviewCount}
+                reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Info area */}
