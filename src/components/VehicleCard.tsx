@@ -195,7 +195,9 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
       "
     >
       {/* Photo + full overlay (compact-scaled) */}
-      <div className="relative aspect-[4/3] bg-brand-gray-100 overflow-hidden">
+      {/* 3:2 box — matches the VDP hero so the baked badge layer crops
+          identically on cards and detail pages (Session 17). */}
+      <div className="relative aspect-[3/2] bg-brand-gray-100 overflow-hidden">
         {showImage ? (
           <Image
             src={heroImage}
