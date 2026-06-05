@@ -32,7 +32,7 @@ export default function CarfaxBadge({ vin }: CarfaxBadgeProps) {
       onClick={(e) => e.stopPropagation()}
       className="
         inline-flex flex-col items-stretch
-        w-[161px] rounded-md overflow-hidden
+        w-[186px] rounded-md overflow-hidden
         bg-white border-2 border-[#1A1919]
         shadow-[0_3px_6px_rgba(0,0,0,0.35)]
         transition-all duration-150
@@ -53,7 +53,7 @@ export default function CarfaxBadge({ vin }: CarfaxBadgeProps) {
       <span
         className="
           bg-[#1A1919] text-white text-center uppercase
-          text-[14px] font-black tracking-[0.12em] py-[7px]
+          text-[16px] font-black tracking-[0.12em] py-[8px]
         "
       >
         Free Report

@@ -124,8 +124,10 @@ export default function DealerCluster({
 }: DealerClusterProps) {
   /* ── Logo badge pill — inline SVG, lives in JS bundle so CF CDN cache-busts automatically ── */
   // +15% (Jeremiah, Session 18) — keep in sync with the bake compositor
-  // (photo_overlay.py composite_logo_badge uses 184x66).
-  const logoW = compact ? 126 : 184;
+  // (photo_overlay.py composite_logo_badge uses 186x67).
+  // Uniform badge spec (Jeremiah 2026-06-05): 186px wide, same as
+  // CarfaxBadge and the natural GoogleReviewsLockup width.
+  const logoW = compact ? 126 : 186;
   const logoH = compact ? 45  : 66;
 
   const logoPill = !hideDealerPill && (

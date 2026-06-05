@@ -342,7 +342,11 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                   }}
                 >
                   {showCarfaxBadge && (
-                    <div className="[&_>*]:scale-[0.26] sm:[&_>*]:scale-[0.52] [&_>*]:origin-top-left">
+                    /* Natural size like GoogleReviewsLockup — uniform badge
+                       spec (Jeremiah 2026-06-05): carfax/dealer/google all
+                       186px wide on the desktop VDP. Mobile gets the same
+                       0.6 treatment as the lockup wrapper below. */
+                    <div className="scale-[0.6] sm:scale-100 origin-top-left">
                       <CarfaxBadge vin={vehicle.vin} />
                     </div>
                   )}
