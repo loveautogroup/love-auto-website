@@ -123,8 +123,10 @@ export default function DealerCluster({
   hideDealerPill = false,
 }: DealerClusterProps) {
   /* ── Logo badge pill — inline SVG, lives in JS bundle so CF CDN cache-busts automatically ── */
-  const logoW = compact ? 110 : 160;
-  const logoH = compact ? 39  : 57;
+  // +15% (Jeremiah, Session 18) — keep in sync with the bake compositor
+  // (photo_overlay.py composite_logo_badge uses 184x66).
+  const logoW = compact ? 126 : 184;
+  const logoH = compact ? 45  : 66;
 
   const logoPill = !hideDealerPill && (
     <div

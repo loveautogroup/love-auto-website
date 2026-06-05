@@ -108,6 +108,10 @@ interface DmsVehicle {
   as_is?: boolean | null;
   /** Known defects documented by the seller. Null when none. */
   known_issues?: string | null;
+  /** Branded hero with badges baked into the pixels — used for social
+   *  og:image only on the website. Hero display always uses photos[0]
+   *  (raw) + interactive HTML badge overlays. */
+  bakedHeroUrl?: string | null;
   /** V2 photo pipeline media shape — optional, absent on older responses. */
   media?: {
     hero_url?: string | null;
@@ -193,6 +197,7 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     dealerCenterLastSeen: "",
     recentlyReduced: Boolean(v.recently_reduced),
     // Phase 2 photo pipeline — null in Phase 1 (VDPWalkaround renders nothing).
+    bakedHeroUrl: v.bakedHeroUrl ?? null,
     walkaroundUrl: v.media?.walkaround_url ?? null,
     walkaroundPosterUrl: v.media?.walkaround_poster_url ?? null,
     // AS-IS / legal disclosure fields (Diane, 2026-05-12)
@@ -280,5 +285,6 @@ export function syncedToVehicle(s: SyncedVehicle): Vehicle {
     recentlyReduced: s.recentlyReduced,
     asIs: s.asIs ?? true,
     knownIssues: s.knownIssues ?? null,
+    bakedHeroUrl: s.bakedHeroUrl ?? null,
   };
 }

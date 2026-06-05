@@ -78,6 +78,10 @@ export interface FeedVehicle {
   description?: string | null;
   status?: string;
   photos?: FeedPhoto[];
+  /** Branded hero with badges baked into the pixels (Railway bake). When
+   *  present, fetchInventory() swaps it into photos[0] so every feed
+   *  ships the branded photo without per-feed changes. */
+  bakedHeroUrl?: string | null;
   /** Public VDP slug — built from year-make-model + stock if available. */
   vdpUrl?: string;
 }
@@ -104,6 +108,14 @@ export async function fetchInventory(): Promise<FeedVehicle[]> {
     .filter((v) => v.vin && v.year && v.make && v.model)
     .map((v) => ({
       ...v,
+      // External platforms get the BRANDED baked hero in slot 0 (badges in
+      // the pixels). The raw original stays in the additional images.
+      photos:
+        v.bakedHeroUrl && (v.photos?.length ?? 0) > 0
+          ? [{ url: v.bakedHeroUrl, isPrimary: true }, ...(v.photos ?? []).slice(1)]
+          : v.bakedHeroUrl
+          ? [{ url: v.bakedHeroUrl, isPrimary: true }]
+          : v.photos,
       vdpUrl: buildVdpUrl(v),
       // Defensive — the public endpoint should already filter to retail-
       // ready + sale-pending, but in case it ever returns more we double-check.

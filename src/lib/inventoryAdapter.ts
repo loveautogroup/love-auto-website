@@ -23,6 +23,8 @@ import type { Vehicle } from "@/lib/types";
 
 export interface SyncedVehicle {
   vin: string;
+  /** Branded baked hero for social/og use; display hero stays raw. */
+  bakedHeroUrl?: string | null;
   stockNumber?: string;
   slug: string;
   year: number;

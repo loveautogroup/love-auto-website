@@ -19,6 +19,8 @@ export interface Vehicle {
   description: string;
   features: string[];
   images: string[];
+  /** Branded hero with baked badges — og:image / social preview only. */
+  bakedHeroUrl?: string | null;
   status: "available" | "sale-pending" | "sold" | "coming-soon";
   dateInStock: string;
   daysOnLot: number;

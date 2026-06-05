@@ -98,8 +98,13 @@ export async function generateMetadata({
   const orderedImages = applyPhotoOrder(vehicle.slug, vehicle.images ?? []);
   // Fall back to site-wide OG image for vehicles with no photos yet so
   // Facebook/iMessage always renders *something* instead of a blank card.
+  // Prefer the branded baked hero for social-share previews (Facebook,
+  // iMessage) — it carries the dealer badges in the pixels. On-page hero
+  // display still uses the raw photo + interactive HTML overlays.
   const ogImageUrl =
-    orderedImages[0] ?? "https://www.loveautogroup.net/og-image.png";
+    vehicle.bakedHeroUrl ??
+    orderedImages[0] ??
+    "https://www.loveautogroup.net/og-image.png";
   const ogImageAlt = `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim} — Love Auto Group`;
 
   return {
