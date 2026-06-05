@@ -132,6 +132,26 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
           unoptimized
           priority
         />
+        {/* Desktop mouse navigation — hidden on touch viewports where
+            swipe handles it. Keyboard arrows work everywhere. */}
+        <button
+          onClick={prev}
+          aria-label="Previous photo"
+          className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 items-center justify-center w-11 h-11 rounded-full bg-black/50 text-white/80 hover:bg-black/75 hover:text-white transition-colors"
+        >
+          <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+          </svg>
+        </button>
+        <button
+          onClick={next}
+          aria-label="Next photo"
+          className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 items-center justify-center w-11 h-11 rounded-full bg-black/50 text-white/80 hover:bg-black/75 hover:text-white transition-colors"
+        >
+          <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
+            <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+          </svg>
+        </button>
       </div>
 
       {/* Swipe hint */}
@@ -462,7 +482,18 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
             return (
               <button
                 key={i}
-                onClick={() => setSelectedIndex(i)}
+                onClick={() => {
+                  // The "+N more" tile opens the full-screen gallery —
+                  // previously it just swapped the hero, so the promised
+                  // "more photos" never appeared (Jeremiah 2026-06-05).
+                  // Desktop included: the Lightbox works on any viewport.
+                  if (showMoreOverlay && hasRealPhotos && !forcePlaceholder) {
+                    setLightboxIndex(i);
+                    setLightboxOpen(true);
+                    return;
+                  }
+                  setSelectedIndex(i);
+                }}
                 className={`relative flex-shrink-0 w-[150px] aspect-[4/3] bg-brand-gray-100 rounded-lg overflow-hidden border-2 transition-all ${
                   selectedIndex === i
                     ? "border-brand-red ring-1 ring-brand-red"
