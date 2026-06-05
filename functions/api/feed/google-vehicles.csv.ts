@@ -134,7 +134,10 @@ function renderGoogleCsv(vehicles: FeedVehicle[]): string {
 
     const title = `${v.year} ${v.make} ${v.model}${v.trim ? " " + v.trim : ""}`;
     const price = v.retailPrice ? `${v.retailPrice} USD` : "";
-    const mileage = v.mileage ? `${v.mileage} mi` : "";
+    // Google vehicle spec accepts ONLY "miles" or "km" as the unit token —
+    // "mi" is unrecognized and caused "Missing value [mileage]" on all
+    // vehicles (support.google.com/merchants/answer/14156166).
+    const mileage = v.mileage ? `${v.mileage} miles` : "";
     // Sale Pending vehicles still show "in stock" since they can fall
     // back to available; if they sell, the upstream public/inventory
     // endpoint stops returning them and they drop out of the feed.
