@@ -322,7 +322,10 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                 so the HTML overlay layer aligns exactly with the baked pixel layer. */}
             {showBadges && vehicle && overlay && (
               <div onClick={(e) => e.stopPropagation()}>
-                <PhotoScrim />
+                {/* Scrim exists for HTML badge legibility. On baked heroes the
+                    badges live INSIDE the photo pixels — the scrim would sit on
+                    top of them and wash them out (Session 18 finding). */}
+                {!hasBakedHero && <PhotoScrim />}
 
                 {/* Top-left: CARFAX logo + feature pills (1-Owner, No Accidents…) + status.
                     The CARFAX card hides when baked into the hero pixels; the

@@ -236,8 +236,9 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           </div>
         )}
 
-        {/* Gradient scrim for overlay legibility */}
-        <PhotoScrim />
+        {/* Gradient scrim for overlay legibility — skipped on baked heroes
+            so it doesn't dim the badges baked into the photo pixels. */}
+        {!cardHasBakedHero && <PhotoScrim />}
 
         {/* Top-left column: full Carfax + status cluster — shield,
             active Carfax pills, status pill (in that vertical order).
