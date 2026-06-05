@@ -34,6 +34,10 @@
 export const DEALER = {
   name: "Love Auto Group",
   id: "love-auto-group-villa-park-il",
+  // Google-assigned store code for the linked Business Profile (GBP
+  // Manager, verified Jun 4 2026). GMC store matching requires this
+  // exact value in all Google feeds — NOT the human-readable id above.
+  googleStoreCode: "06345907979509993852",
   phone: "+16303593643",
   phoneFormatted: "(630) 359-3643",
   email: "loveautogroup@gmail.com",

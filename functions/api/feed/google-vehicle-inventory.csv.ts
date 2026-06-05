@@ -74,7 +74,7 @@ function renderLocalInventoryCsv(vehicles: FeedVehicle[]): string {
   const rows = vehicles.map((v) => {
     const price = v.retailPrice ? `${v.retailPrice} USD` : "";
     return [
-      DEALER.id,      // store_code
+      DEALER.googleStoreCode, // store_code (Google-assigned GBP store code)
       v.id,           // product id — matches primary feed
       price,          // price
       "",             // sale_price — not used

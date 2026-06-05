@@ -144,7 +144,7 @@ function renderGoogleCsv(vehicles: FeedVehicle[]): string {
     return [
       v.id, // id (Shopping spec required field)
       v.id, // vehicle_id (Vehicle Listings spec required field — same value)
-      DEALER.id, // store_code (must match Merchant Center store)
+      DEALER.googleStoreCode, // store_code (must match GBP store code in Merchant Center)
       v.make,
       v.make,       // brand — Google Shopping requires this even though we have make
       v.model,

@@ -59,7 +59,7 @@ function renderPosStoreCsv(): string {
 
   // One row — Love Auto Group Villa Park (sole location)
   const row = [
-    DEALER.id,                // "love-auto-group-villa-park-il"
+    DEALER.googleStoreCode,   // Google-assigned GBP store code
     DEALER.name,              // "Love Auto Group"
     DEALER.street,            // "735 N Yale Ave"
     DEALER.city,              // "Villa Park"
