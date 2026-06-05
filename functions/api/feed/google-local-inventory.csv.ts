@@ -10,11 +10,14 @@
  *  2. Vehicles in the primary feed are treated as locally available
  *     at this store (satisfying the "Missing local inventory data" check)
  *
- * Spec: https://support.google.com/merchants/answer/3227905
+ * Spec: https://support.google.com/merchants/answer/14154193 (store_address)
+ *        https://support.google.com/merchants/answer/13869896 (store_code)
  *
- * Required fields: store_code, name, address1, city, region,
- *                  postal_code, country
- * Recommended: phone, website
+ * GMC Next POS store validator (confirmed Jun 4 2026 via "8 unrecognized
+ * attributes" processing error): the ONLY recognized columns are
+ * store_code, store_address (single-string postal address), store_name,
+ * and phone_number. The old multi-column address format (address1/city/
+ * region/postal_code/country/website) is NOT recognized.
  *
  * This file contains ONE row — Love Auto Group's single Villa Park location.
  * If a second location ever opens, add a row here with a new store_code and
@@ -46,28 +49,19 @@ export const onRequestOptions: PagesFunction = async () =>
 
 function renderPosStoreCsv(): string {
   const headers = [
-    "store_code",    // Unique store ID — must match store_code in vehicle feed
-    "name",          // Store display name
-    "address1",      // Street address line 1
-    "city",
-    "region",        // State abbreviation
-    "postal_code",
-    "country",       // ISO 3166-1 alpha-2
-    "phone",         // E.164 format
-    "website",
+    "store_code",    // Google-assigned GBP store code (must match exactly)
+    "store_address", // Full postal address in ONE field per GMC spec
+    "store_name",
+    "phone_number",  // E.164 format
   ];
 
-  // One row — Love Auto Group Villa Park (sole location)
+  // One row — Love Auto Group Villa Park (sole location).
+  // Address matches the GBP listing: 735 N Yale Ave, Unit A.
   const row = [
-    DEALER.googleStoreCode,   // Google-assigned GBP store code
-    DEALER.name,              // "Love Auto Group"
-    DEALER.street,            // "735 N Yale Ave"
-    DEALER.city,              // "Villa Park"
-    DEALER.state,             // "IL"
-    DEALER.zip,               // "60181"
-    DEALER.country,           // "US"
-    DEALER.phone,             // "+16303593643"
-    DEALER.website,           // "https://www.loveautogroup.net"
+    DEALER.googleStoreCode,
+    `${DEALER.street} Unit A, ${DEALER.city}, ${DEALER.state} ${DEALER.zip}`,
+    DEALER.name,
+    DEALER.phone,
   ].map(csvCell).join(",");
 
   return [headers.join(","), row].join("\r\n") + "\r\n";
