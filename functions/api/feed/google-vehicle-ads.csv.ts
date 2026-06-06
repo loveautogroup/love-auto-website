@@ -32,18 +32,52 @@ import {
   type FeedVehicle,
 } from "../../_lib/feed";
 
+interface Env {
+  MERCHANDISING: KVNamespace;
+}
+
+const CONFIG_KEY = "config:v1";
+
+interface MerchOverlay {
+  googleFeed?: boolean;
+}
+interface MerchConfig {
+  overlays?: Record<string, MerchOverlay>;
+}
+
 // Vehicle ads supports up to 10 additional images per offer.
 const MAX_ADDITIONAL_IMAGES = 10;
 
 // VINs excluded from VEHICLE ADS only (kept in other feeds/channels).
 // Clean-title rule: rebuilt/branded/salvage titles are ineligible.
+// Hard guard — applies even if a googleFeed overlay flag is set.
 const EXCLUDED_VINS = new Set<string>([
   // 2016 Lexus IS 300 AWD #11347 — REBUILT title (Jeremiah, Jun 6 2026)
   "JTHCM1D22G5010107",
 ]);
 
-export const onRequestGet: PagesFunction = async () => {
+// ── Per-vehicle opt-in (Jun 6 2026, Jeremiah) ────────────────────────
+// Vehicles enter this feed ONLY when their merchandising overlay (KV
+// config:v1, written from DMS /dashboard/google) has googleFeed: true.
+// Explicit opt-in keeps paid-ads exposure a per-vehicle DMS decision —
+// the Porsche-only pilot is simply "Porsche on, everything else off".
+// FAIL-CLOSED: if the KV read fails, the feed emits ZERO vehicles
+// rather than accidentally exposing the whole lot to ad spend.
+async function googleEnabledVins(env: Env): Promise<Set<string>> {
+  const cfg = await env.MERCHANDISING.get<MerchConfig>(CONFIG_KEY, {
+    type: "json",
+  });
+  const overlays = cfg?.overlays ?? {};
+  const enabled = new Set<string>();
+  for (const [vin, o] of Object.entries(overlays)) {
+    if (o && o.googleFeed === true) enabled.add(vin);
+  }
+  return enabled;
+}
+
+export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
   try {
+    const enabled = await googleEnabledVins(env);
     // Policy (Google onboarding guide + answer 11190670): vehicles in the
     // feed must be listed as AVAILABLE on the landing page — "sold, out of
     // stock, reserved, unavailable, or incoming unit" availability is not
@@ -51,6 +85,7 @@ export const onRequestGet: PagesFunction = async () => {
     // vehicles, so those are excluded here until they return to Available.
     const inventory = (await fetchInventory()).filter(
       (v) =>
+        enabled.has(v.vin) &&
         !EXCLUDED_VINS.has(v.vin) &&
         (v.status === "Available" || v.status == null)
     );
