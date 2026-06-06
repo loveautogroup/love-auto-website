@@ -39,9 +39,18 @@ import {
 // Google supports up to ~30 additional images per listing.
 const MAX_ADDITIONAL_IMAGES = 30;
 
+// VINs excluded from GOOGLE surfaces only (kept in other feeds/channels).
+// Vehicle ads / vehicle listings require a CLEAN TITLE (answer 11544533).
+const EXCLUDED_VINS = new Set<string>([
+  // 2016 Lexus IS 300 AWD #11347 — REBUILT title (Jeremiah, Jun 6 2026)
+  "JTHCM1D22G5010107",
+]);
+
 export const onRequestGet: PagesFunction = async () => {
   try {
-    const inventory = await fetchInventory();
+    const inventory = (await fetchInventory()).filter(
+      (v) => !EXCLUDED_VINS.has(v.vin)
+    );
     const csv = renderGoogleCsv(inventory);
     return new Response(csv, {
       status: 200,
