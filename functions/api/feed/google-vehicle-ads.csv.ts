@@ -40,6 +40,7 @@ const CONFIG_KEY = "config:v1";
 
 interface MerchOverlay {
   googleFeed?: boolean;
+  carfaxSnapshot?: { titleStatus?: string };
 }
 interface MerchConfig {
   overlays?: Record<string, MerchOverlay>;
@@ -70,7 +71,14 @@ async function googleEnabledVins(env: Env): Promise<Set<string>> {
   const overlays = cfg?.overlays ?? {};
   const enabled = new Set<string>();
   for (const [vin, o] of Object.entries(overlays)) {
-    if (o && o.googleFeed === true) enabled.add(vin);
+    if (!o || o.googleFeed !== true) continue;
+    // Clean-title rule (answer 11544533), data-driven: a titleStatus
+    // recorded at intake that is anything other than "clean" makes the
+    // vehicle ineligible for vehicle ads even if its post switch is on.
+    // EXCLUDED_VINS below stays as belt-and-suspenders for known VINs.
+    const title = o.carfaxSnapshot?.titleStatus;
+    if (title && title !== "clean") continue;
+    enabled.add(vin);
   }
   return enabled;
 }
