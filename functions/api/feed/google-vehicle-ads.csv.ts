@@ -44,8 +44,15 @@ const EXCLUDED_VINS = new Set<string>([
 
 export const onRequestGet: PagesFunction = async () => {
   try {
+    // Policy (Google onboarding guide + answer 11190670): vehicles in the
+    // feed must be listed as AVAILABLE on the landing page — "sold, out of
+    // stock, reserved, unavailable, or incoming unit" availability is not
+    // permitted. Our VDP shows a "Sale Pending" badge for DEAL_PENDING
+    // vehicles, so those are excluded here until they return to Available.
     const inventory = (await fetchInventory()).filter(
-      (v) => !EXCLUDED_VINS.has(v.vin)
+      (v) =>
+        !EXCLUDED_VINS.has(v.vin) &&
+        (v.status === "Available" || v.status == null)
     );
     const csv = renderVehicleAdsCsv(inventory);
     return new Response(csv, {
