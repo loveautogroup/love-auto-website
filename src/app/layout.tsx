@@ -136,6 +136,15 @@ CarGurus.DealRatingBadge.options={
   e.parentNode.insertBefore(s,e);
 })();
 `}} />
+        {/* Cloudflare Web Analytics (W2, Jun 7 2026) — RUM beacon feeding the
+            per-VDP view counts. Auto-injection doesn't work on Pages-served
+            sites, so the snippet is embedded. The token is the PUBLIC site
+            token (site_tag 2e53d0ae1d184af9896e40b3669ae5ac). */}
+        <script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "c53f3b1dba644a4086838c08b1f57751"}'
+        />
       </body>
     </html>
   );

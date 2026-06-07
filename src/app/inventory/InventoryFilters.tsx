@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
+import VehicleAlertSignup from "@/components/VehicleAlertSignup";
 
 const MAKES = ["Subaru", "Lexus", "Acura", "Mazda", "Honda", "Toyota"];
 const BODY_STYLES = ["SUV", "Sedan", "Wagon", "Truck", "Coupe"];
@@ -248,6 +249,11 @@ function InventoryFiltersInner() {
           )}
         </div>
       </form>
+
+      <hr className="border-brand-gray-100 my-6" />
+
+      {/* W2: per-make new-arrival email alerts */}
+      <VehicleAlertSignup defaultMake={current.make ?? ""} />
     </>
   );
 

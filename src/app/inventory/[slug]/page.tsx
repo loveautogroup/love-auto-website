@@ -24,6 +24,7 @@ import {
   VDPLiveMileage,
   VDPLiveStatus,
 } from "@/components/VDPLivePrice";
+import VDPViewCount from "@/components/VDPViewCount";
 import {
   VDPCarfaxButton,
   VDPMarketPriceWrap,
@@ -273,6 +274,7 @@ export default async function VehicleDetailPage({
                     <p className="text-sm text-brand-gray-500 mt-1">
                       <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles · {vehicle.drivetrain}
                     </p>
+                    <VDPViewCount path={`/inventory/${vehicle.slug}/`} />
                     {/* CarGurus Deal Rating Badge — SDK replaces this span in-place */}
                     {vehicle.vin && vehicle.price > 0 && (
                       <span
@@ -392,6 +394,7 @@ export default async function VehicleDetailPage({
               <p className="text-sm text-brand-gray-500 mt-1">
                 <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles · {vehicle.drivetrain} · {vehicle.exteriorColor}
               </p>
+              <VDPViewCount path={`/inventory/${vehicle.slug}/`} />
               {/* CarGurus Deal Rating Badge — mobile */}
               {vehicle.vin && vehicle.price > 0 && (
                 <span
