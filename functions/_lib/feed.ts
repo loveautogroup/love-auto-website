@@ -95,6 +95,22 @@ interface DMSInventoryResponse {
  * out anything without a VIN or year (those would be malformed records
  * the 3rd-party platforms would reject anyway).
  */
+/**
+ * R2 photo host rewrite (Jun 6 2026). The bucket's pub-*.r2.dev development
+ * URL is RATE-LIMITED by Cloudflare and 403s some non-browser fetchers —
+ * root cause of GMC's "Unsupported image type [additional_image_link]"
+ * warnings (Googlebot bursts got throttled and received HTML error pages).
+ * photos.loveautogroup.net is the bucket's custom domain: no rate limit,
+ * real CDN caching. Stored URLs keep the old host; we rewrite at feed time.
+ */
+const R2_DEV_HOST = "pub-bca02cfacd234bc68e6ad93b2ef61898.r2.dev";
+const R2_CUSTOM_HOST = "photos.loveautogroup.net";
+
+function rewritePhotoHost(url: string | null | undefined): string | undefined {
+  if (!url) return undefined;
+  return url.replace(`://${R2_DEV_HOST}/`, `://${R2_CUSTOM_HOST}/`);
+}
+
 export async function fetchInventory(): Promise<FeedVehicle[]> {
   const res = await fetch(DMS_PUBLIC_INVENTORY_URL, {
     cf: { cacheTtl: 60 } as RequestInitCfProperties,
@@ -110,12 +126,13 @@ export async function fetchInventory(): Promise<FeedVehicle[]> {
       ...v,
       // External platforms get the BRANDED baked hero in slot 0 (badges in
       // the pixels). The raw original stays in the additional images.
-      photos:
+      photos: (
         v.bakedHeroUrl && (v.photos?.length ?? 0) > 0
           ? [{ url: v.bakedHeroUrl, isPrimary: true }, ...(v.photos ?? []).slice(1)]
           : v.bakedHeroUrl
           ? [{ url: v.bakedHeroUrl, isPrimary: true }]
-          : v.photos,
+          : v.photos
+      )?.map((p) => ({ ...p, url: rewritePhotoHost(p.url) ?? p.url })),
       vdpUrl: buildVdpUrl(v),
       // Defensive — the public endpoint should already filter to retail-
       // ready + sale-pending, but in case it ever returns more we double-check.
