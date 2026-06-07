@@ -19,8 +19,9 @@
  *   - vehicle offers only, one offer per VIN
  *
  * ELIGIBILITY (answer 11544533): vehicle ads require a CLEAN TITLE.
- * Branded / rebuilt / salvage titles and liens MUST be excluded here.
- * Excluded vehicles may still appear in other feeds and channels.
+ * Branded / rebuilt / salvage titles are excluded DATA-DRIVEN via the
+ * merch overlay carfaxSnapshot.titleStatus (seeded at intake or from the
+ * DMS). Excluded vehicles may still appear in other feeds and channels.
  */
 
 import {
@@ -49,14 +50,6 @@ interface MerchConfig {
 // Vehicle ads supports up to 10 additional images per offer.
 const MAX_ADDITIONAL_IMAGES = 10;
 
-// VINs excluded from VEHICLE ADS only (kept in other feeds/channels).
-// Clean-title rule: rebuilt/branded/salvage titles are ineligible.
-// Hard guard — applies even if a googleFeed overlay flag is set.
-const EXCLUDED_VINS = new Set<string>([
-  // 2016 Lexus IS 300 AWD #11347 — REBUILT title (Jeremiah, Jun 6 2026)
-  "JTHCM1D22G5010107",
-]);
-
 // ── Per-vehicle opt-in (Jun 6 2026, Jeremiah) ────────────────────────
 // Vehicles enter this feed ONLY when their merchandising overlay (KV
 // config:v1, written from DMS /dashboard/google) has googleFeed: true.
@@ -75,7 +68,8 @@ async function googleEnabledVins(env: Env): Promise<Set<string>> {
     // Clean-title rule (answer 11544533), data-driven: a titleStatus
     // recorded at intake that is anything other than "clean" makes the
     // vehicle ineligible for vehicle ads even if its post switch is on.
-    // EXCLUDED_VINS below stays as belt-and-suspenders for known VINs.
+    // (Hardcoded EXCLUDED_VINS retired Jun 6 2026 — the IS 300's rebuilt
+    // title now lives in its overlay, seeded via the DMS.)
     const title = o.carfaxSnapshot?.titleStatus;
     if (title && title !== "clean") continue;
     enabled.add(vin);
@@ -92,10 +86,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
     // permitted. Our VDP shows a "Sale Pending" badge for DEAL_PENDING
     // vehicles, so those are excluded here until they return to Available.
     const inventory = (await fetchInventory()).filter(
-      (v) =>
-        enabled.has(v.vin) &&
-        !EXCLUDED_VINS.has(v.vin) &&
-        (v.status === "Available" || v.status == null)
+      (v) => enabled.has(v.vin) && (v.status === "Available" || v.status == null)
     );
     const csv = renderVehicleAdsCsv(inventory);
     return new Response(csv, {
