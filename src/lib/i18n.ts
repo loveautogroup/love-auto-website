@@ -155,7 +155,7 @@ export const translations = {
         "First-time buyer? Rebuilding credit? No problem. Love Auto Group works with multiple lenders to find you the best rate.",
       ctaFull: "Full Credit Application",
       ctaQuick: "Quick Pre-Qualify",
-      softInquiry: "Soft inquiry — no impact to your credit score to apply.",
+      softInquiry: "Secure online application. Your information is encrypted and reviewed the same business day.",
     },
     about: {
       heading: "About Love Auto Group",
@@ -324,7 +324,7 @@ export const translations = {
         "¿Primer comprador? ¿Reconstruyendo crédito? Sin problema. Love Auto Group trabaja con múltiples prestamistas para encontrarte la mejor tasa.",
       ctaFull: "Solicitud de Crédito Completa",
       ctaQuick: "Pre-Calificación Rápida",
-      softInquiry: "Consulta suave — no afecta tu puntaje de crédito.",
+      softInquiry: "Solicitud segura en línea. Su información está cifrada y se revisa el mismo día hábil.",
     },
     about: {
       heading: "Sobre Love Auto Group",

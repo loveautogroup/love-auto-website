@@ -1,24 +1,29 @@
 "use client";
 
 /**
- * Financing pre-qualification form.
+ * In-house FULL credit application (S27, Jun 7 2026) — replaces the
+ * DealerCenter hosted iframe. Modeled on DC's SecuredForms coverage.
  *
- * POSTs to /api/finance-application (Cloudflare Pages Function). Lead is
- * stored in KV and Jeremiah gets a notification email (when RESEND_API_KEY
- * is configured).
+ * POSTs to the DMS public endpoint
+ * https://dms.loveautogroup.net/api/v1/public/credit-applications
+ * (x-intake-key gated, rate-limited). SSN + driver's license number are
+ * encrypted AT REST in the DMS (AES-256-GCM); this form sends them over
+ * TLS only, never stores them client-side, and never echoes them back.
  *
  * IMPORTANT LEGAL NOTES (Diane):
- *   - This is a SOFT pre-qualification form. It does NOT collect SSN.
- *     SSN is collected at the dealership during final approval, on a
- *     separately-signed credit authorization.
+ *   - FCRA credit authorization checkbox is REQUIRED (mirrors the
+ *     DealerCenter (a)/(b)/(c) authorization language).
  *   - TCPA consent for SMS is REQUIRED (explicit opt-in checkbox).
  *   - Privacy notice acknowledgment REQUIRED (ECOA / GLBA).
- *   - Form submits to /api/finance-application; that endpoint logs
- *     IP + user-agent for audit trail.
+ *   - The DMS endpoint logs IP + user-agent as the consent audit trail.
  */
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+
+// Same build-time intake key the LeadForm ships (NEXT_PUBLIC_DMS_INTAKE_KEY
+// on Cloudflare Pages). The DMS validates it with bcrypt server-side.
+const INTAKE_KEY = process.env.NEXT_PUBLIC_DMS_INTAKE_KEY ?? "";
 
 const US_STATES = [
   "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA",
@@ -32,6 +37,8 @@ interface ApplicantFields {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
+  /** Collected for the lender credit pull; encrypted at rest in the DMS. */
+  ssn: string;
   dlNumber: string;
   dlState: string;
   dlIssueDate: string;
@@ -75,6 +82,8 @@ interface FormValues extends ApplicantFields {
   // Consents + anti-spam
   tcpaConsent: boolean;
   privacyConsent: boolean;
+  /** FCRA credit-report authorization — mandatory for a full application. */
+  fcraConsent: boolean;
   honeypot: string;
 }
 
@@ -82,6 +91,7 @@ const EMPTY_APPLICANT: ApplicantFields = {
   firstName: "",
   lastName: "",
   dateOfBirth: "",
+  ssn: "",
   dlNumber: "",
   dlState: "IL",
   dlIssueDate: "",
@@ -100,6 +110,7 @@ const INITIAL: FormValues = {
   lastName: "",
   email: "",
   phone: "",
+  ssn: "",
   addressStreet: "",
   addressCity: "",
   addressState: "IL",
@@ -126,6 +137,7 @@ const INITIAL: FormValues = {
   coBuyer: { ...EMPTY_APPLICANT },
   tcpaConsent: false,
   privacyConsent: false,
+  fcraConsent: false,
   honeypot: "",
 };
 
@@ -143,6 +155,19 @@ export default function FinancingForm() {
   useEffect(() => {
     // Capture timestamp on mount for the min-elapsed anti-spam check.
     renderTimestamp.current = Date.now();
+    // Prefill from VDP apply links: /financing/?vehicle=2018 Porsche 718&down=1000
+    try {
+      const q = new URLSearchParams(window.location.search);
+      const v = q.get("vehicle");
+      const down = q.get("down");
+      setValues((prev) => ({
+        ...prev,
+        vehicleInterest: prev.vehicleInterest || (v ?? ""),
+        desiredDownPayment: prev.desiredDownPayment || (down ?? ""),
+      }));
+    } catch {
+      /* prefill is best-effort */
+    }
   }, []);
 
   function update<K extends keyof FormValues>(key: K, value: FormValues[K]) {
@@ -161,57 +186,93 @@ export default function FinancingForm() {
     if (state.kind === "submitting") return;
     setState({ kind: "submitting" });
 
-    // Coerce numbers + serialize co-buyer only when included.
+    // Shape an applicant into the DMS endpoint's PersonSchema.
+    const person = (a: ApplicantFields) => ({
+      firstName: a.firstName,
+      lastName: a.lastName,
+      dateOfBirth: a.dateOfBirth, // YYYY-MM-DD from <input type="date">
+      ssn: a.ssn,
+      dlNumber: a.dlNumber || undefined,
+      dlState: a.dlState || undefined,
+      dlIssueDate: a.dlIssueDate || undefined,
+      dlExpiryDate: a.dlExpiryDate || undefined,
+    });
+    const employment = (a: ApplicantFields) => ({
+      employerName: a.employer || a.employmentStatus || "Not provided",
+      jobTitle: a.jobTitle || undefined,
+      employerPhone: a.employerPhone || undefined,
+      monthlyIncome: a.monthlyIncome === "" ? undefined : Number(a.monthlyIncome),
+      yearsAtJob:
+        a.timeAtJobMonths === "" ? undefined : Math.floor(Number(a.timeAtJobMonths) / 12),
+      monthsAtJob:
+        a.timeAtJobMonths === "" ? undefined : Number(a.timeAtJobMonths) % 12,
+      incomeType: a.employmentStatus || undefined,
+    });
+
     const payload = {
-      ...values,
-      monthlyHousingPayment:
-        values.monthlyHousingPayment === ""
-          ? undefined
-          : Number(values.monthlyHousingPayment),
-      monthlyIncome: Number(values.monthlyIncome || 0),
-      timeAtJobMonths:
-        values.timeAtJobMonths === "" ? undefined : Number(values.timeAtJobMonths),
-      desiredMonthlyPayment:
-        values.desiredMonthlyPayment === ""
-          ? undefined
-          : Number(values.desiredMonthlyPayment),
-      desiredDownPayment:
-        values.desiredDownPayment === ""
-          ? undefined
-          : Number(values.desiredDownPayment),
-      // Drop the co-buyer payload entirely when the toggle is off — server
-      // validator expects `coBuyer` only when hasCoBuyer is true.
-      coBuyer: values.hasCoBuyer
-        ? {
-            ...values.coBuyer,
-            monthlyIncome: Number(values.coBuyer.monthlyIncome || 0),
-            timeAtJobMonths:
-              values.coBuyer.timeAtJobMonths === ""
-                ? undefined
-                : Number(values.coBuyer.timeAtJobMonths),
-          }
+      honeypot: values.honeypot,
+      startedAt: renderTimestamp.current,
+      buyer: {
+        ...person(values),
+        email: values.email || "",
+        phoneCell: values.phone || undefined,
+      },
+      residence: {
+        street: values.addressStreet,
+        city: values.addressCity,
+        state: values.addressState,
+        zip: values.addressZip,
+        housingType: values.housingStatus || undefined,
+        monthlyHousing:
+          values.monthlyHousingPayment === ""
+            ? undefined
+            : Number(values.monthlyHousingPayment),
+      },
+      employment: employment(values),
+      vehicle: {
+        model: values.vehicleInterest || undefined,
+        price:
+          values.desiredMonthlyPayment === ""
+            ? undefined
+            : `~${values.desiredMonthlyPayment}/mo desired`,
+        downPayment: values.desiredDownPayment || undefined,
+      },
+      tradeIn: values.hasTradeIn
+        ? { model: values.tradeInDetails || "yes" }
         : undefined,
-      renderTimestamp: renderTimestamp.current,
+      coBuyer: values.hasCoBuyer
+        ? { ...person(values.coBuyer), employment: employment(values.coBuyer) }
+        : undefined,
+      consents: {
+        creditAuth: values.fcraConsent,
+        privacy: values.privacyConsent,
+        textMarketing: false,
+        textUpdates: values.tcpaConsent,
+      },
     };
 
     try {
-      const res = await fetch("/api/finance-application", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        "https://dms.loveautogroup.net/api/v1/public/credit-applications",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(INTAKE_KEY ? { "x-intake-key": INTAKE_KEY } : {}),
+          },
+          body: JSON.stringify(payload),
+        }
+      );
       const data = await res.json().catch(() => ({}));
 
-      if (!res.ok || !data.ok) {
+      if (!res.ok || !data.data?.id) {
         setState({
           kind: "error",
-          messages: Array.isArray(data.errors)
-            ? data.errors
-            : [data.error ?? "Could not submit. Please call us at (630) 359-3643."],
+          messages: [data.error ?? "Could not submit. Please call us at (630) 359-3643."],
         });
         return;
       }
-      setState({ kind: "success", id: data.id ?? "" });
+      setState({ kind: "success", id: data.data.id });
     } catch (err) {
       console.error("Financing submit failed:", err);
       setState({
@@ -442,6 +503,26 @@ export default function FinancingForm() {
               value={values.dateOfBirth}
               onChange={(e) => update("dateOfBirth", e.target.value)}
             />
+          </label>
+          <label className="block">
+            <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+              Social Security Number <span className="text-brand-red">*</span>
+            </span>
+            <input
+              type="text"
+              required
+              inputMode="numeric"
+              autoComplete="off"
+              placeholder="___-__-____"
+              pattern="\d{3}-?\d{2}-?\d{4}"
+              title="9 digits, with or without dashes"
+              className={fieldClass}
+              value={values.ssn}
+              onChange={(e) => update("ssn", e.target.value)}
+            />
+            <span className="block text-[11px] text-brand-gray-500 mt-1">
+              Encrypted and sent securely. Required to process your credit application.
+            </span>
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
@@ -782,6 +863,23 @@ export default function FinancingForm() {
               </label>
               <label className="block">
                 <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                  Social Security Number <span className="text-brand-red">*</span>
+                </span>
+                <input
+                  type="text"
+                  required
+                  inputMode="numeric"
+                  autoComplete="off"
+                  placeholder="___-__-____"
+                  pattern="\d{3}-?\d{2}-?\d{4}"
+                  title="9 digits, with or without dashes"
+                  className={fieldClass}
+                  value={values.coBuyer.ssn}
+                  onChange={(e) => updateCoBuyer("ssn", e.target.value)}
+                />
+              </label>
+              <label className="block">
+                <span className="block text-sm font-medium text-brand-gray-900 mb-1">
                   Employment status <span className="text-brand-red">*</span>
                 </span>
                 <select
@@ -938,10 +1036,36 @@ export default function FinancingForm() {
             >
               Privacy Policy
             </Link>
-            . I understand this is a pre-qualification and is not an
-            application for credit. A full credit application and written
-            authorization for a credit report will be collected at the
-            dealership if I decide to proceed.
+            . I understand this is an application for credit and that Love
+            Auto Group works with multiple lenders to find financing options
+            for me.
+          </span>
+        </label>
+        <label className="flex items-start gap-2 text-xs text-brand-gray-700 leading-relaxed">
+          <input
+            type="checkbox"
+            required
+            checked={values.fcraConsent}
+            onChange={(e) => update("fcraConsent", e.target.checked)}
+            className="w-4 h-4 mt-0.5 shrink-0"
+          />
+          <span>
+            <span className="font-semibold">
+              Credit report authorization (required):
+            </span>{" "}
+            I, the undersigned, (a) for the purpose of securing credit, certify
+            the above representations to be correct; (b) authorize Love Auto
+            Group Inc. and the financial institutions to whom this application
+            is submitted, as they consider necessary and appropriate, to obtain
+            consumer credit reports on me and to gather and verify employment
+            history; and (c) understand that Love Auto Group Inc., and any
+            financial institution to whom this application is submitted, will
+            retain this application whether or not it is approved, and that it
+            is my responsibility to notify the creditor of any change of name,
+            address, or employment. Love Auto Group Inc. and any financial
+            institution to whom this application is submitted may share certain
+            non-public personal information about me with my authorization or
+            as provided by law.
           </span>
         </label>
         <p className="text-xs text-brand-gray-500 leading-relaxed pt-2 border-t border-brand-gray-100">
