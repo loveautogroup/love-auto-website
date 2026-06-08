@@ -150,7 +150,12 @@ export default function LeadForm({
         headers["x-intake-key"] = INTAKE_KEY;
       }
 
-      const res = await fetch(`${DMS_API_BASE}/api/v1/public/leads`, {
+      // S27: route through the same-origin Pages Function proxy. The
+      // NEXT_PUBLIC_DMS_INTAKE_KEY never inlined into client bundles on
+      // this build pipeline (compiled to an empty runtime env read), so
+      // direct browser->DMS posts were dying with 401 "Missing
+      // x-intake-key". The proxy attaches the key server-side.
+      const res = await fetch(`/api/leads`, {
         method: "POST",
         headers,
         body: JSON.stringify({

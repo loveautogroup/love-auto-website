@@ -21,10 +21,6 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-// Same build-time intake key the LeadForm ships (NEXT_PUBLIC_DMS_INTAKE_KEY
-// on Cloudflare Pages). The DMS validates it with bcrypt server-side.
-const INTAKE_KEY = process.env.NEXT_PUBLIC_DMS_INTAKE_KEY ?? "";
-
 const US_STATES = [
   "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA",
   "KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ",
@@ -252,17 +248,14 @@ export default function FinancingForm() {
     };
 
     try {
-      const res = await fetch(
-        "https://dms.loveautogroup.net/api/v1/public/credit-applications",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(INTAKE_KEY ? { "x-intake-key": INTAKE_KEY } : {}),
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      // Same-origin Pages Function proxy — it attaches the intake key
+      // server-side (NEXT_PUBLIC_* never inlines on this build pipeline;
+      // see functions/api/credit-app.ts).
+      const res = await fetch("/api/credit-app", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok || !data.data?.id) {
@@ -335,12 +328,13 @@ export default function FinancingForm() {
     >
       <div>
         <h2 className="text-xl font-bold text-brand-gray-900">
-          Financing Pre-Qualification
+          Credit Application
         </h2>
         <p className="text-sm text-brand-gray-500 mt-1">
-          Quick form, no commitment. This is a soft pre-qualification — we
-          collect no Social Security numbers on this form. Fields marked with{" "}
-          <span className="text-brand-red">*</span> are required.
+          Takes about 5 minutes. Your information is encrypted and sent
+          securely, and we work with multiple lenders to find your best rate.
+          Fields marked with <span className="text-brand-red">*</span> are
+          required.
         </p>
       </div>
 
