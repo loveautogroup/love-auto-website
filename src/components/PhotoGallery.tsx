@@ -378,7 +378,9 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     <CarfaxPillStack overlay={overlay} />
                   </div>
                   {overlay.effectiveStatus && (
-                    <StatusPill kind={overlay.effectiveStatus} />
+                    <div className="scale-[0.7] sm:scale-100 origin-top-left">
+                      <StatusPill kind={overlay.effectiveStatus} />
+                    </div>
                   )}
                 </div>
 
@@ -389,7 +391,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                     style={{ top: `${MARGIN_PCT}%` }}
                   >
-                    <div className="pointer-events-auto">
+                    <div className="pointer-events-auto scale-[0.5] sm:scale-100 origin-top">
                       <DealerCluster
                         showBadge={false}
                         hideDealerPill={false}
@@ -403,7 +405,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
 
                 {/* Top-right: merchandising feature pills */}
                 <div
-                  className="absolute z-10 flex flex-col items-end gap-1.5"
+                  className="absolute z-10 flex flex-col items-end gap-1.5 scale-[0.6] sm:scale-100 origin-top-right"
                   style={{ top: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
                 >
                   <FeaturePillCluster pills={overlay.featurePills} stack="inline" />
