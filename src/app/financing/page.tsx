@@ -18,7 +18,10 @@ export default function FinancingPage() {
         className="max-w-5xl mx-auto px-4 py-12 scroll-mt-20"
       >
         <iframe
-          src="https://dwssecuredforms.dealercenter.net/CreditApplication/index/9079472?themecolor=8C8C8C&formtype=l&frameId=dws_frame_0&standalone=true"
+          // DealerCenter moved this to a lowercase path with a trailing slash
+          // (old URL = double 301). Updated 2026-06-07 (S27) while fixing the
+          // CSP frame-src block that had hidden this form since May 5.
+          src="https://dwssecuredforms.dealercenter.net/creditapplication/index/9079472/?themecolor=8C8C8C&formtype=l&frameId=dws_frame_0&standalone=true"
           scrolling="auto"
           style={{ height: "1093px", width: "100%" }}
           frameBorder={0}

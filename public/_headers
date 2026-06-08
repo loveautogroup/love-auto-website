@@ -22,7 +22,13 @@
   # Charlotte's audit (marketing-audit-2026-05-05/seo-audit.md) found CSP
   # was silently blocking the badge — it had never rendered. The May-2 503
   # finding was a red herring; the CDN is fine, our policy was the blocker.
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cargurus.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://dms.loveautogroup.net https://static.cargurus.com https://vpic.nhtsa.dot.gov; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+  # 2026-06-07 (S27) — frame-src += dwssecuredforms.dealercenter.net: the
+  # /financing credit-application iframe (the ONLY apply path; every VDP
+  # apply button routes there) had been silently blocked by our own CSP
+  # since this policy shipped May 5. Same failure class as the CarGurus
+  # badge above. script-src/connect-src += cloudflareinsights for the W2
+  # RUM beacon in layout.tsx, which this policy also blocked.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cargurus.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://dms.loveautogroup.net https://static.cargurus.com https://vpic.nhtsa.dot.gov https://cloudflareinsights.com; frame-src https://www.google.com https://dwssecuredforms.dealercenter.net; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
 
 # Admin routes — noindex, no cache. Gated by Cloudflare Zero Trust Access.
 /admin/*
