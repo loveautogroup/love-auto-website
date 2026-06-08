@@ -67,6 +67,8 @@ export default function QuickPreQualifyForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           formType: "prequal",
+          hasTradeIn: false,
+          hasCoBuyer: false,
           ...values,
           monthlyIncome: Number(values.monthlyIncome || 0),
           renderTimestamp: renderTimestamp.current,

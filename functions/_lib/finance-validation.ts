@@ -385,7 +385,7 @@ export function validateFinanceApplication(
   }
 
   // ─── TRADE-IN ──────────────────────────────────────────────────────
-  if (typeof o.hasTradeIn !== "boolean") {
+  if (!isPrequal && typeof o.hasTradeIn !== "boolean") {
     issues.push("Trade-in question must be answered.");
   }
   if (o.hasTradeIn === true) {
@@ -399,7 +399,7 @@ export function validateFinanceApplication(
   }
 
   // ─── CO-BUYER (optional) ───────────────────────────────────────────
-  if (typeof o.hasCoBuyer !== "boolean") {
+  if (!isPrequal && typeof o.hasCoBuyer !== "boolean") {
     issues.push("Co-buyer question must be answered.");
   }
   if (o.hasCoBuyer === true) {
