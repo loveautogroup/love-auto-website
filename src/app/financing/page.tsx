@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import FinancingHero from "./FinancingHero";
-import FinancingForm from "./FinancingForm";
+import ApplySection from "./ApplySection";
 
 export const metadata: Metadata = {
   title: "Used Car Financing, All Credit Welcome | Love Auto",
@@ -18,9 +18,10 @@ export default function FinancingPage() {
         id="apply"
         className="max-w-5xl mx-auto px-4 py-12 scroll-mt-20"
       >
-{/* In-house full credit application (S27) — replaced the DealerCenter
-            iframe per Jeremiah's call. SSN/DL encrypted at rest in the DMS. */}
-        <FinancingForm />
+{/* In-house applications (S27) — full credit app (SSN, encrypted) +
+            Quick Pre-Qualify short form (no SSN), replacing the old
+            DealerCenter iframe per Jeremiah's call. */}
+        <ApplySection />
       </section>
     </>
   );

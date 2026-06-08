@@ -43,6 +43,9 @@ export interface ApplicantInput {
 }
 
 export interface FinanceApplicationInput {
+  /** "prequal" = short Quick Pre-Qualify form (S27); absent/other = full
+   *  no-SSN pre-qualification. Prequal skips address/DOB/housing. */
+  formType?: "prequal";
   // Primary applicant (buyer)
   firstName: string;
   lastName: string;
@@ -243,6 +246,12 @@ export function validateFinanceApplication(
     }
   }
 
+  // ─── FORM TYPE ─────────────────────────────────────────────────────
+  // "prequal" = the short Quick Pre-Qualify form (S27): only identity,
+  // contact, employment status + income are required. The full no-SSN
+  // pre-qualification keeps its original required set.
+  const isPrequal = o.formType === "prequal";
+
   // ─── LEGAL CONSENTS ────────────────────────────────────────────────
   if (o.tcpaConsent !== true) {
     issues.push("You must agree to receive text messages to submit this form.");
@@ -276,35 +285,41 @@ export function validateFinanceApplication(
   }
 
   // ─── ADDRESS ───────────────────────────────────────────────────────
-  for (const [field, value, max] of [
-    ["Street address", o.addressStreet, MAX_ADDRESS],
-    ["City", o.addressCity, MAX_CITY],
-  ] as const) {
-    if (typeof value !== "string" || value.trim().length === 0) {
-      issues.push(`${field} is required.`);
-    } else if (value.length > max) {
-      issues.push(`${field} is too long.`);
-    } else {
-      assertSafeText(value, field, issues);
+  if (!isPrequal) {
+    for (const [field, value, max] of [
+      ["Street address", o.addressStreet, MAX_ADDRESS],
+      ["City", o.addressCity, MAX_CITY],
+    ] as const) {
+      if (typeof value !== "string" || value.trim().length === 0) {
+        issues.push(`${field} is required.`);
+      } else if (value.length > max) {
+        issues.push(`${field} is too long.`);
+      } else {
+        assertSafeText(value, field, issues);
+      }
     }
-  }
-  if (typeof o.addressState !== "string" || !/^[A-Za-z]{2}$/.test(o.addressState)) {
-    issues.push("State must be a 2-letter code.");
-  }
-  if (typeof o.addressZip !== "string" || !isValidZip(o.addressZip)) {
-    issues.push("Valid ZIP code is required.");
+    if (typeof o.addressState !== "string" || !/^[A-Za-z]{2}$/.test(o.addressState)) {
+      issues.push("State must be a 2-letter code.");
+    }
+    if (typeof o.addressZip !== "string" || !isValidZip(o.addressZip)) {
+      issues.push("Valid ZIP code is required.");
+    }
   }
 
   // ─── PERSONAL ──────────────────────────────────────────────────────
-  if (typeof o.dateOfBirth !== "string" || !isValidDate(o.dateOfBirth)) {
-    issues.push("Valid date of birth is required (must be 18 or older).");
+  if (!isPrequal) {
+    if (typeof o.dateOfBirth !== "string" || !isValidDate(o.dateOfBirth)) {
+      issues.push("Valid date of birth is required (must be 18 or older).");
+    }
   }
   validateDlAndEmployerPhone(o, "Buyer", issues);
-  if (
-    typeof o.housingStatus !== "string" ||
-    !HOUSING_STATUSES.includes(o.housingStatus as (typeof HOUSING_STATUSES)[number])
-  ) {
-    issues.push(`Housing status must be one of: ${HOUSING_STATUSES.join(", ")}.`);
+  if (!isPrequal) {
+    if (
+      typeof o.housingStatus !== "string" ||
+      !HOUSING_STATUSES.includes(o.housingStatus as (typeof HOUSING_STATUSES)[number])
+    ) {
+      issues.push(`Housing status must be one of: ${HOUSING_STATUSES.join(", ")}.`);
+    }
   }
   if (o.monthlyHousingPayment !== undefined && o.monthlyHousingPayment !== null) {
     const n = Number(o.monthlyHousingPayment);

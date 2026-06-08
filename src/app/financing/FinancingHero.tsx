@@ -23,7 +23,7 @@ export default function FinancingHero() {
             <span aria-hidden>📋</span> {f.ctaFull}
           </a>
           <a
-            href="#apply"
+            href="#prequal"
             className="inline-flex items-center justify-center gap-2 bg-white/10 border border-white/30 hover:bg-white/20 text-white font-bold text-lg px-8 py-4 rounded-xl transition-colors"
           >
             <span aria-hidden>⚡</span> {f.ctaQuick}
