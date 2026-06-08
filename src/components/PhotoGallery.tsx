@@ -15,6 +15,7 @@ import {
   GoogleReviewsLockup,
   FeaturePillCluster,
   PhoneCTA,
+  UrlBadge,
   PhotoScrim,
   StatusPill,
   WarrantyBadge,
@@ -249,6 +250,9 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
     (badgeConfig?.google_badge_enabled !== false) &&
     (overlay?.showGoogleReviewsBadge !== false);
   const showPhoneBadge = !hasBakedHero && badgeConfig?.phone_badge_enabled !== false;
+  // URL badge mirrors the phone gating — bottom-center, same Montserrat
+  // treatment, baked into the hero pixels when the hero is baked.
+  const showUrlBadge = !hasBakedHero && hasRealPhotos && !forcePlaceholder;
   const showCarfaxBadge = !hasBakedHero && badgeConfig?.carfax_badge_enabled !== false;
 
   // Only open on mobile; desktop keeps thumbnail-swap-only behaviour
@@ -428,6 +432,17 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                       />
                     </div>
                   </>
+                )}
+
+                {/* Bottom-center: dealership URL — matches phone treatment */}
+                {showUrlBadge && (
+                  <div
+                    className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
+                    style={{ bottom: `${MARGIN_PCT}%` }}
+                  >
+                    <span className="md:hidden"><UrlBadge compact /></span>
+                    <span className="hidden md:inline"><UrlBadge /></span>
+                  </div>
                 )}
 
                 {/* Bottom-right: warranty chip + Google Reviews lockup.

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 
 import Header from "@/components/Header";
@@ -12,6 +12,15 @@ import StickyCTA from "@/components/StickyCTA";
 import { LocalBusinessSchema } from "@/components/StructuredData";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
+// Montserrat powers the wordmark logo + the hero phone/URL badges so the
+// HTML overlay renders the SAME font the bake compositor uses (real
+// Montserrat, not the old Arial Black fallback). Exposed as a CSS var.
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["600", "900"],
+  display: "swap",
+  variable: "--font-montserrat",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.loveautogroup.net"),
@@ -90,7 +99,7 @@ export default async function RootLayout({
 }) {
   const googleReviews = await getGoogleReviews();
   return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
+    <html lang="en" className={`${inter.className} ${montserrat.variable}`} suppressHydrationWarning>
       <body className="bg-brand-gray-50 text-brand-gray-900 antialiased">
         <ReviewsProvider value={googleReviews}>
         <LanguageProvider>

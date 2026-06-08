@@ -36,13 +36,46 @@ export default function PhoneCTA({ phone, phoneRaw, compact }: PhoneCTAProps) {
       <span
         className={
           compact
-            ? "text-[12px] sm:text-[13px] font-extrabold"
-            : "text-[22px] sm:text-[26px] font-extrabold"
+            ? "text-[12px] sm:text-[13px] font-semibold"
+            : "text-[20px] sm:text-[23px] font-semibold"
         }
-        style={{ letterSpacing: "-0.01em" }}
+        // Montserrat (the "AUTO GROUP" wordmark font) letter-spaced — matches
+        // the bottom-center URL badge so the two read as a pair
+        // (Jeremiah 2026-06-08).
+        style={{
+          fontFamily: "var(--font-montserrat), 'Arial Black', sans-serif",
+          letterSpacing: "0.12em",
+        }}
       >
         {phone}
       </span>
     </a>
+  );
+}
+
+/**
+ * URL badge — bottom-center slot. The dealership URL in the same Montserrat
+ * letter-spaced treatment as PhoneCTA so the two match across the bottom
+ * row (phone bottom-left, URL bottom-center, Google bottom-right).
+ * Display text is uppercase; not a link (pure branding, mirrors the bake).
+ */
+export function UrlBadge({ compact }: { compact?: boolean }) {
+  return (
+    <span
+      className={
+        compact
+          ? "text-[11px] sm:text-[12px] font-semibold text-white whitespace-nowrap select-none"
+          : "text-[20px] sm:text-[23px] font-semibold text-white whitespace-nowrap select-none"
+      }
+      style={{
+        fontFamily: "var(--font-montserrat), 'Arial Black', sans-serif",
+        letterSpacing: "0.12em",
+        textShadow:
+          "0 0 1px rgba(0,0,0,0.95), 1px 1px 1px rgba(0,0,0,0.95), -1px -1px 1px rgba(0,0,0,0.95), 0 2px 8px rgba(0,0,0,0.7)",
+      }}
+      aria-hidden="true"
+    >
+      LOVEAUTOGROUP.NET
+    </span>
   );
 }

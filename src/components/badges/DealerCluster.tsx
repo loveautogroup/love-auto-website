@@ -132,12 +132,13 @@ export default function DealerCluster({
 
   const logoPill = !hideDealerPill && (
     <div
-      className="rounded-xl overflow-hidden"
       style={{
-        backgroundColor: "rgba(6, 8, 18, 0.90)",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.45)",
-        padding: compact ? "6px 10px" : "8px 14px",
-        opacity: 0.93,
+        // No pill background — just the logo sitting on the photo, with a
+        // drop-shadow so it stays legible over light backgrounds. Replaces
+        // the old navy pill (Jeremiah 2026-06-08: "just our original logo").
+        filter:
+          "drop-shadow(0 2px 4px rgba(0,0,0,0.85)) drop-shadow(0 0 2px rgba(0,0,0,0.6))",
+        opacity: 0.98,
       }}
       aria-label="Love Auto Group"
     >
@@ -152,15 +153,15 @@ export default function DealerCluster({
           </linearGradient>
         </defs>
         <text x="140" y="43" textAnchor="middle"
-          fontFamily="Montserrat, Arial Black, sans-serif"
+          fontFamily="var(--font-montserrat), 'Arial Black', sans-serif"
           fontWeight="900" fontSize="42" fill="#dc2626" letterSpacing="6">LOVE</text>
         <rect x="70" y="51" width="140" height="2.5" rx="1.25" fill="url(#lag-accent)" />
         <text x="140" y="69" textAnchor="middle"
-          fontFamily="Montserrat, Arial Black, sans-serif"
+          fontFamily="var(--font-montserrat), 'Arial Black', sans-serif"
           fontWeight="600" fontSize="14" fill="#ffffff" letterSpacing="10">AUTO GROUP</text>
-        <text x="140" y="88" textAnchor="middle"
-          fontFamily="Inter, Arial, sans-serif"
-          fontWeight="500" fontSize="16" fill="#cbd5e1" letterSpacing="2">loveautogroup.net</text>
+        <text x="140" y="87" textAnchor="middle"
+          fontFamily="var(--font-montserrat), 'Arial Black', sans-serif"
+          fontWeight="600" fontSize="10" fill="#d1d5db" letterSpacing="5">SINCE 2014</text>
       </svg>
     </div>
   );

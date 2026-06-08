@@ -14,6 +14,7 @@ export { default as DealerCluster } from "./DealerCluster";
 export { GoogleReviewsLockup } from "./DealerCluster";
 export { default as FeaturePillCluster } from "./FeaturePillCluster";
 export { default as PhoneCTA } from "./PhoneCTA";
+export { UrlBadge } from "./PhoneCTA";
 export { default as PhotoScrim } from "./PhotoScrim";
 export { default as StatusPill } from "./StatusPill";
 export { default as WarrantyBadge } from "./WarrantyBadge";
