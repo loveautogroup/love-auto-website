@@ -231,6 +231,9 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
   const overlay = vehicle ? overlayLive : null;
   const showBadges = vehicle && selectedIndex === 0;
   const forcePlaceholder = overlay?.useComingSoonPlaceholder === true;
+  // Gallery photos (index > 0): show minimal dealer logo + URL badge only.
+  // Mirrors the DealerCenter gallery bake so every photo carries branding.
+  const showMinimalBadges = Boolean(vehicle && overlay && selectedIndex > 0 && hasRealPhotos && !forcePlaceholder);
   const warrantyCopy = overlay?.warranty;
   const remaining = Math.max(0, photoCount - 5);
 
@@ -467,6 +470,38 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
               </div>
             )}
 
+            {/* Gallery minimal badges — dealer logo (top-center) + URL badge
+                (bottom-center) on every non-hero photo. Keeps every gallery
+                slot branded without the full CARFAX/Google/phone overlay
+                that would crowd the image. Mirrors the DealerCenter bake
+                produced by composite_gallery_badges in photo_overlay.py. */}
+            {showMinimalBadges && (
+              <div onClick={(e) => e.stopPropagation()}>
+                <PhotoScrim />
+                <div
+                  className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
+                  style={{ top: `${MARGIN_PCT}%` }}
+                >
+                  <div className="pointer-events-auto scale-[0.5] sm:scale-100 origin-top">
+                    <DealerCluster
+                      showBadge={false}
+                      hideDealerPill={false}
+                      rating={googleReviews.rating}
+                      reviewCount={googleReviews.reviewCount}
+                      reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
+                    />
+                  </div>
+                </div>
+                <div
+                  className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
+                  style={{ bottom: `${MARGIN_PCT}%` }}
+                >
+                  <span className="md:hidden"><UrlBadge compact /></span>
+                  <span className="hidden md:inline"><UrlBadge /></span>
+                </div>
+              </div>
+            )}
+
             {/* Expand icon — mobile only, non-first photos (first photo has badge overlay) */}
             {hasRealPhotos && !forcePlaceholder && !showBadges && (
               <div className="absolute bottom-3 right-3 z-10 pointer-events-none md:hidden">
@@ -479,7 +514,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
             )}
 
             {/* Photo counter — shown when no badge overlay */}
-            {!showBadges && (
+            {!showBadges && !showMinimalBadges && (
               <span className="absolute bottom-3 left-3 bg-black/70 text-white text-xs font-medium px-2.5 py-1 rounded-full inline-flex items-center gap-1">
                 <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current">
                   <path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
