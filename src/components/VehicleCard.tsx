@@ -252,15 +252,15 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           style={{ paddingTop: cardHasBakedHero ? "5.5%" : undefined }}
         >
           {!cardHasBakedHero && (
-            <div className="scale-[0.6] origin-top-left">
+            <div className="scale-[0.6] sm:scale-100 origin-top-left">
               <CarfaxBadge vin={vehicle.vin} />
             </div>
           )}
-          <div className="scale-[0.7] origin-top-left">
+          <div className="scale-[0.7] sm:scale-100 origin-top-left">
             <CarfaxPillStack overlay={overlay} compact />
           </div>
           {overlay.effectiveStatus && (
-            <div className="scale-[0.7] origin-top-left">
+            <div className="scale-[0.7] sm:scale-100 origin-top-left">
               <StatusPill kind={overlay.effectiveStatus} />
             </div>
           )}
@@ -270,7 +270,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             or when already baked into the hero pixels. */}
         {!forcePlaceholder && !cardHasBakedHero && (
           <div className="absolute top-1.5 left-0 right-0 flex justify-center z-10 pointer-events-none">
-            <div className="pointer-events-auto scale-[0.5] origin-top">
+            <div className="pointer-events-auto scale-[0.5] sm:scale-100 origin-top">
               <DealerCluster
                 compact
                 rating={googleReviews.rating}
@@ -284,7 +284,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         {/* Top-right column: compact feature pill stack only. Right-
             aligned, mirrors the VDP. */}
         <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 flex flex-col items-end gap-1">
-          <div className="scale-[0.6] origin-top-right">
+          <div className="scale-[0.6] sm:scale-100 origin-top-right">
             <FeaturePillCluster pills={overlay.featurePills} compact stack="inline" />
           </div>
         </div>
@@ -310,7 +310,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             Hidden when baked into the hero pixels. */}
         {!cardHasBakedHero && (
           <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
-            <div className="scale-[0.6] origin-bottom-right">
+            <div className="scale-[0.6] sm:scale-100 origin-bottom-right">
               <GoogleReviewsLockup
                 rating={googleReviews.rating}
                 reviewCount={googleReviews.reviewCount}
