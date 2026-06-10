@@ -102,6 +102,7 @@ export function adaptVehicle(v: SyncedVehicle): Vehicle {
     dateInStock: v.dateInStock,
     daysOnLot: v.daysOnLot,
     recentlyReduced: Boolean(v.recentlyReduced),
+    bakedHeroUrl: v.bakedHeroUrl ?? null,
     asIs: v.asIs ?? true,
     knownIssues: v.knownIssues ?? null,
   };
