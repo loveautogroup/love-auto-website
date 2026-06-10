@@ -98,13 +98,20 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   let heroOverride: string | null = null;
   if (liveSource !== "fallback") {
     const live = liveVehicles.find((v) => v.vin === vehicle.vin);
-    if (
-      live &&
-      Array.isArray(live.images) &&
-      live.images.length > 0 &&
-      live.images[0] !== vehicle.images[0]
-    ) {
-      heroOverride = live.images[0];
+    if (live) {
+      // Prefer the baked hero — all badges are already composited at the
+      // correct proportions and scale naturally as a thumbnail. No CSS
+      // scale-transform hacks needed. cardHasBakedHero detects "hero-baked"
+      // in the URL and suppresses HTML overlays automatically.
+      if (live.bakedHeroUrl) {
+        heroOverride = live.bakedHeroUrl;
+      } else if (
+        Array.isArray(live.images) &&
+        live.images.length > 0 &&
+        live.images[0] !== vehicle.images[0]
+      ) {
+        heroOverride = live.images[0];
+      }
     }
   }
 
