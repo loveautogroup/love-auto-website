@@ -69,6 +69,8 @@ interface DmsVehicle {
   // reads this from VehiclePriceHistory). Optional — older deploys omit
   // the field, treat absent as false for back-compat.
   recently_reduced?: boolean | null;
+  // Baked hero URL with all badges composited in (used as thumbnail on cards).
+  bakedHeroUrl?: string | null;
 }
 
 interface DmsResponse {
@@ -102,6 +104,7 @@ interface SyncedVehicle {
   dealerCenterLastSeen: string;
   description?: string;
   recentlyReduced?: boolean;
+  bakedHeroUrl?: string | null;
 }
 
 interface InventorySnapshot {
@@ -167,6 +170,7 @@ function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     dealerCenterLastSeen: "",
     description: v.description ?? undefined,
     recentlyReduced: Boolean(v.recently_reduced),
+    bakedHeroUrl: v.bakedHeroUrl ?? null,
   };
 }
 
