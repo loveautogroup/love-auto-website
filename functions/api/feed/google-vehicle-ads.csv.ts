@@ -119,12 +119,14 @@ function renderVehicleAdsCsv(vehicles: FeedVehicle[]): string {
   const headers = [
     // Required
     "id",
+    "title",
     "vin",
     "store_code", // top-level = in_store fulfillment (answer 14154094)
     "brand",
     "model",
     "year",
     "condition",
+    "availability",
     "mileage",
     "color",
     "price",
@@ -151,14 +153,19 @@ function renderVehicleAdsCsv(vehicles: FeedVehicle[]): string {
     const mileage = v.mileage ? `${v.mileage} miles` : "";
     const vdpUrl = v.vdpUrl ?? DEALER.website;
 
+    const titleParts = [v.year, v.make, v.model, v.trim].filter(Boolean);
+    const title = titleParts.join(" ");
+
     return [
       v.id,
+      title,
       v.vin,
       DEALER.googleStoreCode,
       v.make, // brand = manufacturer (answer 11192663)
       v.model,
       v.year,
       "Used", // Title Case per vehicle ads spec — every Love Auto vehicle is used
+      "in_stock", // required; feed already filtered to Available/null status vehicles
       mileage,
       v.exteriorColor ?? "",
       price,
