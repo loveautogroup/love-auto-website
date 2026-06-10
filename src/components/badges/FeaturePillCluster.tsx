@@ -51,7 +51,7 @@ export default function FeaturePillCluster({
   // positioned at top-right of the photo. Both use vertical stacking.
   const containerClass =
     stack === "inline"
-      ? `flex flex-col items-end ${compact ? "gap-0.5 sm:gap-1 max-w-[60%]" : "gap-1 sm:gap-1.5 max-w-[55%]"}`
+      ? `flex flex-col items-end ${compact ? "gap-0.5 sm:gap-1 w-full" : "gap-1 sm:gap-1.5 max-w-[55%]"}`
       : `absolute right-1.5 sm:right-2 z-10 flex flex-col items-end ${compact ? "top-1.5 sm:top-2 gap-0.5 sm:gap-1 max-w-[55%]" : "top-2 sm:top-3 gap-1 sm:gap-1.5 max-w-[45%]"}`;
 
   // Pill text alignment is right-aligned in both modes — the cluster sits
@@ -70,7 +70,7 @@ export default function FeaturePillCluster({
               border border-white/25
               shadow-[0_2px_6px_rgba(0,0,0,0.35)]
               ${compact
-                ? "px-1.5 py-[1px] text-[9px] sm:px-2 sm:py-0.5 sm:text-[11px] font-bold leading-tight"
+                ? "px-1.5 py-[1px] text-[9px] sm:px-2 sm:py-0.5 sm:text-[11px] font-bold leading-tight max-w-full overflow-hidden"
                 : "px-1.5 py-[1px] text-[9px] sm:px-4 sm:py-2 sm:text-[16px] font-bold leading-tight"}
             `}
             style={{

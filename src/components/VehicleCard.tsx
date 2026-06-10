@@ -290,10 +290,11 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
 
         {/* Top-right column: compact feature pill stack only. Right-
             aligned, mirrors the VDP. */}
-        <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 flex flex-col items-end gap-1">
-          <div className="scale-[0.6] sm:scale-100 origin-top-right">
-            <FeaturePillCluster pills={overlay.featurePills} compact stack="inline" />
-          </div>
+        {/* w-[40%] gives the pill column an actual layout width so max-w
+            inside the cluster resolves correctly and long pill labels
+            truncate instead of spanning to the card center. */}
+        <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 flex flex-col items-end gap-1 w-[40%]">
+          <FeaturePillCluster pills={overlay.featurePills} compact stack="inline" />
         </div>
 
         {/* Warranty intentionally NOT shown on cards — it's a VDP-level
