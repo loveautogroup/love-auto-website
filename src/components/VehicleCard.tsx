@@ -141,6 +141,8 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   // anywhere" was removed: cars without pictures now render the
   // empty-state SVG instead of the branded placeholder.
   const forcePlaceholder = overlay.useComingSoonPlaceholder === true;
+  // "Coming Soon" state — only CARFAX badge shows (Jeremiah, 2026-06-10).
+  const isComingSoon = noPhotosAnywhere || forcePlaceholder;
 
   const initialHero = (forcePlaceholder || noPhotosAnywhere)
     ? COMING_SOON_PLACEHOLDER
@@ -263,10 +265,12 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
               <CarfaxBadge vin={vehicle.vin} />
             </div>
           )}
-          <div className="scale-[0.77] sm:scale-100 origin-top-left">
-            <CarfaxPillStack overlay={overlay} compact />
-          </div>
-          {overlay.effectiveStatus && (
+          {!isComingSoon && (
+            <div className="scale-[0.77] sm:scale-100 origin-top-left">
+              <CarfaxPillStack overlay={overlay} compact />
+            </div>
+          )}
+          {!isComingSoon && overlay.effectiveStatus && (
             <div className="scale-[0.77] sm:scale-100 origin-top-left">
               <StatusPill kind={overlay.effectiveStatus} />
             </div>
@@ -275,7 +279,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
 
         {/* Top-center: dealer logo pill — not shown on coming-soon placeholder
             or when already baked into the hero pixels. */}
-        {!forcePlaceholder && !cardHasBakedHero && (
+        {!isComingSoon && !cardHasBakedHero && (
           <div className="absolute top-1.5 left-0 right-0 flex justify-center z-10 pointer-events-none">
             <div className="pointer-events-auto scale-[0.55] sm:scale-100 origin-top">
               <DealerCluster
@@ -293,9 +297,11 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         {/* w-[40%] gives the pill column an actual layout width so max-w
             inside the cluster resolves correctly and long pill labels
             truncate instead of spanning to the card center. */}
-        <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 flex flex-col items-end gap-1 w-[40%]">
-          <FeaturePillCluster pills={overlay.featurePills} compact stack="inline" />
-        </div>
+        {!isComingSoon && (
+          <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 flex flex-col items-end gap-1 w-[40%]">
+            <FeaturePillCluster pills={overlay.featurePills} compact stack="inline" />
+          </div>
+        )}
 
         {/* Warranty intentionally NOT shown on cards — it's a VDP-level
             signal. Putting it on the card crowds the bottom row at compact
@@ -304,7 +310,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
 
         {/* Bottom-left: compact phone CTA (anchored left so it can't collide
             with the dealer cluster on the right at narrow card widths). */}
-        {!cardHasBakedHero && (
+        {!cardHasBakedHero && !isComingSoon && (
           <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 z-10">
             <PhoneCTA
               phone={SITE_CONFIG.phone}
@@ -316,7 +322,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
 
         {/* Bottom-right: Google Reviews lockup (dealer logo is now top-center).
             Hidden when baked into the hero pixels. */}
-        {!cardHasBakedHero && (
+        {!cardHasBakedHero && !isComingSoon && (
           <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
             <div className="scale-[0.66] sm:scale-100 origin-bottom-right">
               <GoogleReviewsLockup
