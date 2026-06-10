@@ -342,12 +342,12 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             className="absolute bg-brand-red text-white font-bold text-center z-20 pointer-events-none"
             style={{
               top: '24px',
-              left: '-38px',
+              right: '-38px',
               width: '148px',
               padding: '6px 0',
               fontSize: '10px',
               letterSpacing: '0.08em',
-              transform: 'rotate(-45deg)',
+              transform: 'rotate(45deg)',
             }}
             aria-hidden="true"
           >
