@@ -261,7 +261,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           style={{ paddingTop: cardHasBakedHero ? "5.5%" : undefined }}
         >
           {!cardHasBakedHero && (
-            <div className="scale-[0.66] sm:scale-100 origin-top-left">
+            <div className={isComingSoon ? "scale-[0.44] origin-top-left" : "scale-[0.66] sm:scale-100 origin-top-left"}>
               <CarfaxBadge vin={vehicle.vin} />
             </div>
           )}
