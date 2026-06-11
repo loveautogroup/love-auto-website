@@ -9,9 +9,9 @@
  * cf-access-jwt-assertion defensively.
  */
 
-import { denyIfNoAccess, type AccessEnv } from "../../_lib/access";
+import { requireAdmin, type AdminAuthEnv } from "../../_lib/admin-auth";
 
-interface Env extends AccessEnv {
+interface Env extends AdminAuthEnv {
   LEADS: KVNamespace;
 }
 
@@ -19,7 +19,7 @@ type LeadStatus = "new" | "contacted" | "qualified" | "lost";
 const VALID_STATUSES: LeadStatus[] = ["new", "contacted", "qualified", "lost"];
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
-  const denied = await denyIfNoAccess(request, env);
+  const denied = await requireAdmin(request, env);
   if (denied) return denied;
 
   try {
@@ -58,7 +58,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
 };
 
 export const onRequestPatch: PagesFunction<Env> = async ({ request, env }) => {
-  const denied = await denyIfNoAccess(request, env);
+  const denied = await requireAdmin(request, env);
   if (denied) return denied;
 
   let body: { id?: string; status?: string; note?: string };
@@ -87,7 +87,7 @@ export const onRequestPatch: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   const accessEmail =
-    request.headers.get("cf-access-authenticated-user-email") ?? "unknown";
+    "admin";
 
   const updated = {
     ...raw,

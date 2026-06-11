@@ -14,17 +14,17 @@ import {
   type SigningSession,
 } from "../../_lib/signing";
 
-import { denyIfNoAccess, type AccessEnv } from "../../_lib/access";
+import { requireAdmin, type AdminAuthEnv } from "../../_lib/admin-auth";
 
-interface Env extends AccessEnv {
+interface Env extends AdminAuthEnv {
   SIGNING: KVNamespace;
 }
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
-  const denied = await denyIfNoAccess(request, env);
+  const denied = await requireAdmin(request, env);
   if (denied) return denied;
   const accessEmail =
-    request.headers.get("cf-access-authenticated-user-email") ?? "unknown";
+    "admin";
 
   let body: unknown;
   try {
@@ -80,7 +80,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 };
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
-  const denied = await denyIfNoAccess(request, env);
+  const denied = await requireAdmin(request, env);
   if (denied) return denied;
 
   try {

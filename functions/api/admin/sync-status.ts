@@ -14,9 +14,9 @@
  * days via TTL.
  */
 
-import { denyIfNoAccess, type AccessEnv } from "../../_lib/access";
+import { requireAdmin, type AdminAuthEnv } from "../../_lib/admin-auth";
 
-interface Env extends AccessEnv {
+interface Env extends AdminAuthEnv {
   INVENTORY?: KVNamespace;
 }
 
@@ -36,7 +36,7 @@ interface SnapshotSummary {
 }
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
-  const denied = await denyIfNoAccess(request, env);
+  const denied = await requireAdmin(request, env);
   if (denied) return denied;
   if (!env.INVENTORY) {
     return json(503, {
@@ -106,7 +106,7 @@ interface PostEnv extends Env {
 }
 
 export const onRequestPost: PagesFunction<PostEnv> = async ({ request, env }) => {
-  const denied = await denyIfNoAccess(request, env);
+  const denied = await requireAdmin(request, env);
   if (denied) return denied;
   if (!env.SYNC_WORKER_URL || !env.SYNC_WORKER_AUTH) {
     return json(503, {
