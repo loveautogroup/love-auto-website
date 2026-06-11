@@ -14,15 +14,15 @@ import {
   type SigningSession,
 } from "../../_lib/signing";
 
-interface Env {
+import { denyIfNoAccess, type AccessEnv } from "../../_lib/access";
+
+interface Env extends AccessEnv {
   SIGNING: KVNamespace;
 }
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
-  const accessJwt = request.headers.get("cf-access-jwt-assertion");
-  if (!accessJwt) {
-    return json(401, { error: "Unauthenticated." });
-  }
+  const denied = await denyIfNoAccess(request, env);
+  if (denied) return denied;
   const accessEmail =
     request.headers.get("cf-access-authenticated-user-email") ?? "unknown";
 
@@ -80,10 +80,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 };
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
-  const accessJwt = request.headers.get("cf-access-jwt-assertion");
-  if (!accessJwt) {
-    return json(401, { error: "Unauthenticated." });
-  }
+  const denied = await denyIfNoAccess(request, env);
+  if (denied) return denied;
 
   try {
     const keys: string[] = [];

@@ -9,7 +9,9 @@
  * cf-access-jwt-assertion defensively.
  */
 
-interface Env {
+import { denyIfNoAccess, type AccessEnv } from "../../_lib/access";
+
+interface Env extends AccessEnv {
   LEADS: KVNamespace;
 }
 
@@ -17,10 +19,8 @@ type LeadStatus = "new" | "contacted" | "qualified" | "lost";
 const VALID_STATUSES: LeadStatus[] = ["new", "contacted", "qualified", "lost"];
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
-  const accessJwt = request.headers.get("cf-access-jwt-assertion");
-  if (!accessJwt) {
-    return json(401, { error: "Unauthenticated." });
-  }
+  const denied = await denyIfNoAccess(request, env);
+  if (denied) return denied;
 
   try {
     // List all lead keys. KV list returns up to 1000 per call; we paginate
@@ -58,10 +58,8 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
 };
 
 export const onRequestPatch: PagesFunction<Env> = async ({ request, env }) => {
-  const accessJwt = request.headers.get("cf-access-jwt-assertion");
-  if (!accessJwt) {
-    return json(401, { error: "Unauthenticated." });
-  }
+  const denied = await denyIfNoAccess(request, env);
+  if (denied) return denied;
 
   let body: { id?: string; status?: string; note?: string };
   try {

@@ -18,6 +18,7 @@
  */
 
 import { MerchandisingConfigInput, validateMerchandisingConfig } from "../../_lib/validation";
+import { denyIfNoAccess } from "../../_lib/access";
 
 interface Env {
   MERCHANDISING: KVNamespace;
@@ -31,13 +32,9 @@ const CONFIG_KEY = "config:v1";
 const MAX_BODY_BYTES = 64 * 1024; // 64KB should be plenty for merchandising config
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
-  // CF Access JWT defense in depth — should already be enforced by Access.
-  const accessJwt = request.headers.get("cf-access-jwt-assertion");
-  if (!accessJwt) {
-    return json(401, {
-      error: "Unauthenticated. Cloudflare Access required.",
-    });
-  }
+  // Cryptographically verify the CF Access JWT (not just header presence).
+  const denied = await denyIfNoAccess(request, env);
+  if (denied) return denied;
 
   // Identify the user for the audit trail.
   const accessEmail =
@@ -97,10 +94,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   // Same auth gate as POST — admin read returns full config plus audit
   // metadata (public GET at /api/merchandising omits metadata).
-  const accessJwt = request.headers.get("cf-access-jwt-assertion");
-  if (!accessJwt) {
-    return json(401, { error: "Unauthenticated." });
-  }
+  const denied = await denyIfNoAccess(request, env);
+  if (denied) return denied;
 
   try {
     const { value, metadata } = await env.MERCHANDISING.getWithMetadata(
