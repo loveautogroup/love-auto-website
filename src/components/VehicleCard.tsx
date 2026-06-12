@@ -261,7 +261,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           style={{ paddingTop: cardHasBakedHero ? "5.5%" : undefined }}
         >
           {!cardHasBakedHero && (
-            <div className="scale-[0.44] origin-top-left">
+            <div className="scale-[0.66] sm:scale-100 origin-top-left">
               <CarfaxBadge vin={vehicle.vin} />
             </div>
           )}
@@ -333,27 +333,6 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             </div>
           </div>
         )}
-
-        {/* Coming Soon diagonal ribbon — top-left corner of the photo area.
-            Parent has overflow-hidden so the corners clip automatically.
-            Only shown when the vehicle has no photos yet (isComingSoon). */}
-        {isComingSoon && (
-          <div
-            className="absolute bg-brand-red text-white font-bold text-center z-20 pointer-events-none"
-            style={{
-              top: '24px',
-              right: '-38px',
-              width: '148px',
-              padding: '6px 0',
-              fontSize: '10px',
-              letterSpacing: '0.08em',
-              transform: 'rotate(45deg)',
-            }}
-            aria-hidden="true"
-          >
-            COMING SOON
-          </div>
-        )}
       </div>
 
       {/* Info area */}
@@ -381,15 +360,6 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             {formattedMileage} {c.mi}
           </span>
         </div>
-
-        {isComingSoon && (
-          <div className="flex items-center gap-1.5 mt-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-red flex-shrink-0" aria-hidden="true" />
-            <span className="text-xs text-brand-red font-medium tracking-[0.04em]">
-              Photos coming soon
-            </span>
-          </div>
-        )}
 
         <p className="text-sm text-brand-gray-500 mt-1">
           {c.est}{" "}

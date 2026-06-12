@@ -9,9 +9,7 @@
  * cf-access-jwt-assertion defensively.
  */
 
-import { requireAdmin, type AdminAuthEnv } from "../../_lib/admin-auth";
-
-interface Env extends AdminAuthEnv {
+interface Env {
   LEADS: KVNamespace;
 }
 
@@ -19,8 +17,10 @@ type LeadStatus = "new" | "contacted" | "qualified" | "lost";
 const VALID_STATUSES: LeadStatus[] = ["new", "contacted", "qualified", "lost"];
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
-  const denied = await requireAdmin(request, env);
-  if (denied) return denied;
+  const accessJwt = request.headers.get("cf-access-jwt-assertion");
+  if (!accessJwt) {
+    return json(401, { error: "Unauthenticated." });
+  }
 
   try {
     // List all lead keys. KV list returns up to 1000 per call; we paginate
@@ -58,8 +58,10 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
 };
 
 export const onRequestPatch: PagesFunction<Env> = async ({ request, env }) => {
-  const denied = await requireAdmin(request, env);
-  if (denied) return denied;
+  const accessJwt = request.headers.get("cf-access-jwt-assertion");
+  if (!accessJwt) {
+    return json(401, { error: "Unauthenticated." });
+  }
 
   let body: { id?: string; status?: string; note?: string };
   try {
@@ -87,7 +89,7 @@ export const onRequestPatch: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   const accessEmail =
-    "admin";
+    request.headers.get("cf-access-authenticated-user-email") ?? "unknown";
 
   const updated = {
     ...raw,
