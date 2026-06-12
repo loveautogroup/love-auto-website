@@ -48,7 +48,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   }
   const password = typeof body.password === "string" ? body.password : "";
 
-  if (!timingSafeEqual(password, env.ADMIN_PASSWORD)) {
+  // Trim both sides: Cloudflare secret inputs commonly capture a trailing
+  // newline/space on paste, which would otherwise reject a correct password.
+  if (!timingSafeEqual(password.trim(), env.ADMIN_PASSWORD.trim())) {
     if (env.LEADS) {
       const raw = await env.LEADS.get(rlKey);
       const attempts = (raw ? parseInt(raw, 10) || 0 : 0) + 1;
