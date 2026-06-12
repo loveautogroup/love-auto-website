@@ -1,6 +1,19 @@
 import { SITE_CONFIG } from "@/lib/constants";
 import { Vehicle } from "@/lib/types";
 
+/**
+ * M2 — Safely serialize a JSON-LD schema for use in dangerouslySetInnerHTML.
+ * Escapes characters that could break the <script> tag or enable XSS:
+ *   < > and the Unicode line/paragraph separators U+2028/U+2029.
+ */
+function safeJsonLd(data: unknown): string {
+  return JSON.stringify(data)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029");
+}
+
 export function LocalBusinessSchema() {
   // Schema upgraded 2026-05-02 (AEO audit follow-up). Added:
   //   - description: gives engines a clean quotable sentence with
@@ -111,7 +124,7 @@ export function LocalBusinessSchema() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
     />
   );
 }
@@ -241,7 +254,7 @@ export function VehicleSchema({ vehicle }: { vehicle: Vehicle }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
     />
   );
 }
@@ -265,7 +278,7 @@ export function BreadcrumbSchema({ items }: { items: { name: string; url: string
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
     />
   );
 }
@@ -291,7 +304,7 @@ export function FAQSchema({ items }: { items: { question: string; answer: string
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
     />
   );
 }
