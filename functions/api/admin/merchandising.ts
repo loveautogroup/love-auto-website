@@ -18,30 +18,23 @@
  */
 
 import { MerchandisingConfigInput, validateMerchandisingConfig } from "../../_lib/validation";
+import { requireAdmin, type AdminAuthEnv } from "../../_lib/admin-auth";
 
-interface Env {
+interface Env extends AdminAuthEnv {
   MERCHANDISING: KVNamespace;
-  /** Set in CF Pages env vars. Team domain for Access, e.g. "loveauto.cloudflareaccess.com". */
-  CF_ACCESS_TEAM_DOMAIN?: string;
-  /** Set in CF Pages env vars. Application AUD tag from Access config. */
-  CF_ACCESS_AUD?: string;
 }
 
 const CONFIG_KEY = "config:v1";
 const MAX_BODY_BYTES = 64 * 1024; // 64KB should be plenty for merchandising config
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
-  // CF Access JWT defense in depth — should already be enforced by Access.
-  const accessJwt = request.headers.get("cf-access-jwt-assertion");
-  if (!accessJwt) {
-    return json(401, {
-      error: "Unauthenticated. Cloudflare Access required.",
-    });
-  }
+  // Require a valid admin session cookie.
+  const denied = await requireAdmin(request, env);
+  if (denied) return denied;
 
   // Identify the user for the audit trail.
   const accessEmail =
-    request.headers.get("cf-access-authenticated-user-email") ?? "unknown";
+    "admin";
 
   // Enforce a reasonable body size so a bad actor can't fill KV with garbage
   // if they somehow slip past Access.
@@ -97,10 +90,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   // Same auth gate as POST — admin read returns full config plus audit
   // metadata (public GET at /api/merchandising omits metadata).
-  const accessJwt = request.headers.get("cf-access-jwt-assertion");
-  if (!accessJwt) {
-    return json(401, { error: "Unauthenticated." });
-  }
+  const denied = await requireAdmin(request, env);
+  if (denied) return denied;
 
   try {
     const { value, metadata } = await env.MERCHANDISING.getWithMetadata(

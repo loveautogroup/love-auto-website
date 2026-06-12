@@ -14,7 +14,9 @@
  * days via TTL.
  */
 
-interface Env {
+import { requireAdmin, type AdminAuthEnv } from "../../_lib/admin-auth";
+
+interface Env extends AdminAuthEnv {
   INVENTORY?: KVNamespace;
 }
 
@@ -34,10 +36,8 @@ interface SnapshotSummary {
 }
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
-  const accessJwt = request.headers.get("cf-access-jwt-assertion");
-  if (!accessJwt) {
-    return json(401, { error: "Unauthenticated. Cloudflare Access required." });
-  }
+  const denied = await requireAdmin(request, env);
+  if (denied) return denied;
   if (!env.INVENTORY) {
     return json(503, {
       error:
@@ -106,10 +106,8 @@ interface PostEnv extends Env {
 }
 
 export const onRequestPost: PagesFunction<PostEnv> = async ({ request, env }) => {
-  const accessJwt = request.headers.get("cf-access-jwt-assertion");
-  if (!accessJwt) {
-    return json(401, { error: "Unauthenticated." });
-  }
+  const denied = await requireAdmin(request, env);
+  if (denied) return denied;
   if (!env.SYNC_WORKER_URL || !env.SYNC_WORKER_AUTH) {
     return json(503, {
       error:

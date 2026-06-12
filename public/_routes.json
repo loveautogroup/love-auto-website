@@ -1,6 +1,10 @@
 {
   "version": 1,
-  "description": "Force every /api/* request to Pages Functions. Without this, GET requests to /api/* fall through Cloudflare's static-asset check and hit out/404.html (Next.js's static 404 page) before the function dispatcher runs. POST/OPTIONS work without this file because Cloudflare's static-asset path only catches GET/HEAD. Generated _routes.json from auto-discovery wasn't sufficient on Pages V3 builds with output: \"export\" + trailingSlash: true.",
-  "include": ["/api/*"],
+  "description": "Force /api/* and /admin/* to Pages Functions. /api/* prevents GET fallthrough to static 404 before the dispatcher. /admin/* routes admin HTML through functions/admin/_middleware.ts so the code-based admin login gate runs (Sam 2026-06-11). Static sub-assets under /_next/* are unaffected.",
+  "include": [
+    "/api/*",
+    "/admin",
+    "/admin/*"
+  ],
   "exclude": []
 }
