@@ -117,7 +117,9 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
   };
 
   try {
-    await env.LEADS.put(`lead:${id}`, JSON.stringify(lead));
+    await env.LEADS.put(`lead:${id}`, JSON.stringify(lead), {
+      expirationTtl: 15_552_000, // 180 days
+    });
   } catch (err) {
     console.error("[/api/finance-application] KV write failed:", err);
     return json(
@@ -171,39 +173,19 @@ async function sendLeadEmail(lead: StoredLead, env: Env): Promise<void> {
 
   // Plain-text body. Jeremiah's phone-friendly; structured enough to triage
   // at a glance.
+  // M10: notification contains NO PII — name + vehicle interest only.
+  // Full application (income, DOB, address) lives in KV and is only
+  // accessible via the DMS (https://dms.loveautogroup.net/dashboard/finance-apps).
   const lines = [
-    `New finance application received.`,
+    `New pre-qualify application received.`,
     ``,
     `Applicant: ${lead.firstName} ${lead.lastName}`,
-    `Phone: ${lead.phone}`,
-    `Email: ${lead.email}`,
-    ``,
-    `Address: ${lead.addressStreet}, ${lead.addressCity}, ${lead.addressState} ${lead.addressZip}`,
-    `DOB: ${lead.dateOfBirth}`,
-    ``,
-    `Housing: ${lead.housingStatus}${
-      lead.monthlyHousingPayment ? ` ($${lead.monthlyHousingPayment}/mo)` : ""
-    }`,
-    `Employment: ${lead.employmentStatus}`,
-    lead.employer ? `Employer: ${lead.employer}` : "",
-    lead.jobTitle ? `Job title: ${lead.jobTitle}` : "",
-    lead.timeAtJobMonths ? `Time at job: ${lead.timeAtJobMonths} months` : "",
-    `Monthly income: $${lead.monthlyIncome}`,
-    ``,
     lead.vehicleInterest ? `Vehicle of interest: ${lead.vehicleInterest}` : "",
-    lead.desiredMonthlyPayment
-      ? `Desired payment: $${lead.desiredMonthlyPayment}/mo`
-      : "",
-    lead.desiredDownPayment
-      ? `Down payment: $${lead.desiredDownPayment}`
-      : "",
-    ``,
-    lead.hasTradeIn ? `Has trade-in: ${lead.tradeInDetails}` : "No trade-in",
     ``,
     `Submitted: ${lead.submittedAt}`,
-    `Lead ID: ${lead.id}`,
     ``,
-    `— Submitted via loveautogroup.net/financing`,
+    `View full application (PII stored securely in KV — 180-day retention):`,
+    `https://dms.loveautogroup.net/dashboard/finance-apps`,
   ]
     .filter(Boolean)
     .join("\n");
