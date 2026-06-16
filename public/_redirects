@@ -94,3 +94,13 @@
 /blog/*                      /inventory/                       301
 
 # ─── Old VDP slug patte
+
+# --- VDP / landing trailing-slash recovery (S56, 2026-06-16) ---
+# Static export emits /<route>/index.html. Cloudflare auto-redirects the
+# no-slash form for TOP-LEVEL routes but NOT for nested /inventory/<slug>,
+# which hard-404s (verified 2026-06-16: bare VDP + /inventory/used-* both
+# 404). Serve the canonical page via a 200 REWRITE (not a 301) so there is
+# no redirect chain and no loop risk. Canonical/og tags already point at the
+# slash form, so no duplicate-content penalty.
+/inventory/:slug    /inventory/:slug/index.html    200
+
