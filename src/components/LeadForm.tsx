@@ -34,7 +34,7 @@ const DMS_API_BASE =
 const INTAKE_KEY = process.env.NEXT_PUBLIC_DMS_INTAKE_KEY ?? "";
 
 /** Version tag for the TCPA consent language shown in this form. */
-const OPT_IN_LANGUAGE_VERSION = "v1-2026-04";
+const OPT_IN_LANGUAGE_VERSION = "v2-2026-06-sms";
 
 /**
  * Normalize any US phone string to E.164 (+1XXXXXXXXXX).
@@ -130,7 +130,7 @@ export default function LeadForm({
       return;
     }
     if (!values.marketingOptIn) {
-      setError("Please agree to be contacted before submitting.");
+      setError("Please check the box to consent to text messages before submitting.");
       return;
     }
 
@@ -357,9 +357,16 @@ export default function LeadForm({
           onChange={(e) => update("marketingOptIn", e.target.checked)}
         />
         <span>
-          I agree that Love Auto Group may contact me by phone, text, or email
-          about my inquiry. I understand that consent is not required to make
-          a purchase. Standard rates may apply.
+          By checking the box, and submitting this form, you consent to receive
+          text messages (SMS) to provide you support, and general information
+          from Love Auto Group. Message frequency may vary. Message and data
+          rates may apply. You can reply STOP to opt out of further messaging.
+          Reply HELP for assistance or call{" "}
+          <a href="tel:+16303593643" className="underline text-brand-red">(630)&nbsp;359-3643</a>.
+          {" "}Please see our{" "}
+          <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline text-brand-red">Privacy&nbsp;Policy</a>
+          {" "}and{" "}
+          <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline text-brand-red">Terms&nbsp;and&nbsp;Conditions</a>.
         </span>
       </label>
 

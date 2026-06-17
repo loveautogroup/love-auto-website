@@ -67,6 +67,11 @@ export default function PrivacyPolicyPage() {
             We may also share information with service providers who help us
             operate our website and business, or when required by law.
           </p>
+          <p className="font-semibold">
+            No personal information, mobile number, or messaging consent
+            information will be shared with third parties or affiliates for
+            marketing or promotional purposes.
+          </p>
 
           <h2 className="mt-10 mb-4">Cookies</h2>
           <p>
