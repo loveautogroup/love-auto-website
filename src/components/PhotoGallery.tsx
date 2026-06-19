@@ -425,7 +425,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                 {showPhoneBadge && (
                   <>
                     <div
-                      className="absolute z-10 md:hidden"
+                      className="absolute z-10 md:hidden scale-[0.72] origin-bottom-left"
                       style={{ bottom: `${MARGIN_PCT}%`, left: `${MARGIN_PCT}%` }}
                     >
                       <PhoneCTA
@@ -452,7 +452,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                     style={{ bottom: `${MARGIN_PCT}%` }}
                   >
-                    <span className="md:hidden"><UrlBadge compact /></span>
+                    <span className="md:hidden inline-block scale-[0.72] origin-bottom"><UrlBadge compact /></span>
                     <span className="hidden md:inline"><UrlBadge /></span>
                   </div>
                 )}
@@ -460,7 +460,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                 {/* Bottom-right: warranty chip + Google Reviews lockup.
                     Logo is now top-center; only reviews badge lives here. */}
                 <div
-                  className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.5] sm:scale-100 origin-bottom-right"
+                  className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.42] sm:scale-100 origin-bottom-right"
                   style={{ bottom: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
                 >
                   {!isComingSoon && warrantyCopy && (
@@ -503,7 +503,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                   className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                   style={{ bottom: `${MARGIN_PCT}%` }}
                 >
-                  <span className="md:hidden"><UrlBadge compact /></span>
+                  <span className="md:hidden inline-block scale-[0.72] origin-bottom"><UrlBadge compact /></span>
                   <span className="hidden md:inline"><UrlBadge /></span>
                 </div>
               </div>
