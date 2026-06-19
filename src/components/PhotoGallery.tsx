@@ -361,7 +361,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     The CARFAX card hides when baked into the hero pixels; the
                     feature/status pills are never baked so they always render. */}
                 <div
-                  className="absolute z-10 flex flex-col items-start gap-1.5"
+                  className="absolute z-10 flex flex-col items-start gap-1 sm:gap-1.5"
                   style={{
                     top: `${MARGIN_PCT}%`,
                     left: `${MARGIN_PCT}%`,
@@ -376,17 +376,17 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                        spec (Jeremiah 2026-06-05): carfax/dealer/google all
                        186px wide on the desktop VDP. Mobile gets the same
                        0.6 treatment as the lockup wrapper below. */
-                    <div className="scale-[0.6] sm:scale-100 origin-top-left">
+                    <div className="scale-[0.45] sm:scale-100 origin-top-left">
                       <CarfaxBadge vin={vehicle.vin} />
                     </div>
                   )}
                   {!isComingSoon && (
-                    <div className="scale-[0.7] sm:scale-100 origin-top-left">
+                    <div className="scale-[0.55] sm:scale-100 origin-top-left">
                       <CarfaxPillStack overlay={overlay} />
                     </div>
                   )}
                   {!isComingSoon && overlay.effectiveStatus && (
-                    <div className="scale-[0.7] sm:scale-100 origin-top-left">
+                    <div className="scale-[0.55] sm:scale-100 origin-top-left">
                       <StatusPill kind={overlay.effectiveStatus} />
                     </div>
                   )}
@@ -399,7 +399,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                     style={{ top: `${MARGIN_PCT}%` }}
                   >
-                    <div className="pointer-events-auto scale-[0.5] sm:scale-100 origin-top">
+                    <div className="pointer-events-auto scale-[0.4] sm:scale-100 origin-top">
                       <DealerCluster
                         showBadge={false}
                         hideDealerPill={false}
@@ -414,7 +414,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                 {/* Top-right: merchandising feature pills */}
                 {!isComingSoon && (
                   <div
-                    className="absolute z-10 flex flex-col items-end gap-1.5 scale-[0.6] sm:scale-100 origin-top-right"
+                    className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.5] sm:scale-100 origin-top-right"
                     style={{ top: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
                   >
                     <FeaturePillCluster pills={overlay.featurePills} stack="inline" />
@@ -460,7 +460,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                 {/* Bottom-right: warranty chip + Google Reviews lockup.
                     Logo is now top-center; only reviews badge lives here. */}
                 <div
-                  className="absolute z-10 flex flex-col items-end gap-1.5 scale-[0.6] sm:scale-100 origin-bottom-right"
+                  className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.5] sm:scale-100 origin-bottom-right"
                   style={{ bottom: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
                 >
                   {!isComingSoon && warrantyCopy && (
@@ -489,7 +489,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                   className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                   style={{ top: `${MARGIN_PCT}%` }}
                 >
-                  <div className="pointer-events-auto scale-[0.5] sm:scale-100 origin-top">
+                  <div className="pointer-events-auto scale-[0.4] sm:scale-100 origin-top">
                     <DealerCluster
                       showBadge={false}
                       hideDealerPill={false}
