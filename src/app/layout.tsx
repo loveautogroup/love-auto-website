@@ -115,8 +115,11 @@ export default async function RootLayout({
         </LanguageProvider>
         </ReviewsProvider>
         {/* CarGurus Deal Rating Badge SDK — self-injecting IIFE.
-            Settings match Jeremiah's configurator: STYLE1, GOOD_PRICE minimum,
-            60px height, live updates every 500ms, showContactForm enabled.
+            Settings match the official CarGurus Deal Rating Badge spec
+            (cargurus.com/Cars/webhosts/docs/DealRatingBadge.html): only
+            style / minRating / defaultHeight are sent. The non-spec options
+            (live, liveIntervalMS, showContactForm, debug) and the undocumented
+            data-cg-zip span attribute were removed 2026-06-21 to match exactly.
 
             NOTE: SRI hash removed (2026-05-17). CarGurus rotates their bundle
             regularly; an outdated integrity hash causes browsers to silently
@@ -131,10 +134,6 @@ CarGurus.DealRatingBadge=window.CarGurus.DealRatingBadge||{};
 CarGurus.DealRatingBadge.options={
   "style":"STYLE1",
   "minRating":"GOOD_PRICE",
-  "showContactForm":true,
-  "debug":false,
-  "live":false,
-  "liveIntervalMS":500,
   "defaultHeight":"60"
 };
 (function(){
