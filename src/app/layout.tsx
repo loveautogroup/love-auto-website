@@ -115,11 +115,14 @@ export default async function RootLayout({
         </LanguageProvider>
         </ReviewsProvider>
         {/* CarGurus Deal Rating Badge SDK — self-injecting IIFE.
-            Settings match the official CarGurus Deal Rating Badge spec
-            (cargurus.com/Cars/webhosts/docs/DealRatingBadge.html): only
-            style / minRating / defaultHeight are sent. The non-spec options
-            (live, liveIntervalMS, showContactForm, debug) and the undocumented
-            data-cg-zip span attribute were removed 2026-06-21 to match exactly.
+            Options per CarGurus' documented set (DealRatingBadge.html).
+            style=BANNER1 (Jeremiah's choice — 900x60 fixed banner; note banners
+            ignore defaultHeight/data-cg-height). debug=true TEMPORARILY to surface
+            why the rating API currently returns 503 (logs prefixed
+            "CarGurus.DealRatingBadge." in the console). live is EXPLICITLY false:
+            CarGurus' default is true, which re-scans the DOM every 500ms and was
+            firing 50+ failed requests per page view. The undocumented data-cg-zip
+            span attribute stays removed. Set debug back to false once resolved.
 
             NOTE: SRI hash removed (2026-05-17). CarGurus rotates their bundle
             regularly; an outdated integrity hash causes browsers to silently
@@ -132,9 +135,12 @@ export default async function RootLayout({
 var CarGurus=window.CarGurus||{};window.CarGurus=CarGurus;
 CarGurus.DealRatingBadge=window.CarGurus.DealRatingBadge||{};
 CarGurus.DealRatingBadge.options={
-  "style":"STYLE1",
+  "style":"BANNER1",
   "minRating":"GOOD_PRICE",
-  "defaultHeight":"60"
+  "showContactForm":true,
+  "live":false,
+  "liveIntervalMS":500,
+  "debug":true
 };
 (function(){
   var s=document.createElement('script');
