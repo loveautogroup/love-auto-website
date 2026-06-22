@@ -133,7 +133,7 @@ CarGurus.DealRatingBadge.options={
   "minRating":"GOOD_PRICE",
   "showContactForm":true,
   "debug":false,
-  "live":true,
+  "live":false,
   "liveIntervalMS":500,
   "defaultHeight":"60"
 };
