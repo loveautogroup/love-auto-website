@@ -17,7 +17,7 @@ import { useInventory } from "@/lib/useInventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
 import { useVisibleVehicles, useMerchandising } from "@/data/useMerchandising";
 import VehicleCard from "@/components/VehicleCard";
-import { useRef, type MouseEvent as ReactMouseEvent } from "react";
+import { useRef, useEffect, type MouseEvent as ReactMouseEvent } from "react";
 
 export default function HomeFeaturedGrid() {
   const { vehicles } = useInventory();
@@ -93,7 +93,9 @@ export function HomeOnTheLot() {
     if (!el || !drag.current.down) return;
     const dx = e.pageX - drag.current.startX;
     if (Math.abs(dx) > 5) drag.current.moved = true;
-    el.scrollLeft = drag.current.startScroll - dx;
+    const half = el.scrollWidth / 2;
+    const target = drag.current.startScroll - dx;
+    el.scrollLeft = half > 0 ? (((target % half) + half) % half) : Math.max(0, target);
   };
   const onDragEnd = () => {
     drag.current.down = false;
@@ -107,10 +109,41 @@ export function HomeOnTheLot() {
     }
   };
 
+  // Continuous infinite auto-scroll (marquee). The list is duplicated below, so
+  // wrapping scrollLeft back by one copy's width at the seam loops with no jump.
+  // Paused while the visitor hovers or drags so they can read / interact.
+  const pausedRef = useRef(false);
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    let raf = 0;
+    const SPEED = 0.5; // px per frame (~30px/s)
+    const step = () => {
+      if (el && !pausedRef.current) {
+        const half = el.scrollWidth / 2;
+        if (half > 0) {
+          let n = el.scrollLeft + SPEED;
+          if (n >= half) n -= half;
+          el.scrollLeft = n;
+        }
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [ordered.length]);
+
   if (ordered.length === 0) return null;
 
+  // Duplicate the vehicles so the strip can loop without a visible seam.
+  const loopList = [...ordered, ...ordered];
+
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      onMouseEnter={() => { pausedRef.current = true; }}
+      onMouseLeave={() => { pausedRef.current = false; onDragEnd(); }}
+    >
       {/* Prev / Next arrows for the carousel (desktop); touch-swipe still works. */}
       <button
         type="button"
@@ -139,9 +172,9 @@ export function HomeOnTheLot() {
         onMouseUp={onDragEnd}
         onMouseLeave={onDragEnd}
         onClickCapture={onClickCapture}
-        className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide cursor-grab active:cursor-grabbing select-none"
+        className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide cursor-grab active:cursor-grabbing select-none"
       >
-      {ordered.map((v) => {
+      {loopList.map((v, i) => {
         const forcePh =
           config.overlays?.[v.vin]?.useComingSoonPlaceholder === true;
         const heroImg = forcePh
@@ -159,7 +192,7 @@ export function HomeOnTheLot() {
         const miles = new Intl.NumberFormat("en-US").format(v.mileage);
         return (
           <Link
-            key={v.id}
+            key={`${v.id}-${i}`}
             href={`/inventory/${v.slug}`}
             className="w-[260px] sm:w-[280px] min-w-[260px] sm:min-w-[280px] bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-xl overflow-hidden transition-all snap-start shrink-0 group"
           >
