@@ -244,6 +244,18 @@ export default async function VehicleDetailPage({
               badgeConfig={badgeConfig}
             />
 
+            {/* CarGurus Deal Rating Badge (BANNER1, ~900px) — full-width directly
+                under the gallery per Jeremiah (2026-06-24). Replaces the old narrow
+                price-card placement. SDK swaps the span in-place once the rating
+                loads; the banner image scales to fit on smaller screens. */}
+            {vehicle.vin && vehicle.price > 0 && (
+              <span
+                data-cg-vin={vehicle.vin}
+                data-cg-price={String(Math.round(vehicle.price))}
+                className="block mt-4 text-center lg:text-left empty:hidden [&_img]:inline-block [&_img]:max-w-full [&_img]:h-auto"
+              />
+            )}
+
             {/* Desktop price + CTAs + Carfax + payment calculator —
                 lives directly under the gallery (per Jeremiah, 2026-04-30).
                 Previously sat at the bottom of the page below FAQ/Reviews;
@@ -273,14 +285,6 @@ export default async function VehicleDetailPage({
                     <p className="text-sm text-brand-gray-500 mt-1">
                       <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles · {vehicle.drivetrain}
                     </p>
-                    {/* CarGurus Deal Rating Badge — SDK replaces this span in-place */}
-                    {vehicle.vin && vehicle.price > 0 && (
-                      <span
-                        data-cg-vin={vehicle.vin}
-                        data-cg-price={String(Math.round(vehicle.price))}
-                        className="block mt-3 empty:hidden"
-                      />
-                    )}
                   </div>
 
                   <VDPLiveStatus vin={vehicle.vin} fallback={vehicle.status} />
@@ -391,14 +395,6 @@ export default async function VehicleDetailPage({
               <p className="text-sm text-brand-gray-500 mt-1">
                 <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles · {vehicle.drivetrain} · {vehicle.exteriorColor}
               </p>
-              {/* CarGurus Deal Rating Badge — mobile */}
-              {vehicle.vin && vehicle.price > 0 && (
-                <span
-                  data-cg-vin={vehicle.vin}
-                  data-cg-price={String(Math.round(vehicle.price))}
-                  className="block mt-3 empty:hidden"
-                />
-              )}
               {/* Mobile Show Carfax — inline next to the title so it's
                   impossible to miss. Client wrapper picks up runtime overlay
                   changes from the DMS panel without a site rebuild. */}
