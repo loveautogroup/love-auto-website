@@ -117,9 +117,10 @@ export default async function RootLayout({
         {/* CarGurus Deal Rating Badge SDK — self-injecting IIFE.
             Options per CarGurus' documented set (DealRatingBadge.html).
             style=BANNER1 (Jeremiah's choice — 900x60 fixed banner; note banners
-            ignore defaultHeight/data-cg-height). debug=true TEMPORARILY to surface
-            why the rating API currently returns 503 (logs prefixed
-            "CarGurus.DealRatingBadge." in the console). live is EXPLICITLY false:
+            ignore defaultHeight/data-cg-height). debug=false (was on briefly to
+            diagnose: the badge's rating call to www.cargurus.com was CSP-blocked
+            — fixed 2026-06-24 by adding www.cargurus.com to connect-src in
+            public/_headers; badge now renders). live is EXPLICITLY false:
             CarGurus' default is true, which re-scans the DOM every 500ms and was
             firing 50+ failed requests per page view. The undocumented data-cg-zip
             span attribute stays removed. Set debug back to false once resolved.
@@ -140,7 +141,7 @@ CarGurus.DealRatingBadge.options={
   "showContactForm":true,
   "live":false,
   "liveIntervalMS":500,
-  "debug":true
+  "debug":false
 };
 (function(){
   var s=document.createElement('script');
