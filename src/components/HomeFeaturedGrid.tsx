@@ -17,7 +17,7 @@ import { useInventory } from "@/lib/useInventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
 import { useVisibleVehicles, useMerchandising } from "@/data/useMerchandising";
 import VehicleCard from "@/components/VehicleCard";
-import { useRef } from "react";
+import { useRef, type MouseEvent as ReactMouseEvent } from "react";
 
 export default function HomeFeaturedGrid() {
   const { vehicles } = useInventory();
@@ -81,6 +81,32 @@ export function HomeOnTheLot() {
     el.scrollBy({ left: dir * Math.max(el.clientWidth * 0.9, 300), behavior: "smooth" });
   };
 
+  // Click-and-drag to scroll (desktop mouse). Refs avoid re-renders mid-drag.
+  const drag = useRef({ down: false, startX: 0, startScroll: 0, moved: false });
+  const onDragStart = (e: ReactMouseEvent<HTMLDivElement>) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    drag.current = { down: true, startX: e.pageX, startScroll: el.scrollLeft, moved: false };
+  };
+  const onDragMove = (e: ReactMouseEvent<HTMLDivElement>) => {
+    const el = scrollRef.current;
+    if (!el || !drag.current.down) return;
+    const dx = e.pageX - drag.current.startX;
+    if (Math.abs(dx) > 5) drag.current.moved = true;
+    el.scrollLeft = drag.current.startScroll - dx;
+  };
+  const onDragEnd = () => {
+    drag.current.down = false;
+  };
+  // Swallow the card-link click that would otherwise fire at the end of a drag.
+  const onClickCapture = (e: ReactMouseEvent<HTMLDivElement>) => {
+    if (drag.current.moved) {
+      e.preventDefault();
+      e.stopPropagation();
+      drag.current.moved = false;
+    }
+  };
+
   if (ordered.length === 0) return null;
 
   return (
@@ -106,7 +132,15 @@ export function HomeOnTheLot() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
         </svg>
       </button>
-      <div ref={scrollRef} className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide scroll-smooth">
+      <div
+        ref={scrollRef}
+        onMouseDown={onDragStart}
+        onMouseMove={onDragMove}
+        onMouseUp={onDragEnd}
+        onMouseLeave={onDragEnd}
+        onClickCapture={onClickCapture}
+        className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide cursor-grab active:cursor-grabbing select-none"
+      >
       {ordered.map((v) => {
         const forcePh =
           config.overlays?.[v.vin]?.useComingSoonPlaceholder === true;
