@@ -410,7 +410,8 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           <span
             data-cg-vin={vehicle.vin}
             data-cg-price={String(Math.round(vehicle.price))}
-            className="block mt-2 empty:hidden"
+            data-cg-height="40"
+            className="block mt-2 empty:hidden [&_img]:inline-block [&_img]:max-w-full"
           />
         )}
 

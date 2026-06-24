@@ -116,14 +116,16 @@ export default async function RootLayout({
         </ReviewsProvider>
         {/* CarGurus Deal Rating Badge SDK — self-injecting IIFE.
             Options per CarGurus' documented set (DealRatingBadge.html).
-            style=BANNER1 (Jeremiah's choice — 900x60 fixed banner; note banners
-            ignore defaultHeight/data-cg-height). debug=false (was on briefly to
-            diagnose: the badge's rating call to www.cargurus.com was CSP-blocked
-            — fixed 2026-06-24 by adding www.cargurus.com to connect-src in
-            public/_headers; badge now renders). live is EXPLICITLY false:
-            CarGurus' default is true, which re-scans the DOM every 500ms and was
-            firing 50+ failed requests per page view. The undocumented data-cg-zip
-            span attribute stays removed. Set debug back to false once resolved.
+            style=STYLE1 + minRating=FAIR_PRICE (Jeremiah 2026-06-24 — compact badge,
+            shown for Great/Good/Fair). The badge never rendered because our own CSP
+            blocked the rating call to www.cargurus.com; fixed 2026-06-24 by adding it
+            to connect-src in public/_headers. live=true so the SDK re-scans the DOM
+            and picks up cards rendered AFTER first paint — the inventory filter grid
+            + homepage featured cards inject VehicleCard spans client-side, so with
+            live:false they never got badges. Safe now: requests succeed + are cached
+            (the old "50+ failed requests" storm was the CSP-blocked retries).
+            data-cg-zip stays removed. defaultHeight 60 on detail; cards override to
+            40 (smaller on listing pages, per CarGurus guidance).
 
             NOTE: SRI hash removed (2026-05-17). CarGurus rotates their bundle
             regularly; an outdated integrity hash causes browsers to silently
@@ -136,11 +138,12 @@ export default async function RootLayout({
 var CarGurus=window.CarGurus||{};window.CarGurus=CarGurus;
 CarGurus.DealRatingBadge=window.CarGurus.DealRatingBadge||{};
 CarGurus.DealRatingBadge.options={
-  "style":"BANNER1",
-  "minRating":"GOOD_PRICE",
+  "style":"STYLE1",
+  "minRating":"FAIR_PRICE",
   "showContactForm":true,
-  "live":false,
-  "liveIntervalMS":500,
+  "live":true,
+  "liveIntervalMS":1000,
+  "defaultHeight":"60",
   "debug":false
 };
 (function(){
