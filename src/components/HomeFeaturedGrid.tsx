@@ -117,12 +117,16 @@ export function HomeOnTheLot() {
     const el = scrollRef.current;
     if (!el) return;
     let raf = 0;
-    const SPEED = 0.5; // px per frame (~30px/s)
-    const step = () => {
+    let last = 0;
+    const SPEED = 28; // px per SECOND (refresh-rate independent)
+    const step = (now: number) => {
+      if (last === 0) last = now;
+      const dt = Math.min((now - last) / 1000, 0.05); // clamp so a backgrounded tab doesn't jump
+      last = now;
       if (el && !pausedRef.current) {
         const half = el.scrollWidth / 2;
         if (half > 0) {
-          let n = el.scrollLeft + SPEED;
+          let n = el.scrollLeft + SPEED * dt;
           if (n >= half) n -= half;
           el.scrollLeft = n;
         }
