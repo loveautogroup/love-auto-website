@@ -18,6 +18,10 @@
   # "Failed to fetch" before the request even leaves — server logs stay empty.
   # 2026-05-05 — script-src + connect-src whitelisted for static.cargurus.com
   # 2026-06-07 — connect-src += vpic.nhtsa.dot.gov (sell-your-car VIN decode, W1)
+  # 2026-06-24 — connect-src += www.cargurus.com: the deal-rating badge SDK
+  #   (loaded from static.cargurus.com) POSTs the rating request to
+  #   www.cargurus.com/Cars/api/1.0/dealRatingRequest.action — without this the
+  #   browser CSP-blocked it (confirmed via CarGurus support console paste).
   # so the CarGurus deal-rating badge in layout.tsx can finally execute.
   # Charlotte's audit (marketing-audit-2026-05-05/seo-audit.md) found CSP
   # was silently blocking the badge — it had never rendered. The May-2 503
@@ -27,7 +31,7 @@
   # added earlier that day was removed again the same day — the hosted
   # iframe was replaced by the in-house credit application (FinancingForm
   # -> dms.loveautogroup.net, already in connect-src).
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cargurus.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://dms.loveautogroup.net https://static.cargurus.com https://vpic.nhtsa.dot.gov https://cloudflareinsights.com; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cargurus.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://dms.loveautogroup.net https://static.cargurus.com https://www.cargurus.com https://vpic.nhtsa.dot.gov https://cloudflareinsights.com; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
 
 # Admin routes — noindex, no cache. Gated by Cloudflare Zero Trust Access.
 /admin/*
