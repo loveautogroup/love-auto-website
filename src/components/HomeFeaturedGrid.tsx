@@ -17,6 +17,7 @@ import { useInventory } from "@/lib/useInventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
 import { useVisibleVehicles, useMerchandising } from "@/data/useMerchandising";
 import VehicleCard from "@/components/VehicleCard";
+import { useRef } from "react";
 
 export default function HomeFeaturedGrid() {
   const { vehicles } = useInventory();
@@ -73,8 +74,39 @@ export function HomeOnTheLot() {
   const ordered = sortWithFeaturedFirst(
     visible.filter((v) => v.status !== "sold")
   );
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollByPage = (dir: 1 | -1) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * Math.max(el.clientWidth * 0.9, 300), behavior: "smooth" });
+  };
+
+  if (ordered.length === 0) return null;
+
   return (
-    <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+    <div className="relative">
+      {/* Prev / Next arrows for the carousel (desktop); touch-swipe still works. */}
+      <button
+        type="button"
+        aria-label="Previous vehicles"
+        onClick={() => scrollByPage(-1)}
+        className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-white text-brand-gray-900 shadow-lg ring-1 ring-black/5 hover:bg-brand-gray-100 transition-colors"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        aria-label="Next vehicles"
+        onClick={() => scrollByPage(1)}
+        className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-white text-brand-gray-900 shadow-lg ring-1 ring-black/5 hover:bg-brand-gray-100 transition-colors"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+      <div ref={scrollRef} className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide scroll-smooth">
       {ordered.map((v) => {
         const forcePh =
           config.overlays?.[v.vin]?.useComingSoonPlaceholder === true;
@@ -128,6 +160,7 @@ export function HomeOnTheLot() {
           </Link>
         );
       })}
+      </div>
     </div>
   );
 }
