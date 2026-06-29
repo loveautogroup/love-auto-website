@@ -387,7 +387,7 @@ export default function UsedSubaruNearChicagoPage() {
           <h2>Stop In or Call</h2>
 
           <p>
-            Love Auto Group, 735 N Yale Ave, Villa Park, IL 60181. Phone
+            Love Auto Group, 735 N Yale Ave, Unit A, Villa Park, IL 60181. Phone
             (630) 359-3643. Mon 2-7, Tue-Fri 11-7, Sat 12-7. Closed
             Sunday.
           </p>

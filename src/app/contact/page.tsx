@@ -6,7 +6,7 @@ import ContactHero from "./ContactHero";
 export const metadata: Metadata = {
   title: "Contact Love Auto Group in Villa Park, IL | Visit Us",
   description:
-    "Visit Love Auto Group at 735 N Yale Ave, Villa Park, IL 60181. Call (630) 359-3643 or get directions. Open Monday through Saturday, closed Sundays.",
+    "Visit Love Auto Group at 735 N Yale Ave, Unit A, Villa Park, IL 60181. Call (630) 359-3643 or get directions. Open Monday through Saturday, closed Sundays.",
   alternates: { canonical: "https://www.loveautogroup.net/contact" },
 };
 

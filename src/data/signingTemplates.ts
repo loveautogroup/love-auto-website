@@ -40,7 +40,7 @@ export const DOCUMENT_TEMPLATES: DocumentTemplate[] = [
     title: "Buyer's Order — Vehicle Purchase Agreement",
     body: `BUYER'S ORDER
 
-Seller: Love Auto Group Inc., 735 N Yale Ave, Villa Park, IL 60181
+Seller: Love Auto Group Inc., 735 N Yale Ave, Unit A, Villa Park, IL 60181
 Dealer License: [IL Dealer #]
 Phone: (630) 359-3643
 
@@ -122,7 +122,7 @@ Vehicle:
   Odometer: [Mileage] miles
 
 Selling dealer: Love Auto Group Inc.
-Dealer address: 735 N Yale Ave, Villa Park, IL 60181
+Dealer address: 735 N Yale Ave, Unit A, Villa Park, IL 60181
 
 By signing below, I (Buyer) authorize Love Auto Group to submit this
 application for title and registration to the Illinois Secretary of
@@ -141,7 +141,7 @@ Secretary of State has processed the filing (typically 4-6 weeks).`,
 (for the sole purpose of transferring title and registration)
 
 Principal (buyer): [Buyer Name]
-Agent: Love Auto Group Inc., 735 N Yale Ave, Villa Park, IL 60181
+Agent: Love Auto Group Inc., 735 N Yale Ave, Unit A, Villa Park, IL 60181
 
 Vehicle:
   [Year Make Model]

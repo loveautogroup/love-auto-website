@@ -212,7 +212,7 @@ export default async function BrandPage({
           </h2>
           <p className="text-brand-gray-600 mb-6">
             Call (630) 359-3643 and we will let you know when one lands.
-            735 N Yale Ave, Villa Park, IL 60181.
+            735 N Yale Ave, Unit A, Villa Park, IL 60181.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <a

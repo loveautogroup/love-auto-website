@@ -59,7 +59,7 @@ const FAQS = [
   {
     question: "Where in the Chicago area are you located?",
     answer:
-      "Love Auto Group is at 735 N Yale Ave, Villa Park, IL 60181, in DuPage County. Twenty minutes west of downtown Chicago via I-290, central to the western suburbs. Buyers regularly come from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, Naperville, Lisle, Bloomingdale, Hinsdale, and Chicago itself. We are also close to the Tri-State (I-294) and I-355 for buyers from the north and west DuPage edge.",
+      "Love Auto Group is at 735 N Yale Ave, Unit A, Villa Park, IL 60181, in DuPage County. Twenty minutes west of downtown Chicago via I-290, central to the western suburbs. Buyers regularly come from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, Naperville, Lisle, Bloomingdale, Hinsdale, and Chicago itself. We are also close to the Tri-State (I-294) and I-355 for buyers from the north and west DuPage edge.",
   },
   {
     question: "Do you carry Carfax reports on every vehicle?",
@@ -398,7 +398,7 @@ export default function IndependentJapaneseMakesDealerChicagoPage() {
           <h2>Stop In or Call</h2>
 
           <p>
-            Love Auto Group, 735 N Yale Ave, Villa Park, IL 60181. Phone
+            Love Auto Group, 735 N Yale Ave, Unit A, Villa Park, IL 60181. Phone
             (630) 359-3643. Mon 2-7, Tue-Fri 11-7, Sat 12-7. Closed Sunday.
           </p>
 

@@ -24,7 +24,7 @@ const FAQ_ITEMS = [
   {
     question: "Where can I find used cars for sale in Villa Park, IL?",
     answer:
-      "Love Auto Group is a family owned used car dealership located at 735 N Yale Ave, Villa Park, IL 60181. We carry a carefully selected inventory of quality used cars, SUVs, and trucks — with a specialty in Japanese makes like Subaru, Lexus, Acura, Honda, and Mazda.",
+      "Love Auto Group is a family owned used car dealership located at 735 N Yale Ave, Unit A, Villa Park, IL 60181. We carry a carefully selected inventory of quality used cars, SUVs, and trucks — with a specialty in Japanese makes like Subaru, Lexus, Acura, Honda, and Mazda.",
   },
   {
     question: "What are the best used car dealerships in Villa Park, Illinois?",

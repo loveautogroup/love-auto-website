@@ -74,7 +74,7 @@ function generateFAQs(vehicle: Vehicle) {
   faqs.push({
     question: `Where can I see this ${yearMakeModel} in person?`,
     answer:
-      "We're at 735 N Yale Ave, Villa Park, IL 60181 — easy to reach from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the broader DuPage County area. Test drives are walk-in friendly during business hours; call (630) 359-3643 to confirm the vehicle is on the lot before you head over.",
+      "We're at 735 N Yale Ave, Unit A, Villa Park, IL 60181 — easy to reach from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the broader DuPage County area. Test drives are walk-in friendly during business hours; call (630) 359-3643 to confirm the vehicle is on the lot before you head over.",
   });
 
   return faqs;

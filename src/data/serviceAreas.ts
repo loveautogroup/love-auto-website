@@ -119,7 +119,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Find Us From Westmont",
         body: [
-          "735 N Yale Ave, Villa Park, IL 60181. About 10 minutes north of downtown Westmont via Cass Avenue. Free parking, no appointment needed, afternoons-into-evenings hours most weekdays plus Saturday afternoons.",
+          "735 N Yale Ave, Unit A, Villa Park, IL 60181. About 10 minutes north of downtown Westmont via Cass Avenue. Free parking, no appointment needed, afternoons-into-evenings hours most weekdays plus Saturday afternoons.",
         ],
       },
     ],
@@ -150,7 +150,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "How to Find Us From Lisle",
         body: [
-          "735 N Yale Ave, Villa Park, IL 60181. From downtown Lisle, head north on Naperville Road, east on Roosevelt Road, and look for Yale Avenue once you're in Villa Park. Free parking and afternoons-into-evenings hours most weekdays plus Saturday afternoons. Call (630) 359-3643 to confirm a specific vehicle is available before the drive.",
+          "735 N Yale Ave, Unit A, Villa Park, IL 60181. From downtown Lisle, head north on Naperville Road, east on Roosevelt Road, and look for Yale Avenue once you're in Villa Park. Free parking and afternoons-into-evenings hours most weekdays plus Saturday afternoons. Call (630) 359-3643 to confirm a specific vehicle is available before the drive.",
         ],
       },
     ],
@@ -182,7 +182,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Visit Us From Downers Grove",
         body: [
-          "735 N Yale Ave, Villa Park, IL 60181. Best route from Downers Grove is north on Ogden Avenue or Route 53 to North Avenue. Free parking, no appointment needed, afternoons-into-evenings hours most weekdays plus Saturday afternoons.",
+          "735 N Yale Ave, Unit A, Villa Park, IL 60181. Best route from Downers Grove is north on Ogden Avenue or Route 53 to North Avenue. Free parking, no appointment needed, afternoons-into-evenings hours most weekdays plus Saturday afternoons.",
         ],
       },
     ],
@@ -245,7 +245,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Find Us From Elmhurst",
         body: [
-          "735 N Yale Ave, Villa Park, IL 60181. Best route is North Avenue west, then a quick turn north on Yale. Free parking, no appointment necessary — we keep extended afternoon and evening hours so you can stop by after work without rushing.",
+          "735 N Yale Ave, Unit A, Villa Park, IL 60181. Best route is North Avenue west, then a quick turn north on Yale. Free parking, no appointment necessary — we keep extended afternoon and evening hours so you can stop by after work without rushing.",
         ],
       },
     ],

@@ -131,7 +131,7 @@ export default async function ServiceAreaPage({
             Stop By From {content.town}
           </h2>
           <p className="text-brand-gray-600 mb-6">
-            735 N Yale Ave, Villa Park, IL 60181 — {content.proximity.toLowerCase()}
+            735 N Yale Ave, Unit A, Villa Park, IL 60181 — {content.proximity.toLowerCase()}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <a
