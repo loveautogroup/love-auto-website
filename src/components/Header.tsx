@@ -82,7 +82,7 @@ export default function Header() {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
             <span className="text-brand-gray-300">
-              735 N Yale Ave, Villa Park, IL 60181
+              735 N Yale Ave, Unit A, Villa Park, IL 60181
             </span>
             <span className="text-brand-gray-700" aria-hidden="true">|</span>
             <CarfaxAdvantageBadge size="xs" />

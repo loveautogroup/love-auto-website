@@ -5,11 +5,11 @@ export const SITE_CONFIG = {
   phoneRaw: "6303593643",
   email: "loveautogroup@gmail.com",
   address: {
-    street: "735 N Yale Ave",
+    street: "735 N Yale Ave, Unit A",
     city: "Villa Park",
     state: "IL",
     zip: "60181",
-    full: "735 N Yale Ave, Villa Park, IL 60181",
+    full: "735 N Yale Ave, Unit A, Villa Park, IL 60181",
   },
   url: "https://www.loveautogroup.net",
   established: 2014,
