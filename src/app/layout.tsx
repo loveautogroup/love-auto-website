@@ -10,6 +10,7 @@ import { getGoogleReviews } from "@/lib/google-reviews";
 import TextUsButton from "@/components/TextUsButton";
 import StickyCTA from "@/components/StickyCTA";
 import { LocalBusinessSchema } from "@/components/StructuredData";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 // Montserrat powers the wordmark logo + the hero phone/URL badges so the
@@ -154,6 +155,10 @@ CarGurus.DealRatingBadge.options={
   e.parentNode.insertBefore(s,e);
 })();
 `}} />
+        {/* GA4 funnel attribution (S2-1) — view_vehicle / form_submit /
+            click_phone events fire from VDPTracker, the lead + financing
+            forms, and PhoneCTA. */}
+        <GoogleAnalytics />
         {/* Cloudflare Web Analytics (W2, Jun 7 2026) — RUM beacon feeding the
             per-VDP view counts. Auto-injection doesn't work on Pages-served
             sites, so the snippet is embedded. The token is the PUBLIC site

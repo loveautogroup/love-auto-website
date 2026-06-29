@@ -1,5 +1,7 @@
 "use client";
 
+import { trackPhoneClick } from "@/lib/analytics";
+
 /**
  * Phone CTA — bottom-center slot. Big bold white text with heavy shadow
  * for legibility over any photo.
@@ -22,7 +24,10 @@ export default function PhoneCTA({ phone, phoneRaw, compact }: PhoneCTAProps) {
   return (
     <a
       href={`tel:${phoneRaw}`}
-      onClick={(e) => e.stopPropagation()}
+      onClick={(e) => {
+        e.stopPropagation();
+        trackPhoneClick(compact ? "card" : "vdp");
+      }}
       className="inline-block whitespace-nowrap text-white no-underline"
       style={{
         // Layered shadow: hard 1px outline at every angle for letter

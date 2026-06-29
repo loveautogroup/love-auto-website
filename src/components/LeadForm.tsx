@@ -1,5 +1,7 @@
 "use client";
 
+import { trackFormSubmit, trackLeadContact } from "@/lib/analytics";
+
 /**
  * LeadForm — the single inquiry form used across the site.
  *
@@ -216,6 +218,8 @@ export default function LeadForm({
           "call or text (630) 359-3643."
       );
       setValues({ ...INITIAL, vehicleInterest: "" });
+      trackFormSubmit(source);
+      trackLeadContact(source);
       if (onSuccess && leadId) onSuccess(leadId);
     } catch (err) {
       setError(
