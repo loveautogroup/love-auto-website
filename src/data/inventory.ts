@@ -1,4 +1,6 @@
 import { Vehicle } from "@/lib/types";
+import inventorySnapshot from "./inventory-snapshot.json";
+import { adaptSnapshot, type InventorySnapshot } from "@/lib/inventoryAdapter";
 
 /**
  * Real inventory data synced from Dealer Center.
@@ -21,7 +23,7 @@ function generateImagePaths(
   return Array.from({ length: count }, (_, i) => `${base}/${prefix}-${i + 1}.webp`);
 }
 
-export const sampleInventory: Vehicle[] = [
+const HANDWRITTEN_FALLBACK: Vehicle[] = [
   {
     id: "11331",
     slug: "2017-ford-mustang-ecoboost-premium-11331",
@@ -338,6 +340,30 @@ export const sampleInventory: Vehicle[] = [
     recentlyReduced: false,
   },
 ];
+
+/**
+ * Live-fresh inventory for static rendering. scripts/fetch-inventory-snapshot.ts
+ * (prebuild) refreshes inventory-snapshot.json from the live feed on every build,
+ * and the DMS deploy hook rebuilds the site whenever inventory changes -- so the
+ * statically rendered homepage, inventory list, and sitemap show CURRENT cars
+ * instead of a months-old snapshot (this is what removed the "flash of old cars"
+ * on first load). If the snapshot is missing or empty, fall back to the
+ * hand-written list above so a build is never blocked.
+ */
+function buildSampleInventory(): Vehicle[] {
+  try {
+    const snap = inventorySnapshot as unknown as InventorySnapshot;
+    if (snap && Array.isArray(snap.vehicles) && snap.vehicles.length > 0) {
+      const adapted = adaptSnapshot(snap);
+      if (adapted.length > 0) return adapted;
+    }
+  } catch {
+    // fall through to the hand-written fallback
+  }
+  return HANDWRITTEN_FALLBACK;
+}
+
+export const sampleInventory: Vehicle[] = buildSampleInventory();
 
 export function getVehicleBySlug(slug: string): Vehicle | undefined {
   return sampleInventory.find((v) => v.slug === slug);
