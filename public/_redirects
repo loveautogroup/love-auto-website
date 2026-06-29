@@ -93,7 +93,27 @@
 /blog/                       /inventory/                       301
 /blog/*                      /inventory/                       301
 
-# ─── Old VDP slug patte
+# ─── Old VDP slug patterns (CarsForSale-era) — added 2026-06-29, Leo ──
+# Search Console "Not found (404)" report (June 2026) surfaced ~163 dead
+# URLs. The bulk are legacy auto-CMS vehicle-detail pages plus a stray
+# /default — never mapped at cutover, so they hard-404 and waste whatever
+# Google equity they still hold. 301 to /inventory/ so equity consolidates
+# and the legacy URLs deindex cleanly. Patterns confirmed from the live GSC
+# 404 export: /Inventory/Details/{guid}, /default, /inventory/{brand}/{model}/{stock}.
+
+# Legacy VDP detail pages: /Inventory/Details/{guid}
+/Inventory/Details/*         /inventory/                       301
+/inventory/details/*         /inventory/                       301
+
+# Stray legacy homepage alias
+/default                     /                                 301
+/default/                    /                                 301
+
+# Old brand/model/stock VDP format: /inventory/{brand}/{model}/{stock}
+# e.g. /inventory/lexus/rc/11266. Live VDPs are single-segment
+# (/inventory/{slug}/), so this 3-segment pattern cannot collide with a
+# live car page or with the :slug rewrite below.
+/inventory/:brand/:model/:stock   /inventory/                  301
 
 # --- VDP / landing trailing-slash recovery (S56, 2026-06-16) ---
 # Static export emits /<route>/index.html. Cloudflare auto-redirects the
@@ -103,4 +123,3 @@
 # no redirect chain and no loop risk. Canonical/og tags already point at the
 # slash form, so no duplicate-content penalty.
 /inventory/:slug    /inventory/:slug/index.html    200
-
