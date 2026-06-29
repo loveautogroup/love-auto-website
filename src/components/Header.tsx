@@ -137,9 +137,9 @@ export default function Header() {
           <Image
             src="/images/logo-primary.svg"
             alt="Love Auto Group — Since 2014"
-            width={220}
-            height={80}
-            className="h-14 md:h-16 w-auto object-contain"
+            width={440}
+            height={160}
+            className="h-28 md:h-32 w-auto object-contain"
             priority
           />
         </Link>
