@@ -23,9 +23,13 @@ declare global {
 // ---------------------------------------------------------------------------
 
 function gtag(...args: unknown[]) {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag(...args);
-  }
+  if (typeof window === 'undefined') return;
+  // Push straight to the dataLayer (the standard gtag-stub behavior) rather
+  // than gating on window.gtag. VDPTracker fires view_vehicle in a mount
+  // effect that can run BEFORE the gtag/js loader defines window.gtag, so the
+  // old guard silently dropped that event. GA4 processes queued dataLayer
+  // entries once the library loads, so queuing here never loses an event.
+  (window.dataLayer = window.dataLayer || []).push(args);
 }
 
 export function sendEvent(name: string, params?: Record<string, unknown>) {
