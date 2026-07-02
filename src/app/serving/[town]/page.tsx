@@ -26,10 +26,17 @@ export async function generateMetadata({
   const content = SERVICE_AREAS.find((s) => s.slug === town);
   if (!content) return {};
   const url = `https://www.loveautogroup.net/serving/${content.slug}`;
+  // villa-park-il duplicates the dedicated /used-cars-villa-park-il/ hub
+  // (identical title/topic, both were self-canonical, splitting the geo
+  // signal for our #2 gap-zone keyword). Consolidate onto the hub page.
+  const canonical =
+    content.slug === "villa-park-il"
+      ? "https://www.loveautogroup.net/used-cars-villa-park-il/"
+      : url;
   return {
     title: content.title,
     description: content.description,
-    alternates: { canonical: url },
+    alternates: { canonical },
     openGraph: {
       title: content.title,
       description: content.description,

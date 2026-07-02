@@ -35,6 +35,10 @@ export function LocalBusinessSchema() {
     "@type": "AutoDealer",
     "@id": `${SITE_CONFIG.url}/#dealership`,
     name: SITE_CONFIG.name,
+    // Branded-search fix (Anna gap-zone brief 2026-06-29 / DMS task #10):
+    // cover the query variants searchers actually type for us.
+    alternateName: ["Love Auto", "Love Automotive", "Love Auto Group"],
+    logo: `${SITE_CONFIG.url}/images/logo-primary.svg`,
     legalName: "Love Auto Group Inc.",
     description:
       "Japanese makes specialist in Villa Park, IL — 20 miles from Chicago. Family owned since 2014. Specializing in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Serving DuPage County and the western Chicago suburbs.",

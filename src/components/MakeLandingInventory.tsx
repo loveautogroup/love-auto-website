@@ -52,8 +52,8 @@ export default function MakeLandingInventory({
       </h2>
       <p className="text-brand-gray-500 mb-6">
         {inventoryForMake.length > 0
-          ? `${inventoryForMake.length} ${pluralNoun.toLowerCase()} on the lot today.`
-          : `No ${pluralNoun.toLowerCase()} in stock right now — check back soon, or `}
+          ? `${inventoryForMake.length} ${isBodyStyle ? pluralNoun.toLowerCase() : `used ${make}`} on the lot today.`
+          : `No ${isBodyStyle ? pluralNoun.toLowerCase() : `used ${make}`} in stock right now — check back soon, or `}
         {inventoryForMake.length === 0 && (
           <Link
             href="/sell-your-car"

@@ -26,11 +26,11 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.loveautogroup.net"),
   title: {
-    default: "Japanese Makes in Villa Park IL, 20 Miles from Chicago | Love Auto Group",
+    default: "Love Auto Group — Used Car Dealership in Villa Park, IL",
     template: "%s",
   },
   description:
-    "Japanese makes specialist in Villa Park IL — 20 miles from Chicago. Used Lexus, Subaru, Acura, Mazda, Honda. 4.7★ on Google, 125+ reviews. Family owned since 2014.",
+    "Love Auto Group — used car dealership in Villa Park, IL, 20 miles from Chicago. Japanese makes specialist: used Lexus, Subaru, Acura, Mazda, Honda. 4.7★ on Google, 125+ reviews. Family owned since 2014.",
   keywords: [
     "used cars Villa Park IL",
     "used car dealership Villa Park",
@@ -53,9 +53,9 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
   },
   openGraph: {
-    title: "Japanese Makes in Villa Park IL, 20 Miles from Chicago | Love Auto Group",
+    title: "Love Auto Group — Used Car Dealership in Villa Park, IL",
     description:
-      "Japanese makes specialist in Villa Park IL — 20 miles from Chicago. Used Lexus, Subaru, Acura, Mazda, Honda. 4.7★ on Google, 125+ reviews. Family owned since 2014.",
+      "Love Auto Group — used car dealership in Villa Park, IL, 20 miles from Chicago. Japanese makes specialist: used Lexus, Subaru, Acura, Mazda, Honda. 4.7★ on Google, 125+ reviews. Family owned since 2014.",
     url: "https://www.loveautogroup.net",
     siteName: "Love Auto Group",
     locale: "en_US",
@@ -76,9 +76,9 @@ export const metadata: Metadata = {
     // wired makes the cards parse cleanly for any engine that reads them.
     site: "@loveautogroup",
     creator: "@loveautogroup",
-    title: "Japanese Makes in Villa Park IL, 20 Miles from Chicago | Love Auto Group",
+    title: "Love Auto Group — Used Car Dealership in Villa Park, IL",
     description:
-      "Japanese makes specialist in Villa Park IL — 20 miles from Chicago. Used Lexus, Subaru, Acura, Mazda, Honda. Family owned since 2014.",
+      "Love Auto Group — used car dealership in Villa Park, IL. Japanese makes specialist. Family owned since 2014.",
     images: ["https://www.loveautogroup.net/og-image.png"],
   },
   verification: {
