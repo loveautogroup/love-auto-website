@@ -309,7 +309,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     src={heroSrc}
                     alt={`${alt} for sale in Villa Park, IL — Photo ${selectedIndex + 1} of ${photoCount}`}
                     fill
-                    className="object-cover"
+                    className={heroSrc === COMING_SOON_PLACEHOLDER ? "object-contain" : "object-cover"}
                     sizes="(max-width: 768px) 100vw, 60vw"
                     priority={selectedIndex === 0}
                     unoptimized
