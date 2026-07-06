@@ -247,62 +247,76 @@ export default async function VehicleDetailPage({
         <VDPTrustStrip />
 
         <div className="flex flex-col gap-8">
-          {/* Above-the-fold summary — Google vehicle-ads data-quality review
-              requires name/price/VIN/mileage/availability visible on load
-              WITHOUT scrolling; IL advertised-price law requires the doc +
-              e-filing fees itemized. This bar sits ABOVE the hero so both are
-              satisfied. Internet Price === feed price (Google price match). */}
-          <div className="bg-white rounded-xl border border-brand-gray-200 p-4 sm:p-5">
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          {/* Above-the-fold summary (compact). Google vehicle-ads review
+              needs name/price/VIN/mileage/availability visible on load; IL law
+              needs the doc + e-filing fees itemized. Left = vehicle + price +
+              fees; right = nationwide shipping. Internet Price === feed price. */}
+          <div className="bg-white rounded-xl border border-brand-gray-200 px-4 py-3">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              {/* Left — vehicle, price, fees */}
               <div className="min-w-0">
-                <div className="text-xl sm:text-2xl font-bold text-brand-gray-900">
-                  {vehicle.year} {vehicle.make} {vehicle.model}{" "}
-                  <span className="font-normal text-brand-gray-500">
-                    {vehicle.trim}
+                <div className="flex items-baseline flex-wrap gap-x-3 gap-y-1">
+                  <span className="text-base sm:text-lg font-bold text-brand-gray-900">
+                    {vehicle.year} {vehicle.make} {vehicle.model}
                   </span>
+                  {vehicle.price > 0 && (
+                    <span className="text-2xl font-bold text-brand-red leading-none">
+                      <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
+                    </span>
+                  )}
                 </div>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-sm text-brand-gray-600">
+                <div className="flex items-center flex-wrap gap-x-2.5 gap-y-1 mt-1 text-xs text-brand-gray-600">
                   <span>
                     <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles
                   </span>
-                  {vehicle.drivetrain && <span>{vehicle.drivetrain}</span>}
-                  {vehicle.exteriorColor && <span>{vehicle.exteriorColor}</span>}
+                  {vehicle.exteriorColor && (
+                    <>
+                      <span className="text-brand-gray-300">·</span>
+                      <span>{vehicle.exteriorColor}</span>
+                    </>
+                  )}
+                  <span className="text-brand-gray-300">·</span>
                   <VDPLiveStatus vin={vehicle.vin} fallback={vehicle.status} />
+                  {vehicle.vin && (
+                    <>
+                      <span className="text-brand-gray-300">·</span>
+                      <span className="font-mono text-brand-gray-400">
+                        VIN {vehicle.vin}
+                      </span>
+                    </>
+                  )}
                 </div>
-                {vehicle.vin && (
-                  <p className="text-xs text-brand-gray-400 mt-1.5 font-mono tracking-wide">
-                    VIN: {vehicle.vin}
-                  </p>
+                {vehicle.price > 0 && (
+                  <div className="text-[11px] text-brand-gray-400 mt-1">
+                    +${DOC_FEE} doc &nbsp;+${EFILING_FEE} e-filing &nbsp;=&nbsp;
+                    <span className="font-semibold text-brand-gray-600">
+                      {formattedTotalWithFees} with fees
+                    </span>
+                    <span className="hidden sm:inline"> · plus tax, title &amp; license</span>
+                  </div>
                 )}
               </div>
-              {vehicle.price > 0 && (
-                <div className="sm:text-right shrink-0">
-                  <div className="text-xs uppercase tracking-wide text-brand-gray-500">
-                    Internet Price
+              {/* Right — nationwide shipping */}
+              <div className="flex items-center gap-2.5 shrink-0 border-t sm:border-t-0 sm:border-l border-brand-gray-200 pt-2.5 sm:pt-0 sm:pl-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-7 h-7 text-brand-red shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
+                </svg>
+                <div className="leading-tight">
+                  <div className="text-sm font-semibold text-brand-gray-900">
+                    Ships anywhere in the U.S.
                   </div>
-                  <div className="text-3xl font-bold text-brand-red leading-tight">
-                    <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
+                  <div className="text-[11px] text-brand-gray-500">
+                    Nationwide delivery available
                   </div>
-                  <dl className="mt-2 text-sm text-brand-gray-600 space-y-1">
-                    <div className="flex justify-between sm:justify-end sm:gap-8">
-                      <dt>Documentation Fee</dt>
-                      <dd>+${DOC_FEE}</dd>
-                    </div>
-                    <div className="flex justify-between sm:justify-end sm:gap-8">
-                      <dt>Electronic Filing Fee</dt>
-                      <dd>+${EFILING_FEE}</dd>
-                    </div>
-                    <div className="flex justify-between sm:justify-end sm:gap-8 font-semibold text-brand-gray-900 pt-1.5 mt-1.5 border-t border-brand-gray-200">
-                      <dt>Price with Fees</dt>
-                      <dd>{formattedTotalWithFees}</dd>
-                    </div>
-                  </dl>
-                  <p className="text-[11px] leading-snug text-brand-gray-400 mt-2 sm:max-w-[16rem] sm:ml-auto">
-                    Advertised price plus documentation fee and electronic filing
-                    fee. Plus applicable tax, title, and license.
-                  </p>
                 </div>
-              )}
+              </div>
             </div>
           </div>
 
