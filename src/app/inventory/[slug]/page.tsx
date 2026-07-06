@@ -150,6 +150,22 @@ export default async function VehicleDetailPage({
 
   const monthlyPayment = estimateMonthlyPayment(vehicle.price);
 
+  // Illinois advertised-price disclosure (2026): the doc fee + electronic
+  // filing fee must be itemized wherever a price is advertised. "Internet
+  // Price" stays equal to the feed/DMS price so Google's vehicle-ads
+  // price-match check passes; the fee lines + "Price with Fees" total meet
+  // the IL requirement. Fees confirmed by Jeremiah 2026-07-06.
+  const DOC_FEE = 377;
+  const EFILING_FEE = 35;
+  const totalWithFees = vehicle.price + DOC_FEE + EFILING_FEE;
+  const totalHasCents = Math.round(totalWithFees * 100) % 100 !== 0;
+  const formattedTotalWithFees = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: totalHasCents ? 2 : 0,
+    maximumFractionDigits: 2,
+  }).format(totalWithFees);
+
   // Pull merchandising overlay for market estimate (Jordan-researched).
   // Pass `recentlyReduced` so the build-time hero status pill auto-flips to
   // "Price Reduced" when the DMS public feed reports a price drop in the
@@ -231,6 +247,65 @@ export default async function VehicleDetailPage({
         <VDPTrustStrip />
 
         <div className="flex flex-col gap-8">
+          {/* Above-the-fold summary — Google vehicle-ads data-quality review
+              requires name/price/VIN/mileage/availability visible on load
+              WITHOUT scrolling; IL advertised-price law requires the doc +
+              e-filing fees itemized. This bar sits ABOVE the hero so both are
+              satisfied. Internet Price === feed price (Google price match). */}
+          <div className="bg-white rounded-xl border border-brand-gray-200 p-4 sm:p-5">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+              <div className="min-w-0">
+                <div className="text-xl sm:text-2xl font-bold text-brand-gray-900">
+                  {vehicle.year} {vehicle.make} {vehicle.model}{" "}
+                  <span className="font-normal text-brand-gray-500">
+                    {vehicle.trim}
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-sm text-brand-gray-600">
+                  <span>
+                    <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles
+                  </span>
+                  {vehicle.drivetrain && <span>{vehicle.drivetrain}</span>}
+                  {vehicle.exteriorColor && <span>{vehicle.exteriorColor}</span>}
+                  <VDPLiveStatus vin={vehicle.vin} fallback={vehicle.status} />
+                </div>
+                {vehicle.vin && (
+                  <p className="text-xs text-brand-gray-400 mt-1.5 font-mono tracking-wide">
+                    VIN: {vehicle.vin}
+                  </p>
+                )}
+              </div>
+              {vehicle.price > 0 && (
+                <div className="sm:text-right shrink-0">
+                  <div className="text-xs uppercase tracking-wide text-brand-gray-500">
+                    Internet Price
+                  </div>
+                  <div className="text-3xl font-bold text-brand-red leading-tight">
+                    <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
+                  </div>
+                  <dl className="mt-2 text-sm text-brand-gray-600 space-y-1">
+                    <div className="flex justify-between sm:justify-end sm:gap-8">
+                      <dt>Documentation Fee</dt>
+                      <dd>+${DOC_FEE}</dd>
+                    </div>
+                    <div className="flex justify-between sm:justify-end sm:gap-8">
+                      <dt>Electronic Filing Fee</dt>
+                      <dd>+${EFILING_FEE}</dd>
+                    </div>
+                    <div className="flex justify-between sm:justify-end sm:gap-8 font-semibold text-brand-gray-900 pt-1.5 mt-1.5 border-t border-brand-gray-200">
+                      <dt>Price with Fees</dt>
+                      <dd>{formattedTotalWithFees}</dd>
+                    </div>
+                  </dl>
+                  <p className="text-[11px] leading-snug text-brand-gray-400 mt-2 sm:max-w-[16rem] sm:ml-auto">
+                    Advertised price plus documentation fee and electronic filing
+                    fee. Plus applicable tax, title, and license.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Hero block — photos + tabbed details now span the full content
               width on every breakpoint. The right-side sidebar has been
               moved BELOW the hero (rendered later in this file) so the
