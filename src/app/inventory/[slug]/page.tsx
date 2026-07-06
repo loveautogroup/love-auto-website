@@ -150,22 +150,6 @@ export default async function VehicleDetailPage({
 
   const monthlyPayment = estimateMonthlyPayment(vehicle.price);
 
-  // Illinois advertised-price disclosure (2026): the doc fee + electronic
-  // filing fee must be itemized wherever a price is advertised. "Internet
-  // Price" stays equal to the feed/DMS price so Google's vehicle-ads
-  // price-match check passes; the fee lines + "Price with Fees" total meet
-  // the IL requirement. Fees confirmed by Jeremiah 2026-07-06.
-  const DOC_FEE = 377;
-  const EFILING_FEE = 35;
-  const totalWithFees = vehicle.price + DOC_FEE + EFILING_FEE;
-  const totalHasCents = Math.round(totalWithFees * 100) % 100 !== 0;
-  const formattedTotalWithFees = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: totalHasCents ? 2 : 0,
-    maximumFractionDigits: 2,
-  }).format(totalWithFees);
-
   // Pull merchandising overlay for market estimate (Jordan-researched).
   // Pass `recentlyReduced` so the build-time hero status pill auto-flips to
   // "Price Reduced" when the DMS public feed reports a price drop in the
@@ -286,15 +270,24 @@ export default async function VehicleDetailPage({
                     </>
                   )}
                 </div>
-                {vehicle.price > 0 && (
-                  <div className="text-[11px] text-brand-gray-400 mt-1">
-                    +${DOC_FEE} doc &nbsp;+${EFILING_FEE} e-filing &nbsp;=&nbsp;
-                    <span className="font-semibold text-brand-gray-600">
-                      {formattedTotalWithFees} with fees
-                    </span>
-                    <span className="hidden sm:inline"> · plus tax, title &amp; license</span>
-                  </div>
-                )}
+                <div className="inline-flex items-center gap-1.5 mt-2 rounded-md border border-green-200 bg-green-50 px-2.5 py-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-3.5 w-3.5 shrink-0 text-green-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-xs font-semibold text-green-800">
+                    No dealer fees
+                  </span>
+                  <span className="text-xs text-green-700">
+                    — just tax, title &amp; license
+                  </span>
+                </div>
               </div>
               {/* Right — nationwide shipping */}
               <div className="flex items-center gap-2.5 shrink-0 border-t sm:border-t-0 sm:border-l border-brand-gray-200 pt-2.5 sm:pt-0 sm:pl-4">
