@@ -150,6 +150,30 @@ export default async function VehicleDetailPage({
 
   const monthlyPayment = estimateMonthlyPayment(vehicle.price);
 
+  // Nationwide-shipping badge — rendered under the CARFAX button (desktop + mobile).
+  const shippingBanner = (
+    <div className="flex items-center gap-2.5">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-6 h-6 text-brand-red shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
+      </svg>
+      <div className="leading-tight">
+        <div className="text-sm font-semibold text-brand-gray-900">
+          Ships anywhere in the U.S.
+        </div>
+        <div className="text-[11px] text-brand-gray-500">
+          Nationwide delivery available
+        </div>
+      </div>
+    </div>
+  );
+
   // Pull merchandising overlay for market estimate (Jordan-researched).
   // Pass `recentlyReduced` so the build-time hero status pill auto-flips to
   // "Price Reduced" when the DMS public feed reports a price drop in the
@@ -289,27 +313,6 @@ export default async function VehicleDetailPage({
                   </span>
                 </div>
               </div>
-              {/* Right — nationwide shipping */}
-              <div className="flex items-center gap-2.5 shrink-0 border-t sm:border-t-0 sm:border-l border-brand-gray-200 pt-2.5 sm:pt-0 sm:pl-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-7 h-7 text-brand-red shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
-                </svg>
-                <div className="leading-tight">
-                  <div className="text-sm font-semibold text-brand-gray-900">
-                    Ships anywhere in the U.S.
-                  </div>
-                  <div className="text-[11px] text-brand-gray-500">
-                    Nationwide delivery available
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -425,6 +428,9 @@ export default async function VehicleDetailPage({
                     vehicleStatus={vehicle.status}
                     variant="wide"
                   />
+                  <div className="mt-4 pt-4 border-t border-brand-gray-100">
+                    {shippingBanner}
+                  </div>
                 </div>
 
                 {/* Card 3 — payment calculator */}
@@ -500,6 +506,7 @@ export default async function VehicleDetailPage({
                 vehicleStatus={vehicle.status}
                 variant="inline"
               />
+              <div className="mt-3">{shippingBanner}</div>
               {/* Credit application / financing CTA (mobile) - every VDP */}
               <a
                 href="/financing"
