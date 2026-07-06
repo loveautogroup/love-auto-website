@@ -174,6 +174,29 @@ export default async function VehicleDetailPage({
     </div>
   );
 
+  // Nationwide-delivery card (black box) — shown under the CARFAX button.
+  const deliveryCard = (
+                <div className="bg-brand-navy rounded-xl p-5 flex items-start gap-3">
+                  <div className="shrink-0 mt-0.5 w-9 h-9 rounded-full bg-white/10 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white leading-tight">Ships Anywhere in the US</p>
+                    <p className="text-xs text-white/70 mt-1 leading-snug">
+                      Can&rsquo;t make it to Villa Park? We can arrange nationwide delivery. Buyer pays transport — call us for a quote.
+                    </p>
+                    <a
+                      href={`tel:${SITE_CONFIG.phoneRaw}`}
+                      className="inline-block mt-2 text-xs font-semibold text-brand-red bg-white rounded-full px-3 py-1 hover:bg-brand-red hover:text-white transition-colors"
+                    >
+                      {SITE_CONFIG.phone} — Ask about delivery
+                    </a>
+                  </div>
+                </div>
+  );
+
   // Pull merchandising overlay for market estimate (Jordan-researched).
   // Pass `recentlyReduced` so the build-time hero status pill auto-flips to
   // "Price Reduced" when the DMS public feed reports a price drop in the
@@ -313,6 +336,9 @@ export default async function VehicleDetailPage({
                   </span>
                 </div>
               </div>
+              <div className="flex items-center gap-2.5 shrink-0 border-t sm:border-t-0 sm:border-l border-brand-gray-200 pt-2.5 sm:pt-0 sm:pl-4">
+                {shippingBanner}
+              </div>
             </div>
           </div>
 
@@ -428,8 +454,8 @@ export default async function VehicleDetailPage({
                     vehicleStatus={vehicle.status}
                     variant="wide"
                   />
-                  <div className="mt-4 pt-4 border-t border-brand-gray-100">
-                    {shippingBanner}
+                  <div className="mt-4">
+                    {deliveryCard}
                   </div>
                 </div>
 
@@ -442,26 +468,6 @@ export default async function VehicleDetailPage({
                   />
                 </div>
 
-                {/* Card 4 — nationwide delivery callout */}
-                <div className="bg-brand-navy rounded-xl p-5 flex items-start gap-3">
-                  <div className="shrink-0 mt-0.5 w-9 h-9 rounded-full bg-white/10 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-white leading-tight">Ships Anywhere in the US</p>
-                    <p className="text-xs text-white/70 mt-1 leading-snug">
-                      Can&rsquo;t make it to Villa Park? We can arrange nationwide delivery. Buyer pays transport — call us for a quote.
-                    </p>
-                    <a
-                      href={`tel:${SITE_CONFIG.phoneRaw}`}
-                      className="inline-block mt-2 text-xs font-semibold text-brand-red bg-white rounded-full px-3 py-1 hover:bg-brand-red hover:text-white transition-colors"
-                    >
-                      {SITE_CONFIG.phone} — Ask about delivery
-                    </a>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -506,7 +512,7 @@ export default async function VehicleDetailPage({
                 vehicleStatus={vehicle.status}
                 variant="inline"
               />
-              <div className="mt-3">{shippingBanner}</div>
+              <div className="mt-3">{deliveryCard}</div>
               {/* Credit application / financing CTA (mobile) - every VDP */}
               <a
                 href="/financing"
