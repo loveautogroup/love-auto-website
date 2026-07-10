@@ -66,7 +66,16 @@ async function resolveVehicle(slug: string) {
   // Fall back to seed only for vehicles absent from the DMS feed.
   const live = await fetchDmsInventory();
   const dmsMatch = live.find((v) => v.slug === slug);
-  if (dmsMatch) return syncedToVehicle(dmsMatch);
+  if (dmsMatch) {
+    const vehicle = syncedToVehicle(dmsMatch);
+    // Documented intent: DMS marketing copy wins; if the feed has none yet,
+    // keep the hand-written seed description for this slug.
+    if (!vehicle.description) {
+      const seed = getVehicleBySlug(slug);
+      if (seed?.description) vehicle.description = seed.description;
+    }
+    return vehicle;
+  }
 
   return getVehicleBySlug(slug);
 }

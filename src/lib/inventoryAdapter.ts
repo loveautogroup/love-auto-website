@@ -42,6 +42,10 @@ export interface SyncedVehicle {
   price: number;
   status: "available" | "sale-pending" | "sold" | "coming-soon";
   features: string[];
+  /** Long-form marketing copy from the DMS public feed
+   *  (Railway vehicle.description). Empty/absent -> the VDP falls back to
+   *  the hand-written seed description for this slug. */
+  description?: string | null;
   daysOnLot: number;
   dateInStock: string;
   images: string[];

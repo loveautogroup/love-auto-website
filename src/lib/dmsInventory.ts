@@ -190,6 +190,7 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     features: Array.isArray(v.features)
       ? v.features.filter((f) => typeof f === "string")
       : [],
+    description: v.description ?? null,
     daysOnLot: Number(v.daysOnLot) || 0,
     dateInStock: v.dateInStock ?? "",
     images,
@@ -276,7 +277,7 @@ export function syncedToVehicle(s: SyncedVehicle): Vehicle {
     engine: s.engine,
     bodyStyle: s.bodyStyle,
     fuelType: s.fuelType,
-    description: "",
+    description: s.description ?? "",
     features: s.features,
     images: s.images,
     status: s.status,
