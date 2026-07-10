@@ -62,20 +62,47 @@ export default function QuickPreQualifyForm() {
     if (state.kind === "submitting") return;
     setState({ kind: "submitting" });
     try {
-      const res = await fetch("/api/finance-application", {
+      // Phase 6d: route pre-qualify through the same-origin lead proxy into the
+      // DMS lead pipeline (encrypts contact PII at rest + blind index), instead
+      // of the legacy /api/finance-application KV sink (full PII, 180-day TTL).
+      // The prequal-only fields ride along in `message`; tcpaConsent is the
+      // required text-message consent → the intake's marketingOptIn TCPA gate.
+      const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          formType: "prequal",
-          hasTradeIn: false,
-          hasCoBuyer: false,
-          ...values,
-          monthlyIncome: Number(values.monthlyIncome || 0),
-          renderTimestamp: renderTimestamp.current,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          phone: values.phone,
+          email: values.email || undefined,
+          vehicleInterestText: values.vehicleInterest || undefined,
+          message:
+            `Pre-qualify (no SSN). Employment: ${values.employmentStatus || "n/a"}; ` +
+            `est. monthly income: $${Number(values.monthlyIncome || 0)}` +
+            `${values.desiredDownPayment ? `; desired down: $${values.desiredDownPayment}` : ""}.`,
+          source: "website-prequalify",
+          marketingOptIn: values.tcpaConsent,
+          optInLanguageVersion: "prequalify-2026-07",
+          honeypot: values.honeypot,
+          referrer:
+            typeof window !== "undefined" ? document.referrer || undefined : undefined,
+          sourceMetadata:
+            typeof window !== "undefined"
+              ? (() => {
+                  const q = new URLSearchParams(window.location.search);
+                  const meta: Record<string, string> = {};
+                  for (const k of ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid"] as const) {
+                    const v = q.get(k);
+                    if (v) meta[k] = v;
+                  }
+                  meta.landingPage = window.location.href;
+                  return Object.keys(meta).length ? meta : undefined;
+                })()
+              : undefined,
         }),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.ok) {
+      if (!res.ok) {
         setState({
           kind: "error",
           messages: Array.isArray(data.errors)
