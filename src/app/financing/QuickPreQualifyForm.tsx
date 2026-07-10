@@ -14,6 +14,20 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
+/**
+ * Normalize any US phone string to E.164 (+1XXXXXXXXXX) — the public lead
+ * intake (/api/v1/public/leads) rejects anything else with an E.164 regex,
+ * so a raw "(630) 555-1234" would 400 on every real submission. Mirrors the
+ * helper in LeadForm.tsx; returns the trimmed input unchanged when it can't
+ * be normalized so the DMS surfaces the validation error instead of us.
+ */
+function normalizePhone(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  if (digits.length === 10) return `+1${digits}`;
+  if (digits.length === 11 && digits.startsWith("1")) return `+${digits}`;
+  return raw.trim();
+}
+
 type State =
   | { kind: "idle" }
   | { kind: "submitting" }
@@ -73,7 +87,7 @@ export default function QuickPreQualifyForm() {
         body: JSON.stringify({
           firstName: values.firstName,
           lastName: values.lastName,
-          phone: values.phone,
+          phone: normalizePhone(values.phone),
           email: values.email || undefined,
           vehicleInterestText: values.vehicleInterest || undefined,
           message:
