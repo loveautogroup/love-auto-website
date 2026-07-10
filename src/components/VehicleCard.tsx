@@ -272,7 +272,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           )}
           {!isComingSoon && overlay.effectiveStatus && (
             <div className="scale-[0.77] sm:scale-100 origin-top-left">
-              <StatusPill kind={overlay.effectiveStatus} />
+              <StatusPill kind={overlay.effectiveStatus} compact />
             </div>
           )}
         </div>

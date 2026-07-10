@@ -9,6 +9,14 @@ import { StatusBadgeKind } from "@/data/merchandising";
 
 interface StatusPillProps {
   kind: StatusBadgeKind;
+  /**
+   * Compact mode for inventory cards — matches the CarfaxPillStack compact
+   * pill sizing so the status badge sits at the same scale as the trust
+   * pills beside it. Without this the full VDP-size pill (14px) rendered on
+   * ~300px card photos and covered a big chunk of the car (Jeremiah,
+   * 2026-07-09: "too big on the preview hero and blocks most of the car").
+   */
+  compact?: boolean;
 }
 
 const VARIANTS: Record<
@@ -36,14 +44,16 @@ const VARIANTS: Record<
   "make-offer": { label: "Make Offer", className: "bg-[#F59E0B] text-[#1F2937]" },
 };
 
-export default function StatusPill({ kind }: StatusPillProps) {
+export default function StatusPill({ kind, compact = false }: StatusPillProps) {
   const { label, className } = VARIANTS[kind];
   return (
     <span
       className={`
-        inline-block rounded-md
-        px-3.5 py-2 text-[14px] font-semibold leading-none
+        inline-block rounded-md font-semibold leading-none
         shadow-[0_2px_4px_rgba(0,0,0,0.15)]
+        ${compact
+          ? "px-1.5 py-[2px] text-[8px] sm:px-2 sm:py-0.5 sm:text-[10px]"
+          : "px-3.5 py-2 text-[14px]"}
         ${className}
       `}
     >
