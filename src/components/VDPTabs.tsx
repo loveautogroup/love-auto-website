@@ -74,15 +74,18 @@ export default function VDPTabs({
               ))}
             </div>
 
-            {/* Description */}
-            <section>
-              <h2 className="text-xl font-bold text-brand-gray-900 mb-3">
-                About This Vehicle
-              </h2>
-              <p className="text-brand-gray-700 leading-relaxed">
-                {vehicle.description}
-              </p>
-            </section>
+            {/* Description — only render when there is real copy, so a
+                vehicle with no description never shows an empty heading. */}
+            {vehicle.description?.trim() ? (
+              <section>
+                <h2 className="text-xl font-bold text-brand-gray-900 mb-3">
+                  About This Vehicle
+                </h2>
+                <p className="text-brand-gray-700 leading-relaxed">
+                  {vehicle.description}
+                </p>
+              </section>
+            ) : null}
 
             {/* Full Specs Grid */}
             <section>
