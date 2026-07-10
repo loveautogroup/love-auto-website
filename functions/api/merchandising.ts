@@ -17,6 +17,19 @@ interface Env {
 
 const CONFIG_KEY = "config:v1";
 
+// Phase 6c: this endpoint is PUBLIC (no auth). Return only the display fields
+// the site/DMS render — never the raw KV blob, which the admin write path can
+// stamp with internal audit metadata (savedBy / updatedBy / lastUpdated) or a
+// future private note. Allowlist projection = internal fields can't leak.
+const PUBLIC_MERCH_FIELDS = ["featuredVins", "defaultWarranty", "textPhone", "overlays"] as const;
+function toPublicMerchConfig(raw: unknown): Record<string, unknown> {
+  const c = (raw ?? {}) as Record<string, unknown>;
+  const out: Record<string, unknown> = {};
+  for (const k of PUBLIC_MERCH_FIELDS) if (k in c) out[k] = c[k];
+  return out;
+}
+
+
 export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
   try {
     const raw = await env.MERCHANDISING.get(CONFIG_KEY, { type: "json" });
@@ -30,7 +43,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
       });
     }
 
-    return new Response(JSON.stringify(raw), {
+    return new Response(JSON.stringify(toPublicMerchConfig(raw)), {
       status: 200,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
