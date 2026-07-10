@@ -13,6 +13,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { consentHashesFor } from "@/lib/consent-language";
 
 /**
  * Normalize any US phone string to E.164 (+1XXXXXXXXXX) — the public lead
@@ -97,6 +98,7 @@ export default function QuickPreQualifyForm() {
           source: "website-prequalify",
           marketingOptIn: values.tcpaConsent,
           optInLanguageVersion: "prequalify-2026-07",
+          consentHashes: await consentHashesFor("prequalify-2026-07"),
           honeypot: values.honeypot,
           referrer:
             typeof window !== "undefined" ? document.referrer || undefined : undefined,

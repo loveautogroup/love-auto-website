@@ -21,6 +21,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { trackFormSubmit, trackLeadFinancing } from "@/lib/analytics";
+import { consentHashesFor } from "@/lib/consent-language";
 
 const US_STATES = [
   "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA",
@@ -246,6 +247,8 @@ export default function FinancingForm() {
         textMarketing: false,
         textUpdates: values.tcpaConsent,
       },
+      consentLanguageVersion: "creditapp-2026-07",
+      consentHashes: await consentHashesFor("creditapp-2026-07"),
     };
 
     try {

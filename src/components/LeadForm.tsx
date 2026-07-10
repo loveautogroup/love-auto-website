@@ -28,6 +28,7 @@ import { trackFormSubmit, trackLeadContact } from "@/lib/analytics";
 
 import { useState } from "react";
 import { LeadFormConsent } from "@/components/LeadFormConsent";
+import { consentHashesFor } from "@/lib/consent-language";
 
 const DMS_API_BASE =
   process.env.NEXT_PUBLIC_DMS_API_BASE ?? "https://dms.loveautogroup.net";
@@ -170,6 +171,7 @@ export default function LeadForm({
           source,
           marketingOptIn: values.marketingOptIn,
           optInLanguageVersion: OPT_IN_LANGUAGE_VERSION,
+          consentHashes: await consentHashesFor("v2-2026-06-sms"),
           // Honeypot — always sent; real users leave it blank.
           // DMS silently drops submissions where it's non-empty.
           honeypot: values.honeypot,
