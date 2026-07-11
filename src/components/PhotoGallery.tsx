@@ -381,12 +381,12 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     </div>
                   )}
                   {!isComingSoon && (
-                    <div className="scale-[0.55] sm:scale-100 origin-top-left">
+                    <div className="scale-[0.41] sm:scale-75 origin-top-left">
                       <CarfaxPillStack overlay={overlay} />
                     </div>
                   )}
                   {!isComingSoon && overlay.effectiveStatus && (
-                    <div className="scale-[0.55] sm:scale-100 origin-top-left">
+                    <div className="scale-[0.41] sm:scale-75 origin-top-left">
                       <StatusPill kind={overlay.effectiveStatus} />
                     </div>
                   )}
@@ -414,7 +414,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                 {/* Top-right: merchandising feature pills */}
                 {!isComingSoon && (
                   <div
-                    className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.5] sm:scale-100 origin-top-right"
+                    className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.38] sm:scale-75 origin-top-right"
                     style={{ top: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
                   >
                     <FeaturePillCluster pills={overlay.featurePills} stack="inline" />
@@ -460,7 +460,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                 {/* Bottom-right: warranty chip + Google Reviews lockup.
                     Logo is now top-center; only reviews badge lives here. */}
                 <div
-                  className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.42] sm:scale-100 origin-bottom-right"
+                  className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.32] sm:scale-75 origin-bottom-right"
                   style={{ bottom: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
                 >
                   {!isComingSoon && warrantyCopy && (

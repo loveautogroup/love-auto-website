@@ -266,12 +266,12 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             </div>
           )}
           {!isComingSoon && (
-            <div className="scale-[0.77] sm:scale-100 origin-top-left">
+            <div className="scale-[0.58] sm:scale-75 origin-top-left">
               <CarfaxPillStack overlay={overlay} compact />
             </div>
           )}
           {!isComingSoon && overlay.effectiveStatus && (
-            <div className="scale-[0.77] sm:scale-100 origin-top-left">
+            <div className="scale-[0.58] sm:scale-75 origin-top-left">
               <StatusPill kind={overlay.effectiveStatus} compact />
             </div>
           )}
@@ -298,7 +298,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             inside the cluster resolves correctly and long pill labels
             truncate instead of spanning to the card center. */}
         {!isComingSoon && (
-          <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 flex flex-col items-end gap-1 w-[40%]">
+          <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 flex flex-col items-end gap-1 w-[40%] scale-75 origin-top-right">
             <FeaturePillCluster pills={overlay.featurePills} compact stack="inline" />
           </div>
         )}
