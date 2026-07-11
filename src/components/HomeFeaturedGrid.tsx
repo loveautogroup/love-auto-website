@@ -17,7 +17,7 @@ import { useInventory } from "@/lib/useInventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
 import { useVisibleVehicles, useMerchandising } from "@/data/useMerchandising";
 import VehicleCard from "@/components/VehicleCard";
-import { useRef, useEffect, type MouseEvent as ReactMouseEvent } from "react";
+import { useRef, useState, useEffect, type MouseEvent as ReactMouseEvent } from "react";
 
 export default function HomeFeaturedGrid() {
   const { vehicles } = useInventory();
@@ -26,19 +26,55 @@ export default function HomeFeaturedGrid() {
   const visible = useVisibleVehicles(vehicles);
   const available = visible.filter((v) => v.status !== "sold");
 
-  // Build featured list from the LIVE KV featuredVins — order preserved.
-  // If KV returns an empty array, featuredVehicles is empty and the section
-  // hides itself. No fallback to "show everything" when nothing is featured.
+  // Featured-first pool over ALL website-available vehicles. The hand-picked
+  // featuredVins lead (in their configured order); the rest of the live
+  // inventory follows. This keeps the section full even after featured cars
+  // sell (previously it shrank to whatever hand-picked VINs were still in
+  // stock), and lets it cycle through everything currently on the website —
+  // NOT the full DMS inventory, only what is live here.
   const byVin = new Map(available.map((v) => [v.vin, v]));
-  const featuredVehicles = (config.featuredVins ?? [])
+  const featured = (config.featuredVins ?? [])
     .map((vin) => byVin.get(vin))
     .filter((v): v is NonNullable<typeof v> => v !== undefined);
+  const featuredVinSet = new Set(featured.map((v) => v.vin));
+  const pool = [...featured, ...available.filter((v) => !featuredVinSet.has(v.vin))];
 
-  // Nothing featured → hide the entire section (heading and all).
-  if (featuredVehicles.length === 0) return null;
+  // Two rows of three on desktop; always surface at least 4 when we have them.
+  const VISIBLE = 6;
+  const [offset, setOffset] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [dimmed, setDimmed] = useState(false);
+
+  // Auto-rotate through the whole pool when it is larger than one screen of
+  // cards, so every live vehicle gets airtime. Brief crossfade each turn;
+  // pauses while the visitor is hovering the section.
+  useEffect(() => {
+    if (pool.length <= VISIBLE || paused) return;
+    const id = setInterval(() => {
+      setDimmed(true);
+      setTimeout(() => {
+        setOffset((o) => (o + VISIBLE) % pool.length);
+        setDimmed(false);
+      }, 350);
+    }, 7000);
+    return () => clearInterval(id);
+  }, [pool.length, paused]);
+
+  // Only hide the section when the website has no available vehicles at all.
+  if (pool.length === 0) return null;
+
+  const shown =
+    pool.length <= VISIBLE
+      ? pool
+      : Array.from({ length: VISIBLE }, (_, i) => pool[(offset + i) % pool.length]);
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-16" aria-labelledby="featured-heading">
+    <section
+      className="max-w-7xl mx-auto px-4 py-16"
+      aria-labelledby="featured-heading"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <div className="text-center mb-10">
         <h2 id="featured-heading" className="text-3xl font-bold text-brand-gray-900">
           Featured Vehicles
@@ -47,8 +83,11 @@ export default function HomeFeaturedGrid() {
           Hand-picked from our inventory, inspected and ready to drive
         </p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {featuredVehicles.map((vehicle) => (
+      <div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 transition-opacity duration-300"
+        style={{ opacity: dimmed ? 0 : 1 }}
+      >
+        {shown.map((vehicle) => (
           <VehicleCard key={vehicle.id} vehicle={vehicle} />
         ))}
       </div>
