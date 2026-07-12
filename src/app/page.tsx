@@ -22,29 +22,6 @@ export default function HomePage() {
       {/* Featured Vehicles — self-hides when nothing is featured in KV */}
       <HomeFeaturedGrid />
 
-      {/* On the Lot Now â€" horizontal scroll carousel */}
-      <section className="bg-brand-navy py-12" aria-labelledby="lot-heading">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-baseline justify-between mb-6">
-            <div>
-              <h2 id="lot-heading" className="text-2xl font-bold text-white">
-                On the Lot Now
-              </h2>
-              <p className="text-brand-gray-300 text-sm mt-1">
-                Available today in Villa Park
-              </p>
-            </div>
-            <Link
-              href="/inventory"
-              className="text-brand-red-light hover:text-white text-sm font-semibold transition-colors"
-            >
-              View All →
-            </Link>
-          </div>
-          <HomeOnTheLot />
-        </div>
-      </section>
-
       {/* Trust Pillars */}
       <section className="bg-white py-16" aria-labelledby="why-heading">
         <div className="max-w-7xl mx-auto px-4">
@@ -393,6 +370,29 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      {/* On the Lot Now â€" horizontal scroll carousel */}
+      <section className="bg-brand-navy py-12" aria-labelledby="lot-heading">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-baseline justify-between mb-6">
+            <div>
+              <h2 id="lot-heading" className="text-2xl font-bold text-white">
+                On the Lot Now
+              </h2>
+              <p className="text-brand-gray-300 text-sm mt-1">
+                Available today in Villa Park
+              </p>
+            </div>
+            <Link
+              href="/inventory"
+              className="text-brand-red-light hover:text-white text-sm font-semibold transition-colors"
+            >
+              View All →
+            </Link>
+          </div>
+          <HomeOnTheLot />
+        </div>
+      </section>
+
       {/* Review wall — social proof before the SEO hub. Positioned at the
           bottom of the page so it closes strong, distinct from mid-page
           placement used by competitors. */}
