@@ -31,6 +31,8 @@
  * dealer identification across all 3rd-party platforms.
  */
 
+import { vehicleSlug } from "../../shared/slug";
+
 export const DEALER = {
   name: "Love Auto Group",
   id: "love-auto-group-villa-park-il",
@@ -143,16 +145,12 @@ export async function fetchInventory(): Promise<FeedVehicle[]> {
 }
 
 function buildVdpUrl(v: FeedVehicle): string {
-  const slugParts = [v.year, v.make, v.model, v.trim]
-    .filter(Boolean)
-    .map((s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""))
-    .join("-");
-  // Must match shared/slug.ts formula (stockNumber > id > last-6-VIN).
-  // The website routes on stock number — VIN-based URLs 404 (discovered Jun 4 2026).
-  const tail = v.stockNumber
-    ? v.stockNumber.toLowerCase().replace(/[^a-z0-9]+/g, "-")
-    : String(v.id ?? "").trim() || v.vin.slice(-6).toLowerCase();
-  return `${DEALER.website}/inventory/${slugParts}-${tail}/`;
+  // Canonical slug from shared/slug.ts — the SAME computer the site, sitemap,
+  // and inventory function use, and it honors SEED_SLUGS_BY_VIN. This formula
+  // used to be hand-copied here, so feed links 404'd for any seeded vehicle
+  // whose DMS data drifted from its SEO-stable slug. Importing the single
+  // source of truth removes that drift class entirely.
+  return `${DEALER.website}/inventory/${vehicleSlug(v)}/`;
 }
 
 // ─────────────────────────────────────────────────────────────────────
