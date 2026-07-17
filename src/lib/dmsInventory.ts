@@ -15,6 +15,7 @@
 import type { Vehicle } from "@/lib/types";
 import type { SyncedVehicle } from "@/lib/inventoryAdapter";
 import { titleCase, vehicleSlug, SEED_SLUGS_BY_VIN as SHARED_SEED_SLUGS } from "../../shared/slug";
+import { displayCase, dedupeTrim } from "../../shared/displayCase";
 
 // Re-export for any external consumer that previously imported from here.
 // All slug logic lives in shared/slug.ts now — change there, not here.
@@ -265,9 +266,11 @@ export function syncedToVehicle(s: SyncedVehicle): Vehicle {
     vin: s.vin,
     stockNumber: s.stockNumber ?? "",
     year: s.year,
-    make: s.make,
-    model: s.model,
-    trim: s.trim,
+    // E3: idempotent showroom casing here too — this mapper feeds the VDPs
+    // from the live DMS fetch, which bypasses the inventoryAdapter path.
+    make: displayCase(s.make),
+    model: displayCase(s.model),
+    trim: dedupeTrim(displayCase(s.model), displayCase(s.trim)),
     price: s.price,
     mileage: s.mileage,
     exteriorColor: s.exteriorColor,

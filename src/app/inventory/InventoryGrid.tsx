@@ -153,8 +153,25 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
  * requires it under Next 15+.
  */
 export default function InventoryGrid({ vehicles }: InventoryGridProps) {
+  // E6: the Suspense fallback IS the build-time HTML — useSearchParams
+  // suspends during static prerender, so whatever renders here is what
+  // crawlers (and the first paint) see. A "Loading inventory..." shell
+  // meant the main inventory page shipped ZERO vehicle cards in its HTML.
+  // Render the real card grid from the build-time snapshot instead; the
+  // interactive filterable grid hydrates over it client-side.
   return (
-    <Suspense fallback={<div className="py-16 text-center text-brand-gray-500">Loading inventory...</div>}>
+    <Suspense
+      fallback={
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
+          aria-label="Vehicle inventory"
+        >
+          {vehicles.map((vehicle) => (
+            <VehicleCard key={vehicle.id} vehicle={vehicle} />
+          ))}
+        </div>
+      }
+    >
       <InventoryGridInner vehicles={vehicles} />
     </Suspense>
   );

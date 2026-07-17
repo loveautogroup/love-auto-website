@@ -92,13 +92,16 @@ export async function generateMetadata({
   // Mark's approved VDP title template with fallback for trim overflow.
   // Full form: "{Year} {Make} {Model} {Trim} for Sale | Love Auto Group"
   // If over 60 chars, drop the trim to keep Google SERP clean.
+  // E3: trim can legitimately be empty now (dedupeTrim strips a trim that
+  // just repeats the model) — join with filter(Boolean) so empty trims
+  // can't leave a double space in the <title>.
   const base = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
-  const withTrim = `${base} ${vehicle.trim} for Sale | Love Auto Group`;
+  const withTrim = `${[base, vehicle.trim].filter(Boolean).join(" ")} for Sale | Love Auto Group`;
   const withoutTrim = `${base} for Sale | Love Auto Group`;
   const title = withTrim.length <= 60 ? withTrim : withoutTrim;
 
   const formattedMileage = new Intl.NumberFormat().format(vehicle.mileage);
-  const description = `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim} for sale in Villa Park, IL. ${formattedMileage} miles, ${vehicle.drivetrain}. Carefully selected and fully reconditioned at Love Auto Group.`;
+  const description = `${[base, vehicle.trim].filter(Boolean).join(" ")} for sale in Villa Park, IL. ${formattedMileage} miles, ${vehicle.drivetrain}. Carefully selected and fully reconditioned at Love Auto Group.`;
 
   const url = `https://www.loveautogroup.net/inventory/${slug}/`;
   // Hero photo for social-share preview reflects Jordan's manifest, so
