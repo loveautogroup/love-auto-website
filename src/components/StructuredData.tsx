@@ -312,3 +312,39 @@ export function FAQSchema({ items }: { items: { question: string; answer: string
     />
   );
 }
+
+/**
+ * E6 — ItemList of vehicle listing pages. Emitted on /inventory and the
+ * make/body-style landing pages so Google understands them as listing
+ * hubs and can crawl straight to every live VDP. Baked at build time
+ * from the same snapshot the page's cards render from.
+ */
+export function ItemListSchema({
+  name,
+  vehicles,
+}: {
+  name: string;
+  vehicles: Vehicle[];
+}) {
+  const items = vehicles.slice(0, 25);
+  if (items.length === 0) return null;
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    numberOfItems: items.length,
+    itemListElement: items.map((v, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: `${v.year} ${v.make} ${v.model}${v.trim ? ` ${v.trim}` : ""}`,
+      url: `${SITE_CONFIG.url}/inventory/${v.slug}/`,
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
+    />
+  );
+}

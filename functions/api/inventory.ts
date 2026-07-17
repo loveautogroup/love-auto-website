@@ -23,7 +23,8 @@
  * already writes to KV so consumers don't need a code change.
  */
 
-import { titleCase, vehicleSlug } from "../../shared/slug";
+import { vehicleSlug } from "../../shared/slug";
+import { displayCase, dedupeTrim } from "../../shared/displayCase";
 
 interface Env {
   INVENTORY?: KVNamespace;
@@ -71,6 +72,10 @@ interface DmsVehicle {
   recently_reduced?: boolean | null;
   // Baked hero URL with all badges composited in (used as thumbnail on cards).
   bakedHeroUrl?: string | null;
+  // E1: AS-IS disclosure flag + seller-disclosed defects. The DMS mirror
+  // emits these camelCase (it converts Railway's as_is/known_issues).
+  asIs?: boolean | null;
+  knownIssues?: string | null;
 }
 
 interface DmsResponse {
@@ -105,6 +110,10 @@ interface SyncedVehicle {
   description?: string;
   recentlyReduced?: boolean;
   bakedHeroUrl?: string | null;
+  /** E1 — AS-IS flag + disclosed defects, passed through to the site's
+   *  inventoryAdapter (which already declares both fields). */
+  asIs?: boolean;
+  knownIssues?: string | null;
 }
 
 interface InventorySnapshot {
@@ -132,9 +141,12 @@ function mapStatus(
 }
 
 function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
-  const make = titleCase(v.make ?? "");
-  const model = titleCase(v.model ?? "");
-  const trim = v.trim ? titleCase(v.trim) : "";
+  // E3: showroom-correct casing (SLK350 / MKZ / CX-3, not Slk350 / Mkz /
+  // Cx-3) + kill the "Boxster Boxster" model-repeated-in-trim class.
+  // vehicleSlug(v) below still receives the RAW row — slugs never move.
+  const make = displayCase(v.make ?? "");
+  const model = displayCase(v.model ?? "");
+  const trim = v.trim ? dedupeTrim(model, displayCase(v.trim)) : "";
   const stockNumber = v.stockNumber ? String(v.stockNumber) : "";
   // Shared slug computer — see shared/slug.ts. Honors SEED_SLUGS_BY_VIN.
   const slug = vehicleSlug(v);
@@ -171,6 +183,13 @@ function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     description: v.description ?? undefined,
     recentlyReduced: Boolean(v.recently_reduced),
     bakedHeroUrl: v.bakedHeroUrl ?? null,
+    // E1: default asIs to TRUE — every Love Auto vehicle is sold as-is;
+    // the flag only goes false if the DMS explicitly says so.
+    asIs: v.asIs ?? true,
+    knownIssues:
+      typeof v.knownIssues === "string" && v.knownIssues.trim() !== ""
+        ? v.knownIssues
+        : null,
   };
 }
 

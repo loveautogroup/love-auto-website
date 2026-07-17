@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { MakeLandingContent } from "@/data/makeLandings";
 import MakeLandingInventory from "@/components/MakeLandingInventory";
-import { BreadcrumbSchema } from "@/components/StructuredData";
+import { BreadcrumbSchema, ItemListSchema } from "@/components/StructuredData";
+import { sampleInventory } from "@/data/inventory";
 
 interface MakeLandingPageProps {
   content: MakeLandingContent;
@@ -22,8 +23,22 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
   const pluralNoun = content.pluralNoun ?? `${content.make}s`;
   const isBodyStyle = filterType === "bodyStyle";
 
+  // E6: build-time filtered list for structured data — the SAME filter
+  // MakeLandingInventory applies client-side, so the ItemList matches
+  // the cards baked into the page HTML.
+  const schemaVehicles = sampleInventory.filter((v) => {
+    if (v.status !== "available") return false;
+    if (isBodyStyle) return v.bodyStyle.toLowerCase() === filterValue;
+    return v.make.toLowerCase() === filterValue;
+  });
+
   return (
     <>
+      {/* E6: listing-hub structured data for this landing page. */}
+      <ItemListSchema
+        name={`Used ${isBodyStyle ? pluralNoun : content.make} for Sale in Villa Park, IL`}
+        vehicles={schemaVehicles}
+      />
       <BreadcrumbSchema
         items={[
           { name: "Home", url: "https://www.loveautogroup.net/" },

@@ -5,6 +5,8 @@ import InventoryFilters from "./InventoryFilters";
 import InventoryGrid from "./InventoryGrid";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
 import InventoryHero from "./InventoryHero";
+import RecentlyReducedRail from "./RecentlyReducedRail";
+import { ItemListSchema } from "@/components/StructuredData";
 
 export const metadata: Metadata = {
   title: "Used Cars for Sale in Villa Park, IL | Love Auto Group",
@@ -21,13 +23,33 @@ export default function InventoryPage() {
     sampleInventory.filter((v) => v.status !== "sold")
   );
 
+  // E2: price drops from the last 14 days (DMS pricing-history flag),
+  // surfaced as a rail before the main grid. Sanity guard: when MORE THAN
+  // HALF the lot is flagged (a pricing-history backfill artifact — 8 of 9
+  // cars were flagged on 2026-07-17), a "deals" rail is meaningless noise
+  // that just duplicates the grid, so it hides itself until the data is
+  // discriminating again.
+  const reducedAll = vehicles.filter(
+    (v) => v.recentlyReduced && v.status === "available"
+  );
+  const recentlyReduced =
+    reducedAll.length * 2 <= vehicles.length ? reducedAll.slice(0, 8) : [];
+
   return (
     <>
+      {/* E6: listing-hub structured data — crawlers get every live VDP. */}
+      <ItemListSchema
+        name="Used Cars for Sale in Villa Park, IL"
+        vehicles={vehicles}
+      />
+
       <InventoryHero />
 
       <div className="max-w-7xl mx-auto px-4 pt-4">
         <VDPTrustStrip />
       </div>
+
+      <RecentlyReducedRail vehicles={recentlyReduced} />
 
       <section className="max-w-7xl mx-auto px-4 py-8">
         <div className="lg:grid lg:grid-cols-[280px_1fr] lg:gap-8">

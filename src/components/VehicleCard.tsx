@@ -71,13 +71,15 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     vehicle.recentlyReduced ?? false
   );
 
-  const priceHasCents = Math.round(vehicle.price * 100) % 100 !== 0;
+  // E3: sticker prices display as whole dollars — FLOOR, never round.
+  // Dealers price $13,999.99 deliberately under the next round number,
+  // so it must render "$13,999", not "$14,000".
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    minimumFractionDigits: priceHasCents ? 2 : 0,
-    maximumFractionDigits: 2,
-  }).format(vehicle.price);
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(Math.floor(vehicle.price));
 
   const formattedMileage = new Intl.NumberFormat("en-US").format(
     vehicle.mileage
@@ -381,6 +383,15 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             {formattedMileage} {c.mi}
           </span>
         </div>
+
+        {/* E1: AS-IS chip — quiet compliance signal (counsel-requested).
+            All Love Auto vehicles default to as-is; kept off the photo
+            overlay (already dense) and off the sparse coming-soon state. */}
+        {!isComingSoon && (vehicle.asIs ?? true) && (
+          <span className="inline-block mt-2 text-[11px] uppercase tracking-wide text-brand-gray-500 border border-brand-gray-300 rounded px-1.5 py-0.5">
+            Sold As-Is
+          </span>
+        )}
 
         {isComingSoon && (
           <div className="flex items-center gap-1.5 mt-2">

@@ -19,15 +19,16 @@ interface BaseProps {
   className?: string;
 }
 
-const formatPrice = (n: number) => {
-  const hasCents = Math.round(n * 100) % 100 !== 0;
-  return new Intl.NumberFormat("en-US", {
+// E3: sticker prices display as whole dollars — FLOOR, never round.
+// Dealers price $13,999.99 deliberately under the next round number,
+// so it must render "$13,999", not "$14,000".
+const formatPrice = (n: number) =>
+  new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    minimumFractionDigits: hasCents ? 2 : 0,
-    maximumFractionDigits: 2,
-  }).format(n);
-};
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(Math.floor(n));
 
 const formatMileage = (n: number) => new Intl.NumberFormat("en-US").format(n);
 

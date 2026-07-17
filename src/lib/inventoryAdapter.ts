@@ -20,6 +20,7 @@
  */
 
 import type { Vehicle } from "@/lib/types";
+import { displayCase, dedupeTrim } from "../../shared/displayCase";
 
 export interface SyncedVehicle {
   vin: string;
@@ -87,9 +88,12 @@ export function adaptVehicle(v: SyncedVehicle): Vehicle {
     vin: v.vin,
     stockNumber: v.stockNumber ?? "",
     year: v.year,
-    make: v.make,
-    model: v.model,
-    trim: v.trim,
+    // E3: idempotent display casing at the adapter too — the feed function
+    // applies the same helpers, but committed snapshots fetched from an
+    // older deploy would otherwise ship "Slk350"/"Mkz" for one more build.
+    make: displayCase(v.make),
+    model: displayCase(v.model),
+    trim: dedupeTrim(displayCase(v.model), displayCase(v.trim)),
     price: v.price,
     mileage: v.mileage,
     exteriorColor: v.exteriorColor,
