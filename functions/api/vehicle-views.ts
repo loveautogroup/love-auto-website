@@ -103,10 +103,22 @@ async function handleBatch(
     try {
       const res = await fetch(DMS_PUBLIC_URL, {
         headers: { Accept: "application/json" },
+        cf: { cacheTtl: 30, cacheEverything: false },
       });
       if (res.ok) {
-        const data = (await res.json()) as { vehicles?: SnapshotVehicle[] };
-        vehicles = Array.isArray(data?.vehicles) ? data.vehicles : [];
+        // The mirror returns { data: [...] } today; [slug].ts warns this
+        // endpoint has changed shape before, so accept a bare array and
+        // { vehicles: [...] } too instead of silently reading undefined.
+        const raw = (await res.json()) as
+          | SnapshotVehicle[]
+          | { data?: SnapshotVehicle[]; vehicles?: SnapshotVehicle[] };
+        vehicles = Array.isArray(raw)
+          ? raw
+          : Array.isArray(raw?.data)
+            ? raw.data
+            : Array.isArray(raw?.vehicles)
+              ? raw.vehicles
+              : [];
       }
     } catch {
       /* fail soft below */
