@@ -38,6 +38,9 @@ const CACHE_TTL_S = 3600;
 /** Same key functions/api/inventory.ts writes the site's KV snapshot to. */
 const KV_KEY_CURRENT = "inventory:current";
 const MAX_BATCH_STOCKS = 100;
+/** Live DMS public mirror — same source /api/inventory and the [slug].ts
+ *  VDP bridge use when KV is empty. camelCase fields (stockNumber, vin…). */
+const DMS_PUBLIC_URL = "https://dms.loveautogroup.net/api/v1/public/inventory";
 
 function json(body: unknown, maxAge = 300): Response {
   return new Response(JSON.stringify(body), {
@@ -77,11 +80,16 @@ async function handleBatch(
 
   const token = ctx.env.CF_ANALYTICS_TOKEN;
   const siteTag = ctx.env.CF_WA_SITE_TAG ?? "2e53d0ae1d184af9896e40b3669ae5ac";
-  if (!token) return json({ views: {} });
+  // `reason` is a debug affordance on the fail-soft empty shape: mobile only
+  // reads `views`, but a human hitting the URL can see WHICH leg came up dry.
+  if (!token) return json({ views: {}, reason: "analytics-token-missing" }, 60);
 
-  // Resolve stock → VDP path via the site's own KV inventory snapshot so
-  // slugs (incl. the SEO-stable SEED_SLUGS_BY_VIN overrides) can never
-  // drift from what the site actually serves.
+  // Resolve stock → VDP path. First choice: the KV inventory snapshot.
+  // NOTE (2026-07-17): that snapshot is written by the LEGACY DC-feed cron
+  // worker (workers/inventory-sync) and may be absent or stale — the site
+  // itself reads the live DMS mirror first (/api/inventory mode 1, and the
+  // [slug].ts VDP bridge). So when KV yields nothing we do the same live
+  // fallback rather than returning empty.
   let snapshot: { vehicles?: SnapshotVehicle[] } | null = null;
   try {
     snapshot = (await ctx.env.INVENTORY.get(KV_KEY_CURRENT, {
@@ -90,8 +98,22 @@ async function handleBatch(
   } catch {
     snapshot = null;
   }
-  const vehicles = snapshot?.vehicles ?? [];
-  if (vehicles.length === 0) return json({ views: {} });
+  let vehicles = snapshot?.vehicles ?? [];
+  if (vehicles.length === 0) {
+    try {
+      const res = await fetch(DMS_PUBLIC_URL, {
+        headers: { Accept: "application/json" },
+      });
+      if (res.ok) {
+        const data = (await res.json()) as { vehicles?: SnapshotVehicle[] };
+        vehicles = Array.isArray(data?.vehicles) ? data.vehicles : [];
+      }
+    } catch {
+      /* fail soft below */
+    }
+  }
+  if (vehicles.length === 0)
+    return json({ views: {}, reason: "no-inventory-source" }, 60);
 
   const wanted = new Set(stocks.map(String));
   const pathByStock = new Map<string, string>();
@@ -113,7 +135,8 @@ async function handleBatch(
       /* one bad row never breaks the batch */
     }
   }
-  if (pathByStock.size === 0) return json({ views: {} });
+  if (pathByStock.size === 0)
+    return json({ views: {}, reason: "stocks-not-found" }, 60);
 
   const out: Record<string, number> = {};
   const misses: Array<{ stock: string; path: string }> = [];
