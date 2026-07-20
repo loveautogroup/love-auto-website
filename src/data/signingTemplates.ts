@@ -182,7 +182,7 @@ AND NO IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR
 PURPOSE. The Buyer assumes all risk of any defects in the vehicle that
 may appear after the sale.
 
-Love Auto Group has inspected the vehicle and, to the best of our
+The vehicle has been inspected and, to the best of our
 knowledge, the vehicle is being delivered in the condition the Buyer
 inspected on [Date of Inspection]. The Buyer has been provided a free
 Carfax vehicle history report showing ownership, title, accident, and
@@ -190,13 +190,10 @@ service history.
 
 The Buyer acknowledges the following:
 
-  1. The Buyer has had the opportunity to inspect the vehicle, test
-     drive it, and to have it independently inspected by a mechanic of
-     the Buyer's choice before signing this disclosure.
-  2. The Buyer is not relying on any oral representation from Love
+  1. The Buyer is not relying on any oral representation from Love
      Auto Group or any of its representatives; any representation not
      contained in writing in the Buyer's Order is void.
-  3. After delivery, the Buyer accepts full responsibility for any
+  2. After delivery, the Buyer accepts full responsibility for any
      repairs, maintenance, or mechanical issues that may arise.
 
 By signing below, the Buyer confirms they have read and understood this

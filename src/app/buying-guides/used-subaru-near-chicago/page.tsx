@@ -31,7 +31,7 @@ const FAQS = [
   {
     question: "What is the difference between buying a used Subaru from an independent dealer vs. a franchise Subaru store?",
     answer:
-      "Franchise Subaru stores carry Certified Pre-Owned (CPO) inventory with a 152-point inspection and a manufacturer-backed warranty, which is the right call if you want a current-generation Forester or Outback with factory backing. Independent dealers like Love Auto Group focus on a different value point. We buy 2014 to 2018 Foresters, Outbacks, and Crosstreks at the value sweet spot, recondition them in-house, sell them at lower price points than franchise CPO, and back the deal with a full inspection and a free Carfax. Same drivetrains, lower overhead, lower price.",
+      "Franchise Subaru stores carry Certified Pre-Owned (CPO) inventory with a 152-point inspection and a manufacturer-backed warranty, which is the right call if you want a current-generation Forester or Outback with factory backing. Independent dealers like Love Auto Group focus on a different value point. We buy 2014 to 2018 Foresters, Outbacks, and Crosstreks at the value sweet spot, recondition them before listing, sell them at lower price points than franchise CPO, and back the deal with a full inspection and a free Carfax. Same drivetrains, lower overhead, lower price.",
   },
   {
     question: "What years of used Subaru are the value sweet spot?",
@@ -156,7 +156,7 @@ export default function UsedSubaruNearChicagoPage() {
             Independent specialists like us focus on a different price
             point. We buy second-generation 2014 to 2018 Foresters,
             Outbacks, and Crosstreks at the value sweet spot, recondition
-            them in our shop, and price them well below CPO. The
+            them before listing, and price them well below CPO. The
             drivetrains in this generation are essentially the same as
             the ones the franchise stores recondition. The difference is
             we do not carry franchise overhead, so the price drops by

@@ -49,7 +49,7 @@ const FAQS = [
   {
     question: "How is an independent dealer different from a franchise dealer?",
     answer:
-      "Franchise dealers (Toyota of Naperville, Honda of Lisle, Lexus of Highland Park, etc.) are tied to one manufacturer. They run Certified Pre-Owned programs with manufacturer-backed warranties, carry late-model inventory, and price near new-car territory. Independents like us are not tied to any one brand. We buy from auctions and trade-ins, recondition in-house, and price below CPO. The trade-off: no manufacturer warranty (we offer aftermarket service contracts as a separate line item) and a smaller inventory of 20 to 30 vehicles versus a franchise lot of 200+.",
+      "Franchise dealers (Toyota of Naperville, Honda of Lisle, Lexus of Highland Park, etc.) are tied to one manufacturer. They run Certified Pre-Owned programs with manufacturer-backed warranties, carry late-model inventory, and price near new-car territory. Independents like us are not tied to any one brand. We buy from auctions and trade-ins, recondition every vehicle before listing, and price below CPO. The trade-off: no manufacturer warranty (we offer aftermarket service contracts as a separate line item) and a smaller inventory of 20 to 30 vehicles versus a franchise lot of 200+.",
   },
   {
     question: "Do you stock Japanese performance cars like the Civic Type R or WRX?",
@@ -197,7 +197,7 @@ export default function IndependentJapaneseMakesDealerChicagoPage() {
           <h3>Independent Specialist (us)</h3>
           <p>
             Not tied to any manufacturer. Buys from wholesale auctions and
-            trade-ins, reconditions in-house, prices below franchise CPO.
+            trade-ins, reconditions every vehicle before listing, prices below franchise CPO.
             Smaller inventory (20 to 30 vehicles versus 200+ at a
             franchise). No manufacturer warranty (we offer aftermarket
             service contracts as a separate line item). The right call if

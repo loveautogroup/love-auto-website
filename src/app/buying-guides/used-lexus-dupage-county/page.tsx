@@ -31,7 +31,7 @@ const FAQS = [
   {
     question: "Independent used Lexus dealer vs. franchise Lexus store: which is right for me?",
     answer:
-      "Franchise Lexus stores carry L/Certified Pre-Owned inventory: typically Lexus vehicles six years old or newer with under 70,000 miles, a 161-point inspection, and a manufacturer-backed warranty extension. If you want a 2022 RX 350 with factory backing, that path makes sense. Independent specialists like Love Auto Group focus on a different price point. We buy 2010 to 2017 RX, ES, IS, and GX models, recondition them in our shop, and price them well below CPO. Same Toyota-derived drivetrains the franchise stores recondition, lower overhead, lower price. The trade-off is no Lexus factory warranty, smaller inventory, and an older average model year.",
+      "Franchise Lexus stores carry L/Certified Pre-Owned inventory: typically Lexus vehicles six years old or newer with under 70,000 miles, a 161-point inspection, and a manufacturer-backed warranty extension. If you want a 2022 RX 350 with factory backing, that path makes sense. Independent specialists like Love Auto Group focus on a different price point. We buy 2010 to 2017 RX, ES, IS, and GX models, recondition them before listing, and price them well below CPO. Same Toyota-derived drivetrains the franchise stores recondition, lower overhead, lower price. The trade-off is no Lexus factory warranty, smaller inventory, and an older average model year.",
   },
   {
     question: "Are used Lexus parts more expensive than Toyota parts?",
@@ -155,7 +155,7 @@ export default function UsedLexusDuPageCountyPage() {
           <p>
             Independent specialists like us focus on a different price
             point. We buy 2010 to 2017 RX, ES, IS, and GX models at the
-            value sweet spot, recondition them in our shop, and price them
+            value sweet spot, recondition them before listing, and price them
             well below franchise CPO. The drivetrains in this generation
             are essentially the same Toyota-derived powertrains the
             franchise stores recondition. The difference is we do not
