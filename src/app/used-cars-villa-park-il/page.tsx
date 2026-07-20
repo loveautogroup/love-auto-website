@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import LivePreviewGrid from "@/components/LivePreviewGrid";
 import { BreadcrumbSchema, FAQSchema } from "@/components/StructuredData";
+import { SITE_CONFIG } from "@/lib/constants";
+import { BRANDS } from "@/data/brands";
 
 const PAGE_URL = "https://www.loveautogroup.net/used-cars-villa-park-il/";
 
@@ -29,7 +31,7 @@ const FAQ_ITEMS = [
   {
     question: "What are the best used car dealerships in Villa Park, Illinois?",
     answer:
-      "Love Auto Group has been serving Villa Park and the surrounding DuPage County area since 2014. We're a CarGurus top-rated dealer with a 4.7-star Google rating and over 125 reviews. Every vehicle is carefully inspected and Carfax certified before it hits our lot.",
+      "Love Auto Group has been serving Villa Park and the surrounding DuPage County area since 2014. We're a CarGurus top-rated dealer with a 4.7-star Google rating and over 125 reviews. Every vehicle is carefully inspected before it hits our lot, and a free Carfax report is included on every car.",
   },
   {
     question: "What used cars does Love Auto Group have in Villa Park?",
@@ -90,8 +92,8 @@ export default function UsedCarsVillaParkPage() {
           </h1>
           <p className="mt-4 text-lg md:text-xl text-brand-gray-300 max-w-3xl">
             Love Auto Group is Villa Park&apos;s used car specialist — 735 N
-            Yale Ave, one mile from Route 83. Japanese makes, Carfax certified,
-            4.7 stars on Google.
+            Yale Ave, one mile from Route 83. Japanese makes, a free Carfax
+            report on every car, 4.7 stars on Google.
           </p>
           <div className="mt-6 flex flex-wrap gap-4">
             <Link
@@ -120,7 +122,7 @@ export default function UsedCarsVillaParkPage() {
             Used Cars For Sale in Villa Park Right Now
           </h2>
           <p className="mt-2 text-brand-gray-500">
-            Every vehicle inspected, Carfax certified, and lot-ready.
+            Every vehicle inspected, lot-ready, and listed with a free Carfax report.
           </p>
         </div>
         <LivePreviewGrid />
@@ -185,6 +187,78 @@ export default function UsedCarsVillaParkPage() {
           </p>
         </section>
 
+        {/* NAP block — must match the Google Business Profile listing
+            (GBP store code 06345907979509993852) exactly. Rendered from
+            SITE_CONFIG so a site-wide NAP change stays in sync here.
+            Page-level AutoDealer JSON-LD (address, geo, hours, areaServed)
+            is already emitted on this page by LocalBusinessSchema in the
+            root layout — do not add a second AutoDealer entity. */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
+            Visit Our Villa Park Car Dealership
+          </h2>
+          <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
+            <p className="font-semibold text-brand-gray-900">
+              {SITE_CONFIG.name}
+            </p>
+            <p className="text-brand-gray-700">{SITE_CONFIG.address.street}</p>
+            <p className="text-brand-gray-700 mb-3">
+              {SITE_CONFIG.address.city}, {SITE_CONFIG.address.state}{" "}
+              {SITE_CONFIG.address.zip}
+            </p>
+            <p className="text-brand-gray-700 mb-4">
+              <a
+                href={`tel:${SITE_CONFIG.phoneRaw}`}
+                className="text-brand-red hover:underline font-semibold"
+              >
+                {SITE_CONFIG.phone}
+              </a>{" "}
+              — call or text
+            </p>
+            <h3 className="font-semibold text-brand-gray-900 mb-2">Hours</h3>
+            <ul className="space-y-1 text-sm">
+              {SITE_CONFIG.hours.map((h) => (
+                <li key={h.day} className="flex justify-between max-w-xs">
+                  <span className="text-brand-gray-500">{h.day}</span>
+                  <span
+                    className={
+                      h.hours === "Closed"
+                        ? "text-brand-red font-medium"
+                        : "text-brand-gray-900 font-medium"
+                    }
+                  >
+                    {h.hours}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* Brand hubs — the brief calls for links out to the brand pages
+            so the geo hub feeds the make-level pages we want to rank. */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
+            Browse Our Villa Park Inventory by Brand
+          </h2>
+          <p className="text-brand-gray-700 leading-relaxed mb-4">
+            Prefer to start with a make? Each brand page covers what we look
+            for when we buy that make, plus the cars we have in stock today.
+          </p>
+          <ul className="flex flex-wrap gap-x-6 gap-y-2 font-semibold">
+            {BRANDS.map((brand) => (
+              <li key={brand.slug}>
+                <Link
+                  href={`/brands/${brand.slug}/`}
+                  className="text-brand-red hover:text-brand-red-dark"
+                >
+                  Used {brand.displayName} →
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         <section className="mb-10">
           <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
             Used Car Financing in Villa Park, IL
@@ -199,7 +273,8 @@ export default function UsedCarsVillaParkPage() {
             or come in and we&apos;ll walk you through your options in person.
           </p>
           <p className="text-brand-gray-700 leading-relaxed">
-            No high-pressure tactics. No surprise fees at signing. We explain
+            No high-pressure tactics and no dealer fees — you pay the listed
+            price plus tax, title, and license, nothing else. We explain
             every number before you put pen to paper.
           </p>
         </section>

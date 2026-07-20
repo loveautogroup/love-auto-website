@@ -39,6 +39,17 @@ export default function AboutPage() {
             carefully selected vehicles that meet our standards.
             Anything that doesn&apos;t pass gets sent back.
           </p>
+          <p className="text-brand-gray-700 leading-relaxed mb-6">
+            Shopping nearby? Start with our{" "}
+            <Link
+              href="/used-cars-villa-park-il/"
+              className="text-brand-red hover:underline"
+            >
+              used cars in Villa Park, IL
+            </Link>{" "}
+            page — current stock, directions, hours, and the questions we
+            hear most.
+          </p>
         </div>
 
         {/* What sets us apart */}
