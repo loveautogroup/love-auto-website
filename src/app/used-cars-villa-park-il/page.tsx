@@ -158,8 +158,8 @@ export default function UsedCarsVillaParkPage() {
             and other import vehicles when the right car comes along.
           </p>
           <p className="text-brand-gray-700 leading-relaxed">
-            Every used car we put on the lot goes through a full inspection by
-            our in-house team before it&apos;s available for sale. Carfax
+            Every used car we put on the lot goes through a full inspection
+            before it&apos;s available for sale. Carfax
             reports are included free on every vehicle. No surprises at the
             deal desk, no pressure on the lot. That&apos;s why we have over 125
             Google reviews and a 4.7-star rating from Villa Park and DuPage

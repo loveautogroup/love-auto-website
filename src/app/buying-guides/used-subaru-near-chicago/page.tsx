@@ -31,7 +31,7 @@ const FAQS = [
   {
     question: "What is the difference between buying a used Subaru from an independent dealer vs. a franchise Subaru store?",
     answer:
-      "Franchise Subaru stores carry Certified Pre-Owned (CPO) inventory with a 152-point inspection and a manufacturer-backed warranty, which is the right call if you want a current-generation Forester or Outback with factory backing. Independent dealers like Love Auto Group focus on a different value point. We buy 2014 to 2018 Foresters, Outbacks, and Crosstreks at the value sweet spot, recondition them in-house, sell them at lower price points than franchise CPO, and back the deal with our own inspection and a free Carfax. Same drivetrains, lower overhead, lower price.",
+      "Franchise Subaru stores carry Certified Pre-Owned (CPO) inventory with a 152-point inspection and a manufacturer-backed warranty, which is the right call if you want a current-generation Forester or Outback with factory backing. Independent dealers like Love Auto Group focus on a different value point. We buy 2014 to 2018 Foresters, Outbacks, and Crosstreks at the value sweet spot, recondition them in-house, sell them at lower price points than franchise CPO, and back the deal with a full inspection and a free Carfax. Same drivetrains, lower overhead, lower price.",
   },
   {
     question: "What years of used Subaru are the value sweet spot?",
@@ -237,12 +237,12 @@ export default function UsedSubaruNearChicagoPage() {
             price.
           </p>
 
-          <h2>What We Inspect on Every Used Subaru</h2>
+          <h2>What Gets Inspected on Every Used Subaru</h2>
 
           <ul>
             <li>
               Head gasket area and coolant condition (less of a concern
-              on FB25 engines than the older EJ25, but we check anyway)
+              on FB25 engines than the older EJ25, but it gets checked anyway)
             </li>
             <li>
               CVT transmission fluid color and condition. CVT fluid that

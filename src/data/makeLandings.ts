@@ -263,7 +263,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Inspection Standards",
         body: [
-          "Honda's reliability reputation is real but not unconditional. We inspect every used Honda for the platform-specific items: CVT health and fluid condition (especially on Civic and CR-V), VTC actuator function (Civic L15B7 turbo engines), AC compressor on early Pilot model years, and full transmission service records when available. As a Carfax Advantage Dealer, we provide a free Carfax report on every Honda we list.",
+          "Honda's reliability reputation is real but not unconditional. Every used Honda is inspected for the platform-specific items: CVT health and fluid condition (especially on Civic and CR-V), VTC actuator function (Civic L15B7 turbo engines), AC compressor on early Pilot model years, and full transmission service records when available. As a Carfax Advantage Dealer, we provide a free Carfax report on every Honda we list.",
         ],
       },
       {
@@ -314,7 +314,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "The Inspection Standard",
         body: [
-          "SUVs work harder than sedans, especially in the Chicago suburbs. We inspect every used SUV for the items that matter on the platform — AWD coupling fluid condition, brake pad and rotor condition (heavier vehicles wear them faster), suspension components, third-row seat operation where applicable, and full electronic system function. If anything fails the inspection, the vehicle doesn't get listed.",
+          "SUVs work harder than sedans, especially in the Chicago suburbs. Every used SUV is inspected for the items that matter on the platform — AWD coupling fluid condition, brake pad and rotor condition (heavier vehicles wear them faster), suspension components, third-row seat operation where applicable, and full electronic system function. If anything fails the inspection, the vehicle doesn't get listed.",
         ],
       },
       {

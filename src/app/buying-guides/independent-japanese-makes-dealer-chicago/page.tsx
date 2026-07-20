@@ -263,7 +263,7 @@ export default function IndependentJapaneseMakesDealerChicagoPage() {
             but when one comes through at the right number we take it.
           </p>
 
-          <h2>What We Inspect on Every Vehicle</h2>
+          <h2>What Gets Inspected on Every Vehicle</h2>
 
           <ul>
             <li>Free Carfax pulled and reviewed before listing</li>

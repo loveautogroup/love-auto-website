@@ -61,7 +61,7 @@ const FAQS = [
   {
     question: "What should I check before buying a used Lexus?",
     answer:
-      "Service history first. Lexus owners who follow the maintenance schedule produce cars that go 250,000 miles without major issues. Owners who skip services produce expensive problems. We pull a Carfax on every Lexus and review the service record before listing. Specific items we inspect: oil consumption history (especially on RX 350 and ES 350 above 100,000 miles), suspension air struts on GX 460 (a known wear point that costs $1,500+ if it fails), transmission fluid color, and any documented timing chain or VVT-i sensor work. Carfax Advantage Dealer status means we share the report before you ask.",
+      "Service history first. Lexus owners who follow the maintenance schedule produce cars that go 250,000 miles without major issues. Owners who skip services produce expensive problems. We pull a Carfax on every Lexus and review the service record before listing. Specific items covered in the inspection: oil consumption history (especially on RX 350 and ES 350 above 100,000 miles), suspension air struts on GX 460 (a known wear point that costs $1,500+ if it fails), transmission fluid color, and any documented timing chain or VVT-i sensor work. Carfax Advantage Dealer status means we share the report before you ask.",
   },
 ];
 
@@ -242,13 +242,13 @@ export default function UsedLexusDuPageCountyPage() {
             they hold value strongly. Price range $18,000 to $25,000+.
           </p>
 
-          <h2>What We Inspect on Every Used Lexus</h2>
+          <h2>What Gets Inspected on Every Used Lexus</h2>
 
           <ul>
             <li>
               Oil consumption history. RX 350 and ES 350 above 100,000
               miles can develop oil consumption from worn piston rings.
-              We check the dipstick at receipt and again before listing
+              The dipstick gets checked at receipt and again before listing
             </li>
             <li>
               Suspension air struts on GX 460 (a known wear point that

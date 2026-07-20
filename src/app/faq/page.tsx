@@ -17,7 +17,7 @@ const faqs = [
   {
     question: "Are your vehicles inspected before sale?",
     answer:
-      "Yes. Every vehicle we sell is thoroughly inspected and fully reconditioned by our in-house team before it goes on the lot. If something needs fixing, it gets fixed right. We don't cut corners.",
+      "Yes. Every vehicle we sell is thoroughly inspected and fully reconditioned before it goes on the lot. If something needs fixing, it gets fixed right. We don't cut corners.",
   },
   {
     question: "Do you offer financing?",
@@ -97,7 +97,7 @@ const faqs = [
   {
     question: "Do you sell vehicles with high mileage?",
     answer:
-      "Yes, and we think it's a smart way to buy. A well-maintained Japanese vehicle at 150,000 to 200,000 miles often has another 100,000 miles of service life ahead. We inspect every high-mileage vehicle carefully and address any issues before listing. The value is better than low-mileage alternatives for most buyers.",
+      "Yes, and we think it's a smart way to buy. A well-maintained Japanese vehicle at 150,000 to 200,000 miles often has another 100,000 miles of service life ahead. Every high-mileage vehicle is carefully inspected, and any issues are addressed before listing. The value is better than low-mileage alternatives for most buyers.",
   },
   {
     question: "What's the difference between buying from you versus a franchise dealer?",

@@ -146,7 +146,7 @@ export const blogPosts: BlogPost[] = [
         <li><strong>Transmission feel.</strong> Lexus transmissions are smooth. Any hesitation, slipping, or harsh shifting is a red flag.</li>
         <li><strong>Interior electronics.</strong> Test the touchscreen, the sound system, and every button. These are the expensive things to fix.</li>
         <li><strong>Leather condition.</strong> Check for cracking, especially on the driver's seat. Reupholstery is expensive.</li>
-        <li><strong>Pre-purchase inspection.</strong> At Love Auto Group, we handle this before any vehicle is listed. If you're buying privately, pay a mechanic to do it.</li>
+        <li><strong>Pre-purchase inspection.</strong> At Love Auto Group, this is handled before any vehicle is listed. If you're buying privately, pay a mechanic to do it.</li>
       </ul>
 
       <h2>Where to Buy a Used Lexus in the Chicago Suburbs</h2>

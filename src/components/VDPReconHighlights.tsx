@@ -83,7 +83,7 @@ export default function VDPReconHighlights() {
 
       {/* Footer note */}
       <p className="mt-4 text-[11px] text-brand-gray-400 leading-snug">
-        Every vehicle is fully inspected and reconditioned by our team before we list it.
+        Every vehicle is fully inspected and reconditioned before it&rsquo;s listed.
         Not happy with something? We&rsquo;ll fix it before you drive off.
       </p>
     </section>

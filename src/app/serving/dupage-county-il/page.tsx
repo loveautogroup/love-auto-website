@@ -255,7 +255,7 @@ export default function DuPageCountyPage() {
           Inventory typically prices from around $4,500 to $18,000, with most
           vehicles in the 2013 to 2018 model years and 80,000 to 140,000 mile
           range. Every vehicle is carefully selected at the buying stage,
-          fully reconditioned by our in-house team, and comes with a free
+          fully inspected and reconditioned, and comes with a free
           Carfax. We&apos;re a Carfax Advantage Dealer, which means we share
           the report before you ask.
         </p>

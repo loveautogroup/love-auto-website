@@ -53,7 +53,7 @@ function generateFAQs(vehicle: Vehicle) {
         ? "That's well below average for the model year — a low-mileage example."
         : vehicle.mileage < 120000
           ? "That's typical for the model year and well within the useful service life of this vehicle."
-          : "Higher-mileage examples like this one are priced to reflect the additional miles. The drivetrain has been inspected and is operating within spec — happy to walk you through what we checked."
+          : "Higher-mileage examples like this one are priced to reflect the additional miles. The drivetrain has been inspected and is operating within spec — happy to walk you through the inspection results."
     }`,
   });
 

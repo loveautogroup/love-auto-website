@@ -63,7 +63,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "What is the most reliable used Honda SUV?",
         answer:
-          "The CR-V is the safest pick. The 2013 to 2017 generation with the 2.4L four-cylinder is the value sweet spot, well past the early-life issues and still current inside. The Pilot is excellent too, but the V6 with variable cylinder management needs documented oil services. We inspect both during recon and only price the ones that pass.",
+          "The CR-V is the safest pick. The 2013 to 2017 generation with the 2.4L four-cylinder is the value sweet spot, well past the early-life issues and still current inside. The Pilot is excellent too, but the V6 with variable cylinder management needs documented oil services. Both get inspected during recon, and only the ones that pass get priced.",
       },
       {
         question: "Should I worry about CVT transmissions in used Hondas?",
@@ -73,7 +73,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "Is a used Honda Pilot a good family vehicle?",
         answer:
-          "Yes, and it is one of the most underrated three-row buys on the used market. The Pilot has a roomier third row than most competitors, the AWD system is genuinely capable in Chicago winters, and resale value is excellent. The honest watch-out is the V6 oil consumption on early variable cylinder management models, which is why we inspect every Pilot during recon.",
+          "Yes, and it is one of the most underrated three-row buys on the used market. The Pilot has a roomier third row than most competitors, the AWD system is genuinely capable in Chicago winters, and resale value is excellent. The honest watch-out is the V6 oil consumption on early variable cylinder management models, which is why every Pilot gets inspected during recon.",
       },
       {
         question: "How much should I expect to pay for a good used Honda Civic?",
@@ -100,7 +100,7 @@ export const BRANDS: BrandContent[] = [
       "Looking for a used Subaru near Chicago? You're in the right place. Love Auto Group is a family owned used Subaru dealer in Villa Park, IL, twenty minutes west of downtown Chicago and central to the western suburbs and DuPage County. We've been buying, reconditioning, and selling Foresters, Outbacks, and Crosstreks here since 2014, and Subaru is one of the makes we know best.",
       "A Subaru built after 2014 will run past 250,000 miles when properly maintained. That is not a marketing claim. That is what every long-term reliability study and what we see at the buying stage shows us. Foresters, Outbacks, and Crosstreks from the second-generation 2014 to 2017 era are the value sweet spot in the used Subaru market, and they are exactly what we keep in rotation on our lot in Villa Park.",
       "We typically stock used Subarus in the $9,000 to $15,000 range, focused on 2014 to 2018 model years with 80,000 to 140,000 miles. Symmetrical all-wheel drive, eight inches of ground clearance on the Forester, and the kind of all-season capability that handles a Chicago suburbs winter without drama. Buyers come to us from across DuPage County, including Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, and Naperville, plus the broader western suburbs.",
-      "Every used Subaru on our lot has been carefully selected and fully reconditioned before it is listed for sale. We look specifically at the head gasket area, the CVT transmission behavior, and the all-wheel drive engagement during our pre-listing inspection. We also pull a free Carfax on every vehicle, looking for documented CVT fluid services, head gasket history, and consistent oil change records.",
+      "Every used Subaru on our lot has been carefully selected and fully reconditioned before it is listed for sale. The head gasket area, the CVT transmission behavior, and the all-wheel drive engagement all get specific attention during the pre-listing inspection. We also pull a free Carfax on every vehicle, looking for documented CVT fluid services, head gasket history, and consistent oil change records.",
       "The Subaru models we see most often: the Forester (the workhorse), the Outback (more interior space, smoother on the highway), the Crosstrek (lighter, smaller, easier on fuel), and the occasional Legacy sedan for buyers who do not need the wagon body.",
     ],
     faqs: [
@@ -187,7 +187,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "What should I check before buying a used Lexus?",
         answer:
-          "Service history first. Lexus owners who follow the maintenance schedule produce cars that go 250,000 miles without drama. Owners who skip services produce expensive problems. We pull a Carfax on every Lexus, review the service record before listing, and inspect the suspension air struts on GX models specifically (a known wear point). Carfax Advantage Dealer status means you see the report before you ask.",
+          "Service history first. Lexus owners who follow the maintenance schedule produce cars that go 250,000 miles without drama. Owners who skip services produce expensive problems. We pull a Carfax on every Lexus, review the service record before listing; the suspension air struts on GX models specifically get inspected (a known wear point). Carfax Advantage Dealer status means you see the report before you ask.",
       },
       {
         question: "Where can I buy a used Lexus in the Chicago suburbs?",
@@ -267,7 +267,7 @@ export const BRANDS: BrandContent[] = [
     body: [
       "Mazda is the driver's pick on the used market. The interiors are a step above the segment, the steering and ride balance are notably sharper than competitors, and Mazda's reliability has caught up with Honda and Toyota in the post-2014 generations. The CX-5 in particular is one of the better-aging compact SUVs you can buy used in this price range.",
       "We typically stock used Mazda models in the $9,000 to $15,000 range, focused on 2014 to 2018 model years with 80,000 to 130,000 miles. Skyactiv engines have proven reliable, the available all-wheel drive on the CX-5 and CX-9 is responsive, and the cabin feels current even on five-year-old examples.",
-      "Every used Mazda on our lot has been carefully selected and fully reconditioned before it is listed. On the CX-5 specifically we inspect the rear differential and the propeller shaft on all-wheel drive models, since Mazda specified service intervals that not every prior owner followed. We pull a free Carfax on every vehicle and confirm fluid services in the documented history before pricing.",
+      "Every used Mazda on our lot has been carefully selected and fully reconditioned before it is listed. On the CX-5 specifically, the rear differential and the propeller shaft get inspected on all-wheel drive models, since Mazda specified service intervals that not every prior owner followed. We pull a free Carfax on every vehicle and confirm fluid services in the documented history before pricing.",
       "The Mazda models we see most often: the CX-5 (the value play in the compact SUV segment), the Mazda3 (compact car with luxury-segment driving feel), the Mazda6 (mid-size sedan), and the occasional CX-9 for buyers who need three rows.",
     ],
     faqs: [
@@ -294,7 +294,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "What should I check before buying a used CX-5?",
         answer:
-          "On AWD models, check the rear differential fluid and the propeller shaft for noise, since Mazda specified service intervals that not every prior owner followed. Also check the touchscreen for the 2014 to 2017 Mazda Connect system, which can develop bugs. We inspect both during recon and pull a free Carfax to confirm fluid services in the documented history before pricing.",
+          "On AWD models, check the rear differential fluid and the propeller shaft for noise, since Mazda specified service intervals that not every prior owner followed. Also check the touchscreen for the 2014 to 2017 Mazda Connect system, which can develop bugs. Both get inspected during recon, and we pull a free Carfax to confirm fluid services in the documented history before pricing.",
       },
     ],
     relatedLinks: [
@@ -315,7 +315,7 @@ export const BRANDS: BrandContent[] = [
     body: [
       "Toyota does not make the flashiest car in any segment, and that is exactly the point. The Camry, Corolla, RAV4, and Highlander are built to start every morning, run for fifteen years, and hand over to the next owner without drama. Used Toyotas hold their value because the cars actually run, and that is why they are a steady part of our inventory mix.",
       "We typically stock used Toyota models in the $9,000 to $16,000 range, focused on 2014 to 2018 model years with 80,000 to 140,000 miles. The 2.5L 2AR-FE four-cylinder in the Camry and the RAV4, the 3.5L 2GR-FKS V6 in the Highlander, and the legendary 1GR-FE V6 in the Tacoma are all engines that routinely run past 250,000 miles when serviced correctly.",
-      "Every used Toyota on our lot has been carefully selected and fully reconditioned before it is listed. We pull a free Carfax on every vehicle and review service history before pricing. On RAV4s with AWD we check the rear differential and the coupling fluid. On Highlanders we look at the V6 water pump (a known wear point around 100,000 miles). On Tacomas we inspect the frame for rust history, since older trucks had a frame recall and pricing varies based on whether the truck was inspected, replaced, or untouched.",
+      "Every used Toyota on our lot has been carefully selected and fully reconditioned before it is listed. We pull a free Carfax on every vehicle and review service history before pricing. On RAV4s with AWD, the rear differential and the coupling fluid get checked. On Highlanders, the V6 water pump gets a close look (a known wear point around 100,000 miles). On Tacomas, the frame gets inspected for rust history, since older trucks had a frame recall and pricing varies based on whether the truck was inspected, replaced, or untouched.",
       "The Toyota models we see most often: the Camry (the volume reliability play), the Corolla (the entry-level commuter that refuses to die), the RAV4 (compact SUV with class-leading resale), the Highlander (three-row family hauler that competes with the Pilot and Pathfinder), and the occasional Tacoma (the mid-size truck with the strongest resale value of anything we sell). We also see Sienna, Prius, and the GR86 for the buyer who wants a Toyota that turns better than it accelerates.",
     ],
     faqs: [

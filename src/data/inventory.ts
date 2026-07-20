@@ -80,7 +80,7 @@ const HANDWRITTEN_FALLBACK: Vehicle[] = [
     bodyStyle: "SUV",
     fuelType: "Gasoline",
     description:
-      "A three-row luxury SUV for under $5,000 is rare. One that still drives this well at 213,000 miles is rarer. The MDX Sport is built on the same platform as the Honda Pilot but with Acura's Super Handling AWD, the high-output 3.7L VTEC V6, leather interior, moonroof, and the kind of reliability Japanese engineering is known for. Thoroughly inspected and fully reconditioned by our in-house team. $4,499, priced at the value end but built to the same standard as everything else on the lot. Call or text (630) 359-3643 to see it at 735 N Yale Ave, Villa Park.",
+      "A three-row luxury SUV for under $5,000 is rare. One that still drives this well at 213,000 miles is rarer. The MDX Sport is built on the same platform as the Honda Pilot but with Acura's Super Handling AWD, the high-output 3.7L VTEC V6, leather interior, moonroof, and the kind of reliability Japanese engineering is known for. Thoroughly inspected and fully reconditioned. $4,499, priced at the value end but built to the same standard as everything else on the lot. Call or text (630) 359-3643 to see it at 735 N Yale Ave, Villa Park.",
     features: [
       "Super Handling All-Wheel Drive (SH-AWD)",
       "3.7L VTEC V6",
@@ -116,7 +116,7 @@ const HANDWRITTEN_FALLBACK: Vehicle[] = [
     bodyStyle: "SUV",
     fuelType: "Gasoline",
     description:
-      "A well-equipped compact SUV under $5,000. The SLT-1 trim is the Terrain with the good stuff: heated leather seats, Pioneer premium audio, remote start, touchscreen infotainment, backup camera, and a comfortable ride that takes daily commutes and weekend errands with ease. 151,419 miles, thoroughly inspected and fully reconditioned by our in-house team. $4,999. Stop by 735 N Yale Ave or call (630) 359-3643 to set up a test drive.",
+      "A well-equipped compact SUV under $5,000. The SLT-1 trim is the Terrain with the good stuff: heated leather seats, Pioneer premium audio, remote start, touchscreen infotainment, backup camera, and a comfortable ride that takes daily commutes and weekend errands with ease. 151,419 miles, thoroughly inspected and fully reconditioned. $4,999. Stop by 735 N Yale Ave or call (630) 359-3643 to set up a test drive.",
     features: [
       "Leather Heated Seats",
       "Touchscreen Infotainment",
@@ -224,7 +224,7 @@ const HANDWRITTEN_FALLBACK: Vehicle[] = [
     bodyStyle: "SUV",
     fuelType: "Gasoline",
     description:
-      "A Subaru Forester Premium with symmetrical all-wheel drive, panoramic moonroof, heated seats, and the Boxer engine that put Subaru on the map for Illinois winters. The Premium trim adds the All-Weather Package, roof rails, and the X-Mode traction system for snow and dirt. 189,346 miles on a drivetrain proven to run well past 250,000 with care. Carefully selected and fully reconditioned by our in-house team. $5,799.99. Call or text (630) 359-3643 to test drive at 735 N Yale Ave, Villa Park.",
+      "A Subaru Forester Premium with symmetrical all-wheel drive, panoramic moonroof, heated seats, and the Boxer engine that put Subaru on the map for Illinois winters. The Premium trim adds the All-Weather Package, roof rails, and the X-Mode traction system for snow and dirt. 189,346 miles on a drivetrain proven to run well past 250,000 with care. Carefully selected and fully reconditioned. $5,799.99. Call or text (630) 359-3643 to test drive at 735 N Yale Ave, Villa Park.",
     features: [
       "Symmetrical All-Wheel Drive",
       "Panoramic Power Moonroof",
