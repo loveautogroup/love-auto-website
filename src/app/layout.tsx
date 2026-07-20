@@ -26,11 +26,11 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.loveautogroup.net"),
   title: {
-    default: "Love Auto Group — Used Car Dealership in Villa Park, IL",
+    default: "Love Auto Group | Used Car Dealership in Villa Park, IL",
     template: "%s",
   },
   description:
-    "Love Auto Group — used car dealership in Villa Park, IL, 20 miles from Chicago. Japanese makes specialist: used Lexus, Subaru, Acura, Mazda, Honda. 4.7★ on Google, 125+ reviews. Family owned since 2014.",
+    "Family-owned car dealership in Villa Park, IL. Used Subaru, Lexus, Honda, Acura & Mazda, each with a free Carfax report. No dealer fees — tax, title & license only.",
   keywords: [
     "used cars Villa Park IL",
     "used car dealership Villa Park",
@@ -53,9 +53,9 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
   },
   openGraph: {
-    title: "Love Auto Group — Used Car Dealership in Villa Park, IL",
+    title: "Love Auto Group | Used Car Dealership in Villa Park, IL",
     description:
-      "Love Auto Group — used car dealership in Villa Park, IL, 20 miles from Chicago. Japanese makes specialist: used Lexus, Subaru, Acura, Mazda, Honda. 4.7★ on Google, 125+ reviews. Family owned since 2014.",
+      "Family-owned car dealership in Villa Park, IL. Used Subaru, Lexus, Honda, Acura & Mazda, each with a free Carfax report. No dealer fees — tax, title & license only.",
     url: "https://www.loveautogroup.net",
     siteName: "Love Auto Group",
     locale: "en_US",
@@ -76,9 +76,9 @@ export const metadata: Metadata = {
     // wired makes the cards parse cleanly for any engine that reads them.
     site: "@loveautogroup",
     creator: "@loveautogroup",
-    title: "Love Auto Group — Used Car Dealership in Villa Park, IL",
+    title: "Love Auto Group | Used Car Dealership in Villa Park, IL",
     description:
-      "Love Auto Group — used car dealership in Villa Park, IL. Japanese makes specialist. Family owned since 2014.",
+      "Family-owned car dealership in Villa Park, IL. Japanese makes specialist. No dealer fees, free Carfax. Since 2014.",
     images: ["https://www.loveautogroup.net/og-image.png"],
   },
   verification: {

@@ -398,6 +398,63 @@ export default function HomePage() {
           placement used by competitors. */}
       <HomepageReviewWall />
 
+      {/* "Car dealership" relevance block — SEO plan 2026-07-20, Phase 1.
+          The pos-20.9 "love car dealership" query needs the literal phrase
+          in body copy and an H2, not just the <title>. Written in Mark's
+          voice: plain, honest, no hype. Doubles as the homepage about
+          blurb and links homepage authority to /about/, /inventory/, and
+          the Villa Park hub. */}
+      <section className="bg-white py-16" aria-labelledby="dealership-heading">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2
+            id="dealership-heading"
+            className="text-3xl font-bold text-brand-gray-900 mb-6"
+          >
+            An Independent Car Dealership in Villa Park, IL
+          </h2>
+          <p className="text-brand-gray-700 leading-relaxed mb-4">
+            Love Auto Group is a small, family-owned car dealership at 735 N
+            Yale Ave, Unit A in Villa Park — about 20 miles west of Chicago.
+            We&apos;ve been here since 2014. No franchise banner, no acre of
+            balloons, no handoff to a finance office. You deal directly with
+            the people who found the car, inspected it, and priced it.
+          </p>
+          <p className="text-brand-gray-700 leading-relaxed mb-4">
+            Most of our lot is Japanese makes — Subaru, Lexus, Honda, Acura,
+            Toyota, Mazda — because they hold up. Every vehicle is inspected
+            before it&apos;s listed, and every one comes with a free Carfax
+            report. If a car isn&apos;t good enough to put our name on, we
+            don&apos;t sell it.
+          </p>
+          <p className="text-brand-gray-700 leading-relaxed mb-6">
+            The price you see is the price you pay, plus tax, title, and
+            license. No dealer fees. If you&apos;re comparing car dealerships
+            in Villa Park or anywhere in DuPage County, come walk the lot —
+            or start with the pages below.
+          </p>
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold">
+            <Link
+              href="/about/"
+              className="text-brand-red hover:text-brand-red-dark"
+            >
+              More about us →
+            </Link>
+            <Link
+              href="/inventory/"
+              className="text-brand-red hover:text-brand-red-dark"
+            >
+              Browse the inventory →
+            </Link>
+            <Link
+              href="/used-cars-villa-park-il/"
+              className="text-brand-red hover:text-brand-red-dark"
+            >
+              Used cars in Villa Park →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Internal-linking hub section — feeds homepage authority to brand,
           geo, and buying-guide pages. Added 2026-05-23 as part of Anna v2
           SEO push. Per the GSC deep-dive, the homepage carries 80% of
@@ -432,7 +489,11 @@ export default function HomePage() {
                 {SERVICE_AREAS.map((area) => (
                   <li key={area.slug}>
                     <Link
-                      href={`/serving/${area.slug}/`}
+                      href={
+                        area.slug === "villa-park-il"
+                          ? "/used-cars-villa-park-il/"
+                          : `/serving/${area.slug}/`
+                      }
                       className="text-brand-navy hover:text-brand-red transition-colors"
                     >
                       Used Cars in {area.town}, IL
