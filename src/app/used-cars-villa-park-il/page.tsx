@@ -31,7 +31,7 @@ const FAQ_ITEMS = [
   {
     question: "What are the best used car dealerships in Villa Park, Illinois?",
     answer:
-      "Love Auto Group has been serving Villa Park and the surrounding DuPage County area since 2014. We're a CarGurus top-rated dealer with a 4.7-star Google rating and over 125 reviews. Every vehicle is carefully inspected before it hits our lot, and a free Carfax report is included on every car.",
+      "Love Auto Group has been serving Villa Park and the surrounding DuPage County area since 2014. We're a CarGurus top-rated dealer with a 4.7-star Google rating and 129 reviews. Every vehicle is carefully inspected before it hits our lot, and a free Carfax report is included on every car.",
   },
   {
     question: "What used cars does Love Auto Group have in Villa Park?",

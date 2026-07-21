@@ -26,7 +26,7 @@ export interface GoogleReviewsData {
 
 const FALLBACK: GoogleReviewsData = {
   rating: 4.7,
-  reviewCount: 127,
+  reviewCount: 129,
   reviews: [],
 };
 
