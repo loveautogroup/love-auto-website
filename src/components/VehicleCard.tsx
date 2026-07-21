@@ -384,15 +384,9 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           </span>
         </div>
 
-        {/* E1: AS-IS chip — quiet compliance signal (counsel-requested).
-            All Love Auto vehicles default to as-is; kept off the photo
-            overlay (already dense) and off the sparse coming-soon state. */}
-        {!isComingSoon && (vehicle.asIs ?? true) && (
-          <span className="inline-block mt-2 text-[11px] uppercase tracking-wide text-brand-gray-500 border border-brand-gray-300 rounded px-1.5 py-0.5">
-            Sold As-Is
-          </span>
-        )}
-
+        {/* E1-r (2026-07-21, Jeremiah): AS-IS chip removed — the blanket
+            default-true flag was labeling vehicles as-is that are not.
+            As-is terms are handled at signing, not in listing chrome. */}
         {isComingSoon && (
           <div className="flex items-center gap-1.5 mt-2">
             <span className="w-1.5 h-1.5 rounded-full bg-brand-red flex-shrink-0" aria-hidden="true" />

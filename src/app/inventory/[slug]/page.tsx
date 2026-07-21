@@ -556,30 +556,19 @@ export default async function VehicleDetailPage({
               <VDPReconHighlights />
             </div>
 
-            {/* E1: AS-IS disclosure — counsel-requested (IL used-car dealer).
-                Every Love Auto vehicle defaults to as-is; the panel sits with
-                the trust content above the description tabs so buyers see the
-                no-dealer-warranty terms and any disclosed defects before
-                inquiring. Informational amber, deliberately not a red alarm. */}
-            {(vehicle.asIs ?? true) && (
-              <div className="mt-4 lg:mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 sm:px-5 sm:py-4">
-                <h2 className="text-sm font-semibold text-amber-900">
-                  Sold As-Is
+            {/* E1-r (2026-07-21, Jeremiah): AS-IS disclosure panel removed —
+                the asIs flag defaults true for every vehicle, which mislabeled
+                cars that are not sold as-is. Warranty/as-is terms are settled
+                in the signing documents for the actual sale. Known-issues
+                transparency kept below as a neutral condition note. */}
+            {vehicle.knownIssues && vehicle.knownIssues.trim() !== "" && (
+              <div className="mt-4 lg:mt-6 rounded-xl border border-brand-gray-200 bg-brand-gray-50 px-4 py-3 sm:px-5 sm:py-4">
+                <h2 className="text-sm font-semibold text-brand-gray-900">
+                  Condition notes
                 </h2>
-                <p className="mt-1 text-sm text-amber-900 leading-snug">
-                  This vehicle is sold as-is without a dealer warranty.
-                  Independent pre-purchase inspections are welcome — ask us.
+                <p className="mt-1 text-sm text-brand-gray-700 leading-snug whitespace-pre-line">
+                  {vehicle.knownIssues}
                 </p>
-                {vehicle.knownIssues && vehicle.knownIssues.trim() !== "" && (
-                  <p className="mt-2 text-sm text-amber-900 leading-snug">
-                    <span className="font-semibold">
-                      Known issues disclosed:
-                    </span>{" "}
-                    <span className="whitespace-pre-line">
-                      {vehicle.knownIssues}
-                    </span>
-                  </p>
-                )}
               </div>
             )}
 
