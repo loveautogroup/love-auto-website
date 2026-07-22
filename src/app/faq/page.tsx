@@ -100,11 +100,6 @@ const faqs = [
       "Yes, and we think it's a smart way to buy. A well-maintained Japanese vehicle at 150,000 to 200,000 miles often has another 100,000 miles of service life ahead. Every high-mileage vehicle is carefully inspected, and any issues are addressed before listing. The value is better than low-mileage alternatives for most buyers.",
   },
   {
-    question: "What's the difference between buying from you versus a franchise dealer?",
-    answer:
-      "Franchise dealers carry new cars from one manufacturer and their certified pre-owned programs add a significant markup for the badge and factory-backed warranty. We're an independent dealer, which means we source from multiple channels, keep overhead lower, and pass those savings on. The tradeoff: no manufacturer-backed CPO warranty, but every vehicle is inspected and reconditioned by our own team with a 30-day warranty included.",
-  },
-  {
     question: "Do you work with buyers who have bankruptcy or repossession on their credit?",
     answer:
       "Yes. We work with multiple lenders including partners that specialize in challenged credit situations. Bankruptcy or repossession on your record doesn't automatically disqualify you. A steady income, a down payment, and an honest conversation about your situation go a long way. Start with our online pre-approval (soft credit pull, no score impact) or call us directly.",
