@@ -135,8 +135,10 @@ export default async function BrandPage({
       <section className="bg-brand-navy text-white py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-3xl md:text-5xl font-bold leading-tight">
-            Used {content.displayName} for Sale in
-            <span className="block text-brand-red mt-2">Villa Park, IL</span>
+            Used {content.displayName} for Sale
+            <span className="block text-brand-red mt-2">
+              {content.heroLocation ?? "in Villa Park, IL"}
+            </span>
           </h1>
           <p className="mt-4 text-lg md:text-xl text-brand-gray-300 max-w-3xl">
             {content.hero}
@@ -171,6 +173,24 @@ export default async function BrandPage({
             ))}
           </p>
         ) : null}
+
+        {content.extraSections && content.extraSections.length > 0
+          ? content.extraSections.map((section, i) => (
+              <div key={section.heading} className="mt-10">
+                <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
+                  {section.heading}
+                </h2>
+                {section.paragraphs.map((paragraph, j) => (
+                  <p
+                    key={j}
+                    className="text-lg text-brand-gray-700 leading-relaxed mb-4"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+            ))
+          : null}
       </article>
 
       {/* FAQ section, when authored */}
