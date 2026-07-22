@@ -36,20 +36,6 @@ export interface BrandContent {
   faqs?: { question: string; answer: string }[];
   /** Internal links surfaced at the bottom of the editorial. */
   relatedLinks?: { label: string; href: string }[];
-  /**
-   * Overrides the default "in Villa Park, IL" H1 subline. Use when a page
-   * targets a regional query cluster broader than the home city (e.g.
-   * Subaru's Chicagoland/Oak Brook/DuPage cluster, task #15).
-   */
-  heroLocation?: string;
-  /**
-   * Additional H2 sections rendered after the main editorial body and
-   * related links, before the FAQ block. Used for brand pages that need
-   * deeper regional or model-specific content than the standard body
-   * paragraphs (e.g. Subaru's model-by-model + CPO-language section,
-   * task #15). Optional; brands without it render exactly as before.
-   */
-  extraSections?: { heading: string; paragraphs: string[] }[];
 }
 
 export const BRANDS: BrandContent[] = [
@@ -110,35 +96,12 @@ export const BRANDS: BrandContent[] = [
       "Used Subaru Forester, Outback, Crosstrek, and Legacy near Chicago. Family owned dealer in Villa Park, IL serving the western suburbs and DuPage County. AWD-ready. $9,000 to $15,000. Free Carfax. (630) 359-3643.",
     hero:
       "AWD-ready Subarus near Chicago. Family owned, serving Villa Park and the western suburbs since 2014.",
-    heroLocation:
-      "Serving Chicagoland, Oak Brook & DuPage County",
     body: [
       "Looking for a used Subaru near Chicago? You're in the right place. Love Auto Group is a family owned used Subaru dealer in Villa Park, IL, twenty minutes west of downtown Chicago and central to the western suburbs and DuPage County. We've been buying, reconditioning, and selling Foresters, Outbacks, and Crosstreks here since 2014, and Subaru is one of the makes we know best.",
       "A Subaru built after 2014 will run past 250,000 miles when properly maintained. That is not a marketing claim. That is what every long-term reliability study and what we see at the buying stage shows us. Foresters, Outbacks, and Crosstreks from the second-generation 2014 to 2017 era are the value sweet spot in the used Subaru market, and they are exactly what we keep in rotation on our lot in Villa Park.",
       "We typically stock used Subarus in the $9,000 to $15,000 range, focused on 2014 to 2018 model years with 80,000 to 140,000 miles. Symmetrical all-wheel drive, eight inches of ground clearance on the Forester, and the kind of all-season capability that handles a Chicago suburbs winter without drama. Buyers come to us from across DuPage County, including Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, and Naperville, plus the broader western suburbs.",
       "Every used Subaru on our lot has been carefully selected and fully reconditioned before it is listed for sale. The head gasket area, the CVT transmission behavior, and the all-wheel drive engagement all get specific attention during the pre-listing inspection. We also pull a free Carfax on every vehicle, looking for documented CVT fluid services, head gasket history, and consistent oil change records.",
-      "The Subaru models we see most often: the Forester (the workhorse), the Outback (more interior space, smoother on the highway), the Crosstrek (lighter, smaller, easier on fuel), the Impreza (the most affordable way into Subaru AWD), and the occasional Legacy sedan for buyers who do not need the wagon body. Families cross-shopping a three-row SUV should also ask us about the Ascent, Subaru's largest model and the one built specifically to seat six or seven.",
-    ],
-    extraSections: [
-      {
-        heading: "Which Subaru Fits Your Family",
-        paragraphs: [
-          "Outback: the wagon-and-SUV hybrid. Best pick for buyers who want Subaru's ground clearance and AWD without stepping up to a taller body, and a favorite for long highway drives to relatives outside Chicagoland.",
-          "Forester: the tallest greenhouse and easiest visibility of the lineup. A common choice for new drivers in the family and for anyone who backs a trailer or a bike rack in and out of a Villa Park driveway.",
-          "Crosstrek: the smallest and most fuel-efficient. Fits a family that wants Subaru's winter capability as a second car or a first car for a teenager, without the size or price of an Outback.",
-          "Impreza: the entry point. Same symmetrical AWD as the rest of the lineup, in a smaller sedan or hatchback body, for families cross-shopping used Subaru against a compact sedan.",
-          "Legacy: the sedan for buyers who want Outback-level comfort and AWD without the raised ride height.",
-          "Ascent: Subaru's three-row SUV, built to seat six or seven. This is the model to ask about if a Forester or Outback's back seat is too tight for car seats plus a third row of kids or grandparents. We do not carry Ascents in every rotation, so call (630) 359-3643 and we will let you know when one lands or is on the way.",
-        ],
-      },
-      {
-        heading: "Is It a \"Certified Pre-Owned\" Subaru?",
-        paragraphs: [
-          "Love Auto Group is an independent, family owned dealer. We are not a Subaru franchise, so we cannot sell a vehicle under Subaru's manufacturer Certified Pre-Owned (CPO) program, and none of our Subarus carry that certification or its extended factory warranty.",
-          "What we do instead: every Subaru on our lot is carefully selected, fully reconditioned, and inspected before it is priced, with specific attention to the items Subaru owners actually ask about (head gasket area, CVT fluid condition, AWD engagement). We also pull a free Carfax history report on every vehicle so you can see the documented service and ownership history yourself rather than take our word for it.",
-          "If manufacturer CPO coverage (and the loaner cars, extended factory warranty, and dealership-network perks that come with it) is a requirement for you, a franchised Subaru dealer is the right place to look. If you want a Subaru that has been through an honest independent inspection at a fair price, with the full history in hand, that is what we do in Villa Park.",
-        ],
-      },
+      "The Subaru models we see most often: the Forester (the workhorse), the Outback (more interior space, smoother on the highway), the Crosstrek (lighter, smaller, easier on fuel), and the occasional Legacy sedan for buyers who do not need the wagon body.",
     ],
     faqs: [
       {
@@ -175,21 +138,6 @@ export const BRANDS: BrandContent[] = [
         question: "Do you serve buyers from Chicago and the western suburbs?",
         answer:
           "Yes. We're located in Villa Park, IL, which is centrally placed for the entire DuPage County and western Chicago suburbs market. Buyers regularly come to us from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, Lisle, Naperville, Bloomingdale, and Chicago itself. We can also arrange delivery for out-of-state buyers who find a Subaru on our lot they want.",
-      },
-      {
-        question: "Does Love Auto Group sell Subaru Certified Pre-Owned (CPO) vehicles?",
-        answer:
-          "No, and we want to be upfront about that. We're an independent dealer, not a Subaru franchise, so we cannot offer Subaru's manufacturer CPO program or its factory-backed extended warranty. What we do offer on every Subaru: a full pre-listing inspection and reconditioning pass, with specific attention to the head gasket area, CVT fluid condition, and AWD engagement, plus a free Carfax history report so you can see the documented service and ownership history for yourself. If factory CPO coverage is a must-have, a franchised Subaru dealer is the right stop. If you want an honestly inspected Subaru with full history at a fair price, that's what we do in Villa Park.",
-      },
-      {
-        question: "Do you have a three-row Subaru SUV for a family, like the Ascent?",
-        answer:
-          "Yes, we look for the Ascent specifically for families who need a third row, since it's the only three-row model in the Subaru lineup, built to seat six or seven. We don't carry one in every rotation, so call (630) 359-3643 and we'll flag the next one that lands or let you know when one's on the way. If you don't need a true third row, the Outback and Forester both offer more cargo and passenger room than the Crosstrek or Impreza.",
-      },
-      {
-        question: "What's the best Subaru dealership for families in Chicagoland?",
-        answer:
-          "We think a family shopping used Subaru in Chicagoland should weigh three things: honest condition reporting (we pull a free Carfax on every vehicle), a dealer who actually understands the platform's known wear points (head gasket area, CVT fluid, AWD engagement, all checked during our recon), and a location central enough to reach without a special trip. Villa Park sits about 20 minutes from downtown Chicago and is central to Oak Brook, Elmhurst, Lombard, Glen Ellyn, Addison, Wheaton, and the rest of DuPage County, which is why families across Chicagoland end up here.",
       },
     ],
     relatedLinks: [
