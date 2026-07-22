@@ -5,14 +5,14 @@ import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import { BreadcrumbSchema } from "@/components/StructuredData";
 
 export const metadata: Metadata = {
-  title: "Free Carfax on Every Used Car | Love Auto Group, Villa Park IL",
+  title: "Free Carfax Report on Every Used Car Near Chicago | Love Auto Group",
   description:
-    "Carfax Advantage Dealer in Villa Park, IL. Free Carfax history report on every used car in our inventory. No fees, no exceptions. Family owned since 2014.",
+    "Every used car at our Villa Park dealership near Chicago comes with a free Carfax report already pulled. No signup, no fee, no exceptions. See the full history before you buy.",
   alternates: { canonical: "https://www.loveautogroup.net/free-carfax-villa-park" },
   openGraph: {
-    title: "Free Carfax on Every Used Car | Love Auto Group, Villa Park IL",
+    title: "Free Carfax Report on Every Used Car Near Chicago | Love Auto Group",
     description:
-      "Carfax Advantage Dealer in Villa Park, IL. Free Carfax history report on every used car. No fees, no exceptions.",
+      "Every used car at our Villa Park dealership near Chicago comes with a free Carfax report already pulled. No signup, no fee, no exceptions.",
     url: "https://www.loveautogroup.net/free-carfax-villa-park",
     type: "website",
     siteName: "Love Auto Group",
@@ -80,15 +80,26 @@ export default function FreeCarfaxLanding() {
           Open any vehicle listing on our site. Click the <strong>CARFAX FREE REPORT</strong> button in the top-left of the photo. The report opens in a new tab. That's it — no signup, no email gate, no upsell.
         </p>
         <p className="text-brand-gray-700 leading-relaxed mb-8">
-          If you want a Carfax report on a vehicle you've seen on another site or at another dealer, give us a call at <a href="tel:6303593643" className="text-brand-red hover:underline font-semibold">(630) 359-3643</a> with the VIN and we'll pull the report for you over the phone.
+          One honest limit: our Carfax Advantage status covers our own inventory, so we can only pull a free report on a vehicle we actually have on our lot. If you've found a car for sale somewhere else, we can't pull a Carfax on it for you at no charge - Carfax's own site is where that report comes from, and it isn't free there. What we can tell you: every car <em>we</em> sell already has the report pulled and waiting, which is one less thing to chase down before you buy.
         </p>
 
         <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">Why This Matters Buying Used in Villa Park</h2>
         <p className="text-brand-gray-700 leading-relaxed mb-4">
           Used-car shopping in DuPage County means dealing with vehicles that have lived through Chicago winters, rust-belt road salt, and several previous owners. The single best protection a buyer has is a complete service and accident history before signing anything. The Carfax report is the closest thing to that you can get on a vehicle you don't know personally.
         </p>
-        <p className="text-brand-gray-700 leading-relaxed">
+        <p className="text-brand-gray-700 leading-relaxed mb-8">
           Our Carfax Advantage status is a permanent commitment to making that history available to every shopper who walks onto our lot or browses our website. That's the kind of dealer we are. That's the kind of buying experience our customers tell us they want.
+        </p>
+        <p className="text-brand-gray-700 leading-relaxed">
+          Shopping specifically in Villa Park? Start with our{" "}
+          <Link href="/used-cars-villa-park-il/" className="text-brand-red hover:underline font-semibold">
+            Villa Park used car guide
+          </Link>
+          . Looking for a Subaru? Every one on our{" "}
+          <Link href="/brands/subaru/" className="text-brand-red hover:underline font-semibold">
+            Subaru inventory page
+          </Link>{" "}
+          comes with the same free Carfax report.
         </p>
       </article>
 
