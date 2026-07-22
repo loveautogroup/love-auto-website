@@ -57,7 +57,7 @@ export const BRANDS: BrandContent[] = [
   {
     slug: "honda",
     displayName: "Honda",
-    metaTitle: "Used Honda for Sale in Villa Park, IL | Love Auto Group",
+    metaTitle: "Used Honda Near Chicago | Villa Park, IL | Love Auto Group",
     metaDescription:
       "Used Honda Pilot, CR-V, Accord, and Civic in Villa Park, IL. The reliability standard. $8,000 to $15,000 range. Free Carfax. Family owned. (630) 359-3643.",
     hero:
@@ -263,7 +263,7 @@ export const BRANDS: BrandContent[] = [
   {
     slug: "acura",
     displayName: "Acura",
-    metaTitle: "Used Acura for Sale in Villa Park, IL | Love Auto Group",
+    metaTitle: "Used Acura Near Chicago | Villa Park, IL | Love Auto Group",
     metaDescription:
       "Used Acura MDX, TL, RDX, and TLX in Villa Park, IL. Honda reliability with luxury features. $8,000 to $14,000 range. Free Carfax. (630) 359-3643.",
     hero:
@@ -311,7 +311,7 @@ export const BRANDS: BrandContent[] = [
   {
     slug: "mazda",
     displayName: "Mazda",
-    metaTitle: "Used Mazda for Sale in Villa Park, IL | Love Auto Group",
+    metaTitle: "Used Mazda Near Chicago | Villa Park, IL | Love Auto Group",
     metaDescription:
       "Used Mazda CX-5, Mazda3, Mazda6, and CX-9 in Villa Park, IL. The driver's pick on the used market. $9,000 to $15,000 range. Free Carfax. (630) 359-3643.",
     hero:
