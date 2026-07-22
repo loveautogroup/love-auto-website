@@ -420,8 +420,12 @@ export default function HomePage() {
             the people who found the car, inspected it, and priced it.
           </p>
           <p className="text-brand-gray-700 leading-relaxed mb-4">
-            Most of our lot is Japanese makes — Subaru, Lexus, Honda, Acura,
-            Toyota, Mazda — because they hold up. Every vehicle is inspected
+            Most of our lot is Japanese makes —{" "}
+            <Link href="/brands/subaru/" className="text-brand-red hover:underline">
+              Subaru
+            </Link>
+            , Lexus, Honda, Acura, Toyota, Mazda — because they hold up.
+            Every vehicle is inspected
             before it&apos;s listed, and every one comes with a free Carfax
             report. If a car isn&apos;t good enough to put our name on, we
             don&apos;t sell it.

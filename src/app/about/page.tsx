@@ -34,9 +34,12 @@ export default function AboutPage() {
             inspect, and recondition each one before it gets a price tag.
           </p>
           <p className="text-brand-gray-700 leading-relaxed mb-6">
-            Our focus is on Japanese vehicles like Lexus, Subaru, Acura, and
-            Mazda. Makes known for reliability and longevity. We source
-            carefully selected vehicles that meet our standards.
+            Our focus is on Japanese vehicles like Lexus,{" "}
+            <Link href="/brands/subaru/" className="text-brand-red hover:underline">
+              Subaru
+            </Link>
+            , Acura, and Mazda. Makes known for reliability and longevity. We
+            source carefully selected vehicles that meet our standards.
             Anything that doesn&apos;t pass gets sent back.
           </p>
           <p className="text-brand-gray-700 leading-relaxed mb-6">
