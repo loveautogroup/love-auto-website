@@ -3,7 +3,7 @@ import FinancingHero from "./FinancingHero";
 import ApplySection from "./ApplySection";
 
 export const metadata: Metadata = {
-  title: "Used Car Financing, All Credit Welcome | Love Auto",
+  title: "Used Car Financing, All Credit Welcome | Love Auto Group",
   description:
     "All credit welcome. Multiple lenders, competitive rates, and fast pre-approval. Apply online with Love Auto Group in Villa Park, IL.",
   alternates: { canonical: "https://www.loveautogroup.net/financing" },
