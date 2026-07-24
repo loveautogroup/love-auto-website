@@ -9,7 +9,7 @@ import RecentlyReducedRail from "./RecentlyReducedRail";
 import { ItemListSchema } from "@/components/StructuredData";
 
 export const metadata: Metadata = {
-  title: "Used Cars for Sale in Villa Park, IL | Love Auto Group",
+  title: "Browse Our Full Used Car Inventory | Love Auto Group",
   description:
     "Browse our Villa Park, IL inventory of quality used cars from $4,500 to $18,000. Lexus, Subaru, Acura, Mazda. Fully reconditioned and ready to drive.",
   alternates: { canonical: "https://www.loveautogroup.net/inventory/" },
