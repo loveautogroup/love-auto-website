@@ -2,7 +2,7 @@
  * Admin /api/admin/signing-sessions
  *
  * POST — Jeremiah creates a new signing session. Returns the signing URL
- *        to send the customer. Protected by Cloudflare Access.
+ *        to send the customer.
  * GET  — lists all sessions (Jeremiah's dashboard).
  *
  * Sessions are stored in the SIGNING KV namespace. Each session has a

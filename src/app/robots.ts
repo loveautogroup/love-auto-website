@@ -15,8 +15,8 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         disallow: [
-          // /admin is the merchandising console, gated by Cloudflare Access
-          // anyway, but no reason to invite crawlers in.
+          // /admin is the merchandising console — login-gated anyway, but no
+          // reason to invite crawlers in.
           "/admin",
           "/admin/",
           // 2026-05-05 — block /api/ explicitly. Pages Functions live under

@@ -1,20 +1,11 @@
 /**
  * Admin POST /api/admin/merchandising
  *
- * Writes a new merchandising config to Cloudflare KV. This endpoint is
- * intended to be protected by Cloudflare Zero Trust Access at the
- * application layer — CF Access terminates unauthenticated requests
- * before they reach this Function, so we don't hand-roll auth here.
+ * Writes a new merchandising config to Cloudflare KV.
  *
- * Configure Access in the Cloudflare dashboard:
- *   - Application: "Love Auto Group Admin"
- *   - Domain: loveautogroup.pages.dev/admin/*  AND  loveautogroup.pages.dev/api/admin/*
- *   - Policy: emails allow-list (Jeremiah + Jordan)
- *   - Session duration: 24 hours (or as preferred)
- *
- * Defense in depth: this handler also checks for the CF Access JWT header
- * (cf-access-jwt-assertion) and rejects requests missing it. This catches
- * any misconfiguration where the Access gate doesn't cover this endpoint.
+ * Auth: requireAdmin() from _lib/admin-auth (the __Secure-lag_admin session
+ * cookie). There is no Cloudflare Access application in front of this route —
+ * the session cookie is the only gate, and it fails closed.
  */
 
 import { MerchandisingConfigInput, validateMerchandisingConfig } from "../../_lib/validation";

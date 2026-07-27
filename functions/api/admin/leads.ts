@@ -4,9 +4,8 @@
  * GET  — list all finance-application leads (most recent first)
  * PATCH — update a lead's status (new / contacted / qualified / lost)
  *
- * Same Cloudflare Zero Trust Access gate as /api/admin/merchandising.
- * Access terminates unauthenticated requests; this handler also checks
- * cf-access-jwt-assertion defensively.
+ * Auth: requireAdmin() from _lib/admin-auth (the __Secure-lag_admin session
+ * cookie). There is no Cloudflare Access application in front of this route.
  */
 
 import { requireAdmin, type AdminAuthEnv } from "../../_lib/admin-auth";

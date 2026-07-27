@@ -5,9 +5,8 @@
  * sync logs. Used by the /admin/sync-status page to monitor the
  * inventory-sync Cron Worker without needing access to Cloudflare logs.
  *
- * Same Cloudflare Zero Trust Access gate as the rest of /api/admin.
- * We also check cf-access-jwt-assertion defensively in case Access
- * misconfigures.
+ * Auth: requireAdmin() from _lib/admin-auth (the __Secure-lag_admin session
+ * cookie). There is no Cloudflare Access application in front of this route.
  *
  * Logs are written to the same INVENTORY KV namespace by the Cron
  * Worker under keys "inventory:log:{ISO}". They auto-expire after 30
