@@ -477,6 +477,8 @@ export default function FinancingForm() {
               inputMode="numeric"
               autoComplete="postal-code"
               placeholder="60181"
+              pattern="\d{5}(-\d{4})?"
+              title="5 digits, or 5+4 with a dash (60181 or 60181-1234)"
               className={fieldClass}
               value={values.addressZip}
               onChange={(e) => update("addressZip", e.target.value)}
