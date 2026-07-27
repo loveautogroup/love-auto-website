@@ -123,7 +123,13 @@ export const onRequestPost: PagesFunction<PostEnv> = async ({ request, env }) =>
     const body = await res.text();
     return new Response(body, {
       status: res.status,
-      headers: { "Content-Type": "application/json; charset=utf-8" },
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        // This response bypasses the json() helper below, so the same
+        // no-store rule has to be repeated here.
+        "Cache-Control": "no-store, no-cache, must-revalidate, private",
+        "X-Robots-Tag": "noindex, nofollow, noarchive",
+      },
     });
   } catch (err) {
     return json(502, { error: `Worker call failed: ${(err as Error).message}` });
@@ -177,6 +183,13 @@ function summarizeSnapshot(snap: {
 function json(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json; charset=utf-8" },
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      // Admin data must never be stored by a browser, a shared proxy, or
+      // Cloudflare's edge. public/_headers does NOT cover Pages Functions
+      // responses, so the header has to be set right here.
+      "Cache-Control": "no-store, no-cache, must-revalidate, private",
+      "X-Robots-Tag": "noindex, nofollow, noarchive",
+    },
   });
 }
