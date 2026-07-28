@@ -116,218 +116,75 @@
 /inventory/:brand/:model/:stock   /inventory/                  301
 
 # ─── GSC 404 sweep round 2 (2026-07-28, Leo) ────────────────────────
-# The 2026-06-29 pass (3d31c39) only matched the NO-trailing-slash form.
-# Google has the legacy VDPs indexed WITH the trailing slash, so
+# The 2026-06-29 pass (3d31c39) matched only the NO-trailing-slash form
+# of the legacy VDP pattern. Google has these indexed WITH the slash, so
 # /inventory/acura/mdx/11248/ still hard-404'd while the bare form 301'd.
-# Verified live 2026-07-28 (301 vs 404 on the same URL +/- the slash).
+#
+# !! HARD-LEARNED LIMIT (measured live 2026-07-28) !!
+# Cloudflare's docs claim 2,000 static + 100 dynamic redirects. The REAL
+# behaviour on this project is that everything past roughly the 114th
+# rule is SILENTLY IGNORED - no build error, no warning, the rules just
+# never fire. A first pass at this fix shipped 230 rules; rules 1-114
+# worked and 115-230 did nothing. Probed every rule live to find the
+# edge. KEEP THE TOTAL RULE COUNT UNDER ~100 and re-probe after any
+# bulk addition. Prefer exact static rules for known-bad URLs over
+# speculative wildcard coverage - splats are dynamic and scarce.
 #
 # Placeholder rules match PER SEGMENT, so the 2- and 3-segment forms
 # below can never collide with a live VDP, which is always ONE segment
-# under /inventory/ (e.g. /inventory/2017-lexus-gs-350-awd-11344/).
-# Bare make pages (/inventory/lexus/) ARE one segment, so those are
-# enumerated explicitly further down instead of pattern-matched.
+# under /inventory/. Bare make pages (/inventory/lexus/) ARE one segment,
+# so they are enumerated explicitly instead of pattern-matched.
 
-# Legacy 3-segment VDP — trailing-slash form (the missing half)
-/inventory/:brand/:model/:stock/           /inventory/            301
+# Legacy 3-segment VDP - trailing-slash form (the half 3d31c39 missed)
+/inventory/:brand/:model/:stock/               /inventory/            301
 # Legacy 2-segment make/model listing pages
-/inventory/:brand/:model                   /inventory/            301
-/inventory/:brand/:model/                  /inventory/            301
+/inventory/:brand/:model                       /inventory/            301
+/inventory/:brand/:model/                      /inventory/            301
 
-# Bare legacy make index under /inventory/ — MUST be explicit (see above)
-/inventory/acura                           /brands/acura/         301
-/inventory/acura/                          /brands/acura/         301
-/inventory/honda                           /brands/honda/         301
-/inventory/honda/                          /brands/honda/         301
-/inventory/lexus                           /brands/lexus/         301
-/inventory/lexus/                          /brands/lexus/         301
-/inventory/mazda                           /brands/mazda/         301
-/inventory/mazda/                          /brands/mazda/         301
-/inventory/subaru                          /brands/subaru/        301
-/inventory/subaru/                         /brands/subaru/        301
-/inventory/toyota                          /brands/toyota/        301
-/inventory/toyota/                         /brands/toyota/        301
-/inventory/nissan                          /inventory/            301
-/inventory/nissan/                         /inventory/            301
-/inventory/gmc                             /inventory/            301
-/inventory/gmc/                            /inventory/            301
-/inventory/audi                            /inventory/            301
-/inventory/audi/                           /inventory/            301
-/inventory/ford                            /inventory/            301
-/inventory/ford/                           /inventory/            301
-/inventory/volvo                           /inventory/            301
-/inventory/volvo/                          /inventory/            301
-/inventory/chrysler                        /inventory/            301
-/inventory/chrysler/                       /inventory/            301
-/inventory/hyundai                         /inventory/            301
-/inventory/hyundai/                        /inventory/            301
-/inventory/jaguar                          /inventory/            301
-/inventory/jaguar/                         /inventory/            301
-/inventory/saab                            /inventory/            301
-/inventory/saab/                           /inventory/            301
-/inventory/porsche                         /inventory/            301
-/inventory/porsche/                        /inventory/            301
-/inventory/bmw                             /inventory/            301
-/inventory/bmw/                            /inventory/            301
-/inventory/mercedes-benz                   /inventory/            301
-/inventory/mercedes-benz/                  /inventory/            301
-/inventory/kia                             /inventory/            301
-/inventory/kia/                            /inventory/            301
-/inventory/volkswagen                      /inventory/            301
-/inventory/volkswagen/                     /inventory/            301
-/inventory/dodge                           /inventory/            301
-/inventory/dodge/                          /inventory/            301
-/inventory/jeep                            /inventory/            301
-/inventory/jeep/                           /inventory/            301
-/inventory/chevrolet                       /inventory/            301
-/inventory/chevrolet/                      /inventory/            301
-/inventory/buick                           /inventory/            301
-/inventory/buick/                          /inventory/            301
-/inventory/cadillac                        /inventory/            301
-/inventory/cadillac/                       /inventory/            301
-/inventory/infiniti                        /inventory/            301
-/inventory/infiniti/                       /inventory/            301
-/inventory/mitsubishi                      /inventory/            301
-/inventory/mitsubishi/                     /inventory/            301
-/inventory/tesla                           /inventory/            301
-/inventory/tesla/                          /inventory/            301
+# Bare legacy make index under /inventory/ (must be explicit - see above)
+/inventory/acura/                              /brands/acura/         301
+/inventory/honda/                              /brands/honda/         301
+/inventory/lexus/                              /brands/lexus/         301
+/inventory/mazda/                              /brands/mazda/         301
+/inventory/subaru/                             /brands/subaru/        301
+/inventory/toyota/                             /brands/toyota/        301
 
-# ─── Legacy CarsForSale landing pages ───────────────────────────────
-# Body-style and make landing pages from the old CMS. Still indexed and
-# still hard-404ing as of 2026-07-28. Makes with a real brand page get
-# sent there (relevant destination); the rest go to /inventory/.
+# ─── Legacy CarsForSale landing pages (exact URLs from the GSC report) ─
+# Makes with a real brand page go there; everything else to /inventory/.
+/cars-for-sale                                 /inventory/            301
+/acura-for-sale                                /brands/acura/         301
+/honda-for-sale                                /brands/honda/         301
+/lexus-for-sale                                /brands/lexus/         301
+/mazda-for-sale                                /brands/mazda/         301
+/subaru-for-sale                               /brands/subaru/        301
+/toyota-for-sale                               /brands/toyota/        301
+/nissan-for-sale                               /inventory/            301
+/gmc-for-sale                                  /inventory/            301
+/suv-for-sale                                  /inventory/            301
+/sedan-for-sale                                /inventory/            301
+/coupe-for-sale                                /inventory/            301
+/minivan-for-sale                              /inventory/            301
+/subaru/forester-for-sale                      /brands/subaru/        301
+/toyota/corolla-for-sale                       /brands/toyota/        301
+/mazda/mazda3-for-sale                         /brands/mazda/         301
+/nissan/xterra-for-sale                        /inventory/            301
+/audi/a6-for-sale                              /inventory/            301
+/gmc/terrain-for-sale                          /inventory/            301
+/ford/taurus-for-sale                          /inventory/            301
+/minivan/passenger-for-sale                    /inventory/            301
+/volvo/v60%20cross%20country-for-sale          /inventory/            301
 
-/acura-for-sale                            /brands/acura/         301
-/acura-for-sale/                           /brands/acura/         301
-/acura/*                                   /brands/acura/         301
-/honda-for-sale                            /brands/honda/         301
-/honda-for-sale/                           /brands/honda/         301
-/honda/*                                   /brands/honda/         301
-/lexus-for-sale                            /brands/lexus/         301
-/lexus-for-sale/                           /brands/lexus/         301
-/lexus/*                                   /brands/lexus/         301
-/mazda-for-sale                            /brands/mazda/         301
-/mazda-for-sale/                           /brands/mazda/         301
-/mazda/*                                   /brands/mazda/         301
-/subaru-for-sale                           /brands/subaru/        301
-/subaru-for-sale/                          /brands/subaru/        301
-/subaru/*                                  /brands/subaru/        301
-/toyota-for-sale                           /brands/toyota/        301
-/toyota-for-sale/                          /brands/toyota/        301
-/toyota/*                                  /brands/toyota/        301
-/nissan-for-sale                           /inventory/            301
-/nissan-for-sale/                          /inventory/            301
-/nissan/*                                  /inventory/            301
-/gmc-for-sale                              /inventory/            301
-/gmc-for-sale/                             /inventory/            301
-/gmc/*                                     /inventory/            301
-/audi-for-sale                             /inventory/            301
-/audi-for-sale/                            /inventory/            301
-/audi/*                                    /inventory/            301
-/ford-for-sale                             /inventory/            301
-/ford-for-sale/                            /inventory/            301
-/ford/*                                    /inventory/            301
-/volvo-for-sale                            /inventory/            301
-/volvo-for-sale/                           /inventory/            301
-/volvo/*                                   /inventory/            301
-/chrysler-for-sale                         /inventory/            301
-/chrysler-for-sale/                        /inventory/            301
-/chrysler/*                                /inventory/            301
-/hyundai-for-sale                          /inventory/            301
-/hyundai-for-sale/                         /inventory/            301
-/hyundai/*                                 /inventory/            301
-/jaguar-for-sale                           /inventory/            301
-/jaguar-for-sale/                          /inventory/            301
-/jaguar/*                                  /inventory/            301
-/saab-for-sale                             /inventory/            301
-/saab-for-sale/                            /inventory/            301
-/saab/*                                    /inventory/            301
-/porsche-for-sale                          /inventory/            301
-/porsche-for-sale/                         /inventory/            301
-/porsche/*                                 /inventory/            301
-/bmw-for-sale                              /inventory/            301
-/bmw-for-sale/                             /inventory/            301
-/bmw/*                                     /inventory/            301
-/mercedes-benz-for-sale                    /inventory/            301
-/mercedes-benz-for-sale/                   /inventory/            301
-/mercedes-benz/*                           /inventory/            301
-/kia-for-sale                              /inventory/            301
-/kia-for-sale/                             /inventory/            301
-/kia/*                                     /inventory/            301
-/volkswagen-for-sale                       /inventory/            301
-/volkswagen-for-sale/                      /inventory/            301
-/volkswagen/*                              /inventory/            301
-/dodge-for-sale                            /inventory/            301
-/dodge-for-sale/                           /inventory/            301
-/dodge/*                                   /inventory/            301
-/jeep-for-sale                             /inventory/            301
-/jeep-for-sale/                            /inventory/            301
-/jeep/*                                    /inventory/            301
-/chevrolet-for-sale                        /inventory/            301
-/chevrolet-for-sale/                       /inventory/            301
-/chevrolet/*                               /inventory/            301
-/buick-for-sale                            /inventory/            301
-/buick-for-sale/                           /inventory/            301
-/buick/*                                   /inventory/            301
-/cadillac-for-sale                         /inventory/            301
-/cadillac-for-sale/                        /inventory/            301
-/cadillac/*                                /inventory/            301
-/infiniti-for-sale                         /inventory/            301
-/infiniti-for-sale/                        /inventory/            301
-/infiniti/*                                /inventory/            301
-/mitsubishi-for-sale                       /inventory/            301
-/mitsubishi-for-sale/                      /inventory/            301
-/mitsubishi/*                              /inventory/            301
-/tesla-for-sale                            /inventory/            301
-/tesla-for-sale/                           /inventory/            301
-/tesla/*                                   /inventory/            301
-
-/suv-for-sale                              /inventory/            301
-/suv-for-sale/                             /inventory/            301
-/suv/*                                     /inventory/            301
-/sedan-for-sale                            /inventory/            301
-/sedan-for-sale/                           /inventory/            301
-/sedan/*                                   /inventory/            301
-/coupe-for-sale                            /inventory/            301
-/coupe-for-sale/                           /inventory/            301
-/coupe/*                                   /inventory/            301
-/minivan-for-sale                          /inventory/            301
-/minivan-for-sale/                         /inventory/            301
-/minivan/*                                 /inventory/            301
-/truck-for-sale                            /inventory/            301
-/truck-for-sale/                           /inventory/            301
-/truck/*                                   /inventory/            301
-/wagon-for-sale                            /inventory/            301
-/wagon-for-sale/                           /inventory/            301
-/wagon/*                                   /inventory/            301
-/convertible-for-sale                      /inventory/            301
-/convertible-for-sale/                     /inventory/            301
-/convertible/*                             /inventory/            301
-/hatchback-for-sale                        /inventory/            301
-/hatchback-for-sale/                       /inventory/            301
-/hatchback/*                               /inventory/            301
-/crossover-for-sale                        /inventory/            301
-/crossover-for-sale/                       /inventory/            301
-/crossover/*                               /inventory/            301
-
-# ─── Misc legacy top-level pages (GSC 404 list, 2026-07-28) ─────────
-/cars-for-sale                             /inventory/            301
-/cars-for-sale/                            /inventory/            301
-/terms-and-conditions                      /terms/                301
-/terms-and-conditions/                     /terms/                301
-/loan-application                          /financing/            301
-/loan-application/                         /financing/            301
-/schedule-test-drive                       /contact/              301
-/schedule-test-drive/                      /contact/              301
-/value-my-trade                            /sell-your-car/        301
-/value-my-trade/                           /sell-your-car/        301
-/make-an-appointment                       /contact/              301
-/make-an-appointment/                      /contact/              301
-/testimonials                              /reviews/              301
-/testimonials/                             /reviews/              301
-# Old analytics beacon + a truncated legacy path. No equity, but a 301
-# deindexes them cleanly instead of leaving them in the 404 report.
-/_tracking                                 /                      301
-/mo                                        /                      301
+# ─── Misc legacy top-level pages (GSC 404 list) ─────────────────────
+/terms-and-conditions                          /terms/                301
+/loan-application                              /financing/            301
+/schedule-test-drive                           /contact/              301
+/value-my-trade                                /sell-your-car/        301
+/make-an-appointment                           /contact/              301
+/make-an-appointment/                          /contact/              301
+/testimonials                                  /reviews/              301
+/testimonials/                                 /reviews/              301
+/_tracking                                     /                      301
+/mo                                            /                      301
 
 # --- VDP / landing trailing-slash recovery (S56, 2026-06-16) ---
 # Static export emits /<route>/index.html. Cloudflare auto-redirects the
