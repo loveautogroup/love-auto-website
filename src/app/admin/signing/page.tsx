@@ -16,7 +16,7 @@ export default function SigningAdminPage() {
       </h1>
       <p className="text-brand-gray-500 mb-8">
         Create a new signing session for a customer, or review active and
-        completed sessions. Gated by Cloudflare Access.
+        completed sessions.
       </p>
       <SigningAdmin />
     </main>

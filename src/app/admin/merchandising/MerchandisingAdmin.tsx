@@ -4,8 +4,8 @@
  * Merchandising Admin UI.
  *
  * Jordan's control surface for vehicle featuring and photo overlays.
- * The page is gated by Cloudflare Zero Trust Access — unauthenticated
- * visitors are bounced to a login flow before ever hitting this code.
+ * The page is gated by functions/admin/_middleware.ts (the __Secure-lag_admin
+ * session cookie) — unauthenticated visitors get the login page instead.
  *
  * Data flow:
  *   1. Mount: GET /api/admin/merchandising → current config from KV
@@ -56,7 +56,6 @@ export default function MerchandisingAdmin() {
     overlays: structuredClone(MERCHANDISING.overlays),
   });
   const [saveState, setSaveState] = useState<SaveState>({ kind: "loading" });
-  const [userEmail, setUserEmail] = useState<string>("");
 
   // On mount, pull the current config from KV via the admin API.
   useEffect(() => {
@@ -70,7 +69,7 @@ export default function MerchandisingAdmin() {
           setSaveState({
             kind: "error",
             message:
-              "Not signed in. Cloudflare Access should have logged you in — refresh the page.",
+              "Your admin session expired. Reload the page to sign in again.",
           });
           return;
         }
@@ -83,9 +82,6 @@ export default function MerchandisingAdmin() {
         }
         const data = await res.json();
         if (cancelled) return;
-        const email =
-          res.headers.get("cf-access-authenticated-user-email") ?? "";
-        setUserEmail(email);
         if (data.config) {
           setConfig({
             featuredVins: data.config.featuredVins ?? [],
@@ -194,15 +190,6 @@ export default function MerchandisingAdmin() {
               <h1 className="text-2xl font-bold">Merchandising Admin</h1>
               <p className="text-brand-gray-300 text-sm mt-1">
                 Feature vehicles, write pill copy, set status badges.
-                {userEmail && (
-                  <>
-                    {" "}
-                    Signed in as{" "}
-                    <span className="text-brand-red-light font-semibold">
-                      {userEmail}
-                    </span>
-                  </>
-                )}
               </p>
             </div>
             <SaveButton state={saveState} onSave={save} />

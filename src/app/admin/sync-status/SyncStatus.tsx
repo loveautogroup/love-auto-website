@@ -95,8 +95,8 @@ export default function SyncStatus() {
         <p className="text-sm">
           Most likely cause: the INVENTORY KV namespace isn&apos;t bound yet on
           the Pages project. Open <code>wrangler.jsonc</code>, paste the namespace
-          IDs, push, and redeploy. Or you&apos;re hitting this page outside
-          Cloudflare Access — log in via your dealer email first.
+          IDs, push, and redeploy. Or your admin session expired — reload the
+          page to sign in again.
         </p>
         <button
           onClick={load}
