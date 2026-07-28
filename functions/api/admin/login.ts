@@ -79,6 +79,7 @@ export const onRequestGet: PagesFunction<Env> = async () => {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Set-Cookie": sessionClearCookie(),
+      "Cache-Control": "no-store",
     },
   });
 };
