@@ -37,7 +37,14 @@ export function LocalBusinessSchema() {
     name: SITE_CONFIG.name,
     // Branded-search fix (Anna gap-zone brief 2026-06-29 / DMS task #10):
     // cover the query variants searchers actually type for us.
-    alternateName: ["Love Auto", "Love Automotive", "Love Auto Group"],
+    alternateName: [
+      "Love Auto",
+      "Love Automotive",
+      "Love Auto Group",
+      "Love Auto Group Inc.",
+      "Love Auto Villa Park",
+      "Love Auto Group Villa Park",
+    ],
     logo: `${SITE_CONFIG.url}/images/logo-primary.svg`,
     legalName: "Love Auto Group Inc.",
     description:
@@ -70,6 +77,17 @@ export function LocalBusinessSchema() {
       { "@type": "City", name: "Naperville, IL" },
       { "@type": "City", name: "Hinsdale, IL" },
       { "@type": "City", name: "Bloomingdale, IL" },
+      // Added 2026-07-27 (Anna gap-zone). The first four now have live
+      // /serving/ pages that were missing from the sitemap and unknown to
+      // Google. Countryside and La Grange are here because two question-form
+      // queries naming Countryside drove ~370 impressions to the Subaru
+      // buying guide at zero clicks — the town was in our SERP footprint
+      // without ever being an explicit service-area signal.
+      { "@type": "City", name: "Westmont, IL" },
+      { "@type": "City", name: "Lisle, IL" },
+      { "@type": "City", name: "Downers Grove, IL" },
+      { "@type": "City", name: "Countryside, IL" },
+      { "@type": "City", name: "La Grange, IL" },
     ],
     url: SITE_CONFIG.url,
     telephone: SITE_CONFIG.phone,

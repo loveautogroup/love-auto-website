@@ -18,6 +18,24 @@ const NAV_KEY_MAP: Record<string, string> = {
   "/contact": "contact",
 };
 
+// Geo landing pages, surfaced sitewide for crawl discovery. Villa Park leads
+// because /used-cars-villa-park-il/ is the canonical target for the whole
+// "used cars villa park il" cluster (/serving/villa-park-il/ canonicalizes
+// to it, so that URL is deliberately NOT listed here).
+const FOOTER_AREA_LINKS: { href: string; label: string }[] = [
+  { href: "/used-cars-villa-park-il/", label: "Villa Park" },
+  { href: "/serving/lombard-il/", label: "Lombard" },
+  { href: "/serving/elmhurst-il/", label: "Elmhurst" },
+  { href: "/serving/oak-brook-il/", label: "Oak Brook" },
+  { href: "/serving/glen-ellyn-il/", label: "Glen Ellyn" },
+  { href: "/serving/addison-il/", label: "Addison" },
+  { href: "/serving/wheaton-il/", label: "Wheaton" },
+  { href: "/serving/westmont-il/", label: "Westmont" },
+  { href: "/serving/lisle-il/", label: "Lisle" },
+  { href: "/serving/downers-grove-il/", label: "Downers Grove" },
+  { href: "/serving/dupage-county-il/", label: "DuPage County" },
+];
+
 export default function Footer() {
   const googleReviews = useReviews();
   const currentYear = new Date().getFullYear();
@@ -159,8 +177,36 @@ export default function Footer() {
           </div>
         </div>
 
+        {/*
+          Areas We Serve — sitewide geo link row (Anna gap-zone 2026-07-27).
+          Purpose is crawl discovery, not decoration. GSC URL Inspection found
+          /used-cars-villa-park-il/ stuck at "Discovered - currently not
+          indexed" (never crawled in 8 weeks despite sitemap priority 0.9),
+          and the Wheaton/Westmont/Lisle/Downers Grove pages entirely "unknown
+          to Google". A footer link appears on every page on the site, so it is
+          the strongest internal crawl signal available without new content.
+          Keep these links crawlable <Link>s — do not swap for a JS dropdown.
+        */}
+        <div className="mt-10 pt-6 border-t border-white/10">
+          <h3 className="font-semibold text-sm uppercase tracking-wider text-brand-gray-300 mb-3">
+            {t.footer.areasServed}
+          </h3>
+          <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+            {FOOTER_AREA_LINKS.map((area) => (
+              <li key={area.href}>
+                <Link
+                  href={area.href}
+                  className="text-brand-gray-200 hover:text-white transition-colors"
+                >
+                  {area.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         {/* Bottom bar */}
-        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-brand-gray-500">
+        <div className="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-brand-gray-500">
           <p>
             &copy; {currentYear} {SITE_CONFIG.name}. {t.footer.rights}
           </p>

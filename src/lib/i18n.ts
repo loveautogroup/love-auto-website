@@ -37,6 +37,7 @@ export const translations = {
       rights: "All rights reserved.",
       privacy: "Privacy Policy",
       terms: "Terms",
+      areasServed: "Areas We Serve",
     },
     hero: {
       headline: "Find Your Next Ride",
@@ -203,6 +204,7 @@ export const translations = {
       about:
         "Especialistas en vehículos japoneses en Villa Park, IL — a 20 millas de Chicago. Negocio familiar desde 2014. Cada vehículo inspeccionado y reacondicionado antes de salir de nuestro lote.",
       rights: "Todos los derechos reservados.",
+      areasServed: "Áreas Que Atendemos",
       privacy: "Política de Privacidad",
       terms: "Términos",
     },

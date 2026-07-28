@@ -99,6 +99,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/serving/oak-brook-il/`,       lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/serving/glen-ellyn-il/`,      lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/serving/addison-il/`,         lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    // 2026-07-27 (Anna gap-zone) — these four town pages have existed in
+    // SERVICE_AREAS and built fine, but were never listed here. GSC URL
+    // Inspection reported all four as "URL is unknown to Google": never
+    // discovered, never crawled, zero impressions. Sitemap omission was the
+    // only cause. Wheaton alone is a 53k-population town.
+    { url: `${BASE}/serving/wheaton-il/`,         lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/serving/westmont-il/`,        lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/serving/lisle-il/`,           lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/serving/downers-grove-il/`,   lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     // County hub — 2026-05-02, closes the AEO Q4 gap (every engine missed
     // us on "best used car dealer in DuPage County")
     { url: `${BASE}/serving/dupage-county-il/`,   lastModified: now, changeFrequency: "weekly",  priority: 0.85 },

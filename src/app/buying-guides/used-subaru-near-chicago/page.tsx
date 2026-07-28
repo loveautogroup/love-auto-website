@@ -61,20 +61,28 @@ const FAQS = [
   {
     question: "Do you serve buyers from Chicago and the western suburbs?",
     answer:
-      "Yes. We are located at 735 N Yale Ave in Villa Park, which is centrally placed for the entire DuPage County and western Chicago suburbs market. Buyers regularly come to us from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, Naperville, Lisle, Bloomingdale, Hinsdale, and from Chicago itself. Westbound from the city it is roughly twenty minutes via I-290. Call (630) 359-3643 if you have a specific Subaru model or trim in mind.",
+      "Yes. We are located at 735 N Yale Ave in Villa Park, which is centrally placed for the entire DuPage County and western Chicago suburbs market. Buyers regularly come to us from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, Naperville, Lisle, Bloomingdale, and Hinsdale, from Countryside, La Grange, and Westchester to our south via I-294, and from Chicago itself. Westbound from the city it is roughly twenty minutes via I-290. Call (630) 359-3643 if you have a specific Subaru model or trim in mind.",
   },
 ];
 
+// Title/description rewritten 2026-07-27 (Anna gap-zone). This page ranked
+// position 8.2-9.4 on ~370 impressions across a year for question-form
+// queries ("where is the best place to buy a used subaru in countryside?")
+// and earned ZERO clicks. The old title led with "Where to Buy a Used Subaru
+// Near Chicago" at 73 characters — truncated in SERP, and "Near Chicago"
+// does not visibly answer a searcher who typed their own suburb's name.
+// New title front-loads the answer (who we are, where we are) inside ~60
+// chars; the description names the specific towns those queries come from so
+// the snippet reads as a direct answer.
 export const metadata: Metadata = {
-  title:
-    "Where to Buy a Used Subaru Near Chicago | Love Auto Group, Villa Park IL",
+  title: "Used Subaru Dealer in Villa Park, IL | Love Auto Group",
   description:
-    "Used Subaru Forester, Outback, and Crosstrek near Chicago. Family owned independent dealer in Villa Park, IL serving DuPage County and the western suburbs since 2014. Value sweet spot 2014 to 2018 models, $9,000 to $15,000. Free Carfax. (630) 359-3643.",
+    "Independent used Subaru dealer serving Countryside, Hinsdale, La Grange, and the western Chicago suburbs from Villa Park, IL. Forester, Outback, and Crosstrek — the 2014 to 2018 value range runs $9,000 to $15,000. Free Carfax on every vehicle, no dealer fees. Call or text (630) 359-3643.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
-    title: "Where to Buy a Used Subaru Near Chicago | Love Auto Group",
+    title: "Used Subaru Dealer in Villa Park, IL | Love Auto Group",
     description:
-      "Independent used Subaru dealer in Villa Park, IL. AWD-ready 2014 to 2018 Foresters, Outbacks, and Crosstreks. Family owned since 2014. Free Carfax.",
+      "Independent used Subaru dealer in Villa Park, IL, serving Countryside, Hinsdale, La Grange, and the western Chicago suburbs. AWD Foresters, Outbacks, and Crosstreks. Free Carfax, no dealer fees.",
     url: PAGE_URL,
     type: "article",
     siteName: "Love Auto Group",
