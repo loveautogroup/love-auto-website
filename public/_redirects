@@ -137,9 +137,13 @@
 
 # Legacy 3-segment VDP - trailing-slash form (the half 3d31c39 missed)
 /inventory/:brand/:model/:stock/               /inventory/            301
-# Legacy 2-segment make/model listing pages
-/inventory/:brand/:model                       /inventory/            301
-/inventory/:brand/:model/                      /inventory/            301
+# !! DO NOT add 2-segment /inventory/:a/:b wildcard rules — EVER.
+# Next.js client navigation fetches /inventory/<slug>/index.txt and
+# /inventory/<slug>/__next._tree.txt. Both are 2-segment paths, so a
+# 2-segment wildcard 301s them to /inventory/ and EVERY vehicle click
+# on the whole site bounces back to the inventory list (live outage
+# 2026-07-28 -> 2026-07-30, introduced by 3164b89, removed here).
+# Legacy 2-segment make/model URLs get EXACT static rules only.
 
 # Bare legacy make index under /inventory/ (must be explicit - see above)
 /inventory/acura/                              /brands/acura/         301
