@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, Suspense } from "react";
+import { useMemo, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Vehicle } from "@/lib/types";
 import { useLanguage } from "@/context/LanguageContext";
@@ -8,6 +8,7 @@ import VehicleCard from "@/components/VehicleCard";
 import { useInventory } from "@/lib/useInventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
 import { useVisibleVehicles } from "@/data/useMerchandising";
+import { trackInventoryFilter } from "@/lib/analytics";
 
 interface InventoryGridProps {
   /**
@@ -85,6 +86,49 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
     });
   }, [vehicles, searchParams]);
 
+  const [sortOrder, setSortOrder] = useState("recent");
+
+  // "recent" preserves the merchandising order (featured-first) applied above.
+  // Any explicit choice overrides it: a shopper who picks "Price: Low to High"
+  // means it, featured or not. Never sort `filtered` in place - it's a memo
+  // result and mutating it would corrupt the filter cache.
+  const sorted = useMemo(() => {
+    const copy = [...filtered];
+    switch (sortOrder) {
+      // Newest on the lot first. `dateInStock` is stamped by the backend on a
+      // vehicle's first Listed transition, so cars listed before that stamp
+      // existed have none. Tiering keeps the order sane during the changeover
+      // and self-heals as stamps accrue:
+      //   1. both dated      -> newer date wins
+      //   2. one dated       -> the dated one is newer (stamping starts now)
+      //   3. neither dated   -> stock numbers are issued sequentially, so the
+      //                         higher number is the more recent acquisition
+      case "recent":
+        return copy.sort((a, b) => {
+          const da = a.dateInStock ? Date.parse(a.dateInStock) : NaN;
+          const db = b.dateInStock ? Date.parse(b.dateInStock) : NaN;
+          const aOk = !Number.isNaN(da);
+          const bOk = !Number.isNaN(db);
+          if (aOk && bOk) return db - da;
+          if (aOk) return -1;
+          if (bOk) return 1;
+          const sa = Number(String(a.stockNumber).replace(/\D/g, "")) || 0;
+          const sb = Number(String(b.stockNumber).replace(/\D/g, "")) || 0;
+          return sb - sa;
+        });
+      case "price-asc":
+        return copy.sort((a, b) => a.price - b.price);
+      case "price-desc":
+        return copy.sort((a, b) => b.price - a.price);
+      case "mileage-asc":
+        return copy.sort((a, b) => a.mileage - b.mileage);
+      case "newest":
+        return copy.sort((a, b) => b.year - a.year);
+      default:
+        return filtered;
+    }
+  }, [filtered, sortOrder]);
+
   if (isLoadingInitial) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6" aria-label="Loading inventory">
@@ -113,6 +157,11 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
         <select
           className="text-sm border border-brand-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-red"
           aria-label="Sort vehicles"
+          value={sortOrder}
+          onChange={(e) => {
+            setSortOrder(e.target.value);
+            trackInventoryFilter({ sort: e.target.value });
+          }}
         >
           <option value="recent">{g.sortRecent}</option>
           <option value="price-asc">{g.sortPriceAsc}</option>
@@ -123,7 +172,7 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-        {filtered.map((vehicle) => (
+        {sorted.map((vehicle) => (
           <VehicleCard key={vehicle.id} vehicle={vehicle} />
         ))}
       </div>
