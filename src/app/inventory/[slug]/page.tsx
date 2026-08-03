@@ -16,6 +16,7 @@ import VDPFAQ from "@/components/VDPFAQ";
 import ShowCarfaxButton from "@/components/ShowCarfaxButton";
 import VDPReviews from "@/components/VDPReviews";
 import VDPInquireButton from "@/components/VDPInquireButton";
+import VDPTestDriveButton from "@/components/VDPTestDriveButton";
 import VDPTextUsLink from "@/components/VDPTextUsLink";
 import VDPVinSignal from "@/components/VDPVinSignal";
 import VDPTracker from "@/components/VDPTracker";
@@ -457,6 +458,19 @@ export default async function VehicleDetailPage({
                       vehicleVin={vehicle.vin}
                       className="w-full"
                     />
+                    {/* Test drive request - LEAD ONLY. Captures a preferred
+                        day + time window and lands in the normal lead
+                        pipeline tagged "website-test-drive". Books nothing;
+                        we call back to confirm. Outlined on purpose so it
+                        sits below the solid Call CTA in the hierarchy. */}
+                    <VDPTestDriveButton
+                      vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.trim ? " " + vehicle.trim : ""}`}
+                      vehicleVin={vehicle.vin}
+                      stockNumber={vehicle.stockNumber}
+                      make={vehicle.make}
+                      model={vehicle.model}
+                      className="w-full"
+                    />
                   </div>
                 </div>
 
@@ -537,6 +551,16 @@ export default async function VehicleDetailPage({
                 </svg>
                 Get Pre-Approved
               </a>
+              {/* Test drive request (mobile) - same LEAD-ONLY flow as the
+                  desktop CTA card above. */}
+              <VDPTestDriveButton
+                vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.trim ? " " + vehicle.trim : ""}`}
+                vehicleVin={vehicle.vin}
+                stockNumber={vehicle.stockNumber}
+                make={vehicle.make}
+                model={vehicle.model}
+                className="mt-3 w-full"
+              />
             </div>
 
             {/* Market price comparison — only renders when Jordan has set

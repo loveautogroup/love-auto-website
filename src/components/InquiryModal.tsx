@@ -12,7 +12,7 @@
  * stacking context, so they outranked the modal's contained context).
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import LeadForm, { type LeadFormProps } from "@/components/LeadForm";
 
@@ -21,6 +21,13 @@ interface InquiryModalProps extends LeadFormProps {
   onClose: () => void;
   title?: string;
   subtitle?: string;
+  /**
+   * Optional body override. When provided, this renders INSTEAD of LeadForm
+   * and the LeadFormProps are ignored - it lets other lead surfaces (e.g.
+   * VDPTestDriveButton) reuse this modal chrome (portal, scroll lock, Escape,
+   * z-[60] stacking fix) without forking it. Omit for the default inquiry form.
+   */
+  children?: ReactNode;
 }
 
 export default function InquiryModal({
@@ -28,6 +35,7 @@ export default function InquiryModal({
   onClose,
   title = "Get in touch",
   subtitle,
+  children,
   ...formProps
 }: InquiryModalProps) {
   // Mount-only flag — guards createPortal against SSR where `document`
@@ -99,14 +107,16 @@ export default function InquiryModal({
           </button>
         </div>
         <div className="p-6">
-          <LeadForm
-            {...formProps}
-            compact
-            onSuccess={(leadId) => {
-              if (formProps.onSuccess) formProps.onSuccess(leadId);
-              setTimeout(() => onClose(), 4000);
-            }}
-          />
+          {children ?? (
+            <LeadForm
+              {...formProps}
+              compact
+              onSuccess={(leadId) => {
+                if (formProps.onSuccess) formProps.onSuccess(leadId);
+                setTimeout(() => onClose(), 4000);
+              }}
+            />
+          )}
         </div>
       </div>
     </div>
