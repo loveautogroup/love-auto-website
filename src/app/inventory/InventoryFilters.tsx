@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import VehicleAlertSignup from "@/components/VehicleAlertSignup";
+import { trackInventoryFilter } from "@/lib/analytics";
 
 const MAKES = ["Subaru", "Lexus", "Acura", "Mazda", "Honda", "Toyota"];
 const BODY_STYLES = ["SUV", "Sedan", "Wagon", "Truck", "Coupe"];
@@ -48,6 +49,24 @@ function InventoryFiltersInner() {
     return tab.minPrice === urlMin && tab.maxPrice === urlMax;
   }) ?? PRICE_TABS[0];
 
+  /**
+   * GA4 inventory_filter — fires on the APPLY action only (this form's submit,
+   * or a price-tab click). Deliberately NOT wired to onChange: a shopper
+   * dialing in a price range would otherwise emit one event per keystroke and
+   * bury the useful signal. No debounce timer is used because neither trigger
+   * is continuous, and both immediately precede a navigation — a deferred call
+   * would fire after the page had already unloaded and be lost.
+   */
+  const handleApply = (e: React.FormEvent<HTMLFormElement>) => {
+    const applied: Record<string, string> = {};
+    new FormData(e.currentTarget).forEach((value, key) => {
+      const v = String(value).trim();
+      if (v) applied[key] = v;
+    });
+    trackInventoryFilter(applied);
+    // no preventDefault — the native GET submission continues to /inventory
+  };
+
   const sidebarContent = (
     <>
       {/* Browse by Price */}
@@ -62,6 +81,13 @@ function InventoryFiltersInner() {
               <Link
                 key={tab.href}
                 href={tab.href}
+                onClick={() =>
+                  trackInventoryFilter({
+                    price_tab: tab.label,
+                    ...(tab.minPrice !== null ? { minPrice: String(tab.minPrice) } : {}),
+                    ...(tab.maxPrice !== null ? { maxPrice: String(tab.maxPrice) } : {}),
+                  })
+                }
                 className={`
                   flex items-center justify-between w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors mb-0.5
                   ${isActive
@@ -85,7 +111,7 @@ function InventoryFiltersInner() {
       <hr className="border-brand-gray-100 mb-6" />
 
       {/* Detailed filters */}
-      <form action="/inventory" method="get" className="space-y-6">
+      <form action="/inventory" method="get" className="space-y-6" onSubmit={handleApply}>
         {/* Preserve active price tab params when submitting the form */}
         {activePriceTab.minPrice !== null && (
           <input type="hidden" name="minPrice" value={activePriceTab.minPrice} />

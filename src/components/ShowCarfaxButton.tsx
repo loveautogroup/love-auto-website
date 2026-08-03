@@ -11,6 +11,7 @@
  */
 
 import Image from "next/image";
+import { trackOutboundClick } from "@/lib/analytics";
 
 interface ShowCarfaxButtonProps {
   vin: string;
@@ -27,6 +28,7 @@ export default function ShowCarfaxButton({ vin, variant = "wide" }: ShowCarfaxBu
         href={reportUrl}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => trackOutboundClick(reportUrl, "carfax_report_inline")}
         className="
           inline-flex items-center gap-2
           bg-white border-2 border-[#1A1919] rounded-lg
@@ -54,6 +56,7 @@ export default function ShowCarfaxButton({ vin, variant = "wide" }: ShowCarfaxBu
       href={reportUrl}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => trackOutboundClick(reportUrl, "carfax_report_vdp")}
       className="
         flex flex-col items-center gap-2
         bg-white border-2 border-[#1A1919] rounded-xl

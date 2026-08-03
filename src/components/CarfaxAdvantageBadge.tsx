@@ -15,6 +15,7 @@
  */
 
 import Image from "next/image";
+import { trackOutboundClick } from "@/lib/analytics";
 
 interface CarfaxAdvantageBadgeProps {
   /** Display size variant. xs=banner, sm=footer, md=hero trust strip, lg=accreditations row. */
@@ -47,6 +48,7 @@ export default function CarfaxAdvantageBadge({
       href={CARFAX_DEALER_URL}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => trackOutboundClick(CARFAX_DEALER_URL, "carfax_advantage_dealer")}
       aria-label="Love Auto Group is a Carfax Advantage Dealer — verify on Carfax"
       className={`
         inline-flex items-center justify-center

@@ -16,6 +16,7 @@
  */
 
 import Image from "next/image";
+import { trackOutboundClick } from "@/lib/analytics";
 
 interface CarfaxBadgeProps {
   vin: string;
@@ -29,7 +30,10 @@ export default function CarfaxBadge({ vin }: CarfaxBadgeProps) {
       href={reportUrl}
       target="_blank"
       rel="noopener noreferrer"
-      onClick={(e) => e.stopPropagation()}
+      onClick={(e) => {
+        e.stopPropagation();
+        trackOutboundClick(reportUrl, "carfax_report_photo_badge");
+      }}
       className="
         inline-flex flex-col items-stretch
         w-[186px] rounded-md overflow-hidden

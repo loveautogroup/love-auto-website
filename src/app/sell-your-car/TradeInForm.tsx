@@ -8,6 +8,7 @@
 //     Acquisitions page + notification bell)
 
 import { useRef, useState } from "react";
+import { trackFormSubmit, trackLeadTradeIn } from "@/lib/analytics";
 
 const inputCls =
   "w-full border border-brand-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red";
@@ -130,6 +131,9 @@ export default function TradeInForm() {
         throw new Error(j.error || "Something went wrong. Please try again or call us.");
       }
       setSubmitted(true);
+      // GA4: only after the POST succeeded, matching LeadForm / FinancingForm.
+      trackFormSubmit("trade_in");
+      trackLeadTradeIn();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again or call us at (630) 359-3643.");
     } finally {

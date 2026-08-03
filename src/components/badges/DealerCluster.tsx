@@ -21,6 +21,8 @@
  * on the Google Reviews lockup.
  */
 
+import { trackOutboundClick } from "@/lib/analytics";
+
 /* ─── Google Reviews lockup ────────────────────────────────────────── */
 
 export function GoogleReviewsLockup({
@@ -37,7 +39,10 @@ export function GoogleReviewsLockup({
       href={reviewsUrl}
       target="_blank"
       rel="noopener noreferrer"
-      onClick={(e) => e.stopPropagation()}
+      onClick={(e) => {
+        e.stopPropagation();
+        trackOutboundClick(reviewsUrl, "google_reviews_photo_badge");
+      }}
       aria-label={`Read Love Auto Group's ${rating} star Google reviews, ${reviewCount}+ reviews`}
       className="
         block no-underline text-right

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import { useLanguage } from "@/context/LanguageContext";
+import { trackOutboundClick } from "@/lib/analytics";
 import { useReviews } from "@/context/ReviewsContext";
 
 // Maps NAV_LINKS href → translation key so we can look up the right label.
@@ -93,6 +94,9 @@ export default function Header() {
               href={SITE_CONFIG.reviews.google.readUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() =>
+                trackOutboundClick(SITE_CONFIG.reviews.google.readUrl, "google_reviews_header")
+              }
               className="flex items-center gap-1.5 text-brand-gray-200 hover:text-white transition-colors"
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4" xmlns="http://www.w3.org/2000/svg">
