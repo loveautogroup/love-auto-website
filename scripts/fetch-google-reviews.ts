@@ -11,13 +11,18 @@
 
 import * as fs from "fs";
 import * as path from "path";
+import { fileURLToPath } from "url";
 
 const RAILWAY_BASE =
   process.env.RAILWAY_API_URL ?? "https://web-production-d5f3a.up.railway.app";
 const RAILWAY_KEY = process.env.RAILWAY_API_KEY ?? "";
 
 const OUTPUT_PATH = path.resolve(
-  path.dirname(new URL(import.meta.url).pathname),
+  // fileURLToPath, NOT `new URL(...).pathname`: on Windows the latter yields
+  // "/C:/Claude%20AI/..." (leading slash, percent-encoded spaces), so
+  // path.resolve produced "C:\\C:\\Claude%20AI\\..." and the write ENOENT'd,
+  // breaking `npm run build` locally. Fine on the Linux CF Pages builder.
+  path.dirname(fileURLToPath(import.meta.url)),
   "../src/data/google-reviews.json"
 );
 

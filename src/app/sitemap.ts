@@ -12,14 +12,28 @@
  * cancelled" because the runtime redirected them to the slash form
  * (regression fixed 2026-04-30).
  *
- * Live-DMS integration: vehicle slugs are unioned from sampleInventory
- * (seed) and the live DMS public feed at /api/v1/public/inventory.
- * RETAIL_READY (alias "available") and DEAL_PENDING ("sale-pending") are
- * the only statuses indexed — sold and coming-soon vehicles are
- * deliberately excluded so Google doesn't waste crawl budget on inventory
- * we won't be advertising. If the DMS endpoint is unreachable at build
- * time the seed list still ships, and a permanent fallback sitemap is
- * generated from sampleInventory alone — never crash the build.
+ * Live-DMS integration: THE LIVE FEED IS AUTHORITATIVE. Both the slug list
+ * here and generateStaticParams in /inventory/[slug]/page.tsx read the same
+ * fetchDmsInventory() build snapshot, so sitemap.xml and the set of pages
+ * that actually exist cannot disagree. They did on 2026-08-03: sitemap.xml
+ * advertised the newest car while its page was never generated, and the URL
+ * 404'd.
+ *
+ * RETAIL_READY (alias "available") and DEAL_PENDING ("sale-pending") are the
+ * only statuses indexed — sold and coming-soon vehicles are deliberately
+ * excluded so Google doesn't waste crawl budget on inventory we won't be
+ * advertising.
+ *
+ * Seed slugs (sampleInventory) are emitted ONLY when they also appear in the
+ * live feed. A seed vehicle the DMS no longer lists has been sold and simply
+ * disappears from the feed — its status never flips to "sold", so
+ * INDEXABLE_STATUSES cannot catch it and the intersection is what removes it.
+ * That is how 5 sold cars (11408 / 11360 / 11356 / 11348 / 11344) were still
+ * being advertised weeks after they left the lot.
+ *
+ * Only when the live feed is UNAVAILABLE (empty result) do we fall back to
+ * the seed union, so an upstream outage still ships a usable sitemap rather
+ * than crashing the build.
  *
  * Blog removed Apr 2026 — content preserved in src/data/blog.ts, routes
  * deleted. To restore: re-add the /blog index + [slug] route, re-import
@@ -144,9 +158,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // slug → { lastModified } so we keep the freshest signal per slug.
   const slugMap = new Map<string, { lastModified: Date }>();
 
+  // Empty means "could not read the lot", never "the lot is empty" — see
+  // the contract on fetchDmsInventory(). Only then does seed take over.
+  const liveUnavailable = live.length === 0;
+  const liveSlugs = new Set(live.map((v) => v.slug));
+
   for (const v of sampleInventory) {
     if (!INDEXABLE_STATUSES.has(v.status)) continue;
     if (KNOWN_DEAD_SLUGS.has(v.slug)) continue;
+    // Live feed wins: a seed slug absent from it is a sold vehicle.
+    if (!liveUnavailable && !liveSlugs.has(v.slug)) continue;
     slugMap.set(v.slug, { lastModified: now });
   }
   for (const v of live) {
@@ -168,6 +189,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
+
+  // Printed so a future divergence is one grep away: this count must match
+  // the [generateStaticParams] line emitted by /inventory/[slug]/page.tsx.
+  console.log(
+    `[sitemap] ${vehiclePages.length} vehicle URLs ` +
+      `(live=${live.length}, seed=${sampleInventory.length}` +
+      `${liveUnavailable ? ", LIVE UNAVAILABLE - seed fallback" : ""})`
+  );
 
   return [...staticPages, ...landingPages, ...vehiclePages];
 }

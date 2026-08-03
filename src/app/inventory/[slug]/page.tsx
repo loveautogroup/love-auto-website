@@ -50,14 +50,34 @@ function estimateMonthlyPayment(
 }
 
 export async function generateStaticParams() {
-  // Build-time fetch of the live DMS inventory so VDPs for vehicles that
-  // exist only in DealerCenter (i.e. not yet hand-added to the seed file)
-  // get pre-rendered. On DMS failure, fall back to seed-only — the build
-  // never breaks because of an upstream outage.
+  // Reads the SAME build snapshot as sitemap.ts (see fetchDmsInventory).
+  // These two used to fetch independently, which is how the 2026-08-03 build
+  // shipped a sitemap entry for Lincoln MKX #11423 with no page behind it —
+  // the sitemap's fetch succeeded and this one silently returned [].
+  //
+  // The live feed is authoritative: we generate a page for exactly the
+  // vehicles currently on the lot. Seed slugs absent from the feed are sold
+  // vehicles, and a sold VDP is meant to 404 rather than render stale seed
+  // data claiming the car is still available (CLAUDE.md, 2026-07-28).
+  //
+  // Empty means "could not read the lot", never "the lot is empty" — only
+  // then do we fall back to seed so an upstream outage still ships pages.
   const live = await fetchDmsInventory();
   const slugs = new Set<string>();
-  for (const v of sampleInventory) slugs.add(v.slug);
-  for (const v of live) slugs.add(v.slug);
+  if (live.length > 0) {
+    for (const v of live) slugs.add(v.slug);
+  } else {
+    console.warn(
+      "[generateStaticParams] live DMS inventory unavailable — falling back " +
+        "to seed slugs. Sold cars may be published and new arrivals missing."
+    );
+    for (const v of sampleInventory) slugs.add(v.slug);
+  }
+  // Must match the [sitemap] count logged by src/app/sitemap.ts.
+  console.log(
+    `[generateStaticParams] ${slugs.size} vehicle pages ` +
+      `(live=${live.length}, seed=${sampleInventory.length})`
+  );
   return Array.from(slugs).map((slug) => ({ slug }));
 }
 

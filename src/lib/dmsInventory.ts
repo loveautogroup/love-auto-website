@@ -16,6 +16,7 @@ import type { Vehicle } from "@/lib/types";
 import type { SyncedVehicle } from "@/lib/inventoryAdapter";
 import { titleCase, vehicleSlug, SEED_SLUGS_BY_VIN as SHARED_SEED_SLUGS } from "../../shared/slug";
 import { displayCase, dedupeTrim } from "../../shared/displayCase";
+import inventorySnapshot from "@/data/inventory-snapshot.json";
 
 // Re-export for any external consumer that previously imported from here.
 // All slug logic lives in shared/slug.ts now — change there, not here.
@@ -209,48 +210,187 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
 }
 
 /**
- * Server-side fetch (build-time or Node runtime) of the live DMS inventory.
- * Returns [] on any upstream failure — callers should always have a static
- * fallback for an empty result.
+ * -- ONE SNAPSHOT PER BUILD -------------------------------------------
+ * Every build-time consumer of DMS inventory -- sitemap.ts,
+ * generateStaticParams, generateMetadata and the VDP body -- must render
+ * from the SAME vehicle list, or the build ships internally inconsistent
+ * artifacts. On 2026-08-03 (commit f6f867d) sitemap.xml advertised the
+ * newest car (Lincoln MKX #11423) while generateStaticParams did not, so
+ * /inventory/2016-lincoln-mkx-reserve-11423/ returned 404 in production.
+ *
+ * Root cause: these were INDEPENDENT fetches of a rate-limited upstream,
+ * and every failure path returned [] -- indistinguishable from "the lot is
+ * empty". One fetch degraded, the others did not, and the resulting
+ * half-built site looked perfectly healthy in the build log.
+ *
+ * Fix: the snapshot is fetched exactly ONCE per build, by
+ * scripts/fetch-inventory-snapshot.ts during `prebuild`, and written to
+ * src/data/inventory-snapshot.json. Everything downstream reads that file.
+ * When it is fresh the Next build makes ZERO Railway requests, which also
+ * removes the ~20 concurrent build-time calls that provoked the throttling
+ * to begin with.
+ *
+ * Do NOT reintroduce a second independent fetch of this endpoint.
  */
-export async function fetchDmsInventory(
-  // Bumped 8s → 20s on 2026-04-30 after a build shipped without
-  // pre-rendered VDPs for two Coming Soon vehicles (Crosstrek + MKZ).
-  // Root cause: Railway free-tier hibernation cold-start can run 15-25s,
-  // and 8s wasn't enough during the build's parallel generateStaticParams
-  // call. The sitemap got the slugs (it ran later, after warm-up) but
-  // pages did not — clicking through from the inventory grid 404'd.
-  // 20s is comfortably above observed cold-start. If we move to a paid
-  // Railway plan with always-on, this can come back down.
-  timeoutMs = 20000
-): Promise<SyncedVehicle[]> {
+
+/** How fresh the committed snapshot must be to serve as THE build
+ *  snapshot. `prebuild` rewrites it seconds before `next build` starts, so
+ *  a real deploy always satisfies this. In `next dev` the committed copy is
+ *  usually older, and we fall through to a live fetch below. */
+const SNAPSHOT_MAX_AGE_MS = 6 * 60 * 60 * 1000;
+
+/** Retry budget for the live fallback path. An empty array is treated as a
+ *  TRANSIENT failure, not as an answer: Railway's shared read rate-limit
+ *  returns empty rather than erroring under throttle (CLAUDE.md, S65), so
+ *  "no vehicles" and "you are being throttled" look identical on the wire.
+ *  Precedent: the S65 auction backfill used the same retry-on-empty rule. */
+const LIVE_FETCH_ATTEMPTS = 4;
+
+let liveFetchPromise: Promise<SyncedVehicle[]> | null = null;
+
+function snapshotVehicles(): SyncedVehicle[] | null {
+  try {
+    const snap = inventorySnapshot as unknown as {
+      syncedAt?: string;
+      vehicles?: SyncedVehicle[];
+    };
+    if (!snap || !Array.isArray(snap.vehicles) || snap.vehicles.length === 0) {
+      return null;
+    }
+    const stamp = snap.syncedAt ? Date.parse(snap.syncedAt) : NaN;
+    if (!Number.isFinite(stamp)) return null;
+    if (Date.now() - stamp > SNAPSHOT_MAX_AGE_MS) return null;
+    return snap.vehicles;
+  } catch {
+    return null;
+  }
+}
+
+/** Single attempt. Returns null for "could not read the lot" and a
+ *  (possibly empty) array for "read it successfully". The caller decides
+ *  whether an empty array is believable. */
+async function fetchDmsInventoryOnce(
+  timeoutMs: number,
+  attempt: number
+): Promise<SyncedVehicle[] | null> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  // Attempt 1 keeps the plain URL so it can share Next's Data Cache with
+  // any other in-render caller. Retries append a throwaway param: with
+  // cache:"force-cache" a 200-but-empty response IS cached, so retrying the
+  // same URL would just replay the throttled answer forever. FastAPI
+  // ignores unknown query params (verified 2026-08-03, identical body).
+  const url =
+    attempt === 1
+      ? DMS_PUBLIC_INVENTORY_URL
+      : DMS_PUBLIC_INVENTORY_URL + "?_retry=" + attempt;
   try {
-    const res = await fetch(DMS_PUBLIC_INVENTORY_URL, {
+    const res = await fetch(url, {
       signal: ctrl.signal,
       headers: { Accept: "application/json" },
-      // force-cache: required for output:"export" static generation.
-      // Shares one Railway response across all 3 SSG workers in the same
-      // build run. The static HTML is rebuilt on every CF Pages deploy, so
-      // staleness is bounded by deploy cadence, not cache TTL.
+      // force-cache is deliberate: `no-store` inside a server component opts
+      // the route into dynamic rendering, which output:"export" rejects.
+      // Staleness is bounded by deploy cadence.
       cache: "force-cache",
     });
     if (!res.ok) {
-      console.warn("[dmsInventory] DMS upstream non-OK:", res.status);
-      return [];
+      console.warn(
+        "[dmsInventory] attempt " + attempt + "/" + LIVE_FETCH_ATTEMPTS +
+          " -- upstream non-OK: " + res.status
+      );
+      return null;
     }
     const json = (await res.json()) as DmsResponse;
-    if (!json || !Array.isArray(json.data)) return [];
+    if (!json || !Array.isArray(json.data)) {
+      console.warn(
+        "[dmsInventory] attempt " + attempt + "/" + LIVE_FETCH_ATTEMPTS +
+          " -- malformed payload (no data array)"
+      );
+      return null;
+    }
     return json.data
       .filter((v) => v && v.vin && v.year && v.make && v.model)
       .map(adaptDmsVehicle);
   } catch (err) {
-    console.warn("[dmsInventory] DMS upstream fetch failed:", err);
-    return [];
+    console.warn(
+      "[dmsInventory] attempt " + attempt + "/" + LIVE_FETCH_ATTEMPTS +
+        " -- fetch failed:",
+      err
+    );
+    return null;
   } finally {
     clearTimeout(timer);
   }
+}
+
+async function fetchLiveWithRetry(timeoutMs: number): Promise<SyncedVehicle[]> {
+  for (let attempt = 1; attempt <= LIVE_FETCH_ATTEMPTS; attempt++) {
+    const result = await fetchDmsInventoryOnce(timeoutMs, attempt);
+    if (result && result.length > 0) {
+      console.log(
+        "[dmsInventory] live fetch OK -- " + result.length +
+          " vehicles (attempt " + attempt + ")"
+      );
+      return result;
+    }
+    if (result && result.length === 0) {
+      console.warn(
+        "[dmsInventory] attempt " + attempt + "/" + LIVE_FETCH_ATTEMPTS +
+          " -- upstream returned ZERO vehicles; treating as throttle, retrying"
+      );
+    }
+    if (attempt < LIVE_FETCH_ATTEMPTS) {
+      await new Promise((r) => setTimeout(r, attempt * 3000));
+    }
+  }
+
+  // Loud, unmissable and greppable in a Cloudflare Pages build log. This
+  // used to be a single console.warn that nobody ever saw, which is exactly
+  // how a site shipped without its newest vehicle.
+  console.error(
+    [
+      "",
+      "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+      "!! [dmsInventory] LIVE DMS INVENTORY UNAVAILABLE after " +
+        LIVE_FETCH_ATTEMPTS + " attempts, and no fresh build snapshot.",
+      "!! Vehicle pages and sitemap.xml will be built from seed data --",
+      "!! REAL CARS MAY BE MISSING FROM THE LIVE SITE. Check Railway",
+      "!! before trusting this deploy.",
+      "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+      "",
+    ].join("\n")
+  );
+  return [];
+}
+
+/**
+ * THE build-time inventory list. Snapshot-first, live fetch as fallback.
+ *
+ * Contract for callers: a NON-EMPTY result is authoritative and must be
+ * preferred over seed data. An EMPTY result means "we could not read the
+ * lot" -- never "the lot is empty" -- so callers fall back to seed rather
+ * than publishing an empty inventory.
+ */
+export async function fetchDmsInventory(
+  // Bumped 8s -> 20s on 2026-04-30 after a build shipped without
+  // pre-rendered VDPs for two Coming Soon vehicles (Crosstrek + MKZ).
+  // Root cause: Railway free-tier hibernation cold-start can run 15-25s.
+  timeoutMs = 20000
+): Promise<SyncedVehicle[]> {
+  const snap = snapshotVehicles();
+  if (snap) return snap;
+
+  // One in-flight fetch shared by every caller in this process, so the VDP
+  // route's per-page resolveVehicle() + generateMetadata() calls cannot
+  // stampede Railway (they were issuing 2 requests per vehicle page).
+  if (!liveFetchPromise) {
+    console.warn(
+      "[dmsInventory] no fresh build snapshot -- falling back to a live DMS " +
+        "fetch. In a deploy this means `prebuild` did not run or did not succeed."
+    );
+    liveFetchPromise = fetchLiveWithRetry(timeoutMs);
+  }
+  return liveFetchPromise;
 }
 
 /**
