@@ -113,15 +113,96 @@ function rewritePhotoHost(url: string | null | undefined): string | undefined {
   return url.replace(`://${R2_DEV_HOST}/`, `://${R2_CUSTOM_HOST}/`);
 }
 
-export async function fetchInventory(): Promise<FeedVehicle[]> {
-  const res = await fetch(DMS_PUBLIC_INVENTORY_URL, {
-    cf: { cacheTtl: 60 } as RequestInitCfProperties,
-  });
-  if (!res.ok) {
-    throw new Error(`DMS inventory ${res.status}: ${(await res.text()).slice(0, 200)}`);
+/**
+ * Timeouts + retries (2026-08-03). This used to be a single fetch with NO
+ * timeout and NO retry. Two ways that bit us:
+ *
+ *   - Railway free-tier cold starts run 15-25s. With no AbortController the
+ *     call just hangs until Cloudflare gives up, and every caller of this
+ *     function treats a throw as "the lot is empty" -- see the catch blocks
+ *     in functions/api/feed/*, which answer HTTP 200 with an EMPTY feed.
+ *     To CarGurus / Google Merchant Center / Facebook, a 200 + empty feed
+ *     does not read as "try again later", it reads as "this dealer has zero
+ *     cars", which is a delisting risk.
+ *
+ *   - Railway's shared read rate-limit answers a throttled read with an
+ *     empty 200 (CLAUDE.md, S65). That path produced an empty feed too,
+ *     silently, from a response that looked perfectly healthy.
+ *
+ * So: bounded attempts, a warm-then-cold timeout ladder, and a hard refusal
+ * to believe an empty upstream. Feed consumers are schedulers, not people --
+ * spending 55s worst case to avoid publishing an empty catalog is the right
+ * trade. Note the 200-empty-feed-on-failure policy in the route handlers is
+ * unchanged here; that is a product call about how each platform reacts to a
+ * 5xx, and it belongs to whoever owns the feed relationships.
+ */
+const FEED_ATTEMPT_TIMEOUTS_MS = [5_000, 25_000, 25_000];
+
+async function fetchInventoryOnce(
+  timeoutMs: number,
+  attempt: number
+): Promise<FeedVehicle[]> {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  // Attempt 1 keeps the plain URL so scheduled pulls share one edge-cache
+  // entry. Retries must bust it -- a 200-but-empty throttle response is
+  // cacheable, and replaying it would defeat the retry entirely. FastAPI
+  // ignores unknown query params (verified 2026-08-03).
+  const url =
+    attempt === 1
+      ? DMS_PUBLIC_INVENTORY_URL
+      : `${DMS_PUBLIC_INVENTORY_URL}?_retry=${attempt}`;
+  try {
+    const res = await fetch(url, {
+      signal: ctrl.signal,
+      cf: (attempt === 1
+        ? { cacheTtl: 60 }
+        : { cacheTtl: 0 }) as RequestInitCfProperties,
+    });
+    if (!res.ok) {
+      throw new Error(
+        `DMS inventory ${res.status}: ${(await res.text()).slice(0, 200)}`
+      );
+    }
+    const json = (await res.json()) as DMSInventoryResponse | FeedVehicle[];
+    const items: FeedVehicle[] = Array.isArray(json) ? json : json.data ?? [];
+    // ZERO IS NOT AN ANSWER -- see the header comment. This guards the RAW
+    // upstream rows, deliberately not the status-filtered result below: zero
+    // rows is the throttle signature, whereas rows that all filter out is
+    // real data about a genuinely sold-through lot.
+    if (items.length === 0) {
+      throw new Error("DMS inventory returned ZERO vehicles");
+    }
+    return items;
+  } finally {
+    clearTimeout(timer);
   }
-  const json = (await res.json()) as DMSInventoryResponse | FeedVehicle[];
-  const items: FeedVehicle[] = Array.isArray(json) ? json : json.data ?? [];
+}
+
+export async function fetchInventory(): Promise<FeedVehicle[]> {
+  let items: FeedVehicle[] | null = null;
+  let lastErr: unknown = new Error("no attempt ran");
+
+  for (let attempt = 1; attempt <= FEED_ATTEMPT_TIMEOUTS_MS.length; attempt++) {
+    try {
+      items = await fetchInventoryOnce(
+        FEED_ATTEMPT_TIMEOUTS_MS[attempt - 1],
+        attempt
+      );
+      break;
+    } catch (err) {
+      lastErr = err;
+      console.warn(
+        `[feed] inventory attempt ${attempt}/${FEED_ATTEMPT_TIMEOUTS_MS.length} failed:`,
+        err
+      );
+    }
+  }
+
+  // Still throws on total failure, exactly as before -- callers already
+  // handle it. What changed is how rarely we get here.
+  if (!items) throw lastErr;
+
   return items
     .filter((v) => v.vin && v.year && v.make && v.model)
     .map((v) => ({
