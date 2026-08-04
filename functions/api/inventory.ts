@@ -15,9 +15,19 @@
  *   1. Live DMS fetch (preferred). Two attempts -- a short warm one and a
  *      long cold-start one. On 200 with at least one vehicle, normalize to
  *      InventorySnapshot and return.
- *   2. KV snapshot (workers/inventory-sync) -- ONLY if it is recent enough
- *      to still be true. See KV_MAX_AGE_MS.
- *   3. 204 No Content. Client falls back to its build-time snapshot.
+ *   2. 204 No Content. Client falls back to its build-time snapshot, which
+ *      since 1ecf2dc is live-verified at deploy and ships WITH the site.
+ *
+ * A KV tier used to sit between those two (workers/inventory-sync writing
+ * `inventory:current`). RETIRED 2026-08-03. That worker parsed the
+ * DealerCenter feed, retired as a source 2026-06-04, so it had not written
+ * since ~2026-07-17 and the staleness check rejected its snapshot on every
+ * request anyway -- removing it changes no observable behaviour, it deletes a
+ * tier that already never served. What it sat in front of is strictly better:
+ * the build-time snapshot cannot be unavailable while the site is up, and is
+ * verified live at deploy. Do not reintroduce a KV mirror without a writer
+ * that is actually running; a stale-able tier in front of a non-stale one is
+ * a downgrade, not a safety net.
  *
  * NEVER SERVE STALE AS CURRENT (2026-08-03). This endpoint used to give the
  * DMS 5s and then quietly serve whatever was in KV, at any age. Railway
@@ -32,24 +42,21 @@
  *   - When we cannot be fresh, say so out loud and hand the client a source
  *     we can vouch for, instead of dressing old data up as current.
  *
- * Degradation is visible on every response via X-Inventory-Source, plus
- * X-Inventory-KV-Age-Seconds / X-Inventory-KV-Synced-At when KV was
- * consulted. In-body, the live path is syncedBy:"live-dms" and the KV path
- * is syncedBy:"cron" -- the seam useInventory already reads.
+ * Degradation is visible on every response via X-Inventory-Source:
+ * "live-dms" when we served fresh data, "none" when we could not and the
+ * client should keep its build-time snapshot. In-body, the live path is
+ * syncedBy:"live-dms" -- the seam useInventory already reads.
  *
  * On any DMS shape change the adapter at src/lib/inventoryAdapter.ts
- * carries the conversion. Wire format here mirrors what the cron worker
- * already writes to KV so consumers don't need a code change.
+ * carries the conversion. The wire format is the InventorySnapshot /
+ * SyncedVehicle shape src/lib/inventoryAdapter.ts declares -- it originally
+ * mirrored the retired cron worker's types, and that file is now the only
+ * definition consumers need to track.
  */
 
 import { vehicleSlug } from "../../shared/slug";
 import { displayCase, dedupeTrim } from "../../shared/displayCase";
 
-interface Env {
-  INVENTORY?: KVNamespace;
-}
-
-const KV_KEY_CURRENT = "inventory:current";
 const DMS_URL = "https://dms.loveautogroup.net/api/v1/public/inventory";
 
 /**
@@ -72,24 +79,6 @@ const DMS_URL = "https://dms.loveautogroup.net/api/v1/public/inventory";
  */
 const DMS_WARM_TIMEOUT_MS = 3_000;
 const DMS_COLD_TIMEOUT_MS = 20_000;
-
-/**
- * How old the KV snapshot may be before we refuse to pass it off as current.
- *
- * workers/inventory-sync is supposed to write it on a 15-minute cron, so 6h
- * is 24 consecutive missed cycles -- unambiguously a broken pipeline, not a
- * blip. It is also roughly the longest a car sold this morning may keep
- * being advertised this afternoon.
- *
- * In practice this rejects the snapshot every time, and that is correct:
- * that worker parses the RETIRED DealerCenter feed (PARSER="stub", last
- * deployed 2026-04-24) and its upstream fetch throws on every run, so the
- * KV write never executes and the snapshot has been frozen since roughly
- * 2026-07-17. The tier is dead. It is kept rather than deleted because the
- * check is what makes it safe: repoint that worker at the DMS and this
- * fallback starts working again on its own, with no change here.
- */
-const KV_MAX_AGE_MS = 6 * 60 * 60 * 1_000;
 
 // SEED_SLUGS_BY_VIN now lives in shared/slug.ts. vehicleSlug() handles the
 // override → auto-slug fallback. Don't add overrides here — add them once
@@ -323,7 +312,7 @@ async function fetchDms(): Promise<InventorySnapshot | null> {
     // empty 200 under throttle, so "the lot is empty" and "you got
     // throttled" are identical on the wire. Love Auto always has stock, so
     // retry rather than believe it -- and if the retry agrees, fall through
-    // to the KV/build-time tiers rather than publishing an empty lot.
+    // to the build-time snapshot rather than publishing an empty lot.
     if (snap && snap.vehicles.length > 0) return snap;
     if (i === 0) {
       console.warn(
@@ -335,12 +324,12 @@ async function fetchDms(): Promise<InventorySnapshot | null> {
   return null;
 }
 
-export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
+export const onRequestGet: PagesFunction = async ({ request }) => {
   // Allow cache-busting for admin/debug — append ?fresh=1 to bypass edge cache.
   const url = new URL(request.url);
   const isFresh = url.searchParams.get("fresh") === "1";
 
-  // 1. Try live DMS first.
+  // 1. Live DMS. This is now the ONLY source this endpoint can vouch for.
   const live = await fetchDms();
   if (live && live.vehicles.length > 0) {
     return new Response(JSON.stringify(live), {
@@ -356,79 +345,24 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
     });
   }
 
-  // 2. Fall back to the KV snapshot -- but ONLY if it is recent enough to
-  //    still be true. Serving an old snapshot as current is exactly how sold
-  //    cars stay advertised. An unusable snapshot is worse than no snapshot:
-  //    falling through to 204 hands the client its build-time data, which
-  //    since 1ecf2dc is verified live at deploy time and is therefore the
-  //    fresher of the two. Refusing here is choosing the better source, not
-  //    failing.
-  let kvDiag: Record<string, string> = {};
-  let kvStaleRejected = false;
-
-  if (env.INVENTORY) {
-    try {
-      const raw = (await env.INVENTORY.get(KV_KEY_CURRENT, {
-        type: "json",
-      })) as Partial<InventorySnapshot> | null;
-
-      if (raw) {
-        const stamp = raw.syncedAt ? Date.parse(raw.syncedAt) : NaN;
-        // A snapshot whose timestamp we cannot read has an UNKNOWN age, and
-        // unknown is not the same as fresh. Treat it as stale.
-        const ageMs = Number.isFinite(stamp) ? Date.now() - stamp : Infinity;
-        kvDiag = {
-          "X-Inventory-KV-Synced-At": raw.syncedAt ?? "unknown",
-          "X-Inventory-KV-Age-Seconds": Number.isFinite(ageMs)
-            ? String(Math.round(ageMs / 1000))
-            : "unknown",
-        };
-
-        if (ageMs <= KV_MAX_AGE_MS) {
-          return new Response(JSON.stringify(raw), {
-            status: 200,
-            headers: {
-              "Content-Type": "application/json; charset=utf-8",
-              "Cache-Control": isFresh
-                ? "no-store"
-                : "public, max-age=15, s-maxage=30, stale-while-revalidate=300",
-              "X-Inventory-Source": "kv-fallback",
-              ...kvDiag,
-              ...corsHeaders(),
-            },
-          });
-        }
-
-        kvStaleRejected = true;
-        console.error(
-          "[/api/inventory] DEGRADED -- refusing to serve a stale KV " +
-            `snapshot as current. syncedAt=${raw.syncedAt ?? "unknown"} ` +
-            `age=${kvDiag["X-Inventory-KV-Age-Seconds"]}s ` +
-            `limit=${KV_MAX_AGE_MS / 1000}s. The client will fall back to its ` +
-            "build-time snapshot. Check Railway first " +
-            "(https://web-production-d5f3a.up.railway.app/healthz), then " +
-            "workers/inventory-sync -- it still parses the retired " +
-            "DealerCenter feed and has not written since ~2026-07-17."
-        );
-      } else {
-        kvDiag = { "X-Inventory-KV-Age-Seconds": "absent" };
-      }
-    } catch (err) {
-      console.error("[/api/inventory] KV read failed:", err);
-      kvDiag = { "X-Inventory-KV-Age-Seconds": "error" };
-    }
-  }
-
-  // 3. Nothing trustworthy. 204 tells the client to keep its build-time
-  //    snapshot -- which is real inventory, verified at deploy time, not an
-  //    error page. Short edge cache so a Railway outage does not make every
-  //    single page view pay the full cold-start wait, while still letting us
-  //    recover within ~30s of the DMS coming back.
+  // 2. Nothing fresh. 204 tells the client to keep its build-time snapshot --
+  //    real inventory, verified at deploy time, not an error page. This is the
+  //    same outcome the retired KV tier produced in practice, just without the
+  //    detour: the staleness check rejected that snapshot every time.
+  //
+  //    Short edge cache so a Railway outage does not make every single page
+  //    view pay the full cold-start wait, while still letting us recover
+  //    within ~30s of the DMS coming back.
+  console.error(
+    "[/api/inventory] DEGRADED -- no live DMS inventory after " +
+      `${DMS_WARM_TIMEOUT_MS}ms + ${DMS_COLD_TIMEOUT_MS}ms. Serving 204; the ` +
+      "client keeps its build-time snapshot. Check Railway " +
+      "(https://web-production-d5f3a.up.railway.app/healthz)."
+  );
   return new Response(null, {
     status: 204,
     headers: {
-      "X-Inventory-Source": kvStaleRejected ? "kv-stale-rejected" : "none",
-      ...kvDiag,
+      "X-Inventory-Source": "none",
       "Cache-Control": isFresh ? "no-store" : "public, max-age=15, s-maxage=30",
       ...corsHeaders(),
     },
@@ -443,5 +377,5 @@ function corsHeaders(): Record<string, string> {
   };
 }
 
-export const onRequestOptions: PagesFunction<Env> = async () =>
+export const onRequestOptions: PagesFunction = async () =>
   new Response(null, { status: 204, headers: corsHeaders() });

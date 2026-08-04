@@ -8,9 +8,9 @@
  * for an hour so the GraphQL API is hit at most ~24x/day per vehicle.
  *
  * D6 (2026-07-17, mobile fix pack): batch mode for the mobile app. Takes
- * up to 100 stock numbers, resolves each to its VDP slug via the KV
- * inventory snapshot (`inventory:current`, same data the site serves),
- * answers cached paths from the shared `views:{path}` keys, and fetches
+ * up to 100 stock numbers, resolves each to its VDP slug via the live DMS
+ * mirror (the same source the site itself reads), answers cached paths
+ * from the shared `views:{path}` keys, and fetches
  * every cache miss in ONE GraphQL query grouped by requestPath. Response:
  * `{ views: { [stockNumber]: number } }`. Replaces mobile's per-vehicle
  * fan-out that pointed at a dashboard route which never existed.
@@ -35,8 +35,6 @@ interface Env {
 
 const ACCOUNT_TAG = "e5ffda225b59e007e064e76788d65d80";
 const CACHE_TTL_S = 3600;
-/** Same key functions/api/inventory.ts writes the site's KV snapshot to. */
-const KV_KEY_CURRENT = "inventory:current";
 const MAX_BATCH_STOCKS = 100;
 /** Live DMS public mirror — same source /api/inventory and the [slug].ts
  *  VDP bridge use when KV is empty. camelCase fields (stockNumber, vin…). */
@@ -84,45 +82,40 @@ async function handleBatch(
   // reads `views`, but a human hitting the URL can see WHICH leg came up dry.
   if (!token) return json({ views: {}, reason: "analytics-token-missing" }, 60);
 
-  // Resolve stock → VDP path. First choice: the KV inventory snapshot.
-  // NOTE (2026-07-17): that snapshot is written by the LEGACY DC-feed cron
-  // worker (workers/inventory-sync) and may be absent or stale — the site
-  // itself reads the live DMS mirror first (/api/inventory mode 1, and the
-  // [slug].ts VDP bridge). So when KV yields nothing we do the same live
-  // fallback rather than returning empty.
-  let snapshot: { vehicles?: SnapshotVehicle[] } | null = null;
+  // Resolve stock -> VDP path from the live DMS mirror, the same source
+  // /api/inventory and the [slug].ts VDP bridge read.
+  //
+  // This used to try the `inventory:current` KV snapshot FIRST and only fall
+  // back to the DMS. That tier was retired 2026-08-03: its writer parsed the
+  // DealerCenter feed (retired as a source 2026-06-04) and had not written
+  // since ~2026-07-17, so the KV leg was not merely dead but harmful --
+  // resolving a stock number off a months-old snapshot produced view counts
+  // for cars that had long since sold. The DMS leg below was already carrying
+  // every real request. The INVENTORY binding stays: this function still uses
+  // it for the `views:{path}` cache further down.
+  let vehicles: SnapshotVehicle[] = [];
   try {
-    snapshot = (await ctx.env.INVENTORY.get(KV_KEY_CURRENT, {
-      type: "json",
-    })) as { vehicles?: SnapshotVehicle[] } | null;
-  } catch {
-    snapshot = null;
-  }
-  let vehicles = snapshot?.vehicles ?? [];
-  if (vehicles.length === 0) {
-    try {
-      const res = await fetch(DMS_PUBLIC_URL, {
-        headers: { Accept: "application/json" },
-        cf: { cacheTtl: 30, cacheEverything: false },
-      });
-      if (res.ok) {
-        // The mirror returns { data: [...] } today; [slug].ts warns this
-        // endpoint has changed shape before, so accept a bare array and
-        // { vehicles: [...] } too instead of silently reading undefined.
-        const raw = (await res.json()) as
-          | SnapshotVehicle[]
-          | { data?: SnapshotVehicle[]; vehicles?: SnapshotVehicle[] };
-        vehicles = Array.isArray(raw)
-          ? raw
-          : Array.isArray(raw?.data)
-            ? raw.data
-            : Array.isArray(raw?.vehicles)
-              ? raw.vehicles
-              : [];
-      }
-    } catch {
-      /* fail soft below */
+    const res = await fetch(DMS_PUBLIC_URL, {
+      headers: { Accept: "application/json" },
+      cf: { cacheTtl: 30, cacheEverything: false },
+    });
+    if (res.ok) {
+      // The mirror returns { data: [...] } today; [slug].ts warns this
+      // endpoint has changed shape before, so accept a bare array and
+      // { vehicles: [...] } too instead of silently reading undefined.
+      const raw = (await res.json()) as
+        | SnapshotVehicle[]
+        | { data?: SnapshotVehicle[]; vehicles?: SnapshotVehicle[] };
+      vehicles = Array.isArray(raw)
+        ? raw
+        : Array.isArray(raw?.data)
+          ? raw.data
+          : Array.isArray(raw?.vehicles)
+            ? raw.vehicles
+            : [];
     }
+  } catch {
+    /* fail soft below */
   }
   if (vehicles.length === 0)
     return json({ views: {}, reason: "no-inventory-source" }, 60);

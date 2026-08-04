@@ -29,10 +29,6 @@
 
 import { vehicleSlug, titleCase } from "../../shared/slug";
 
-interface Env {
-  INVENTORY?: KVNamespace;
-}
-
 const DMS_PUBLIC_URL =
   "https://dms.loveautogroup.net/api/v1/public/inventory";
 
@@ -284,7 +280,7 @@ function renderGonePage(v: DmsVehicle): string {
 </html>`;
 }
 
-export const onRequest: PagesFunction<Env> = async (context) => {
+export const onRequest: PagesFunction = async (context) => {
   const staticResponse = await context.next();
   const slug = (context.params as Record<string, string>).slug as string;
   if (!slug) return staticResponse;

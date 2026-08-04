@@ -1,11 +1,10 @@
 /**
- * Adapter — convert the InventorySnapshot returned by /api/inventory
- * (which mirrors workers/inventory-sync/src/types.ts → SyncedVehicle) into
+ * Adapter — convert the InventorySnapshot returned by /api/inventory into
  * the UI-facing Vehicle shape (src/lib/types.ts).
  *
  * Why an adapter:
- *   - Decouples the wire format from the React tree. The Cron Worker can
- *     evolve its parser output independently as long as the adapter keeps
+ *   - Decouples the wire format from the React tree. /api/inventory can
+ *     evolve its output independently as long as the adapter keeps
  *     producing Vehicle objects.
  *   - Lets us populate the `description` field — Dealer Center doesn't ship
  *     long-form descriptions; we generate a fallback from the structured
@@ -15,8 +14,13 @@
  *     the app can ignore the raw photo order from DC.
  *
  * Shape contract (must stay in sync):
- *   workers/inventory-sync/src/types.ts → SyncedVehicle
- *   src/lib/types.ts                    → Vehicle
+ *   SyncedVehicle (declared just below) → what /api/inventory emits
+ *   src/lib/types.ts → Vehicle          → what the React tree consumes
+ *
+ * SyncedVehicle originally mirrored workers/inventory-sync/src/types.ts.
+ * That worker was retired 2026-08-03 (it parsed the DealerCenter feed,
+ * retired as a source 2026-06-04), so THIS file is now the definition to
+ * track, alongside the matching interface in functions/api/inventory.ts.
  */
 
 import type { Vehicle } from "@/lib/types";
