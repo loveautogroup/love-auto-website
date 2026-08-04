@@ -5,6 +5,7 @@ import {
   FAQSchema,
 } from "@/components/StructuredData";
 import { SITE_CONFIG } from "@/lib/constants";
+import SiteBreadcrumb from "@/components/SiteBreadcrumb";
 
 /**
  * Buying guide — "Independent Japanese-Makes Dealer Near Chicago"
@@ -102,22 +103,7 @@ export default function IndependentJapaneseMakesDealerChicagoPage() {
       />
       <FAQSchema items={FAQS} />
 
-      <nav
-        className="max-w-7xl mx-auto px-4 py-4 text-sm"
-        aria-label="Breadcrumb"
-      >
-        <ol className="flex items-center gap-2 text-brand-gray-500">
-          <li>
-            <Link href="/" className="hover:text-brand-red">
-              Home
-            </Link>
-          </li>
-          <li>/</li>
-          <li className="text-brand-gray-900 font-medium">
-            Independent Japanese-Makes Dealer Near Chicago
-          </li>
-        </ol>
-      </nav>
+      <SiteBreadcrumb trail={[{ label: "Independent Japanese-Makes Dealer Near Chicago" }]} />
 
       <article className="max-w-3xl mx-auto px-4 py-8 md:py-12">
         <header className="mb-8">

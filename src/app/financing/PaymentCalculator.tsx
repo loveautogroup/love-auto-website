@@ -13,6 +13,7 @@
  */
 
 import { useMemo, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 function money(v: number): string {
   if (!Number.isFinite(v) || v < 0) return "—";
@@ -40,6 +41,7 @@ function estimateMonthlyPayment(
 }
 
 export default function PaymentCalculator() {
+  const { t } = useLanguage();
   const [price, setPrice] = useState(12000);
   const [down, setDown] = useState(0);
   const [months, setMonths] = useState(60);
@@ -63,15 +65,15 @@ export default function PaymentCalculator() {
         id="calc-heading"
         className="text-2xl font-bold text-brand-gray-900 mb-1"
       >
-        Payment Calculator
+        {t.calculator.heading}
       </h2>
       <p className="text-sm text-brand-gray-500 mb-6">
-        Adjust the numbers to see your estimated monthly payment.
+        {t.calculator.subtext}
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-4">
-          <Field label="Vehicle Price" id="calc-price">
+          <Field label={t.calculator.vehiclePrice} id="calc-price">
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-gray-500">$</span>
               <input
@@ -87,7 +89,7 @@ export default function PaymentCalculator() {
             </div>
           </Field>
 
-          <Field label="Down Payment" id="calc-down">
+          <Field label={t.calculator.downPayment} id="calc-down">
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-gray-500">$</span>
               <input
@@ -103,23 +105,23 @@ export default function PaymentCalculator() {
             </div>
           </Field>
 
-          <Field label="Loan Term" id="calc-term">
+          <Field label={t.calculator.loanTerm} id="calc-term">
             <select
               id="calc-term"
               value={months}
               onChange={(e) => setMonths(Number(e.target.value))}
               className="w-full px-3 py-2 border border-brand-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-brand-red focus:border-transparent outline-none"
             >
-              <option value={24}>24 months (2 years)</option>
-              <option value={36}>36 months (3 years)</option>
-              <option value={48}>48 months (4 years)</option>
-              <option value={60}>60 months (5 years)</option>
-              <option value={72}>72 months (6 years)</option>
-              <option value={84}>84 months (7 years)</option>
+              <option value={24}>{t.calculator.months24}</option>
+              <option value={36}>{t.calculator.months36}</option>
+              <option value={48}>{t.calculator.months48}</option>
+              <option value={60}>{t.calculator.months60}</option>
+              <option value={72}>{t.calculator.months72}</option>
+              <option value={84}>{t.calculator.months84}</option>
             </select>
           </Field>
 
-          <Field label="Est. APR" id="calc-apr">
+          <Field label={t.calculator.estApr} id="calc-apr">
             <div className="relative">
               <input
                 id="calc-apr"
@@ -135,33 +137,33 @@ export default function PaymentCalculator() {
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-gray-500">%</span>
             </div>
             <p className="text-xs text-brand-gray-400 mt-1">
-              Rates depend on your credit profile — apply below for your real rate.
+              {t.calculator.aprHelper}
             </p>
           </Field>
         </div>
 
         <div className="bg-brand-navy text-white rounded-xl p-6 flex flex-col justify-center">
           <p className="text-sm text-brand-gray-300 uppercase tracking-wide font-semibold">
-            Estimated Monthly Payment
+            {t.calculator.estimatedMonthly}
           </p>
           <p className="mt-1 text-5xl font-bold tabular-nums">
             {monthly !== null ? money(monthly) : "—"}
           </p>
-          <p className="mt-1 text-xs text-brand-gray-300">per month</p>
+          <p className="mt-1 text-xs text-brand-gray-300">{t.calculator.perMonth}</p>
 
           <div className="mt-6 pt-6 border-t border-white/10 text-sm space-y-2 text-brand-gray-300">
             <div className="flex justify-between">
-              <span>Amount financed</span>
+              <span>{t.calculator.amountFinanced}</span>
               <span className="tabular-nums text-white">
                 {money(Math.max(0, price - down))}
               </span>
             </div>
             <div className="flex justify-between">
-              <span>Loan term</span>
-              <span className="tabular-nums text-white">{months} months</span>
+              <span>{t.calculator.loanTermRow}</span>
+              <span className="tabular-nums text-white">{months} {t.calculator.monthsSuffix}</span>
             </div>
             <div className="flex justify-between">
-              <span>Total interest</span>
+              <span>{t.calculator.totalInterest}</span>
               <span className="tabular-nums text-white">
                 {totalInterest !== null ? money(totalInterest) : "—"}
               </span>
@@ -172,16 +174,13 @@ export default function PaymentCalculator() {
             href="#apply"
             className="mt-6 inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white font-semibold px-5 py-3 rounded-lg transition-colors"
           >
-            Get my real rate →
+            {t.calculator.getRealRate}
           </a>
         </div>
       </div>
 
       <p className="mt-6 text-xs text-brand-gray-400 leading-relaxed">
-        This calculator is an estimate only. Your actual monthly payment depends on
-        your credit profile, the lender&apos;s offer, trade-in value, taxes, fees,
-        and other variables. Apply below for a real offer — no impact to your
-        credit score to inquire.
+        {t.calculator.disclaimer}
       </p>
     </section>
   );

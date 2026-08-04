@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import LivePreviewGrid from "@/components/LivePreviewGrid";
 import { BreadcrumbSchema, FAQSchema } from "@/components/StructuredData";
+import SiteBreadcrumb from "@/components/SiteBreadcrumb";
 import { SITE_CONFIG } from "@/lib/constants";
 import { BRANDS } from "@/data/brands";
 
@@ -67,19 +68,7 @@ export default function UsedCarsVillaParkPage() {
       <FAQSchema items={FAQ_ITEMS} />
 
       {/* Breadcrumb */}
-      <nav className="max-w-7xl mx-auto px-4 py-4 text-sm" aria-label="Breadcrumb">
-        <ol className="flex items-center gap-2 text-brand-gray-500">
-          <li>
-            <Link href="/" className="hover:text-brand-red">
-              Home
-            </Link>
-          </li>
-          <li>/</li>
-          <li className="text-brand-gray-900 font-medium">
-            Used Cars in Villa Park, IL
-          </li>
-        </ol>
-      </nav>
+      <SiteBreadcrumb trail={[{ label: "Used Cars in Villa Park, IL" }]} />
 
       {/* Hero */}
       <section className="bg-brand-navy text-white py-12 md:py-16">

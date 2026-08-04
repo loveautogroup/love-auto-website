@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Trust strip — displayed on the VDP, homepage, and inventory page.
  *
@@ -7,7 +9,10 @@
  *   3. No Hidden Fees · All Credit Welcome · Same-Day Title & Plates
  */
 
+import { useLanguage } from "@/context/LanguageContext";
+
 export default function VDPTrustStrip() {
+  const { t } = useLanguage();
   return (
     <section
       aria-label="Love Auto Group trust pillars"
@@ -23,8 +28,8 @@ export default function VDPTrustStrip() {
           <span className="inline-flex items-center gap-2">
             <Shield />
             <span>
-              <strong className="font-bold">Fully Inspected</strong>
-              <span className="hidden md:inline text-white/80"> · Free CARFAX Included</span>
+              <strong className="font-bold">{t.vdpTrustStrip.inspected}</strong>
+              <span className="hidden md:inline text-white/80"> · {t.vdpTrustStrip.inspectedSuffix}</span>
             </span>
           </span>
 
@@ -33,8 +38,8 @@ export default function VDPTrustStrip() {
           <span className="inline-flex items-center gap-2">
             <WrenchIcon />
             <span>
-              <strong className="font-bold">Japanese Makes Specialist</strong>
-              <span className="hidden md:inline text-white/80"> · Over a Decade in Villa Park</span>
+              <strong className="font-bold">{t.vdpTrustStrip.specialist}</strong>
+              <span className="hidden md:inline text-white/80"> · {t.vdpTrustStrip.specialistSuffix}</span>
             </span>
           </span>
 
@@ -43,8 +48,8 @@ export default function VDPTrustStrip() {
           <span className="inline-flex items-center gap-2">
             <DollarIcon />
             <span>
-              <strong className="font-bold">No Hidden Fees</strong>
-              <span className="hidden md:inline text-white/80"> · All Credit Welcome · Same-Day Title &amp; Plates</span>
+              <strong className="font-bold">{t.vdpTrustStrip.noFees}</strong>
+              <span className="hidden md:inline text-white/80"> · {t.vdpTrustStrip.noFeesSuffix}</span>
             </span>
           </span>
 

@@ -14,6 +14,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { consentHashesFor } from "@/lib/consent-language";
+import { useLanguage } from "@/context/LanguageContext";
 
 /**
  * Normalize any US phone string to E.164 (+1XXXXXXXXXX) — the public lead
@@ -36,6 +37,7 @@ type State =
   | { kind: "error"; messages: string[] };
 
 export default function QuickPreQualifyForm() {
+  const { t } = useLanguage();
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
@@ -123,13 +125,13 @@ export default function QuickPreQualifyForm() {
           kind: "error",
           messages: Array.isArray(data.errors)
             ? data.errors
-            : [data.error ?? "Could not submit. Please call us at (630) 359-3643."],
+            : [data.error ?? t.prequalify.errSubmit],
         });
         return;
       }
       setState({ kind: "success" });
     } catch {
-      setState({ kind: "error", messages: ["Network error. Please try again or call (630) 359-3643."] });
+      setState({ kind: "error", messages: [t.prequalify.errNetwork] });
     }
   }
 
@@ -140,18 +142,17 @@ export default function QuickPreQualifyForm() {
   if (state.kind === "success") {
     return (
       <div className="bg-brand-green/10 border border-brand-green/20 rounded-xl p-8 text-center">
-        <h3 className="text-xl font-bold text-brand-gray-900 mb-2">You&apos;re In!</h3>
+        <h3 className="text-xl font-bold text-brand-gray-900 mb-2">{t.prequalify.successHeading}</h3>
         <p className="text-brand-gray-600 max-w-md mx-auto">
-          We&apos;ll review your info and reach out within 1 business day with
-          options. Want to talk now? Call{" "}
+          {t.prequalify.successBodyPre}
           <a href="tel:6303593643" className="text-brand-red font-semibold hover:underline">
             (630) 359-3643
-          </a>{" "}
-          or browse{" "}
+          </a>
+          {t.prequalify.successBodyMid}
           <Link href="/inventory" className="text-brand-red hover:underline">
-            our inventory
+            {t.prequalify.inventoryLinkText}
           </Link>
-          .
+          {t.prequalify.successBodyPost}
         </p>
       </div>
     );
@@ -160,16 +161,15 @@ export default function QuickPreQualifyForm() {
   return (
     <form onSubmit={onSubmit} className="bg-white border border-brand-gray-200 rounded-xl p-6 sm:p-8 space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-brand-gray-900">Quick Pre-Qualify</h2>
+        <h2 className="text-xl font-bold text-brand-gray-900">{t.prequalify.heading}</h2>
         <p className="text-sm text-brand-gray-500 mt-1">
-          60 seconds, no Social Security number, no impact to your credit.
-          We&apos;ll text or call you with options.
+          {t.prequalify.subtext}
         </p>
       </div>
 
       {state.kind === "error" && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
-          <p className="font-semibold mb-1">Please fix the following:</p>
+          <p className="font-semibold mb-1">{t.prequalify.fixFollowing}</p>
           <ul className="list-disc ml-5 space-y-0.5">
             {state.messages.map((m, i) => (
               <li key={i}>{m}</li>
@@ -181,61 +181,61 @@ export default function QuickPreQualifyForm() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <label className="block">
           <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-            First name <span className="text-brand-red">*</span>
+            {t.prequalify.firstName} <span className="text-brand-red">*</span>
           </span>
           <input type="text" required autoComplete="given-name" className={fieldClass}
             value={values.firstName} onChange={(e) => update("firstName", e.target.value)} />
         </label>
         <label className="block">
           <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-            Last name <span className="text-brand-red">*</span>
+            {t.prequalify.lastName} <span className="text-brand-red">*</span>
           </span>
           <input type="text" required autoComplete="family-name" className={fieldClass}
             value={values.lastName} onChange={(e) => update("lastName", e.target.value)} />
         </label>
         <label className="block">
           <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-            Phone <span className="text-brand-red">*</span>
+            {t.prequalify.phone} <span className="text-brand-red">*</span>
           </span>
           <input type="tel" required autoComplete="tel" placeholder="(630) 555-1234" className={fieldClass}
             value={values.phone} onChange={(e) => update("phone", e.target.value)} />
         </label>
         <label className="block">
           <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-            Email <span className="text-brand-red">*</span>
+            {t.prequalify.email} <span className="text-brand-red">*</span>
           </span>
           <input type="email" required autoComplete="email" className={fieldClass}
             value={values.email} onChange={(e) => update("email", e.target.value)} />
         </label>
         <label className="block">
           <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-            Employment status <span className="text-brand-red">*</span>
+            {t.prequalify.employmentStatus} <span className="text-brand-red">*</span>
           </span>
           <select required className={fieldClass} value={values.employmentStatus}
             onChange={(e) => update("employmentStatus", e.target.value)}>
-            <option value="">Select…</option>
-            <option value="employed">Employed (W-2)</option>
-            <option value="self-employed">Self-employed</option>
-            <option value="retired">Retired</option>
-            <option value="student">Student</option>
-            <option value="unemployed">Unemployed</option>
-            <option value="other">Other</option>
+            <option value="">{t.prequalify.selectEllipsis}</option>
+            <option value="employed">{t.prequalify.employedW2}</option>
+            <option value="self-employed">{t.prequalify.selfEmployed}</option>
+            <option value="retired">{t.prequalify.retired}</option>
+            <option value="student">{t.prequalify.student}</option>
+            <option value="unemployed">{t.prequalify.unemployed}</option>
+            <option value="other">{t.prequalify.other}</option>
           </select>
         </label>
         <label className="block">
           <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-            Monthly income (before taxes) <span className="text-brand-red">*</span>
+            {t.prequalify.monthlyIncome} <span className="text-brand-red">*</span>
           </span>
           <input type="number" required inputMode="numeric" min={0} placeholder="$" className={fieldClass}
             value={values.monthlyIncome} onChange={(e) => update("monthlyIncome", e.target.value)} />
         </label>
         <label className="block">
-          <span className="block text-sm font-medium text-brand-gray-900 mb-1">Vehicle you&apos;re interested in</span>
-          <input type="text" placeholder="e.g. 2017 Lexus GS 350" className={fieldClass}
+          <span className="block text-sm font-medium text-brand-gray-900 mb-1">{t.prequalify.vehicleInterest}</span>
+          <input type="text" placeholder={t.prequalify.vehicleInterestPlaceholder} className={fieldClass}
             value={values.vehicleInterest} onChange={(e) => update("vehicleInterest", e.target.value)} />
         </label>
         <label className="block">
-          <span className="block text-sm font-medium text-brand-gray-900 mb-1">Down payment</span>
+          <span className="block text-sm font-medium text-brand-gray-900 mb-1">{t.prequalify.downPayment}</span>
           <input type="number" inputMode="numeric" min={0} placeholder="$" className={fieldClass}
             value={values.desiredDownPayment} onChange={(e) => update("desiredDownPayment", e.target.value)} />
         </label>
@@ -282,7 +282,7 @@ export default function QuickPreQualifyForm() {
 
       <button type="submit" disabled={disabled}
         className="w-full bg-brand-red hover:bg-brand-red-dark disabled:bg-brand-gray-400 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-semibold transition-colors">
-        {disabled ? "Submitting…" : "Get Pre-Qualified"}
+        {disabled ? t.prequalify.submitting : t.prequalify.submit}
       </button>
     </form>
   );

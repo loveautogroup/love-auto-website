@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { BRANDS } from "@/data/brands";
 import MakeLandingInventory from "@/components/MakeLandingInventory";
 import { BreadcrumbSchema, FAQSchema } from "@/components/StructuredData";
+import SiteBreadcrumb from "@/components/SiteBreadcrumb";
+import T from "@/components/T";
 
 /**
  * Brand landing pages — /brands/{slug}/
@@ -108,28 +110,10 @@ export default async function BrandPage({
       ) : null}
 
       {/* Breadcrumb */}
-      <nav
-        className="max-w-7xl mx-auto px-4 py-4 text-sm"
-        aria-label="Breadcrumb"
-      >
-        <ol className="flex items-center gap-2 text-brand-gray-500">
-          <li>
-            <Link href="/" className="hover:text-brand-red">
-              Home
-            </Link>
-          </li>
-          <li>/</li>
-          <li>
-            <Link href="/inventory" className="hover:text-brand-red">
-              Inventory
-            </Link>
-          </li>
-          <li>/</li>
-          <li className="text-brand-gray-900 font-medium">
-            Used {content.displayName}
-          </li>
-        </ol>
-      </nav>
+      <SiteBreadcrumb
+        includeInventory
+        trail={[{ label: `Used ${content.displayName}` }]}
+      />
 
       {/* Hero */}
       <section className="bg-brand-navy text-white py-12 md:py-16">
@@ -157,7 +141,7 @@ export default async function BrandPage({
 
         {content.relatedLinks && content.relatedLinks.length > 0 ? (
           <p className="text-base text-brand-gray-600 mt-8">
-            Browse the live inventory below, or{" "}
+            <T get={(t) => t.brandsChrome.browseBelowOr} />{" "}
             {content.relatedLinks.map((link, i) => (
               <span key={link.href}>
                 <Link
@@ -166,7 +150,7 @@ export default async function BrandPage({
                 >
                   {link.label}
                 </Link>
-                {i < content.relatedLinks!.length - 1 ? " or " : "."}
+                {i < content.relatedLinks!.length - 1 ? <T get={(t) => ` ${t.brandsChrome.or} `} /> : "."}
               </span>
             ))}
           </p>
@@ -177,7 +161,7 @@ export default async function BrandPage({
       {content.faqs && content.faqs.length > 0 ? (
         <section className="max-w-4xl mx-auto px-4 pb-8">
           <h2 className="text-2xl font-bold text-brand-gray-900 mb-6">
-            Frequently Asked Questions
+            <T get={(t) => t.brandsChrome.faqHeading} />
           </h2>
           <div className="space-y-6">
             {content.faqs.map((faq) => (
@@ -208,24 +192,23 @@ export default async function BrandPage({
       <section className="bg-brand-gray-50 py-12">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-2xl font-bold text-brand-gray-900 mb-2">
-            Looking for a specific {content.displayName} model?
+            <T get={(t) => t.brandsChrome.lookingForModel.replace("{make}", content.displayName)} />
           </h2>
           <p className="text-brand-gray-600 mb-6">
-            Call (630) 359-3643 and we will let you know when one lands.
-            735 N Yale Ave, Unit A, Villa Park, IL 60181.
+            <T get={(t) => t.brandsChrome.callAndNotify.replace("{phone}", "(630) 359-3643")} />
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <a
               href="tel:6303593643"
               className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-xl font-semibold"
             >
-              Call (630) 359-3643
+              <T get={(t) => t.brandsChrome.callPhone.replace("{phone}", "(630) 359-3643")} />
             </a>
             <Link
               href="/inventory"
               className="inline-flex items-center border-2 border-brand-gray-300 hover:bg-brand-gray-100 text-brand-gray-900 px-6 py-3 rounded-xl font-semibold"
             >
-              View Full Inventory
+              <T get={(t) => t.brandsChrome.viewFullInventory} />
             </Link>
           </div>
         </div>

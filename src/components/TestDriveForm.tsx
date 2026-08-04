@@ -51,10 +51,13 @@
  *     top of the DMS's own 5-per-10-min limit.
  *
  * CONSENT: the DMS lead schema requires marketingOptIn === true, so the same
- * TCPA checkbox LeadForm uses is required here. The consent paragraph stays
- * in ENGLISH in both locales on purpose - consentHashes are a sha-256 of the
- * registered English wording in CONSENT_LANGUAGE, and translating the visible
- * text would break the "prove what the customer saw" audit trail.
+ * TCPA checkbox LeadForm uses is required here. As of v3-2026-08-sms
+ * (Diane's ruling, approved by Jeremiah 2026-08-03 -- "yes for v3"),
+ * language lives IN the version key -- v3-2026-08-sms-en / -es are separate
+ * registry rows, each hashed from its own rendered string, so the Spanish
+ * page now shows and hashes the Spanish paragraph. v2-2026-06-sms (English
+ * only) stays FROZEN in the registry for prior submissions -- never point
+ * new submissions at it again.
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -62,9 +65,6 @@ import { useLanguage } from "@/context/LanguageContext";
 import { LeadFormConsent } from "@/components/LeadFormConsent";
 import { CONSENT_LANGUAGE, consentHashesFor } from "@/lib/consent-language";
 import { trackFormSubmit, trackLeadTestDrive } from "@/lib/analytics";
-
-/** Same consent version LeadForm sends. Do not fork without a registry row. */
-const OPT_IN_LANGUAGE_VERSION = "v2-2026-06-sms";
 
 /** leadSource tag that makes this distinguishable in the DMS. */
 export const TEST_DRIVE_SOURCE = "website-test-drive";
@@ -249,6 +249,10 @@ export default function TestDriveForm({
 }: TestDriveFormProps) {
   const { t, locale } = useLanguage();
   const td = t.testDrive;
+  // v3-2026-08-sms pair -- same version keys LeadForm sends, selected by
+  // the same locale switch. Do not fork without a registry row.
+  const OPT_IN_LANGUAGE_VERSION =
+    locale === "es" ? "v3-2026-08-sms-es" : "v3-2026-08-sms-en";
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -688,7 +692,7 @@ export default function TestDriveForm({
         />
       </div>
 
-      {/* TCPA consent - English in both locales (see file header). */}
+      {/* TCPA consent - language selected by locale (see file header). */}
       <label className="flex items-start gap-2 text-xs text-brand-gray-700 cursor-pointer select-none">
         <input
           type="checkbox"
@@ -698,28 +702,24 @@ export default function TestDriveForm({
           onChange={(e) => setOptIn(e.target.checked)}
         />
         <span>
-          {CONSENT_LANGUAGE[OPT_IN_LANGUAGE_VERSION].tcpa_sms} Reply HELP for
-          assistance or call{" "}
-          <a href="tel:+16303593643" className="underline text-brand-red">
-            (630)&nbsp;359-3643
-          </a>
-          . Please see our{" "}
+          {CONSENT_LANGUAGE[OPT_IN_LANGUAGE_VERSION].tcpa_sms}{" "}
+          {locale === "es" ? "Consulte nuestra" : "Please see our"}{" "}
           <a
             href="/privacy-policy"
             target="_blank"
             rel="noopener noreferrer"
             className="underline text-brand-red"
           >
-            Privacy&nbsp;Policy
+            {locale === "es" ? "Política de Privacidad" : "Privacy Policy"}
           </a>{" "}
-          and{" "}
+          {locale === "es" ? "y" : "and"}{" "}
           <a
             href="/terms"
             target="_blank"
             rel="noopener noreferrer"
             className="underline text-brand-red"
           >
-            Terms&nbsp;and&nbsp;Conditions
+            {locale === "es" ? "Términos y Condiciones" : "Terms and Conditions"}
           </a>
           .
         </span>

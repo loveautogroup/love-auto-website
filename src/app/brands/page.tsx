@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BRANDS } from "@/data/brands";
 import { BreadcrumbSchema } from "@/components/StructuredData";
+import SiteBreadcrumb from "@/components/SiteBreadcrumb";
 
 /**
  * Brands index — /brands/
@@ -80,20 +81,7 @@ export default function BrandsIndexPage() {
       />
 
       {/* Breadcrumb */}
-      <nav
-        className="max-w-7xl mx-auto px-4 py-4 text-sm"
-        aria-label="Breadcrumb"
-      >
-        <ol className="flex items-center gap-2 text-brand-gray-500">
-          <li>
-            <Link href="/" className="hover:text-brand-red">
-              Home
-            </Link>
-          </li>
-          <li>/</li>
-          <li className="text-brand-gray-900 font-medium">Brands</li>
-        </ol>
-      </nav>
+      <SiteBreadcrumb trail={[{ label: "Brands" }]} />
 
       {/* Hero */}
       <section className="bg-brand-navy text-white py-12 md:py-16">

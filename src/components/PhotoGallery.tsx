@@ -8,6 +8,7 @@ import type { GlobalBadgeConfig } from "@/lib/dmsInventory";
 import { useResolveOverlay } from "@/data/useMerchandising";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import { useReviews } from "@/context/ReviewsContext";
+import { useLanguage } from "@/context/LanguageContext";
 import {
   CarfaxBadge,
   CarfaxPillStack,
@@ -64,6 +65,7 @@ interface LightboxProps {
 }
 
 function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
+  const { t } = useLanguage();
   const [idx, setIdx] = useState(initialIndex);
   const touchStartX = useRef<number | null>(null);
   const count = images.length;
@@ -113,7 +115,7 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
         </span>
         <button
           onClick={onClose}
-          aria-label="Close photo viewer"
+          aria-label={t.gallery.close}
           className="text-white/80 hover:text-white p-2 -mr-2 rounded-full transition-colors"
         >
           <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
@@ -137,7 +139,7 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
             swipe handles it. Keyboard arrows work everywhere. */}
         <button
           onClick={prev}
-          aria-label="Previous photo"
+          aria-label={t.gallery.previous}
           className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 items-center justify-center w-11 h-11 rounded-full bg-black/50 text-white/80 hover:bg-black/75 hover:text-white transition-colors"
         >
           <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
@@ -146,7 +148,7 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
         </button>
         <button
           onClick={next}
-          aria-label="Next photo"
+          aria-label={t.gallery.next}
           className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 items-center justify-center w-11 h-11 rounded-full bg-black/50 text-white/80 hover:bg-black/75 hover:text-white transition-colors"
         >
           <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
@@ -158,7 +160,7 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
       {/* Swipe hint */}
       {count > 1 && (
         <div className="absolute bottom-20 inset-x-0 flex justify-center pointer-events-none">
-          <span className="text-white/40 text-xs animate-pulse">swipe to navigate</span>
+          <span className="text-white/40 text-xs animate-pulse">{t.gallery.swipe}</span>
         </div>
       )}
 
@@ -209,6 +211,7 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
  * thumbnail still swaps the hero as before.
  */
 export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeConfig }: PhotoGalleryProps) {
+  const { t } = useLanguage();
   const googleReviews = useReviews();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [erroredSrcs, setErroredSrcs] = useState<Set<string>>(new Set());
@@ -341,8 +344,8 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                     />
                   </svg>
-                  <p className="font-medium text-sm">Vehicle Photos</p>
-                  <p className="text-xs">Synced from Dealer Center</p>
+                  <p className="font-medium text-sm">{t.gallery.placeholderTitle}</p>
+                  <p className="text-xs">{t.gallery.placeholderSub}</p>
                 </div>
               </div>
             )}

@@ -22,9 +22,23 @@ export const CONSENT_LANGUAGE = {
     privacy:
       "I acknowledge I have read and agree to the Privacy Policy. I understand this is a pre-qualification request, not an application for credit, and no credit report will be pulled. A full credit application with written authorization comes later if I decide to proceed.",
   },
+  // v2-2026-06-sms is FROZEN -- proof for every customer who already agreed
+  // to it. Do not edit, rename, or delete. Superseded by the v3 pair below
+  // for all new submissions (Diane's ruling, approved by Jeremiah 2026-08-03
+  // -- "yes for v3"); language now lives in the version key itself, so each
+  // locale's registry string is exactly what gets rendered AND hashed for
+  // that submission.
   "v2-2026-06-sms": {
     tcpa_sms:
       "By checking the box, and submitting this form, you consent to receive text messages (SMS) to provide you support, and general information from Love Auto Group. Message frequency may vary. Message and data rates may apply. You can reply STOP to opt out of further messaging.",
+  },
+  "v3-2026-08-sms-en": {
+    tcpa_sms:
+      "By checking this box, I consent to receive calls and text messages from Love Auto Group at the phone number I provided, including calls and texts sent using automated dialing systems or a prerecorded or artificial voice, about vehicles, financing, and offers. Consent is not a condition of purchasing any vehicle or service. Message frequency varies. Message and data rates may apply. Reply STOP to any text, or call us at (630) 359-3643, to opt out at any time. Reply HELP for help.",
+  },
+  "v3-2026-08-sms-es": {
+    tcpa_sms:
+      "Al marcar esta casilla, doy mi consentimiento para recibir llamadas y mensajes de texto de Love Auto Group al número de teléfono que proporcioné, incluyendo llamadas y mensajes enviados con sistemas automáticos de marcación o con voz pregrabada o artificial, sobre vehículos, financiamiento y ofertas. Dar este consentimiento no es requisito para comprar ningún vehículo ni servicio. La frecuencia de los mensajes puede variar. Pueden aplicar tarifas de mensajes y datos. Puede responder STOP a cualquier mensaje de texto, o llamarnos al (630) 359-3643, para cancelar en cualquier momento. Responda HELP si necesita ayuda.",
   },
 } as const;
 

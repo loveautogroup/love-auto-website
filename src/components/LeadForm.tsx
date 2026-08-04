@@ -28,16 +28,14 @@ import { trackFormSubmit, trackLeadContact } from "@/lib/analytics";
 
 import { useState } from "react";
 import { LeadFormConsent } from "@/components/LeadFormConsent";
-import { consentHashesFor } from "@/lib/consent-language";
+import { CONSENT_LANGUAGE, consentHashesFor } from "@/lib/consent-language";
+import { useLanguage } from "@/context/LanguageContext";
 
 const DMS_API_BASE =
   process.env.NEXT_PUBLIC_DMS_API_BASE ?? "https://dms.loveautogroup.net";
 
 /** Intake key baked in at Cloudflare Pages build time. Empty = bridge mode. */
 const INTAKE_KEY = process.env.NEXT_PUBLIC_DMS_INTAKE_KEY ?? "";
-
-/** Version tag for the TCPA consent language shown in this form. */
-const OPT_IN_LANGUAGE_VERSION = "v2-2026-06-sms";
 
 /**
  * Normalize any US phone string to E.164 (+1XXXXXXXXXX).
@@ -97,10 +95,18 @@ export default function LeadForm({
   source = "website",
   initialVehicleInterest = "",
   vehicleVin: _vehicleVin,  // reserved — see prop comment
-  submitLabel = "Send message",
+  submitLabel,
   onSuccess,
   compact = false,
 }: LeadFormProps) {
+  const { t, locale } = useLanguage();
+  // v3-2026-08-sms pair (Diane's ruling, approved by Jeremiah 2026-08-03 --
+  // "yes for v3"): language lives in the version key itself, so whichever
+  // string is rendered below is also the exact string that gets hashed.
+  // v2-2026-06-sms stays FROZEN in the registry for prior submissions --
+  // never point new submissions at it again.
+  const optInLanguageVersion =
+    locale === "es" ? "v3-2026-08-sms-es" : "v3-2026-08-sms-en";
   const [values, setValues] = useState<FormValues>({
     ...INITIAL,
     vehicleInterest: initialVehicleInterest,
@@ -125,15 +131,15 @@ export default function LeadForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!values.name.trim()) {
-      setError("Please enter your name.");
+      setError(t.leadForm.errName);
       return;
     }
     if (!values.phone.trim()) {
-      setError("Please enter your phone number.");
+      setError(t.leadForm.errPhone);
       return;
     }
     if (!values.marketingOptIn) {
-      setError("Please check the box to consent to text messages before submitting.");
+      setError(t.leadForm.errConsent);
       return;
     }
 
@@ -170,8 +176,8 @@ export default function LeadForm({
           message: values.message || undefined,
           source,
           marketingOptIn: values.marketingOptIn,
-          optInLanguageVersion: OPT_IN_LANGUAGE_VERSION,
-          consentHashes: await consentHashesFor("v2-2026-06-sms"),
+          optInLanguageVersion: optInLanguageVersion,
+          consentHashes: await consentHashesFor(optInLanguageVersion),
           // Honeypot — always sent; real users leave it blank.
           // DMS silently drops submissions where it's non-empty.
           honeypot: values.honeypot,
@@ -207,18 +213,13 @@ export default function LeadForm({
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(
-          body.error ||
-            "We couldn't send your message. Please call (630) 359-3643."
+          body.error || t.leadForm.errSubmit
         );
       }
 
       const body = await res.json();
       const leadId: string | null = body?.data?.leadId ?? null;
-      setSuccess(
-        `Thanks ${firstName}! We'll reach out shortly. ` +
-          "If you don't hear back within an hour during business hours, " +
-          "call or text (630) 359-3643."
-      );
+      setSuccess(t.leadForm.successBody.replace("{name}", firstName));
       setValues({ ...INITIAL, vehicleInterest: "" });
       trackFormSubmit(source);
       trackLeadContact(source);
@@ -227,7 +228,7 @@ export default function LeadForm({
       setError(
         err instanceof Error
           ? err.message
-          : "Something went wrong. Please call (630) 359-3643."
+          : t.leadForm.errGeneric
       );
     } finally {
       setSubmitting(false);
@@ -252,7 +253,7 @@ export default function LeadForm({
             />
           </svg>
           <div>
-            <h3 className="font-bold text-brand-gray-900">Message received</h3>
+            <h3 className="font-bold text-brand-gray-900">{t.leadForm.successHeading}</h3>
             <p className="mt-1 text-sm text-brand-gray-700">{success}</p>
           </div>
         </div>
@@ -268,7 +269,7 @@ export default function LeadForm({
       {/* Honeypot — hidden via CSS; bots fill it, real users never see it */}
       <div aria-hidden="true" className="absolute -left-[9999px] -top-[9999px]">
         <label>
-          Leave blank
+          {t.leadForm.honeypotLabel}
           <input
             type="text"
             tabIndex={-1}
@@ -281,13 +282,13 @@ export default function LeadForm({
 
       <div>
         <label className="block text-sm font-medium text-brand-gray-700 mb-1">
-          Name <span className="text-brand-red">*</span>
+          {t.leadForm.nameLabel} <span className="text-brand-red">*</span>
         </label>
         <input
           type="text"
           required
           className={inputCss}
-          placeholder="First and last name"
+          placeholder={t.leadForm.namePlaceholder}
           value={values.name}
           onChange={(e) => update("name", e.target.value)}
           autoComplete="name"
@@ -297,13 +298,13 @@ export default function LeadForm({
       <div className={compact ? "" : "grid grid-cols-1 sm:grid-cols-2 gap-4"}>
         <div>
           <label className="block text-sm font-medium text-brand-gray-700 mb-1">
-            Phone <span className="text-brand-red">*</span>
+            {t.leadForm.phoneLabel} <span className="text-brand-red">*</span>
           </label>
           <input
             type="tel"
             required
             className={inputCss}
-            placeholder="(630) 555-1234"
+            placeholder={t.leadForm.phonePlaceholder}
             value={values.phone}
             onChange={(e) => update("phone", e.target.value)}
             autoComplete="tel"
@@ -311,12 +312,12 @@ export default function LeadForm({
         </div>
         <div>
           <label className="block text-sm font-medium text-brand-gray-700 mb-1">
-            Email
+            {t.leadForm.emailLabel}
           </label>
           <input
             type="email"
             className={inputCss}
-            placeholder="you@example.com"
+            placeholder={t.leadForm.emailPlaceholder}
             value={values.email}
             onChange={(e) => update("email", e.target.value)}
             autoComplete="email"
@@ -326,7 +327,7 @@ export default function LeadForm({
 
       <div>
         <label className="block text-sm font-medium text-brand-gray-700 mb-1">
-          Vehicle of interest
+          {t.leadForm.vehicleLabel}
         </label>
         <input
           type="text"
@@ -334,7 +335,7 @@ export default function LeadForm({
           placeholder={
             initialVehicleInterest
               ? initialVehicleInterest
-              : "e.g. 2017 Subaru Forester or just 'AWD SUV under 15k'"
+              : t.leadForm.vehiclePlaceholder
           }
           value={values.vehicleInterest}
           onChange={(e) => update("vehicleInterest", e.target.value)}
@@ -343,12 +344,12 @@ export default function LeadForm({
 
       <div>
         <label className="block text-sm font-medium text-brand-gray-700 mb-1">
-          Message
+          {t.leadForm.messageLabel}
         </label>
         <textarea
           rows={compact ? 3 : 4}
           className={inputCss + " resize-none"}
-          placeholder="Tell us a little about what you're looking for..."
+          placeholder={t.leadForm.messagePlaceholder}
           value={values.message}
           onChange={(e) => update("message", e.target.value)}
         />
@@ -363,16 +364,15 @@ export default function LeadForm({
           onChange={(e) => update("marketingOptIn", e.target.checked)}
         />
         <span>
-          By checking the box, and submitting this form, you consent to receive
-          text messages (SMS) to provide you support, and general information
-          from Love Auto Group. Message frequency may vary. Message and data
-          rates may apply. You can reply STOP to opt out of further messaging.
-          Reply HELP for assistance or call{" "}
-          <a href="tel:+16303593643" className="underline text-brand-red">(630)&nbsp;359-3643</a>.
-          {" "}Please see our{" "}
-          <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline text-brand-red">Privacy&nbsp;Policy</a>
-          {" "}and{" "}
-          <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline text-brand-red">Terms&nbsp;and&nbsp;Conditions</a>.
+          {CONSENT_LANGUAGE[optInLanguageVersion].tcpa_sms}
+          {" "}{locale === "es" ? "Consulte nuestra" : "Please see our"}{" "}
+          <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline text-brand-red">
+            {locale === "es" ? "Política de Privacidad" : "Privacy Policy"}
+          </a>
+          {" "}{locale === "es" ? "y" : "and"}{" "}
+          <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline text-brand-red">
+            {locale === "es" ? "Términos y Condiciones" : "Terms and Conditions"}
+          </a>.
         </span>
       </label>
 
@@ -392,7 +392,7 @@ export default function LeadForm({
         disabled={submitting}
         className="w-full rounded-lg bg-brand-red text-white font-semibold px-4 py-3 hover:bg-brand-red-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {submitting ? "Sending..." : submitLabel}
+        {submitting ? t.leadForm.sending : (submitLabel ?? t.leadForm.submitDefault)}
       </button>
     </form>
   );

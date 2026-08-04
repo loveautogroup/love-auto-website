@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SERVICE_AREAS } from "@/data/serviceAreas";
 import LivePreviewGrid from "@/components/LivePreviewGrid";
+import SiteBreadcrumb from "@/components/SiteBreadcrumb";
 import { BreadcrumbSchema } from "@/components/StructuredData";
 
 /**
@@ -71,13 +72,7 @@ export default async function ServiceAreaPage({
       />
 
       {/* Breadcrumb */}
-      <nav className="max-w-7xl mx-auto px-4 py-4 text-sm" aria-label="Breadcrumb">
-        <ol className="flex items-center gap-2 text-brand-gray-500">
-          <li><Link href="/" className="hover:text-brand-red">Home</Link></li>
-          <li>/</li>
-          <li className="text-brand-gray-900 font-medium">Serving {content.town}, IL</li>
-        </ol>
-      </nav>
+      <SiteBreadcrumb trail={[{ label: `Serving ${content.town}, IL` }]} />
 
       {/* Hero */}
       <section className="bg-brand-navy text-white py-12 md:py-16">

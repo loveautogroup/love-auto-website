@@ -17,6 +17,11 @@
  * (we don't want a synthetic estimate to mislead anyone).
  */
 
+"use client";
+
+import { useLanguage } from "@/context/LanguageContext";
+import type { Translations } from "@/lib/i18n";
+
 interface VDPMarketPriceProps {
   askingPrice: number;
   marketEstimate?: number;
@@ -32,7 +37,11 @@ interface RatingInfo {
   markerPercent: number;
 }
 
-function ratingFor(askingPrice: number, marketEstimate: number): RatingInfo {
+function ratingFor(
+  askingPrice: number,
+  marketEstimate: number,
+  tMarket: Translations["marketPrice"]
+): RatingInfo {
   const ratio = askingPrice / marketEstimate;
   const savings = marketEstimate - askingPrice;
   const savingsAbs = Math.abs(savings);
@@ -58,20 +67,20 @@ function ratingFor(askingPrice: number, marketEstimate: number): RatingInfo {
 
   if (ratio < 0.92) {
     kind = "great";
-    label = "Great Deal";
-    description = `${formatted} below market`;
+    label = tMarket.great;
+    description = tMarket.belowMarket.replace("{amount}", formatted);
   } else if (ratio < 0.97) {
     kind = "good";
-    label = "Good Deal";
-    description = `${formatted} below market`;
+    label = tMarket.good;
+    description = tMarket.belowMarket.replace("{amount}", formatted);
   } else if (ratio <= 1.03) {
     kind = "fair";
-    label = "Fair Price";
-    description = "Right around market value";
+    label = tMarket.fair;
+    description = tMarket.aroundMarket;
   } else {
     kind = "above";
-    label = "Above Market";
-    description = `${formatted} above market`;
+    label = tMarket.above;
+    description = tMarket.aboveMarket.replace("{amount}", formatted);
   }
 
   // Color & icon vary by rating
@@ -94,9 +103,10 @@ export default function VDPMarketPrice({
   askingPrice,
   marketEstimate,
 }: VDPMarketPriceProps) {
+  const { t } = useLanguage();
   if (!marketEstimate || marketEstimate <= 0) return null;
 
-  const rating = ratingFor(askingPrice, marketEstimate);
+  const rating = ratingFor(askingPrice, marketEstimate, t.marketPrice);
   const askingHasCents = Math.round(askingPrice * 100) % 100 !== 0;
   const formattedAsking = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -123,10 +133,10 @@ export default function VDPMarketPrice({
             id="market-price-heading"
             className="text-sm font-bold text-brand-gray-900 uppercase tracking-wide"
           >
-            Market Price Analysis
+            {t.marketPrice.heading}
           </h2>
           <p className="text-xs text-brand-gray-500 mt-0.5">
-            Independent estimate based on comparable Chicago-area listings
+            {t.marketPrice.subtext}
           </p>
         </div>
         <span
@@ -139,11 +149,11 @@ export default function VDPMarketPrice({
       {/* Asking vs Estimate row */}
       <div className="flex items-baseline justify-between mb-2 text-sm">
         <div>
-          <span className="text-brand-gray-500">Asking</span>{" "}
+          <span className="text-brand-gray-500">{t.marketPrice.asking}</span>{" "}
           <span className="font-bold text-brand-gray-900">{formattedAsking}</span>
         </div>
         <div>
-          <span className="text-brand-gray-500">Market Estimate</span>{" "}
+          <span className="text-brand-gray-500">{t.marketPrice.estimate}</span>{" "}
           <span className="font-bold text-brand-gray-900">{formattedEstimate}</span>
         </div>
       </div>
@@ -159,9 +169,9 @@ export default function VDPMarketPrice({
       </div>
 
       <div className="flex justify-between text-[10px] font-medium text-brand-gray-500 mt-1.5 uppercase tracking-wide">
-        <span>Great Deal</span>
-        <span>Fair Price</span>
-        <span>Above Market</span>
+        <span>{t.marketPrice.great}</span>
+        <span>{t.marketPrice.fair}</span>
+        <span>{t.marketPrice.above}</span>
       </div>
 
       <p className="text-xs text-brand-gray-600 mt-3 text-center">

@@ -12,6 +12,7 @@
 
 import Image from "next/image";
 import { trackOutboundClick } from "@/lib/analytics";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ShowCarfaxButtonProps {
   vin: string;
@@ -20,7 +21,9 @@ interface ShowCarfaxButtonProps {
 }
 
 export default function ShowCarfaxButton({ vin, variant = "wide" }: ShowCarfaxButtonProps) {
+  const { t } = useLanguage();
   const reportUrl = `https://www.carfax.com/VehicleHistory/p/Report.cfx?partner=DVW_1&vin=${vin}`;
+  const ariaLabel = t.carfaxButton.ariaLabel.replace("{vin}", vin);
 
   if (variant === "inline") {
     return (
@@ -36,7 +39,7 @@ export default function ShowCarfaxButton({ vin, variant = "wide" }: ShowCarfaxBu
           hover:bg-brand-gray-50 hover:shadow-md
           transition-all text-sm font-bold
         "
-        aria-label={`Show free Carfax report for VIN ${vin}`}
+        aria-label={ariaLabel}
       >
         <Image
           src="/brand/carfax-logo.svg"
@@ -46,7 +49,7 @@ export default function ShowCarfaxButton({ vin, variant = "wide" }: ShowCarfaxBu
           className="h-3.5 w-auto"
           unoptimized
         />
-        <span>Show Me the Carfax →</span>
+        <span>{t.carfaxButton.showMeArrow}</span>
       </a>
     );
   }
@@ -64,7 +67,7 @@ export default function ShowCarfaxButton({ vin, variant = "wide" }: ShowCarfaxBu
         hover:border-brand-red hover:shadow-lg hover:-translate-y-0.5
         transition-all
       "
-      aria-label={`Show free Carfax report for VIN ${vin}`}
+      aria-label={ariaLabel}
     >
       <Image
         src="/brand/carfax-logo.svg"
@@ -78,10 +81,10 @@ export default function ShowCarfaxButton({ vin, variant = "wide" }: ShowCarfaxBu
         <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor" aria-hidden="true">
           <path d="M12 2L4 6v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V6l-8-4zm-1 14l-4-4 1.4-1.4L11 13.2l5.6-5.6L18 9l-7 7z" />
         </svg>
-        <span>Show Me the Carfax</span>
+        <span>{t.carfaxButton.showMe}</span>
       </div>
       <p className="text-[11px] text-brand-gray-500 text-center leading-tight">
-        Free vehicle history report · Opens in a new tab
+        {t.carfaxButton.freeReportNote}
       </p>
     </a>
   );

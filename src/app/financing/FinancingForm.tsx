@@ -22,6 +22,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { trackFormSubmit, trackLeadFinancing } from "@/lib/analytics";
 import { consentHashesFor } from "@/lib/consent-language";
+import { useLanguage } from "@/context/LanguageContext";
 
 const US_STATES = [
   "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA",
@@ -146,6 +147,7 @@ type SubmitState =
   | { kind: "error"; messages: string[] };
 
 export default function FinancingForm() {
+  const { t } = useLanguage();
   const [values, setValues] = useState<FormValues>(INITIAL);
   const [state, setState] = useState<SubmitState>({ kind: "idle" });
   const renderTimestamp = useRef<number>(0);
@@ -265,7 +267,7 @@ export default function FinancingForm() {
       if (!res.ok || !data.data?.id) {
         setState({
           kind: "error",
-          messages: [data.error ?? "Could not submit. Please call us at (630) 359-3643."],
+          messages: [data.error ?? t.creditApp.errSubmit],
         });
         return;
       }
@@ -276,9 +278,7 @@ export default function FinancingForm() {
       console.error("Financing submit failed:", err);
       setState({
         kind: "error",
-        messages: [
-          "Network error. Please try again or call us at (630) 359-3643.",
-        ],
+        messages: [t.creditApp.errNetwork],
       });
     }
   }
@@ -301,22 +301,21 @@ export default function FinancingForm() {
           />
         </svg>
         <h3 className="text-xl font-bold text-brand-gray-900 mb-2">
-          Application Received!
+          {t.creditApp.successHeading}
         </h3>
         <p className="text-brand-gray-600 max-w-md mx-auto">
-          Jordan will review your info and reach out within 1 business day with
-          financing options. If you&apos;d rather talk now, call{" "}
+          {t.creditApp.successBodyPre}
           <a
             href="tel:6303593643"
             className="text-brand-red font-semibold hover:underline"
           >
             (630) 359-3643
           </a>
-          . Meanwhile, browse{" "}
+          {t.creditApp.successBodyMid}
           <Link href="/inventory" className="text-brand-red hover:underline">
-            our inventory
+            {t.creditApp.inventoryLinkText}
           </Link>
-          .
+          {t.creditApp.successBodyPost}
         </p>
       </div>
     );
@@ -334,19 +333,18 @@ export default function FinancingForm() {
     >
       <div>
         <h2 className="text-xl font-bold text-brand-gray-900">
-          Credit Application
+          {t.creditApp.heading}
         </h2>
         <p className="text-sm text-brand-gray-500 mt-1">
-          Takes about 5 minutes. Your information is encrypted and sent
-          securely, and we work with multiple lenders to find your best rate.
-          Fields marked with <span className="text-brand-red">*</span> are
-          required.
+          {t.creditApp.subtext.split("*")[0]}
+          <span className="text-brand-red">*</span>
+          {t.creditApp.subtext.split("*")[1]}
         </p>
       </div>
 
       {state.kind === "error" && (
         <div className="bg-brand-red/10 border border-brand-red/20 rounded-lg p-4 text-sm text-brand-red">
-          <p className="font-semibold mb-1">Please fix the following:</p>
+          <p className="font-semibold mb-1">{t.creditApp.fixFollowing}</p>
           <ul className="list-disc list-inside space-y-0.5">
             {state.messages.map((m, i) => (
               <li key={i}>{m}</li>
@@ -358,12 +356,12 @@ export default function FinancingForm() {
       {/* ─── Contact ─── */}
       <fieldset className="space-y-4" disabled={disabled}>
         <legend className="text-sm font-bold text-brand-gray-900 mb-2 uppercase tracking-wide">
-          Contact
+          {t.creditApp.sectionContact}
         </legend>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              First name <span className="text-brand-red">*</span>
+              {t.creditApp.firstName} <span className="text-brand-red">*</span>
             </span>
             <input
               type="text"
@@ -376,7 +374,7 @@ export default function FinancingForm() {
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Last name <span className="text-brand-red">*</span>
+              {t.creditApp.lastName} <span className="text-brand-red">*</span>
             </span>
             <input
               type="text"
@@ -389,7 +387,7 @@ export default function FinancingForm() {
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Email <span className="text-brand-red">*</span>
+              {t.creditApp.email} <span className="text-brand-red">*</span>
             </span>
             <input
               type="email"
@@ -402,7 +400,7 @@ export default function FinancingForm() {
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Phone <span className="text-brand-red">*</span>
+              {t.creditApp.phone} <span className="text-brand-red">*</span>
             </span>
             <input
               type="tel"
@@ -420,11 +418,11 @@ export default function FinancingForm() {
       {/* ─── Address ─── */}
       <fieldset className="space-y-4" disabled={disabled}>
         <legend className="text-sm font-bold text-brand-gray-900 mb-2 uppercase tracking-wide">
-          Home Address
+          {t.creditApp.sectionAddress}
         </legend>
         <label className="block">
           <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-            Street <span className="text-brand-red">*</span>
+            {t.creditApp.street} <span className="text-brand-red">*</span>
           </span>
           <input
             type="text"
@@ -438,7 +436,7 @@ export default function FinancingForm() {
         <div className="grid grid-cols-1 sm:grid-cols-[1fr_120px_140px] gap-4">
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              City <span className="text-brand-red">*</span>
+              {t.creditApp.city} <span className="text-brand-red">*</span>
             </span>
             <input
               type="text"
@@ -451,7 +449,7 @@ export default function FinancingForm() {
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              State <span className="text-brand-red">*</span>
+              {t.creditApp.state} <span className="text-brand-red">*</span>
             </span>
             <select
               required
@@ -469,7 +467,7 @@ export default function FinancingForm() {
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              ZIP <span className="text-brand-red">*</span>
+              {t.creditApp.zip} <span className="text-brand-red">*</span>
             </span>
             <input
               type="text"
@@ -490,12 +488,12 @@ export default function FinancingForm() {
       {/* ─── Personal ─── */}
       <fieldset className="space-y-4" disabled={disabled}>
         <legend className="text-sm font-bold text-brand-gray-900 mb-2 uppercase tracking-wide">
-          Personal
+          {t.creditApp.sectionPersonal}
         </legend>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Date of birth <span className="text-brand-red">*</span>
+              {t.creditApp.dob} <span className="text-brand-red">*</span>
             </span>
             <input
               type="date"
@@ -508,7 +506,7 @@ export default function FinancingForm() {
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Social Security Number <span className="text-brand-red">*</span>
+              {t.creditApp.ssnLabel} <span className="text-brand-red">*</span>
             </span>
             <input
               type="text"
@@ -523,12 +521,12 @@ export default function FinancingForm() {
               onChange={(e) => update("ssn", e.target.value)}
             />
             <span className="block text-[11px] text-brand-gray-500 mt-1">
-              Encrypted and sent securely. Required to process your credit application.
+              {t.creditApp.ssnHelper}
             </span>
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Housing status <span className="text-brand-red">*</span>
+              {t.creditApp.housingStatus} <span className="text-brand-red">*</span>
             </span>
             <select
               required
@@ -538,16 +536,16 @@ export default function FinancingForm() {
                 update("housingStatus", e.target.value as FormValues["housingStatus"])
               }
             >
-              <option value="">Select…</option>
-              <option value="own">Own</option>
-              <option value="rent">Rent</option>
-              <option value="other">Other</option>
+              <option value="">{t.creditApp.selectEllipsis}</option>
+              <option value="own">{t.creditApp.own}</option>
+              <option value="rent">{t.creditApp.rent}</option>
+              <option value="other">{t.creditApp.other}</option>
             </select>
           </label>
         </div>
         <label className="block">
           <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-            Monthly housing payment (rent or mortgage)
+            {t.creditApp.monthlyHousing}
           </span>
           <input
             type="number"
@@ -563,12 +561,12 @@ export default function FinancingForm() {
         {/* Driver's License (optional — saves a follow-up call when submitting to lender) */}
         <div className="pt-4 border-t border-brand-gray-100">
           <p className="text-xs uppercase tracking-wide text-brand-gray-500 font-semibold mb-3">
-            Driver&apos;s License (optional)
+            {t.creditApp.dlSection}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <label className="block">
               <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                DL number
+                {t.creditApp.dlNumber}
               </span>
               <input
                 type="text"
@@ -580,7 +578,7 @@ export default function FinancingForm() {
             </label>
             <label className="block">
               <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                DL state
+                {t.creditApp.dlState}
               </span>
               <select
                 className={fieldClass}
@@ -596,7 +594,7 @@ export default function FinancingForm() {
             </label>
             <label className="block">
               <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                DL issue date
+                {t.creditApp.dlIssueDate}
               </span>
               <input
                 type="date"
@@ -607,7 +605,7 @@ export default function FinancingForm() {
             </label>
             <label className="block">
               <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                DL expiry date
+                {t.creditApp.dlExpiryDate}
               </span>
               <input
                 type="date"
@@ -623,12 +621,12 @@ export default function FinancingForm() {
       {/* ─── Employment ─── */}
       <fieldset className="space-y-4" disabled={disabled}>
         <legend className="text-sm font-bold text-brand-gray-900 mb-2 uppercase tracking-wide">
-          Employment & Income
+          {t.creditApp.sectionEmployment}
         </legend>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Employment status <span className="text-brand-red">*</span>
+              {t.creditApp.employmentStatus} <span className="text-brand-red">*</span>
             </span>
             <select
               required
@@ -641,18 +639,18 @@ export default function FinancingForm() {
                 )
               }
             >
-              <option value="">Select…</option>
-              <option value="employed">Employed (W-2)</option>
-              <option value="self-employed">Self-employed</option>
-              <option value="retired">Retired</option>
-              <option value="student">Student</option>
-              <option value="unemployed">Unemployed</option>
-              <option value="other">Other</option>
+              <option value="">{t.creditApp.selectEllipsis}</option>
+              <option value="employed">{t.creditApp.employedW2}</option>
+              <option value="self-employed">{t.creditApp.selfEmployed}</option>
+              <option value="retired">{t.creditApp.retired}</option>
+              <option value="student">{t.creditApp.student}</option>
+              <option value="unemployed">{t.creditApp.unemployed}</option>
+              <option value="other">{t.creditApp.other}</option>
             </select>
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Monthly gross income <span className="text-brand-red">*</span>
+              {t.creditApp.monthlyGrossIncome} <span className="text-brand-red">*</span>
             </span>
             <input
               type="number"
@@ -667,7 +665,7 @@ export default function FinancingForm() {
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Employer
+              {t.creditApp.employer}
             </span>
             <input
               type="text"
@@ -679,7 +677,7 @@ export default function FinancingForm() {
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Job title
+              {t.creditApp.jobTitle}
             </span>
             <input
               type="text"
@@ -691,7 +689,7 @@ export default function FinancingForm() {
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Employer phone
+              {t.creditApp.employerPhone}
             </span>
             <input
               type="tel"
@@ -705,7 +703,7 @@ export default function FinancingForm() {
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Time at current job (months)
+              {t.creditApp.timeAtJob}
             </span>
             <input
               type="number"
@@ -723,15 +721,15 @@ export default function FinancingForm() {
       {/* ─── Vehicle interest ─── */}
       <fieldset className="space-y-4" disabled={disabled}>
         <legend className="text-sm font-bold text-brand-gray-900 mb-2 uppercase tracking-wide">
-          Vehicle Interest
+          {t.creditApp.sectionVehicle}
         </legend>
         <label className="block">
           <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-            Vehicle you&apos;re interested in (optional)
+            {t.creditApp.vehicleInterested}
           </span>
           <input
             type="text"
-            placeholder="e.g. 2016 Honda Pilot, or 'SUV under $12,000'"
+            placeholder={t.creditApp.vehicleInterestedPlaceholder}
             className={fieldClass}
             value={values.vehicleInterest}
             onChange={(e) => update("vehicleInterest", e.target.value)}
@@ -740,7 +738,7 @@ export default function FinancingForm() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Desired monthly payment
+              {t.creditApp.desiredMonthly}
             </span>
             <input
               type="number"
@@ -754,7 +752,7 @@ export default function FinancingForm() {
           </label>
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Down payment
+              {t.creditApp.downPayment}
             </span>
             <input
               type="number"
@@ -772,7 +770,7 @@ export default function FinancingForm() {
       {/* ─── Trade-in ─── */}
       <fieldset className="space-y-3" disabled={disabled}>
         <legend className="text-sm font-bold text-brand-gray-900 mb-2 uppercase tracking-wide">
-          Trade-In
+          {t.creditApp.sectionTradeIn}
         </legend>
         <label className="flex items-center gap-2 text-sm text-brand-gray-900">
           <input
@@ -781,19 +779,19 @@ export default function FinancingForm() {
             onChange={(e) => update("hasTradeIn", e.target.checked)}
             className="w-4 h-4"
           />
-          I have a vehicle to trade in
+          {t.creditApp.haveTradeIn}
         </label>
         {values.hasTradeIn && (
           <label className="block">
             <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              Trade-in details (year / make / model / mileage / condition)
+              {t.creditApp.tradeInDetails}
             </span>
             <textarea
               rows={3}
               className={fieldClass}
               value={values.tradeInDetails}
               onChange={(e) => update("tradeInDetails", e.target.value)}
-              placeholder="e.g. 2012 Honda Civic LX, 140k miles, runs great, one owner"
+              placeholder={t.creditApp.tradeInPlaceholder}
             />
           </label>
         )}
@@ -802,7 +800,7 @@ export default function FinancingForm() {
       {/* ─── Co-Buyer (optional) ─── */}
       <fieldset className="space-y-4" disabled={disabled}>
         <legend className="text-sm font-bold text-brand-gray-900 mb-2 uppercase tracking-wide">
-          Co-Buyer
+          {t.creditApp.sectionCoBuyer}
         </legend>
         <label className="flex items-start gap-3 cursor-pointer">
           <input
@@ -812,11 +810,9 @@ export default function FinancingForm() {
             onChange={(e) => update("hasCoBuyer", e.target.checked)}
           />
           <span className="text-sm text-brand-gray-700">
-            Add a co-buyer to this application.{" "}
+            {t.creditApp.addCoBuyer}{" "}
             <span className="text-brand-gray-500">
-              A co-buyer&apos;s income can help if your own income is limited or
-              you&apos;re rebuilding credit. Spouse, parent, or anyone willing
-              to be jointly responsible for the loan.
+              {t.creditApp.coBuyerHelp}
             </span>
           </span>
         </label>
@@ -824,12 +820,12 @@ export default function FinancingForm() {
         {values.hasCoBuyer && (
           <div className="space-y-4 rounded-lg border border-brand-gray-200 bg-brand-gray-50 p-5">
             <p className="text-xs uppercase tracking-wide text-brand-gray-600 font-semibold">
-              Co-Buyer Information
+              {t.creditApp.coBuyerInfo}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <label className="block">
                 <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                  First name <span className="text-brand-red">*</span>
+                  {t.creditApp.firstName} <span className="text-brand-red">*</span>
                 </span>
                 <input
                   type="text"
@@ -841,7 +837,7 @@ export default function FinancingForm() {
               </label>
               <label className="block">
                 <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                  Last name <span className="text-brand-red">*</span>
+                  {t.creditApp.lastName} <span className="text-brand-red">*</span>
                 </span>
                 <input
                   type="text"
@@ -853,7 +849,7 @@ export default function FinancingForm() {
               </label>
               <label className="block">
                 <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                  Date of birth <span className="text-brand-red">*</span>
+                  {t.creditApp.dob} <span className="text-brand-red">*</span>
                 </span>
                 <input
                   type="date"
@@ -865,7 +861,7 @@ export default function FinancingForm() {
               </label>
               <label className="block">
                 <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                  Social Security Number <span className="text-brand-red">*</span>
+                  {t.creditApp.ssnLabel} <span className="text-brand-red">*</span>
                 </span>
                 <input
                   type="text"
@@ -882,7 +878,7 @@ export default function FinancingForm() {
               </label>
               <label className="block">
                 <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                  Employment status <span className="text-brand-red">*</span>
+                  {t.creditApp.employmentStatus} <span className="text-brand-red">*</span>
                 </span>
                 <select
                   required
@@ -895,18 +891,18 @@ export default function FinancingForm() {
                     )
                   }
                 >
-                  <option value="">Select…</option>
-                  <option value="employed">Employed (W-2)</option>
-                  <option value="self-employed">Self-employed</option>
-                  <option value="retired">Retired</option>
-                  <option value="student">Student</option>
-                  <option value="unemployed">Unemployed</option>
-                  <option value="other">Other</option>
+                  <option value="">{t.creditApp.selectEllipsis}</option>
+                  <option value="employed">{t.creditApp.employedW2}</option>
+                  <option value="self-employed">{t.creditApp.selfEmployed}</option>
+                  <option value="retired">{t.creditApp.retired}</option>
+                  <option value="student">{t.creditApp.student}</option>
+                  <option value="unemployed">{t.creditApp.unemployed}</option>
+                  <option value="other">{t.creditApp.other}</option>
                 </select>
               </label>
               <label className="block">
                 <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                  Monthly gross income <span className="text-brand-red">*</span>
+                  {t.creditApp.monthlyGrossIncome} <span className="text-brand-red">*</span>
                 </span>
                 <input
                   type="number"
@@ -921,7 +917,7 @@ export default function FinancingForm() {
               </label>
               <label className="block">
                 <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                  Employer
+                  {t.creditApp.employer}
                 </span>
                 <input
                   type="text"
@@ -932,7 +928,7 @@ export default function FinancingForm() {
               </label>
               <label className="block">
                 <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                  Job title
+                  {t.creditApp.jobTitle}
                 </span>
                 <input
                   type="text"
@@ -943,7 +939,7 @@ export default function FinancingForm() {
               </label>
               <label className="block">
                 <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                  Employer phone
+                  {t.creditApp.employerPhone}
                 </span>
                 <input
                   type="tel"
@@ -956,7 +952,7 @@ export default function FinancingForm() {
               </label>
               <label className="block">
                 <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                  Time at current job (months)
+                  {t.creditApp.timeAtJob}
                 </span>
                 <input
                   type="number"
@@ -970,9 +966,7 @@ export default function FinancingForm() {
               </label>
             </div>
             <p className="text-xs text-brand-gray-500 pt-2 border-t border-brand-gray-200">
-              We&apos;ll collect the co-buyer&apos;s driver&apos;s license info
-              during your visit — we only need enough here to start the
-              application.
+              {t.creditApp.coBuyerDlNote}
             </p>
           </div>
         )}
@@ -999,7 +993,7 @@ export default function FinancingForm() {
         disabled={disabled}
       >
         <legend className="text-sm font-bold text-brand-gray-900 mb-2 uppercase tracking-wide">
-          Consent
+          {t.creditApp.sectionConsent}
         </legend>
         <label className="flex items-start gap-2 text-xs text-brand-gray-700 leading-relaxed">
           <input
@@ -1087,7 +1081,7 @@ export default function FinancingForm() {
         disabled={disabled}
         className="w-full bg-brand-red hover:bg-brand-red-dark disabled:bg-brand-gray-400 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-semibold transition-colors"
       >
-        {disabled ? "Submitting…" : "Submit Application"}
+        {disabled ? t.creditApp.submitting : t.creditApp.submitDefault}
       </button>
     </form>
   );

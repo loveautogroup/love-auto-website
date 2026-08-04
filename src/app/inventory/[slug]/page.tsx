@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { sampleInventory, getVehicleBySlug } from "@/data/inventory";
 import { fetchDmsInventory, syncedToVehicle, fetchGlobalBadgeConfig } from "@/lib/dmsInventory";
@@ -20,6 +19,8 @@ import VDPTestDriveButton from "@/components/VDPTestDriveButton";
 import VDPTextUsLink from "@/components/VDPTextUsLink";
 import VDPVinSignal from "@/components/VDPVinSignal";
 import VDPTracker from "@/components/VDPTracker";
+import SiteBreadcrumb from "@/components/SiteBreadcrumb";
+import T from "@/components/T";
 import {
   VDPLivePrice,
   VDPLiveMileage,
@@ -200,10 +201,10 @@ export default async function VehicleDetailPage({
       </svg>
       <div className="leading-tight">
         <div className="text-sm font-semibold text-brand-gray-900">
-          Ships anywhere in the U.S.
+          <T get={(t) => t.vdpChrome.shipsAnywhere} />
         </div>
         <div className="text-[11px] text-brand-gray-500">
-          Nationwide delivery available
+          <T get={(t) => t.vdpChrome.nationwideDelivery} />
         </div>
       </div>
     </div>
@@ -218,15 +219,15 @@ export default async function VehicleDetailPage({
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-white leading-tight">Ships Anywhere in the US</p>
+                    <p className="text-sm font-bold text-white leading-tight"><T get={(t) => t.delivery.heading} /></p>
                     <p className="text-xs text-white/70 mt-1 leading-snug">
-                      Can&rsquo;t make it to Villa Park? We can arrange nationwide delivery. Buyer pays transport — call us for a quote.
+                      <T get={(t) => t.delivery.body} />
                     </p>
                     <a
                       href={`tel:${SITE_CONFIG.phoneRaw}`}
                       className="inline-block mt-2 text-xs font-semibold text-brand-red bg-white rounded-full px-3 py-1 hover:bg-brand-red hover:text-white transition-colors"
                     >
-                      {SITE_CONFIG.phone} — Ask about delivery
+                      {SITE_CONFIG.phone} <T get={(t) => t.delivery.ctaSuffix} />
                     </a>
                   </div>
                 </div>
@@ -283,28 +284,10 @@ export default async function VehicleDetailPage({
       />
 
       {/* Breadcrumb */}
-      <nav
-        className="max-w-7xl mx-auto px-4 py-4 text-sm"
-        aria-label="Breadcrumb"
-      >
-        <ol className="flex items-center gap-2 text-brand-gray-500">
-          <li>
-            <Link href="/" className="hover:text-brand-red">
-              Home
-            </Link>
-          </li>
-          <li>/</li>
-          <li>
-            <Link href="/inventory" className="hover:text-brand-red">
-              Inventory
-            </Link>
-          </li>
-          <li>/</li>
-          <li className="text-brand-gray-900 font-medium">
-            {vehicle.year} {vehicle.make} {vehicle.model}
-          </li>
-        </ol>
-      </nav>
+      <SiteBreadcrumb
+        includeInventory
+        trail={[{ label: `${vehicle.year} ${vehicle.make} ${vehicle.model}` }]}
+      />
 
       {/* pb-32 on mobile gives clearance for the fixed Call/Text/Calc bar
           (~76px tall). lg+ drops back to pb-16 since the sticky bar is hidden. */}
@@ -333,7 +316,7 @@ export default async function VehicleDetailPage({
                 </div>
                 <div className="flex items-center flex-wrap gap-x-2.5 gap-y-1 mt-1 text-xs text-brand-gray-600">
                   <span>
-                    <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles
+                    <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> <T get={(t) => t.vdpChrome.miles} />
                   </span>
                   {vehicle.exteriorColor && (
                     <>
@@ -364,10 +347,10 @@ export default async function VehicleDetailPage({
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <span className="text-xs font-semibold text-green-800">
-                    No dealer fees
+                    <T get={(t) => t.vdpChrome.noDealerFees} />
                   </span>
                   <span className="text-xs text-green-700">
-                    — just tax, title &amp; license
+                    {" "}<T get={(t) => t.vdpChrome.noDealerFeesSuffix} />
                   </span>
                 </div>
               </div>
@@ -414,10 +397,10 @@ export default async function VehicleDetailPage({
                       <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
                     </p>
                     <p className="text-sm text-brand-gray-500 mt-1">
-                      Est. <span className="font-semibold">${monthlyPayment}/mo</span>*
+                      <T get={(t) => t.card.est} /> <span className="font-semibold">${monthlyPayment}<T get={(t) => t.card.perMo} /></span>*
                     </p>
                     <p className="text-sm text-brand-gray-500 mt-1">
-                      <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles · {vehicle.drivetrain}
+                      <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> <T get={(t) => t.vdpChrome.miles} /> · {vehicle.drivetrain}
                     </p>
                     {/* CarGurus Deal Rating Badge (STYLE1) - next to the price */}
                     {vehicle.vin && vehicle.price > 0 && (
@@ -450,7 +433,7 @@ export default async function VehicleDetailPage({
                           d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                         />
                       </svg>
-                      Call {SITE_CONFIG.phone}
+                      <T get={(t) => t.vdpChrome.call} /> {SITE_CONFIG.phone}
                     </a>
                     <VDPTextUsLink
                       vin={vehicle.vin}
@@ -461,7 +444,7 @@ export default async function VehicleDetailPage({
                       <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
                         <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
                       </svg>
-                      Text Us
+                      <T get={(t) => t.vdpChrome.textUs} />
                     </VDPTextUsLink>
                     {/* Credit application / financing CTA - every VDP */}
                     <a
@@ -471,7 +454,7 @@ export default async function VehicleDetailPage({
                       <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
-                      Get Pre-Approved
+                      <T get={(t) => t.ctas.getPreApproved} />
                     </a>
                     <VDPInquireButton
                       vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.trim ? " " + vehicle.trim : ""}`}
@@ -537,11 +520,11 @@ export default async function VehicleDetailPage({
                   <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
                 </p>
                 <p className="text-sm text-brand-gray-500">
-                  Est. ${monthlyPayment}/mo*
+                  <T get={(t) => t.card.est} /> ${monthlyPayment}<T get={(t) => t.card.perMo} />*
                 </p>
               </div>
               <p className="text-sm text-brand-gray-500 mt-1">
-                <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> miles · {vehicle.drivetrain} · {vehicle.exteriorColor}
+                <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> <T get={(t) => t.vdpChrome.miles} /> · {vehicle.drivetrain} · {vehicle.exteriorColor}
               </p>
               {/* CarGurus Deal Rating Badge (STYLE1) - mobile, next to the price */}
               {vehicle.vin && vehicle.price > 0 && (
@@ -569,7 +552,7 @@ export default async function VehicleDetailPage({
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                Get Pre-Approved
+                <T get={(t) => t.ctas.getPreApproved} />
               </a>
               {/* Test drive request (mobile) - same LEAD-ONLY flow as the
                   desktop CTA card above. */}
@@ -608,7 +591,7 @@ export default async function VehicleDetailPage({
             {vehicle.knownIssues && vehicle.knownIssues.trim() !== "" && (
               <div className="mt-4 lg:mt-6 rounded-xl border border-brand-gray-200 bg-brand-gray-50 px-4 py-3 sm:px-5 sm:py-4">
                 <h2 className="text-sm font-semibold text-brand-gray-900">
-                  Condition notes
+                  <T get={(t) => t.vdpChrome.conditionNotes} />
                 </h2>
                 <p className="mt-1 text-sm text-brand-gray-700 leading-snug whitespace-pre-line">
                   {vehicle.knownIssues}
@@ -675,7 +658,7 @@ export default async function VehicleDetailPage({
                 d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
               />
             </svg>
-            Call
+            <T get={(t) => t.vdpChrome.call} />
           </a>
           <VDPTextUsLink
             vin={vehicle.vin}
@@ -687,7 +670,7 @@ export default async function VehicleDetailPage({
             <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true">
               <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
             </svg>
-            Text
+            <T get={(t) => t.vdpChrome.textUs} />
           </VDPTextUsLink>
           <MobileCalculatorButton
             vehiclePrice={vehicle.price}

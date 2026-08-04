@@ -3,6 +3,8 @@ import type { MakeLandingContent } from "@/data/makeLandings";
 import MakeLandingInventory from "@/components/MakeLandingInventory";
 import { BreadcrumbSchema, ItemListSchema } from "@/components/StructuredData";
 import { sampleInventory } from "@/data/inventory";
+import SiteBreadcrumb from "@/components/SiteBreadcrumb";
+import T from "@/components/T";
 
 interface MakeLandingPageProps {
   content: MakeLandingContent;
@@ -51,17 +53,10 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
       />
 
       {/* Breadcrumb */}
-      <nav className="max-w-7xl mx-auto px-4 py-4 text-sm" aria-label="Breadcrumb">
-        <ol className="flex items-center gap-2 text-brand-gray-500">
-          <li><Link href="/" className="hover:text-brand-red">Home</Link></li>
-          <li>/</li>
-          <li><Link href="/inventory" className="hover:text-brand-red">Inventory</Link></li>
-          <li>/</li>
-          <li className="text-brand-gray-900 font-medium">
-            {isBodyStyle ? `Used ${pluralNoun}` : `Used ${content.make}`}
-          </li>
-        </ol>
-      </nav>
+      <SiteBreadcrumb
+        includeInventory
+        trail={[{ label: isBodyStyle ? `Used ${pluralNoun}` : `Used ${content.make}` }]}
+      />
 
       {/* Hero */}
       <section className="bg-brand-navy text-white py-12 md:py-16">
@@ -101,7 +96,11 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
 
         <section className="mb-10 bg-brand-gray-50 rounded-xl p-6 border border-brand-gray-200">
           <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
-            {isBodyStyle ? `${pluralNoun} We Specialize In` : `${content.make} Models We Specialize In`}
+            {isBodyStyle ? (
+              <>{pluralNoun} <T get={(t) => t.makeLandingChrome.specializeInBodyStyle} /></>
+            ) : (
+              <>{content.make} <T get={(t) => t.makeLandingChrome.specializeIn} /></>
+            )}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {content.models.map((model) => (
@@ -118,22 +117,29 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
 
         {/* CTA */}
         <section className="bg-brand-navy text-white rounded-xl p-8 text-center">
-          <h2 className="text-2xl font-bold mb-2">See What's on the Lot Today</h2>
+          <h2 className="text-2xl font-bold mb-2"><T get={(t) => t.makeLandingChrome.ctaHeading} /></h2>
           <p className="text-brand-gray-300 mb-6">
-            Inventory rotates weekly. Stop by our Villa Park location or call us to ask about a specific {isBodyStyle ? "vehicle" : content.make} you're hunting for.
+            <T
+              get={(t) =>
+                t.makeLandingChrome.ctaBody.replace(
+                  "{thing}",
+                  isBodyStyle ? t.makeLandingChrome.vehicleGeneric : content.make
+                )
+              }
+            />
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/inventory"
               className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-xl font-semibold"
             >
-              Browse Full Inventory
+              <T get={(t) => t.makeLandingChrome.browseFullInventory} />
             </Link>
             <a
               href="tel:6303593643"
               className="inline-flex items-center border-2 border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-xl font-semibold"
             >
-              Call (630) 359-3643
+              <T get={(t) => t.makeLandingChrome.callPhone.replace("{phone}", "(630) 359-3643")} />
             </a>
           </div>
         </section>
