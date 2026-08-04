@@ -31,6 +31,7 @@ import {
   fetchInventory,
   csvCell,
   feedCorsHeaders,
+  feedUnavailable,
   FEED_CACHE_HEADER,
   DEALER,
   type FeedVehicle,
@@ -47,32 +48,36 @@ const EXCLUDED_VINS = new Set<string>([
 ]);
 
 export const onRequestGet: PagesFunction = async () => {
+  // Narrow try: ONLY the upstream READ. A throw here means we could not read
+  // the inventory, which is now HTTP 503 + Retry-After (2026-08-03, Jeremiah's
+  // call) instead of the old 200 + empty feed -- an empty 200 reads to feed
+  // consumers as "this dealer has zero cars", which is a delisting risk.
+  // Rendering and filtering happen OUTSIDE the try on purpose: once the read
+  // succeeds, a feed that legitimately comes out empty is truthful data and
+  // stays a 200.
+  let inventory: FeedVehicle[];
   try {
-    const inventory = (await fetchInventory()).filter(
-      (v) => !EXCLUDED_VINS.has(v.vin)
-    );
-    const csv = renderGoogleCsv(inventory);
-    return new Response(csv, {
-      status: 200,
-      headers: {
-        "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition":
-          'inline; filename="loveautogroup-google-vehicles.csv"',
-        "Cache-Control": FEED_CACHE_HEADER,
-        ...feedCorsHeaders(),
-      },
-    });
+    inventory = await fetchInventory();
   } catch (err) {
-    console.error("[/api/feed/google-vehicles.csv] fetch failed:", err);
-    return new Response(renderGoogleCsv([]), {
-      status: 200,
-      headers: {
-        "Content-Type": "text/csv; charset=utf-8",
-        "Cache-Control": "public, max-age=30",
-        ...feedCorsHeaders(),
-      },
-    });
+    return feedUnavailable("/api/feed/google-vehicles.csv", err);
   }
+
+  // Read succeeded, so every exclusion below is real data about real
+  // vehicles. If every car carried a branded title this would render an
+  // empty-but-valid feed at 200, which is the honest answer.
+  const eligible = inventory.filter((v) => !EXCLUDED_VINS.has(v.vin));
+  const csv = renderGoogleCsv(eligible);
+
+  return new Response(csv, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/csv; charset=utf-8",
+      "Content-Disposition":
+        'inline; filename="loveautogroup-google-vehicles.csv"',
+      "Cache-Control": FEED_CACHE_HEADER,
+      ...feedCorsHeaders(),
+    },
+  });
 };
 
 export const onRequestOptions: PagesFunction = async () =>

@@ -28,6 +28,7 @@ import {
   fetchInventory,
   csvCell,
   feedCorsHeaders,
+  feedUnavailable,
   FEED_CACHE_HEADER,
   DEALER,
   type FeedVehicle,
@@ -78,38 +79,46 @@ async function googleEnabledVins(env: Env): Promise<Set<string>> {
 }
 
 export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
+  // BOTH reads sit in the try. The KV overlay is what decides eligibility, so
+  // a KV failure means we could not determine WHAT belongs in the feed -- that
+  // is a read failure, not an empty catalog. Answering 503 also preserves the
+  // original fail-closed intent: a 503 publishes zero vehicles exactly like the
+  // old empty 200 did, so no accidental ad-spend exposure. It just says so
+  // honestly instead of asserting the lot is empty.
+  let enabled: Set<string>;
+  let inventory: FeedVehicle[];
   try {
-    const enabled = await googleEnabledVins(env);
-    // Policy (Google onboarding guide + answer 11190670): vehicles in the
-    // feed must be listed as AVAILABLE on the landing page — "sold, out of
-    // stock, reserved, unavailable, or incoming unit" availability is not
-    // permitted. Our VDP shows a "Sale Pending" badge for DEAL_PENDING
-    // vehicles, so those are excluded here until they return to Available.
-    const inventory = (await fetchInventory()).filter(
-      (v) => enabled.has(v.vin) && (v.status === "Available" || v.status == null)
-    );
-    const csv = renderVehicleAdsCsv(inventory);
-    return new Response(csv, {
-      status: 200,
-      headers: {
-        "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition":
-          'inline; filename="loveautogroup-google-vehicle-ads.csv"',
-        "Cache-Control": FEED_CACHE_HEADER,
-        ...feedCorsHeaders(),
-      },
-    });
+    enabled = await googleEnabledVins(env);
+    inventory = await fetchInventory();
   } catch (err) {
-    console.error("[/api/feed/google-vehicle-ads.csv] fetch failed:", err);
-    return new Response(renderVehicleAdsCsv([]), {
-      status: 200,
-      headers: {
-        "Content-Type": "text/csv; charset=utf-8",
-        "Cache-Control": "public, max-age=30",
-        ...feedCorsHeaders(),
-      },
-    });
+    return feedUnavailable("/api/feed/google-vehicle-ads.csv", err);
   }
+
+  // Both reads succeeded, so every exclusion below is real data about real
+  // vehicles and an empty RESULT is a truthful 200. A lot where nothing is
+  // opted into Google Ads, or where every opted-in car went sale-pending, is a
+  // correct empty feed and must NOT 503.
+  //
+  // Policy (Google onboarding guide + answer 11190670): vehicles in the feed
+  // must be listed as AVAILABLE on the landing page -- "sold, out of stock,
+  // reserved, unavailable, or incoming unit" availability is not permitted.
+  // Our VDP shows a "Sale Pending" badge for DEAL_PENDING vehicles, so those
+  // are excluded here until they return to Available.
+  const eligible = inventory.filter(
+    (v) => enabled.has(v.vin) && (v.status === "Available" || v.status == null)
+  );
+  const csv = renderVehicleAdsCsv(eligible);
+
+  return new Response(csv, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/csv; charset=utf-8",
+      "Content-Disposition":
+        'inline; filename="loveautogroup-google-vehicle-ads.csv"',
+      "Cache-Control": FEED_CACHE_HEADER,
+      ...feedCorsHeaders(),
+    },
+  });
 };
 
 export const onRequestOptions: PagesFunction = async () =>

@@ -23,6 +23,7 @@ import {
   fetchInventory,
   csvCell,
   feedCorsHeaders,
+  feedUnavailable,
   FEED_CACHE_HEADER,
   type FeedVehicle,
 } from "../../_lib/feed";
@@ -37,34 +38,33 @@ interface DCVehicle extends FeedVehicle {
 }
 
 export const onRequestGet: PagesFunction = async () => {
+  // Narrow try: ONLY the upstream READ. A throw here means we could not read
+  // the inventory, which is now HTTP 503 + Retry-After (2026-08-03, Jeremiah's
+  // call) instead of the old 200 + empty feed -- an empty 200 reads to feed
+  // consumers as "this dealer has zero cars", which is a delisting risk.
+  // Rendering and filtering happen OUTSIDE the try on purpose: once the read
+  // succeeds, a feed that legitimately comes out empty is truthful data and
+  // stays a 200.
+  let inventory: FeedVehicle[];
   try {
-    const inventory = await fetchInventory();
-    const csv = renderDealerCenterCsv(inventory as DCVehicle[]);
-    return new Response(csv, {
-      status: 200,
-      headers: {
-        "Content-Type": "text/csv; charset=utf-8",
-        // "inline" (not "attachment") so DC's server-side validator
-        // can read the response body without being treated as a download.
-        "Content-Disposition": "inline; filename=\"loveautogroup-dc-inventory.csv\"",
-        "Cache-Control": FEED_CACHE_HEADER,
-        ...feedCorsHeaders(),
-      },
-    });
+    inventory = await fetchInventory();
   } catch (err) {
-    console.error("[/api/feed/dealercenter.csv] fetch failed:", err);
-    // Return an empty but valid CSV on error so DC doesn't mark the
-    // feed as broken — it will just see 0 vehicles to import.
-    return new Response(renderDealerCenterCsv([]), {
-      status: 200,
-      headers: {
-        "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition": "inline; filename=\"loveautogroup-dc-inventory.csv\"",
-        "Cache-Control": "public, max-age=30",
-        ...feedCorsHeaders(),
-      },
-    });
+    return feedUnavailable("/api/feed/dealercenter.csv", err);
   }
+
+  const csv = renderDealerCenterCsv(inventory as DCVehicle[]);
+
+  return new Response(csv, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/csv; charset=utf-8",
+      // "inline" (not "attachment") so DC's server-side validator
+      // can read the response body without being treated as a download.
+      "Content-Disposition": "inline; filename=\"loveautogroup-dc-inventory.csv\"",
+      "Cache-Control": FEED_CACHE_HEADER,
+      ...feedCorsHeaders(),
+    },
+  });
 };
 
 export const onRequestOptions: PagesFunction = async () =>

@@ -132,9 +132,12 @@ function rewritePhotoHost(url: string | null | undefined): string | undefined {
  * So: bounded attempts, a warm-then-cold timeout ladder, and a hard refusal
  * to believe an empty upstream. Feed consumers are schedulers, not people --
  * spending 55s worst case to avoid publishing an empty catalog is the right
- * trade. Note the 200-empty-feed-on-failure policy in the route handlers is
- * unchanged here; that is a product call about how each platform reacts to a
- * 5xx, and it belongs to whoever owns the feed relationships.
+ * trade. Route handlers no longer answer a read failure with an
+ * empty 200: as of 2026-08-03 (Jeremiah's call) a throw out of this
+ * function becomes HTTP 503 + Retry-After via feedUnavailable() below, so
+ * consumers read "retry later" instead of "this dealer has zero cars".
+ * A feed that READ successfully and legitimately filtered to zero rows is
+ * still a truthful 200 -- same distinction as the zero-guard above.
  */
 const FEED_ATTEMPT_TIMEOUTS_MS = [5_000, 25_000, 25_000];
 
@@ -278,3 +281,59 @@ export function feedCorsHeaders(): Record<string, string> {
  *  see the cached copy; less often will see fresh on each pull. */
 export const FEED_CACHE_HEADER =
   "public, max-age=120, s-maxage=300, stale-while-revalidate=3600";
+
+/**
+ * How long a feed consumer should wait before retrying a 503. 300s lines up
+ * with the healthy path's s-maxage, is comfortably longer than a Railway cold
+ * start (15-25s) or a hibernation wake, and is far shorter than any consumer's
+ * normal pull cadence (CarGurus 1-4h, GMC scheduled, DealerCenter nightly), so
+ * it never delays recovery past the next scheduled fetch.
+ */
+export const FEED_UNAVAILABLE_RETRY_SECONDS = 300;
+
+/**
+ * "We could not READ the inventory" response (2026-08-03, Jeremiah's call).
+ *
+ * The distinction this exists to protect:
+ *   - could not read the inventory      -> 503, this function
+ *   - read it fine, zero rows qualified -> 200 with an empty-but-valid feed
+ *
+ * The second case is truthful data (e.g. nothing is opted into Google Ads, or
+ * every car is sale-pending) and must NOT 503. Call this ONLY from a catch
+ * that wraps the upstream read itself, never one that also wraps rendering or
+ * filtering.
+ *
+ * Why 503 and not 500/502: 503 is the only 5xx that means "temporary, come
+ * back" and the only one for which Retry-After is defined (RFC 9110 10.2.3).
+ * Feed consumers treat 5xx as transient and keep serving their last good pull;
+ * they treat a 200 with zero offers as an authoritative empty catalog, which
+ * is the delisting risk we are removing.
+ *
+ * The body is deliberately NOT a valid empty feed. No CSV header row, no XML
+ * root element, and text/plain rather than the feed's own content type, so a
+ * consumer that ignores the status line still cannot mistake it for a
+ * well-formed catalog containing zero vehicles. The upstream error text is
+ * logged, never echoed -- these endpoints are public and CORS-open.
+ *
+ * no-store keeps a 503 out of the Cloudflare edge cache so recovery is visible
+ * on the very next pull (the old error path set max-age=30, which meant one
+ * failed read could be replayed to other consumers for 30s).
+ */
+export function feedUnavailable(feedPath: string, err: unknown): Response {
+  console.error(`[${feedPath}] inventory unavailable, serving 503:`, err);
+  const body =
+    "ERROR 503 inventory_source_unavailable\r\n" +
+    "This is NOT an empty catalog. Love Auto Group could not read its " +
+    "inventory source, so no vehicle list could be produced. Do not " +
+    "interpret this response as zero vehicles in stock. Retry in " +
+    `${FEED_UNAVAILABLE_RETRY_SECONDS} seconds.\r\n`;
+  return new Response(body, {
+    status: 503,
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store",
+      "Retry-After": String(FEED_UNAVAILABLE_RETRY_SECONDS),
+      ...feedCorsHeaders(),
+    },
+  });
+}

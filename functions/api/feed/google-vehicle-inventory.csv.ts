@@ -26,36 +26,39 @@ import {
   fetchInventory,
   csvCell,
   feedCorsHeaders,
+  feedUnavailable,
   FEED_CACHE_HEADER,
   DEALER,
   type FeedVehicle,
 } from "../../_lib/feed";
 
 export const onRequestGet: PagesFunction = async () => {
+  // Narrow try: ONLY the upstream READ. A throw here means we could not read
+  // the inventory, which is now HTTP 503 + Retry-After (2026-08-03, Jeremiah's
+  // call) instead of the old 200 + empty feed -- an empty 200 reads to feed
+  // consumers as "this dealer has zero cars", which is a delisting risk.
+  // Rendering and filtering happen OUTSIDE the try on purpose: once the read
+  // succeeds, a feed that legitimately comes out empty is truthful data and
+  // stays a 200.
+  let inventory: FeedVehicle[];
   try {
-    const inventory = await fetchInventory();
-    const csv = renderLocalInventoryCsv(inventory);
-    return new Response(csv, {
-      status: 200,
-      headers: {
-        "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition":
-          'inline; filename="loveautogroup-google-vehicle-inventory.csv"',
-        "Cache-Control": FEED_CACHE_HEADER,
-        ...feedCorsHeaders(),
-      },
-    });
+    inventory = await fetchInventory();
   } catch (err) {
-    console.error("[/api/feed/google-vehicle-inventory.csv] fetch failed:", err);
-    return new Response(renderLocalInventoryCsv([]), {
-      status: 200,
-      headers: {
-        "Content-Type": "text/csv; charset=utf-8",
-        "Cache-Control": "public, max-age=30",
-        ...feedCorsHeaders(),
-      },
-    });
+    return feedUnavailable("/api/feed/google-vehicle-inventory.csv", err);
   }
+
+  const csv = renderLocalInventoryCsv(inventory);
+
+  return new Response(csv, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/csv; charset=utf-8",
+      "Content-Disposition":
+        'inline; filename="loveautogroup-google-vehicle-inventory.csv"',
+      "Cache-Control": FEED_CACHE_HEADER,
+      ...feedCorsHeaders(),
+    },
+  });
 };
 
 export const onRequestOptions: PagesFunction = async () =>
