@@ -47,9 +47,11 @@
       // but the namespace is still live and still needed:
       //   - /api/vehicle-views stores its `views:{path}` analytics cache here
       //   - workers/kv-snapshot backs this namespace up to R2 nightly
-      // /api/admin/sync-status also still reads the now-frozen
-      // `inventory:current` + `inventory:log:*` keys; that page monitors a
-      // pipeline that no longer runs. See the S79 handoff.
+      // Nothing reads `inventory:current` / `inventory:log:*` any more:
+      // /api/admin/sync-status was repointed 2026-08-03 at the pipeline that
+      // actually runs (build snapshot + /api/inventory + the feeds) and no
+      // longer touches this namespace. Those frozen keys are dead weight and
+      // can be deleted whenever convenient.
       "binding": "INVENTORY",
       "id": "8e64e40dfeae483396a3b1eaa755c820",
       "preview_id": "9cefd2c111df4fb78e80090ade013440"

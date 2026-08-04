@@ -1,3 +1,43 @@
+> # ⛔ SUPERSEDED — DO NOT BUILD FROM THIS DOCUMENT
+>
+> **Superseded 2026-08-03.** Everything below describes a DealerCenter →
+> Cron Worker → KV pipeline that **no longer exists and must not be
+> rebuilt**:
+>
+> - **DealerCenter stopped being the source of truth on 2026-06-04.** The
+>   in-house DMS (`dms.loveautogroup.net` + Railway) is authoritative. Any
+>   design that parses a DealerCenter feed is wrong at the root.
+> - **`workers/inventory-sync` was deleted 2026-08-03.** It had not written
+>   since ~2026-07-17 and the runtime staleness check rejected its snapshot
+>   on every request, so it served nothing.
+> - **The `inventory:current` / `inventory:log:*` KV tier is retired.** The
+>   INVENTORY namespace survives for `/api/vehicle-views` only. Do not
+>   reintroduce a KV inventory mirror without a writer that is actually
+>   running — a stale-able tier in front of a non-stale one is a downgrade,
+>   not a safety net.
+>
+> **The pipeline that actually runs today:**
+>
+> ```
+> Railway DMS ─┬─ prebuild snapshot (src/data/inventory-snapshot.json)
+>              │     → CF Pages build → static VDPs + sitemaps
+>              ├─ runtime /api/inventory (live DMS, staged 3s + 20s, 204 when degraded)
+>              └─ 7 marketplace feeds (503 on read failure, never an empty 200)
+> ```
+>
+> Live references, all current:
+> - `scripts/fetch-inventory-snapshot.ts` — the single build-time fetch; fails the build rather than shipping stale
+> - `functions/api/inventory.ts` — the runtime path and its degradation contract
+> - `functions/_lib/feed.ts` — shared feed fetch + `feedUnavailable()`
+> - `functions/api/admin/sync-status.ts` — monitors all three of the above
+>
+> The success criteria and the merchandising-overlay rules below still
+> describe real product requirements and are kept for that reason. The
+> architecture, the worker code, the KV schema, and the deployment steps
+> are historical only.
+
+---
+
 # Inventory Sync — Dealer Center → Website
 
 **Spec for:** Bill (engineer)

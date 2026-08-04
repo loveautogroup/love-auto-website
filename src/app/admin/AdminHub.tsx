@@ -19,7 +19,8 @@ interface Stats {
   openSigningSessions: number;
   completedSigningSessions: number;
   inventoryCount: number | null;
-  inventoryAgeMinutes: number | null;
+  /** "ok" | "degraded" | "unknown" from /api/admin/sync-status?scope=quick. */
+  inventoryHealth: string | null;
   loading: boolean;
   error: string | null;
 }
@@ -33,7 +34,7 @@ export default function AdminHub() {
     openSigningSessions: 0,
     completedSigningSessions: 0,
     inventoryCount: null,
-    inventoryAgeMinutes: null,
+    inventoryHealth: null,
     loading: true,
     error: null,
   });
@@ -50,7 +51,10 @@ export default function AdminHub() {
             credentials: "include",
             cache: "no-store",
           }).catch(() => null),
-          fetch("/api/admin/sync-status", {
+          // scope=quick: runtime probe only. The full check also reads both
+          // sitemaps and probes 7 feeds, which is far too much work to fire
+          // on every admin page view just to draw one badge.
+          fetch("/api/admin/sync-status?scope=quick", {
             credentials: "include",
             cache: "no-store",
           }).catch(() => null),
@@ -65,15 +69,12 @@ export default function AdminHub() {
         const leads: Array<{ status: string }> = leadsData?.leads ?? [];
         const sessions: Array<{ status: string }> = sessData?.sessions ?? [];
 
+        // Live count from the DMS read, NOT a stored snapshot. Null whenever
+        // the probe could not establish one — the badge then says so.
         const inventoryCount: number | null =
-          syncData?.snapshot?.vehicleCount ?? null;
-        const inventoryAgeMinutes: number | null =
-          syncData?.snapshot?.syncedAt
-            ? Math.floor(
-                (Date.now() - new Date(syncData.snapshot.syncedAt).getTime()) /
-                  60_000
-              )
-            : null;
+          syncData?.runtime?.vehicleCount ?? null;
+        const inventoryHealth: string | null =
+          syncData?.runtime?.health ?? null;
 
         setStats({
           newLeads: leads.filter((l) => l.status === "new").length,
@@ -90,7 +91,7 @@ export default function AdminHub() {
             (s) => s.status === "signed" || s.status === "archived"
           ).length,
           inventoryCount,
-          inventoryAgeMinutes,
+          inventoryHealth,
           loading: false,
           error: null,
         });
@@ -179,14 +180,16 @@ export default function AdminHub() {
           />
           <NavCard
             href="/admin/sync-status"
-            title="Inventory Sync"
-            description="Watch the Cron Worker mirror Dealer Center inventory into the site every 15 minutes. Trigger a manual sync, inspect the latest snapshot, see what changed."
+            title="Website Inventory Status"
+            description="Is the site showing the current lot right now? Checks live DMS data, whether the deployed car pages still match the lot, and whether the marketplace feeds are publishing. Rebuild the site from here."
             badge={
-              stats.inventoryCount !== null
-                ? `${stats.inventoryCount} cars · ${
-                    stats.inventoryAgeMinutes ?? 0
-                  }m ago`
-                : undefined
+              stats.inventoryHealth === "ok" && stats.inventoryCount !== null
+                ? `${stats.inventoryCount} cars live`
+                : stats.inventoryHealth === "degraded"
+                  ? "site degraded"
+                  : stats.inventoryHealth === "unknown"
+                    ? "status unknown"
+                    : undefined
             }
           />
         </div>
