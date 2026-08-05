@@ -51,6 +51,52 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const incoming = validation.value as MerchandisingConfigInput;
 
+  // --- Optimistic concurrency check -------------------------------------
+  // Every save here is a whole-config overwrite, so without a precondition
+  // the last writer silently wins. That matters because this key has TWO
+  // independent writers: this editor, and the DMS (which writes overlays
+  // straight to the same KV key through its own Cloudflare API path, not
+  // through this endpoint). The realistic loss looks like: an admin opens
+  // the editor, spends five minutes arranging featured vehicles, the DMS
+  // saves a carfax/pill overlay in the meantime, the admin hits Save — and
+  // the DMS overlay is wiped with no error shown. That exact shape has
+  // already bitten this system once before (the 2026-06-07 overlay-clobber
+  // incident).
+  //
+  // The client sends the `lastUpdated` it loaded as If-Match. If the stored
+  // value has moved on since, reject with 409 and hand back what's actually
+  // in KV so the client can reload rather than overwrite blind.
+  //
+  // Honest limits: KV is eventually consistent, so this is a guard against
+  // human-timescale collisions (seconds to minutes apart), not a true
+  // compare-and-swap. It cannot make simultaneous writes safe. A request
+  // with no If-Match header is still accepted — that's the deliberate
+  // escape hatch for recovery/scripted writes.
+  const ifMatch = request.headers.get("if-match");
+  if (ifMatch) {
+    let currentVersion: string | null = null;
+    try {
+      const current = await env.MERCHANDISING.get(CONFIG_KEY, { type: "json" });
+      currentVersion =
+        (current as { lastUpdated?: string } | null)?.lastUpdated ?? null;
+    } catch (err) {
+      console.error("[/api/admin/merchandising] precondition read failed:", err);
+      return json(503, { error: "Could not verify current config. Try again." });
+    }
+
+    // An empty key is a valid first write — only a real, differing version
+    // is a conflict.
+    if (currentVersion !== null && currentVersion !== ifMatch) {
+      return json(409, {
+        error:
+          "This config changed after you loaded it — saving now would " +
+          "overwrite those changes. Reload the page and reapply your edits.",
+        currentVersion,
+        yourVersion: ifMatch,
+      });
+    }
+  }
+
   // Stamp audit trail fields server-side so clients can't forge them.
   const toStore = {
     ...incoming,
@@ -89,7 +135,12 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       CONFIG_KEY,
       { type: "json" }
     );
-    return json(200, { config: value, metadata });
+    // `version` is the token the client echoes back as If-Match on save.
+    // Surfaced at the top level (rather than leaving the client to dig it
+    // out of config.lastUpdated) so the precondition contract is explicit.
+    const version =
+      (value as { lastUpdated?: string } | null)?.lastUpdated ?? null;
+    return json(200, { config: value, metadata, version });
   } catch (err) {
     console.error("[/api/admin/merchandising GET] KV read failed:", err);
     return json(503, { error: "Could not read config." });

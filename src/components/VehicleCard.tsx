@@ -20,6 +20,7 @@ import {
   StatusPill,
 } from "./badges";
 import { useReviews } from "@/context/ReviewsContext";
+import { useBadgeConfig } from "@/context/BadgeConfigContext";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -58,6 +59,7 @@ function estimateMonthlyPayment(
  */
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const googleReviews = useReviews();
+  const badgeConfig = useBadgeConfig();
   const { t } = useLanguage();
   const c = t.card;
 
@@ -159,6 +161,15 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   // components into hero photos (Session 17). When the displayed image is
   // baked, suppress the HTML twins below to avoid double-stamping.
   const cardHasBakedHero = heroSrc.includes("hero-baked");
+  // The CARFAX badge honors the DMS merchandising opt-out, exactly as the
+  // VDP's PhotoGallery does. It previously checked only the baked-hero
+  // flag, so turning the badge OFF in the DMS hid it on vehicle detail
+  // pages while every inventory card kept showing it.
+  // NOTE: deliberately NOT gated on isComingSoon — per Jeremiah's
+  // 2026-06-10 ruling the CARFAX badge is the ONE badge that still shows
+  // on a Coming Soon card (that's why its siblings below are suppressed).
+  const showCarfaxBadge =
+    !cardHasBakedHero && badgeConfig.carfax_badge_enabled !== false;
   // Track the specific URL that 404'd so we can prevent retrying it while
   // still allowing a *different* (live) URL to replace it. A boolean latch
   // would block the upgrade from a failed seed path to a working R2/DC URL.
@@ -262,7 +273,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 flex flex-col items-start gap-1"
           style={{ paddingTop: cardHasBakedHero ? "5.5%" : undefined }}
         >
-          {!cardHasBakedHero && (
+          {showCarfaxBadge && (
             <div className="scale-[0.44] origin-top-left">
               <CarfaxBadge vin={vehicle.vin} />
             </div>

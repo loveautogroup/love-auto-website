@@ -45,7 +45,16 @@ const VARIANTS: Record<
 };
 
 export default function StatusPill({ kind, compact = false }: StatusPillProps) {
-  const { label, className } = VARIANTS[kind];
+  // `kind` originates in KV, which is external data the type system can't
+  // vouch for. An unrecognized value used to destructure `undefined` and
+  // throw, taking down the entire card grid or VDP with it. Render nothing
+  // instead — a missing badge is a far better failure than a blank page.
+  const variant = VARIANTS[kind];
+  if (!variant) {
+    console.warn(`[StatusPill] unrecognized status kind: ${String(kind)}`);
+    return null;
+  }
+  const { label, className } = variant;
   return (
     <span
       className={`

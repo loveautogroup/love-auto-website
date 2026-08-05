@@ -56,6 +56,9 @@ export default function MerchandisingAdmin() {
     overlays: structuredClone(MERCHANDISING.overlays),
   });
   const [saveState, setSaveState] = useState<SaveState>({ kind: "loading" });
+  // Revision token from the last successful load/save, echoed as If-Match
+  // so the server can reject a save that would clobber someone else's work.
+  const [loadedVersion, setLoadedVersion] = useState<string | null>(null);
 
   // On mount, pull the current config from KV via the admin API.
   useEffect(() => {
@@ -89,6 +92,10 @@ export default function MerchandisingAdmin() {
             overlays: data.config.overlays ?? {},
           });
         }
+        // Remember which revision we loaded so save() can prove it hasn't
+        // been overwritten (by another admin, or by the DMS writing an
+        // overlay to the same KV key) while this page sat open.
+        setLoadedVersion(data.version ?? data.config?.lastUpdated ?? null);
         setSaveState({ kind: "idle" });
       } catch (err) {
         if (!cancelled)
@@ -153,7 +160,12 @@ export default function MerchandisingAdmin() {
       const res = await fetch("/api/admin/merchandising", {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          // Precondition — see the server route's concurrency comment.
+          // Omitted only on a first-ever write, when there's no revision yet.
+          ...(loadedVersion ? { "If-Match": loadedVersion } : {}),
+        },
         body: JSON.stringify(config),
       });
       if (!res.ok) {
@@ -168,6 +180,9 @@ export default function MerchandisingAdmin() {
         return;
       }
       const data = await res.json();
+      // Adopt the new revision so a second save in the same sitting isn't
+      // rejected against the now-stale token we loaded with.
+      setLoadedVersion(data.lastUpdated ?? null);
       setSaveState({ kind: "saved", at: data.lastUpdated });
     } catch (err) {
       setSaveState({

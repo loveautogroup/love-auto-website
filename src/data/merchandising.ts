@@ -14,26 +14,14 @@
  * a drop-in swap.
  */
 
-export type StatusBadgeKind =
-  | "just-arrived"
-  | "price-reduced"
-  | "price-drop"
-  | "staff-pick"
-  | "low-mileage"
-  | "sale-pending"
-  | "coming-soon"
-  | "hot-deal"
-  | "great-deal"
-  | "below-market"
-  | "managers-special"
-  | "reconditioned"
-  | "off-lease"
-  | "trade-in"
-  | "new-arrival"
-  | "must-see"
-  | "rare-find"
-  | "loaded"
-  | "make-offer";
+import type { StatusKind } from "../../shared/statusKinds";
+
+/**
+ * Derived from shared/statusKinds.ts so this union and the edge validator
+ * in functions/_lib/validation.ts can never disagree again — they used to
+ * be hand-maintained copies and drifted (see that file's header).
+ */
+export type StatusBadgeKind = StatusKind;
 
 /**
  * Per-vehicle overlay settings, keyed by VIN.

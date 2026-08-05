@@ -6,7 +6,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ReviewsProvider } from "@/context/ReviewsContext";
+import { BadgeConfigProvider } from "@/context/BadgeConfigContext";
 import { getGoogleReviews } from "@/lib/google-reviews";
+import { fetchGlobalBadgeConfig } from "@/lib/dmsInventory";
 import TextUsButton from "@/components/TextUsButton";
 import StickyCTA from "@/components/StickyCTA";
 import { LocalBusinessSchema } from "@/components/StructuredData";
@@ -98,11 +100,15 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const googleReviews = await getGoogleReviews();
+  const [googleReviews, badgeConfig] = await Promise.all([
+    getGoogleReviews(),
+    fetchGlobalBadgeConfig(),
+  ]);
   return (
     <html lang="en" className={`${inter.className} ${montserrat.variable}`} suppressHydrationWarning>
       <body className="bg-brand-gray-50 text-brand-gray-900 antialiased">
         <ReviewsProvider value={googleReviews}>
+        <BadgeConfigProvider value={badgeConfig}>
         <LanguageProvider>
         <a href="#main-content" className="skip-link">
           Skip to main content
@@ -114,6 +120,7 @@ export default async function RootLayout({
         <TextUsButton />
         <StickyCTA />
         </LanguageProvider>
+        </BadgeConfigProvider>
         </ReviewsProvider>
         {/* CarGurus Deal Rating Badge SDK — self-injecting IIFE.
             Options per CarGurus' documented set (DealRatingBadge.html).

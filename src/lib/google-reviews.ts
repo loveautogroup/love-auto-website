@@ -1,9 +1,20 @@
 /**
- * Server-side Google review data fetcher.
+ * Build-time Google review data fetcher.
  *
- * Uses Next.js unstable_cache (1-hour revalidation) so the site serves
- * live review data without a full rebuild. Falls back to static values
- * if Railway is unreachable.
+ * ⚠️ This runs ONLY at build time. The header used to claim the 1-hour
+ * revalidation below meant "the site serves live review data without a
+ * full rebuild" — it does not. This site is `output: "export"` (see
+ * next.config.ts), so there is no server at runtime: unstable_cache and
+ * `next: { revalidate }` are honored during the build and then the result
+ * is frozen into static HTML. Review rating and count are therefore as
+ * old as the last Cloudflare Pages deploy, however long ago that was.
+ *
+ * That's acceptable — ratings move slowly — but don't read the caching
+ * hints as a freshness guarantee. Making these genuinely live would mean
+ * fetching client-side after hydration, the way useMerchandising() already
+ * does for overlays; that's a product decision, not a bug fix.
+ *
+ * Falls back to static values if Railway is unreachable.
  */
 import { unstable_cache } from "next/cache";
 
@@ -47,13 +58,25 @@ async function _fetchGoogleReviews(): Promise<GoogleReviewsData> {
       ).catch(() => null), // reviews are non-critical
     ]);
 
-    if (!summaryRes.ok) return FALLBACK;
+    if (!summaryRes.ok) {
+      console.warn(
+        `[google-reviews] reputation summary returned ${summaryRes.status} — ` +
+          `building with fallback rating ${FALLBACK.rating}/${FALLBACK.reviewCount} reviews.`
+      );
+      return FALLBACK;
+    }
 
     const summary = await summaryRes.json() as {
       platforms?: { platform: string; star_avg: number; review_count: number }[];
     };
     const google = summary.platforms?.find((p) => p.platform === "Google");
-    if (!google || !google.review_count) return FALLBACK;
+    if (!google || !google.review_count) {
+      console.warn(
+        "[google-reviews] no Google platform row (or zero reviews) in the " +
+          "reputation summary — building with fallback values."
+      );
+      return FALLBACK;
+    }
 
     const rating = Math.round(google.star_avg * 10) / 10;
     const reviewCount = google.review_count;
@@ -75,7 +98,12 @@ async function _fetchGoogleReviews(): Promise<GoogleReviewsData> {
     }
 
     return { rating, reviewCount, reviews };
-  } catch {
+  } catch (err) {
+    // Previously a bare `catch {}`. A build could silently ship stale
+    // fallback numbers site-wide with nothing in the log to explain why —
+    // the same "nobody ever saw it" failure mode dmsInventory.ts was
+    // hardened against.
+    console.error("[google-reviews] fetch failed, using fallback values:", err);
     return FALLBACK;
   }
 }

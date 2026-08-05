@@ -45,7 +45,12 @@ export interface GlobalBadgeConfig {
   margin_pct: number;
 }
 
-const BADGE_CONFIG_FALLBACK: GlobalBadgeConfig = {
+/**
+ * Safe "everything on" default, used whenever the DMS badge-config
+ * endpoint is unreachable. Also the default value of BadgeConfigContext,
+ * so a card rendered outside the provider keeps the pre-context behavior.
+ */
+export const BADGE_CONFIG_FALLBACK: GlobalBadgeConfig = {
   dealer_badge_enabled: true,
   dealer_badge_position: "bottom-right",
   dealer_badge_size_pct: 28,

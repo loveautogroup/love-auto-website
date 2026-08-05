@@ -3,31 +3,14 @@
  *
  * We don't pull Zod into Functions (it'd bloat the Worker) — this is a
  * hand-rolled validator that returns clear error messages for the admin UI.
- * Keep it in sync with src/data/merchandising.ts.
+ *
+ * The status list is NO LONGER duplicated here. It used to be, and it
+ * drifted out of sync with src/data/merchandising.ts (this copy was missing
+ * "coming-soon", so saving that status failed validation even though the
+ * app fully supported it). Both sides now import shared/statusKinds.ts.
  */
 
-const STATUS_KINDS = [
-  "just-arrived",
-  "price-reduced",
-  "price-drop",
-  "staff-pick",
-  "low-mileage",
-  "sale-pending",
-  "hot-deal",
-  "great-deal",
-  "below-market",
-  "managers-special",
-  "reconditioned",
-  "off-lease",
-  "trade-in",
-  "new-arrival",
-  "must-see",
-  "rare-find",
-  "loaded",
-  "make-offer",
-] as const;
-
-type StatusKind = (typeof STATUS_KINDS)[number];
+import { STATUS_KINDS, type StatusKind } from "../../shared/statusKinds";
 
 export interface MerchandisingConfigInput {
   featuredVins: string[];

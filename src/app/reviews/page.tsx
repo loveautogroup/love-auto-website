@@ -21,11 +21,22 @@ import Link from "next/link";
 import VDPReviews from "@/components/VDPReviews";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 import { SITE_CONFIG } from "@/lib/constants";
+import { getGoogleReviews } from "@/lib/google-reviews";
 
-export const metadata: Metadata = {
-  title: "Customer Reviews, 4.7 Stars on Google | Love Auto Group",
+/**
+ * Metadata is derived from the same review fetcher the page body uses,
+ * rather than hardcoded. The rating and count were previously frozen
+ * literals ("4.7 Stars", "129 reviews") that would keep asserting those
+ * numbers in the title, description and search snippet forever, drifting
+ * further from the live figures shown on the page itself with every new
+ * review. Next memoizes the fetch, so this costs nothing extra.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const { rating, reviewCount } = await getGoogleReviews();
+  return {
+  title: `Customer Reviews, ${rating} Stars on Google | Love Auto Group`,
   description:
-    "Read real Google reviews from Love Auto Group customers. 4.7-star rating across 129 reviews from buyers in Villa Park, Lombard, Elmhurst, Oak Brook and the surrounding DuPage County area.",
+    `Read real Google reviews from Love Auto Group customers. ${rating}-star rating across ${reviewCount} reviews from buyers in Villa Park, Lombard, Elmhurst, Oak Brook and the surrounding DuPage County area.`,
   alternates: { canonical: "https://www.loveautogroup.net/reviews/" },
   openGraph: {
     title: "Customer Reviews — Love Auto Group",
@@ -41,7 +52,8 @@ export const metadata: Metadata = {
     description:
       "Real Google reviews from Love Auto Group customers in Villa Park, IL.",
   },
-};
+  };
+}
 
 export default function ReviewsPage() {
   return (
