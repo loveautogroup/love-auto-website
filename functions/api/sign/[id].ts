@@ -123,13 +123,25 @@ export const onRequestPatch: PagesFunction<Env, "id"> = async ({
   if (!session) {
     return json(404, { error: "Session not found or expired." });
   }
-  if (session.status !== "consented" && session.status !== "signed") {
+  // Completed sessions are rejected FIRST, matching the consent handler
+  // above (line ~87) which already checks in this order.
+  //
+  // These two guards used to be the other way round, and the consent check
+  // catches everything that is not "consented"/"signed" — so an "archived"
+  // session never reached the 409 below. It was turned away with
+  // "You must accept the ESIGN consent before signing", which is both wrong
+  // and confusing: the customer already signed, the session was archived
+  // afterwards, and nothing about consent is the problem. The status was
+  // still correctly refused, so this is a message-and-code fix, not a
+  // security one. TypeScript had been flagging the dead comparison as an
+  // unsatisfiable type check the whole time.
+  if (session.status === "signed" || session.status === "archived") {
+    return json(409, { error: "This session has already been completed." });
+  }
+  if (session.status !== "consented") {
     return json(400, {
       error: "You must accept the ESIGN consent before signing.",
     });
-  }
-  if (session.status === "signed" || session.status === "archived") {
-    return json(409, { error: "This session has already been completed." });
   }
 
   // Verify the doc kind is actually on this session.
