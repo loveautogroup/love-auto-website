@@ -34,6 +34,18 @@ export interface Env {
   TURSO_AUTH_TOKEN: string;
   SNAPSHOTS: R2Bucket;
   HEALTHCHECK_URL?: string;
+  /**
+   * Optional bearer token sent with the HEALTHCHECK_URL ping.
+   *
+   * Lets HEALTHCHECK_URL point at the DMS scheduled-job registry
+   * (https://dms.loveautogroup.net/api/v1/heartbeat?job=turso-snapshot),
+   * which requires auth, instead of only an open Healthchecks.io URL.
+   * Healthchecks.io ignores an unexpected Authorization header, so setting
+   * this is safe whichever target the URL points at, and leaving it unset
+   * keeps the previous behaviour exactly.
+   *   wrangler secret put HEARTBEAT_SECRET
+   */
+  HEARTBEAT_SECRET?: string;
 }
 
 const SNAPSHOT_PREFIX = "turso-snapshots";
@@ -165,9 +177,25 @@ async function runSnapshot(env: Env): Promise<void> {
 
   if (env.HEALTHCHECK_URL) {
     try {
-      const r = await fetch(env.HEALTHCHECK_URL);
+      const r = await fetch(env.HEALTHCHECK_URL, {
+        // POST so the DMS heartbeat endpoint accepts it; Healthchecks.io
+        // treats POST as a success ping identically to GET.
+        method: "POST",
+        headers: env.HEARTBEAT_SECRET
+          ? { Authorization: `Bearer ${env.HEARTBEAT_SECRET}` }
+          : undefined,
+      });
+      // Log the status, not just that we tried: a 401 here means the ping is
+      // landing nowhere, which otherwise looks identical to a healthy run.
       console.log(`[turso-snapshot] healthcheck ping: ${r.status}`);
+      if (!r.ok) {
+        console.warn(
+          `[turso-snapshot] healthcheck ping REJECTED (${r.status}) — this run is not being recorded`,
+        );
+      }
     } catch (err) {
+      // Non-fatal: snapshot succeeded, heartbeat didn't. Never let bookkeeping
+      // about finished work fail the work.
       console.warn(`[turso-snapshot] healthcheck ping failed:`, err);
     }
   } else {

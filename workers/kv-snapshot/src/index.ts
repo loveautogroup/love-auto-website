@@ -33,6 +33,19 @@ export interface Env {
    *   wrangler secret put MANUAL_TRIGGER_SECRET
    */
   MANUAL_TRIGGER_SECRET?: string;
+  /**
+   * Optional bearer token sent with the HEALTHCHECK_URL ping. Distinct from
+   * MANUAL_TRIGGER_SECRET above: that one guards calls coming IN to this
+   * worker, this one authenticates a call going OUT.
+   *
+   * Lets HEALTHCHECK_URL point at the DMS scheduled-job registry
+   * (https://dms.loveautogroup.net/api/v1/heartbeat?job=kv-snapshot), which
+   * requires auth. Healthchecks.io ignores an unexpected Authorization
+   * header, so this is safe whichever target the URL points at, and leaving
+   * it unset keeps the previous behaviour exactly.
+   *   wrangler secret put HEARTBEAT_SECRET
+   */
+  HEARTBEAT_SECRET?: string;
 }
 
 interface NamespaceSpec {
@@ -216,8 +229,22 @@ async function runSnapshot(env: Env): Promise<SnapshotResult> {
   // Healthchecks heartbeat on success only
   if (env.HEALTHCHECK_URL) {
     try {
-      const r = await fetch(env.HEALTHCHECK_URL);
+      const r = await fetch(env.HEALTHCHECK_URL, {
+        // POST so the DMS heartbeat endpoint accepts it; Healthchecks.io
+        // treats POST as a success ping identically to GET.
+        method: "POST",
+        headers: env.HEARTBEAT_SECRET
+          ? { Authorization: `Bearer ${env.HEARTBEAT_SECRET}` }
+          : undefined,
+      });
+      // Log the status, not just that we tried: a 401 here means the ping is
+      // landing nowhere, which otherwise looks identical to a healthy run.
       console.log(`[kv-snapshot] healthcheck ping: ${r.status}`);
+      if (!r.ok) {
+        console.warn(
+          `[kv-snapshot] healthcheck ping REJECTED (${r.status}) — this run is not being recorded`,
+        );
+      }
     } catch (err) {
       // Non-fatal: snapshot succeeded, healthcheck didn't. Log and move on.
       console.warn(`[kv-snapshot] healthcheck ping failed:`, err);
