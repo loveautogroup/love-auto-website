@@ -269,6 +269,15 @@ export default function TestDriveForm({
 
   // Captured on mount - the proxy's min-elapsed bot guard reads this.
   const startedAt = useRef(Date.now());
+  // Found in the website audit: every client-side validation check below
+  // (name/phone/day/time/consent) returns before the fetch, so a user who
+  // fails one, fixes it, and resubmits within MIN_ELAPSED_MS of when the
+  // modal first opened got a false "Submission too fast" from the proxy —
+  // even though they'd been legitimately interacting the whole time. A
+  // real second attempt from the same mount isn't bot behavior, so once
+  // one has happened, stop sending startedAt at all; the proxy's timing
+  // guard only engages when the field is present.
+  const hasAttempted = useRef(false);
 
   // Showroom hours. null while loading; `false` once the fetch has failed,
   // which switches the time control to a free input rather than leaving the
@@ -342,6 +351,9 @@ export default function TestDriveForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (sending) return;
+    // Read before mutating — see the comment on hasAttempted above.
+    const isRetry = hasAttempted.current;
+    hasAttempted.current = true;
     if (!name.trim()) {
       setError(td.errName);
       return;
@@ -424,8 +436,9 @@ export default function TestDriveForm({
           optInLanguageVersion: OPT_IN_LANGUAGE_VERSION,
           consentHashes: await consentHashesFor(OPT_IN_LANGUAGE_VERSION),
           honeypot,
-          // Proxy-side bot timing guard (test-drive path only).
-          startedAt: startedAt.current,
+          // Proxy-side bot timing guard (test-drive path only). Omitted on
+          // a retry within the same mount — see the hasAttempted comment.
+          startedAt: isRetry ? undefined : startedAt.current,
           referrer:
             typeof window !== "undefined"
               ? document.referrer || undefined

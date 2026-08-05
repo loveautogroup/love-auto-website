@@ -3,17 +3,20 @@
 /**
  * Quick Pre-Qualify — the SHORT no-SSN form (S27, Jeremiah's ask).
  *
- * Five fields + consents, ~60 seconds. Posts to the legacy KV pipeline
- * (/api/finance-application) with formType:"prequal" — the validator
- * skips address/DOB/housing for this type. Shows up in the DMS
- * /dashboard/finance-apps list next to full applications.
+ * Five fields + consents, ~60 seconds. Phase 6d moved this off the legacy
+ * KV pipeline (/api/finance-application) onto the same-origin /api/leads
+ * proxy into the DMS lead pipeline (encrypts contact PII at rest + blind
+ * index) — see the comment at the fetch call below. This header was stale
+ * (found in the website audit) and still described the retired path.
  * NO SSN is collected here by design; the full Credit Application tab
  * handles that path.
  */
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { consentHashesFor } from "@/lib/consent-language";
+import { consentHashesFor, CONSENT_LANGUAGE, splitAroundPhrase } from "@/lib/consent-language";
+
+const CONSENT_VERSION = "prequalify-2026-07" as const;
 import { useLanguage } from "@/context/LanguageContext";
 
 /**
@@ -99,8 +102,18 @@ export default function QuickPreQualifyForm() {
             `${values.desiredDownPayment ? `; desired down: $${values.desiredDownPayment}` : ""}.`,
           source: "website-prequalify",
           marketingOptIn: values.tcpaConsent,
-          optInLanguageVersion: "prequalify-2026-07",
-          consentHashes: await consentHashesFor("prequalify-2026-07"),
+          // Found in the website audit: the privacy-acknowledgment checkbox
+          // is required by the browser (this form has no noValidate — a
+          // submission genuinely can't reach here without it checked), but
+          // nothing in the payload ever said so — the DMS lead record
+          // carried zero evidence the required acknowledgment was given.
+          // Sent both top-level (in case the DMS schema picks it up
+          // directly) and folded into sourceMetadata (a flexible bag this
+          // same endpoint already stores utm params in), so the evidence
+          // persists either way.
+          privacyConsent: values.privacyConsent,
+          optInLanguageVersion: CONSENT_VERSION,
+          consentHashes: await consentHashesFor(CONSENT_VERSION),
           honeypot: values.honeypot,
           referrer:
             typeof window !== "undefined" ? document.referrer || undefined : undefined,
@@ -114,6 +127,7 @@ export default function QuickPreQualifyForm() {
                     if (v) meta[k] = v;
                   }
                   meta.landingPage = window.location.href;
+                  meta.privacyConsent = String(values.privacyConsent);
                   return Object.keys(meta).length ? meta : undefined;
                 })()
               : undefined,
@@ -256,11 +270,7 @@ export default function QuickPreQualifyForm() {
             onChange={(e) => update("tcpaConsent", e.target.checked)} className="w-4 h-4 mt-0.5 shrink-0" />
           <span>
             <span className="font-semibold">Text message consent (required):</span>{" "}
-            By checking this box, I consent to receive text messages from Love
-            Auto Group at the phone number provided, including texts sent via
-            automated systems, about my inquiry. Message and data rates may
-            apply. Message frequency varies. Reply STOP to opt out at any time.
-            Consent is not a condition of purchase.
+            {CONSENT_LANGUAGE[CONSENT_VERSION].tcpa_sms}
           </span>
         </label>
         <label className="flex items-start gap-2 text-xs text-brand-gray-700 leading-relaxed">
@@ -268,14 +278,20 @@ export default function QuickPreQualifyForm() {
             onChange={(e) => update("privacyConsent", e.target.checked)} className="w-4 h-4 mt-0.5 shrink-0" />
           <span>
             <span className="font-semibold">Privacy acknowledgment (required):</span>{" "}
-            I acknowledge I have read and agree to the{" "}
-            <Link href="/privacy-policy" className="text-brand-red hover:underline" target="_blank">
-              Privacy Policy
-            </Link>
-            . I understand this is a pre-qualification request, not an
-            application for credit, and no credit report will be pulled. A full
-            credit application with written authorization comes later if I
-            decide to proceed.
+            {(() => {
+              const text = CONSENT_LANGUAGE[CONSENT_VERSION].privacy;
+              const parts = splitAroundPhrase(text, "Privacy Policy");
+              if (!parts) return text;
+              return (
+                <>
+                  {parts[0]}
+                  <Link href="/privacy-policy" className="text-brand-red hover:underline" target="_blank">
+                    Privacy Policy
+                  </Link>
+                  {parts[1]}
+                </>
+              );
+            })()}
           </span>
         </label>
       </fieldset>

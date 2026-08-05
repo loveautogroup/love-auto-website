@@ -105,6 +105,10 @@ export default function TradeInForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Found in the website audit: this relied only on the submit button's
+    // disabled={sending} attribute — every other form in this codebase
+    // guards the top of the handler explicitly too.
+    if (sending) return;
     setError("");
     setSending(true);
     const fd = new FormData(e.currentTarget);
@@ -149,8 +153,17 @@ export default function TradeInForm() {
     <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-brand-gray-200 p-6 space-y-5">
       <h2 className="text-xl font-bold text-brand-gray-900">{t.tradeInForm.heading}</h2>
 
-      {/* Honeypot — humans never see it */}
-      <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+      {/* Honeypot — off-screen, not display:none. Found in the website
+          audit: className="hidden" (display:none) is the one style some
+          visibility-aware bots and form-fill libraries deliberately skip;
+          every other form's honeypot on this site uses this same
+          off-screen-positioning trap instead. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] -top-[9999px]">
+        <label>
+          Leave this field blank
+          <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+        </label>
+      </div>
 
       {/* VIN decode */}
       <div>

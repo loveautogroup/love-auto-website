@@ -44,6 +44,24 @@ export const CONSENT_LANGUAGE = {
 
 export type ConsentVersionKey = keyof typeof CONSENT_LANGUAGE;
 
+/**
+ * Split a consent string around a linkable phrase (e.g. "Privacy Policy")
+ * so a caller can wrap just that phrase in a real <a>/<Link> while the
+ * surrounding text stays byte-identical to the registry — derived from the
+ * registry string at render time rather than hand-retyped, so it can never
+ * drift out of sync with what actually gets hashed. Returns null if the
+ * phrase isn't present (caller should fall back to rendering the plain
+ * string with no embedded link).
+ */
+export function splitAroundPhrase(
+  text: string,
+  phrase: string
+): [string, string] | null {
+  const idx = text.indexOf(phrase);
+  if (idx === -1) return null;
+  return [text.slice(0, idx), text.slice(idx + phrase.length)];
+}
+
 // SHA-256 → lowercase hex, via Web Crypto (browser + edge runtime).
 export async function sha256Hex(text: string): Promise<string> {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));

@@ -21,7 +21,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { trackFormSubmit, trackLeadFinancing } from "@/lib/analytics";
-import { consentHashesFor } from "@/lib/consent-language";
+import { consentHashesFor, CONSENT_LANGUAGE, splitAroundPhrase } from "@/lib/consent-language";
 import { useLanguage } from "@/context/LanguageContext";
 
 const US_STATES = [
@@ -85,6 +85,8 @@ interface FormValues extends ApplicantFields {
   fcraConsent: boolean;
   honeypot: string;
 }
+
+const CONSENT_VERSION = "creditapp-2026-07" as const;
 
 const EMPTY_APPLICANT: ApplicantFields = {
   firstName: "",
@@ -249,8 +251,8 @@ export default function FinancingForm() {
         textMarketing: false,
         textUpdates: values.tcpaConsent,
       },
-      consentLanguageVersion: "creditapp-2026-07",
-      consentHashes: await consentHashesFor("creditapp-2026-07"),
+      consentLanguageVersion: CONSENT_VERSION,
+      consentHashes: await consentHashesFor(CONSENT_VERSION),
     };
 
     try {
@@ -326,10 +328,19 @@ export default function FinancingForm() {
     "w-full border border-brand-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red disabled:bg-brand-gray-50";
 
   return (
+    // Found in the website audit: `noValidate` was set here with no
+    // equivalent manual validation in onSubmit — every `required` field
+    // below (including SSN and all three consent checkboxes, one of which
+    // is the legally-required FCRA credit-pull authorization) could be
+    // submitted blank. Removed rather than reimplement validation onSubmit:
+    // every field already carries the right required/pattern/type attrs,
+    // the co-buyer section's required fields are conditionally MOUNTED (not
+    // just hidden) so they never trip "invalid unfocusable field", and the
+    // sibling QuickPreQualifyForm already relies on native validation the
+    // same way with no noValidate.
     <form
       onSubmit={onSubmit}
       className="bg-white rounded-xl border border-brand-gray-200 p-6 space-y-6"
-      noValidate
     >
       <div>
         <h2 className="text-xl font-bold text-brand-gray-900">
@@ -1005,11 +1016,7 @@ export default function FinancingForm() {
           />
           <span>
             <span className="font-semibold">Text message consent (required):</span>{" "}
-            By checking this box, I consent to receive text messages from Love
-            Auto Group at the phone number provided, including texts sent via
-            automated systems, about my inquiry. Message and data rates may
-            apply. Message frequency varies. Reply STOP to opt out at any time.
-            Consent is not a condition of purchase.
+            {CONSENT_LANGUAGE[CONSENT_VERSION].tcpa_sms}
           </span>
         </label>
         <label className="flex items-start gap-2 text-xs text-brand-gray-700 leading-relaxed">
@@ -1024,17 +1031,24 @@ export default function FinancingForm() {
             <span className="font-semibold">
               Privacy acknowledgment (required):
             </span>{" "}
-            I acknowledge I have read and agree to the{" "}
-            <Link
-              href="/privacy-policy"
-              className="text-brand-red hover:underline"
-              target="_blank"
-            >
-              Privacy Policy
-            </Link>
-            . I understand this is an application for credit and that Love
-            Auto Group works with multiple lenders to find financing options
-            for me.
+            {(() => {
+              const text = CONSENT_LANGUAGE[CONSENT_VERSION].privacy;
+              const parts = splitAroundPhrase(text, "Privacy Policy");
+              if (!parts) return text;
+              return (
+                <>
+                  {parts[0]}
+                  <Link
+                    href="/privacy-policy"
+                    className="text-brand-red hover:underline"
+                    target="_blank"
+                  >
+                    Privacy Policy
+                  </Link>
+                  {parts[1]}
+                </>
+              );
+            })()}
           </span>
         </label>
         <label className="flex items-start gap-2 text-xs text-brand-gray-700 leading-relaxed">
@@ -1049,19 +1063,7 @@ export default function FinancingForm() {
             <span className="font-semibold">
               Credit report authorization (required):
             </span>{" "}
-            I, the undersigned, (a) for the purpose of securing credit, certify
-            the above representations to be correct; (b) authorize Love Auto
-            Group Inc. and the financial institutions to whom this application
-            is submitted, as they consider necessary and appropriate, to obtain
-            consumer credit reports on me and to gather and verify employment
-            history; and (c) understand that Love Auto Group Inc., and any
-            financial institution to whom this application is submitted, will
-            retain this application whether or not it is approved, and that it
-            is my responsibility to notify the creditor of any change of name,
-            address, or employment. Love Auto Group Inc. and any financial
-            institution to whom this application is submitted may share certain
-            non-public personal information about me with my authorization or
-            as provided by law.
+            {CONSENT_LANGUAGE[CONSENT_VERSION].fcra_credit_auth}
           </span>
         </label>
         <p className="text-xs text-brand-gray-500 leading-relaxed pt-2 border-t border-brand-gray-100">

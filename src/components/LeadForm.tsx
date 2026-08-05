@@ -130,6 +130,11 @@ export default function LeadForm({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    // Found in the website audit: this relied only on the submit button's
+    // disabled={submitting} attribute — every other form in this codebase
+    // (TestDriveForm, FinancingForm, QuickPreQualifyForm) also guards the
+    // top of the handler explicitly.
+    if (submitting) return;
     if (!values.name.trim()) {
       setError(t.leadForm.errName);
       return;
