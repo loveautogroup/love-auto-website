@@ -103,9 +103,13 @@ function renderFacebookCsv(vehicles: FeedVehicle[]): string {
       photos[i]?.url ?? ""
     );
 
-    // FB requires "available" / "out of stock". Sale Pending stays
-    // "available" since it can still flip back to a deal if it falls out.
-    const availability = v.status === "Sale Pending" ? "available" : "available";
+    // FB requires "available" / "out of stock". Sale Pending deliberately
+    // stays "available" here since it can still flip back if the deal falls
+    // out — so every vehicle this feed reaches is available by definition
+    // (sold/archived vehicles never make it into `vehicles` upstream).
+    // NOTE: this diverges on purpose from the Google feeds, which DO report
+    // Sale Pending as "out of stock". Don't "fix" one to match the other.
+    const availability = "available";
 
     const title = `${v.year} ${v.make} ${v.model}${v.trim ? " " + v.trim : ""}`;
 

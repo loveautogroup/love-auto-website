@@ -10,8 +10,12 @@
  * consumers). Register THIS URL in Merchant Center as the vehicle ads
  * data source. Spec differences honored here vs the legacy feed:
  *   - condition is Title Case ("Used" / "New")
- *   - NO availability column (vehicle ads rejects it unless the offer
- *     is build_to_order — answer 11192663, price-attributes note)
+ *   - availability IS required and always "in_stock". (This originally
+ *     read "NO availability column" per a reading of answer 11192663;
+ *     Merchant Center then rejected every row with "Missing value
+ *     [availability]", fixed in 89469d6 on 2026-06-10. The feed is
+ *     pre-filtered to Available-status vehicles, so in_stock is always
+ *     truthful — do not re-derive it per row.)
  *   - additional_image_link capped at 10 (vehicle ads maximum)
  *   - in-store fulfillment expressed via the top-level store_code
  *     attribute, which is equivalent to vehicle_fulfillment(option)=
