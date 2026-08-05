@@ -34,15 +34,22 @@ export interface Env {
    */
   MANUAL_TRIGGER_SECRET?: string;
   /**
-   * Optional bearer token sent with the HEALTHCHECK_URL ping. Distinct from
-   * MANUAL_TRIGGER_SECRET above: that one guards calls coming IN to this
-   * worker, this one authenticates a call going OUT.
+   * DMS scheduled-job registry ping, SEPARATE from HEALTHCHECK_URL above:
+   *   https://dms.loveautogroup.net/api/v1/heartbeat?job=kv-snapshot
    *
-   * Lets HEALTHCHECK_URL point at the DMS scheduled-job registry
-   * (https://dms.loveautogroup.net/api/v1/heartbeat?job=kv-snapshot), which
-   * requires auth. Healthchecks.io ignores an unexpected Authorization
-   * header, so this is safe whichever target the URL points at, and leaving
-   * it unset keeps the previous behaviour exactly.
+   * Deliberately a second destination rather than a replacement. Healthchecks
+   * .io alerts by email from outside our stack, which is exactly what you
+   * want when the failure IS our stack; the DMS registry puts this backup on
+   * /dashboard/heartbeats beside every other timed job, where someone
+   * actually looks. Those are different jobs and neither substitutes for the
+   * other, so the worker reports to both and each is independently optional.
+   *   wrangler secret put HEARTBEAT_URL
+   */
+  HEARTBEAT_URL?: string;
+  /**
+   * Bearer token for HEARTBEAT_URL. Distinct from MANUAL_TRIGGER_SECRET
+   * above: that one guards calls coming IN to this worker, this one
+   * authenticates a call going OUT.
    *   wrangler secret put HEARTBEAT_SECRET
    */
   HEARTBEAT_SECRET?: string;
@@ -159,6 +166,55 @@ interface SnapshotResult {
   durationMs: number;
 }
 
+/**
+ * Report a completed run to both success monitors.
+ *
+ * Called on the success path only — pinging at the start would give a job
+ * that reliably starts and reliably crashes a perfect record forever.
+ *
+ * Each destination is independently optional and independently reported:
+ * Healthchecks.io (plain GET, no auth, alerts by email from outside our
+ * stack) and the DMS registry (POST + bearer, shows on
+ * /dashboard/heartbeats). Neither substitutes for the other.
+ *
+ * Never throws. The snapshot has already succeeded by this point, and
+ * letting bookkeeping about finished work fail the work would mean the
+ * monitoring caused the outage it exists to detect.
+ */
+async function pingSuccess(
+  label: string,
+  env: { HEALTHCHECK_URL?: string; HEARTBEAT_URL?: string; HEARTBEAT_SECRET?: string },
+): Promise<void> {
+  // Status is logged, not merely the attempt: a rejected ping otherwise reads
+  // exactly like a healthy run, which is how a dead watchdog stayed hidden.
+  const send = async (name: string, url: string, init?: RequestInit) => {
+    try {
+      const r = await fetch(url, init);
+      console.log(`[${label}] ${name} ping: ${r.status}`);
+      if (!r.ok) {
+        console.warn(
+          `[${label}] ${name} ping REJECTED (${r.status}) — this run is NOT being recorded there`,
+        );
+      }
+    } catch (err) {
+      console.warn(`[${label}] ${name} ping failed:`, err);
+    }
+  };
+
+  if (env.HEALTHCHECK_URL) {
+    await send("healthcheck", env.HEALTHCHECK_URL);
+  } else {
+    console.warn(`[${label}] HEALTHCHECK_URL unset — no Healthchecks ping sent`);
+  }
+
+  if (env.HEARTBEAT_URL && env.HEARTBEAT_SECRET) {
+    await send("dms-heartbeat", env.HEARTBEAT_URL, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${env.HEARTBEAT_SECRET}` },
+    });
+  }
+}
+
 async function runSnapshot(env: Env): Promise<SnapshotResult> {
   const startedAt = Date.now();
   const date = new Date().toISOString().slice(0, 10);
@@ -227,33 +283,7 @@ async function runSnapshot(env: Env): Promise<SnapshotResult> {
   await pruneOldSnapshots(env, date);
 
   // Healthchecks heartbeat on success only
-  if (env.HEALTHCHECK_URL) {
-    try {
-      const r = await fetch(env.HEALTHCHECK_URL, {
-        // POST so the DMS heartbeat endpoint accepts it; Healthchecks.io
-        // treats POST as a success ping identically to GET.
-        method: "POST",
-        headers: env.HEARTBEAT_SECRET
-          ? { Authorization: `Bearer ${env.HEARTBEAT_SECRET}` }
-          : undefined,
-      });
-      // Log the status, not just that we tried: a 401 here means the ping is
-      // landing nowhere, which otherwise looks identical to a healthy run.
-      console.log(`[kv-snapshot] healthcheck ping: ${r.status}`);
-      if (!r.ok) {
-        console.warn(
-          `[kv-snapshot] healthcheck ping REJECTED (${r.status}) — this run is not being recorded`,
-        );
-      }
-    } catch (err) {
-      // Non-fatal: snapshot succeeded, healthcheck didn't. Log and move on.
-      console.warn(`[kv-snapshot] healthcheck ping failed:`, err);
-    }
-  } else {
-    console.warn(
-      `[kv-snapshot] HEALTHCHECK_URL secret unset — no heartbeat sent`,
-    );
-  }
+  await pingSuccess("kv-snapshot", env);
 
   return {
     key,
