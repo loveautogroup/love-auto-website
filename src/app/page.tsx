@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import T from "@/components/T";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -9,6 +10,32 @@ import VDPTrustStrip from "@/components/VDPTrustStrip";
 import HomeHero from "@/components/HomeHero";
 import { SERVICE_AREAS } from "@/data/serviceAreas";
 import { BRANDS } from "@/data/brands";
+
+/**
+ * The homepage previously exported no metadata at all, inheriting the root
+ * layout's canonical. It needs its own now purely to carry the hreflang pair
+ * pointing at /es/.
+ *
+ * This deliberately lives HERE rather than in the root layout, even though
+ * the root is where the canonical lives. Layout metadata is inherited by
+ * every page beneath it, so declaring `languages` there would have every
+ * English page — /about, /faq, /terms — announce a Spanish counterpart that
+ * does not exist yet. A hreflang pointing at a 404 is worse than no hreflang:
+ * it tells Google the annotation is unreliable and it stops trusting the set.
+ *
+ * hreflang is only honoured when it is RECIPROCAL, so this and the block in
+ * src/app/es/page.tsx have to agree. Change one, change the other.
+ */
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://www.loveautogroup.net/",
+    languages: {
+      "en-US": "https://www.loveautogroup.net/",
+      "es-US": "https://www.loveautogroup.net/es/",
+      "x-default": "https://www.loveautogroup.net/",
+    },
+  },
+};
 
 export default function HomePage() {
   return (
