@@ -28,6 +28,7 @@
  */
 
 import { vehicleSlug, titleCase } from "../../shared/slug";
+import { escapeHtml, escapeUrl } from "../../shared/escapeHtml";
 import { rewritePhotoHost } from "../../shared/photoHost";
 
 const DMS_PUBLIC_URL =
@@ -95,22 +96,30 @@ function formatCurrency(n: number | null | undefined): string {
   }).format(n);
 }
 
+/**
+ * Every DMS-sourced value below is escaped HERE, at the point it's derived,
+ * rather than at each of the ~15 places it gets interpolated further down —
+ * so a new reference in the template can't silently reintroduce the gap.
+ * `title` is assembled from already-escaped parts and must NOT be escaped
+ * again. Numeric values (price, mileage) are formatter output and safe.
+ */
 function renderComingSoonPage(v: DmsVehicle, slug: string): string {
-  const make = titleCase(v.make ?? "");
-  const model = titleCase(v.model ?? "");
-  const trim = v.trim ? titleCase(v.trim) : "";
-  const title = `${v.year} ${make} ${model}${trim ? " " + trim : ""}`;
+  const make = escapeHtml(titleCase(v.make ?? ""));
+  const model = escapeHtml(titleCase(v.model ?? ""));
+  const trim = v.trim ? escapeHtml(titleCase(v.trim)) : "";
+  const title = `${escapeHtml(v.year)} ${make} ${model}${trim ? " " + trim : ""}`;
   const price = formatCurrency(v.retailPrice);
   const mileage = v.mileage
     ? new Intl.NumberFormat("en-US").format(v.mileage) + " mi"
     : "";
-  const color = v.exteriorColor ?? "";
+  const color = escapeHtml(v.exteriorColor ?? "");
   const available = isAvailable(v.status);
   // Found in the website audit: rendered the raw r2.dev URL directly —
   // the same rate-limited host already rewritten away from everywhere
   // else photos are served.
-  const vehiclePhotoUrl =
-    rewritePhotoHost(v.photos?.find((p) => p.isPrimary)?.url ?? v.photos?.[0]?.url) ?? "";
+  const vehiclePhotoUrl = escapeUrl(
+    rewritePhotoHost(v.photos?.find((p) => p.isPrimary)?.url ?? v.photos?.[0]?.url) ?? ""
+  );
   // For coming-soon / in-recon vehicles with no photos, use the branded
   // coming-soon placeholder rather than leaving the frame empty.
   const heroUrl = vehiclePhotoUrl
@@ -118,7 +127,10 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
     : available
     ? ""
     : "https://www.loveautogroup.net/images/coming-soon.png";
-  const canonicalUrl = `https://www.loveautogroup.net/inventory/${slug}/`;
+  // `slug` reaches here only after matching a DMS-computed vehicleSlug(),
+  // so it can't carry arbitrary request input — escaped anyway, since that
+  // invariant lives in the caller and could be relaxed later.
+  const canonicalUrl = `https://www.loveautogroup.net/inventory/${escapeHtml(slug)}/`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -228,10 +240,11 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
  * — the copy shouldn't claim "sold" for a car that was simply hidden.
  */
 function renderGonePage(v: DmsVehicle, hidden = false): string {
-  const make = titleCase(v.make ?? "");
-  const model = titleCase(v.model ?? "");
-  const trim = v.trim ? titleCase(v.trim) : "";
-  const title = `${v.year} ${make} ${model}${trim ? " " + trim : ""}`;
+  // Escaped at derivation — see the note on renderComingSoonPage above.
+  const make = escapeHtml(titleCase(v.make ?? ""));
+  const model = escapeHtml(titleCase(v.model ?? ""));
+  const trim = v.trim ? escapeHtml(titleCase(v.trim)) : "";
+  const title = `${escapeHtml(v.year)} ${make} ${model}${trim ? " " + trim : ""}`;
   const badgeText = hidden ? "NO LONGER LISTED" : "SOLD";
   const heading = hidden
     ? `This ${title} is no longer listed.`

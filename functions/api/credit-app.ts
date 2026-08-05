@@ -90,10 +90,21 @@ export async function onRequestPost(ctx: { request: Request; env: Env }) {
     }
   }
 
-  // Clear rate-limit counter on a seemingly legitimate submission.
-  if (ctx.env.LEADS) {
-    await ctx.env.LEADS.delete(rlKey);
-  }
+  // NOTE: the counter is deliberately NOT cleared here.
+  //
+  // This used to `delete(rlKey)` on any submission that cleared the
+  // honeypot and timing checks, which made the limit unenforceable on the
+  // one endpoint that collects Social Security numbers. `startedAt` is
+  // supplied by the client, so passing the 8-second timing gate only takes
+  // sending a timestamp 9 seconds in the past — meaning a scripted caller
+  // reset its own counter to zero on every request and could submit
+  // without bound. The 3-per-10-minutes limit only ever applied to
+  // requests that FAILED the bot checks, i.e. the least sophisticated ones.
+  //
+  // Counting every attempt in the window is what RL_MAX_ATTEMPTS /
+  // RL_WINDOW_SECONDS plainly intend. Three credit applications from one
+  // IP in ten minutes is not a normal customer flow, and the error copy
+  // already offers the phone number for anyone who genuinely hits it.
 
   const upstream = await fetch(UPSTREAM, {
     method: "POST",

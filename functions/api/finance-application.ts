@@ -68,7 +68,56 @@ async function checkRateLimit(
   return { ok: true };
 }
 
-export const onRequestPost: PagesFunction<Env> = async (ctx) => {
+/**
+ * RETIRED 2026-08-05 — this endpoint no longer accepts submissions.
+ *
+ * Nothing calls it. The public /financing form (QuickPreQualifyForm) was
+ * migrated to the same-origin /api/leads pipeline in Phase 6d; its own
+ * header comment says so. A repo-wide search finds no remaining caller in
+ * this site, and the DMS only ever READS the historical records (through
+ * its own /api/v1/finance-applications route against the LEADS KV) — it
+ * never posted here.
+ *
+ * But a Pages Function is published by file path, so this stayed a live,
+ * publicly reachable POST that would validate and durably store whatever
+ * PII it was handed — name, contact, date of birth, address, income — as
+ * plaintext JSON in KV. An orphaned intake nobody watches is a liability
+ * with no upside, so it now returns 410 Gone.
+ *
+ * To be precise about scope, since the audit finding overstated this: the
+ * validator rejects SSN outright (finance-validation.ts, "NO SSN on the
+ * form"), so this was never an SSN sink. The SSN-collecting path is
+ * /api/credit-app, which is separate and still live.
+ *
+ * Deliberately neutralized rather than deleted: functions/api/admin/leads.ts
+ * and the DMS still read the `lead:*` records this wrote, so the shape
+ * documented in this file is still worth keeping next to that reader. The
+ * historical KV records are untouched by this change — they age out on
+ * their existing TTL.
+ *
+ * To bring it back, restore the handler below from git history and point a
+ * form at it again.
+ */
+export const onRequestPost: PagesFunction<Env> = async () =>
+  new Response(
+    JSON.stringify({
+      ok: false,
+      error:
+        "This form is no longer in service. Please use the application at " +
+        "https://www.loveautogroup.net/financing/ or call us at (630) 359-3643.",
+    }),
+    {
+      status: 410,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "no-store",
+        "Access-Control-Allow-Origin": "*",
+      },
+    }
+  );
+
+/** Previous implementation — retained for reference, no longer routed. */
+const _retiredOnRequestPost: PagesFunction<Env> = async (ctx) => {
   const { request, env } = ctx;
 
   // Anti-abuse: per-IP rate limit. 3 per hour.
