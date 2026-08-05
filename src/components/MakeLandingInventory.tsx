@@ -12,6 +12,7 @@
 import Link from "next/link";
 import { useInventory } from "@/lib/useInventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
+import { useVisibleVehicles } from "@/data/useMerchandising";
 import VehicleCard from "@/components/VehicleCard";
 
 interface MakeLandingInventoryProps {
@@ -28,11 +29,17 @@ export default function MakeLandingInventory({
   make,
 }: MakeLandingInventoryProps) {
   const { vehicles } = useInventory();
+  // Found in the website audit: this page fetched live inventory directly
+  // and never applied the KV-backed hidden filter every other listing
+  // surface (main grid, homepage, similar-vehicles) uses — a vehicle
+  // toggled "Hide from site" in the DMS disappeared from those within
+  // ~60s but stayed fully visible here indefinitely.
+  const visibleVehicles = useVisibleVehicles(vehicles);
   const value = filterValue.toLowerCase();
   const isBodyStyle = filterType === "bodyStyle";
 
   const inventoryForMake = sortWithFeaturedFirst(
-    vehicles.filter((v) => {
+    visibleVehicles.filter((v) => {
       if (v.status !== "available") return false;
       if (isBodyStyle) return v.bodyStyle.toLowerCase() === value;
       return v.make.toLowerCase() === value;
@@ -59,7 +66,7 @@ export default function MakeLandingInventory({
             href="/sell-your-car"
             className="text-brand-red hover:underline font-semibold"
           >
-            tell us what you're looking for
+            tell us what you&apos;re looking for
           </Link>
         )}
         {inventoryForMake.length === 0 && " and we'll source one to order."}

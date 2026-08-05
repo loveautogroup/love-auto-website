@@ -73,6 +73,34 @@ export async function fetchGlobalBadgeConfig(): Promise<GlobalBadgeConfig> {
   }
 }
 
+const MERCHANDISING_CONFIG_URL = "https://www.loveautogroup.net/api/merchandising";
+
+/**
+ * Found in the website audit: sitemap.ts had no way to know which vehicles
+ * were toggled "Hide from site" in the DMS — the KV-backed hidden overlay
+ * is only ever checked by client-side hooks, never at build time. Fetches
+ * the same public /api/merchandising endpoint the client uses and returns
+ * the set of hidden VINs so a build-time consumer (sitemap.ts) can exclude
+ * them. Best-effort: an empty set on any failure just means "nothing known
+ * to be hidden," never blocks the build.
+ */
+export async function fetchHiddenVins(): Promise<Set<string>> {
+  try {
+    const res = await fetch(MERCHANDISING_CONFIG_URL, { cache: "no-store" });
+    if (res.status === 204 || !res.ok) return new Set();
+    const data = (await res.json()) as {
+      overlays?: Record<string, { hidden?: boolean }>;
+    };
+    return new Set(
+      Object.entries(data.overlays ?? {})
+        .filter(([, o]) => o?.hidden === true)
+        .map(([vin]) => vin.toUpperCase())
+    );
+  } catch {
+    return new Set();
+  }
+}
+
 interface DmsPhoto {
   url: string;
   isPrimary?: boolean;

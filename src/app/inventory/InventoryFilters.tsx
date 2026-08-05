@@ -6,9 +6,18 @@ import { useSearchParams } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import VehicleAlertSignup from "@/components/VehicleAlertSignup";
 import { trackInventoryFilter } from "@/lib/analytics";
+import { useInventory } from "@/lib/useInventory";
+import { useVisibleVehicles } from "@/data/useMerchandising";
 
-const MAKES = ["Subaru", "Lexus", "Acura", "Mazda", "Honda", "Toyota"];
-const BODY_STYLES = ["SUV", "Sedan", "Wagon", "Truck", "Coupe"];
+// Found in the website audit: this used to be a hardcoded list that had
+// already drifted from the real lot (no Ford/Lincoln/Mercedes-Benz option,
+// no Convertible body style, while current inventory had all three) — a
+// shopper could never isolate makes/styles that were actually on the lot.
+// Derived from live inventory now, falling back to the same seed data
+// InventoryGrid renders from until the live fetch resolves.
+function uniqueSorted(values: (string | undefined)[]): string[] {
+  return Array.from(new Set(values.filter((v): v is string => !!v))).sort();
+}
 
 const PRICE_TABS = [
   { label: "All Vehicles",  href: "/inventory",                              minPrice: null,  maxPrice: null  },
@@ -28,6 +37,12 @@ function InventoryFiltersInner() {
   const { t } = useLanguage();
   const f = t.filters;
   const searchParams = useSearchParams();
+  // useInventory() already holds the seed data until the live fetch
+  // resolves, then swaps in — no separate fallback branch needed here.
+  const { vehicles: liveVehicles } = useInventory();
+  const visibleVehicles = useVisibleVehicles(liveVehicles);
+  const MAKES = uniqueSorted(visibleVehicles.map((v) => v.make));
+  const BODY_STYLES = uniqueSorted(visibleVehicles.map((v) => v.bodyStyle));
   const current = {
     make: searchParams.get("make") ?? "",
     bodyStyle: searchParams.get("bodyStyle") ?? "",
@@ -119,6 +134,24 @@ function InventoryFiltersInner() {
         {activePriceTab.maxPrice !== null && (
           <input type="hidden" name="maxPrice" value={activePriceTab.maxPrice} />
         )}
+
+        {/* Search — found in the website audit: the grid's filter logic
+            already supports a tokenized ?q= search over make/model/trim/
+            drivetrain/bodyStyle/features, but there was no control
+            anywhere on the site that could ever produce that URL. */}
+        <div>
+          <label htmlFor="filter-q" className="block text-sm font-semibold text-brand-gray-900 mb-2">
+            {f.search}
+          </label>
+          <input
+            type="search"
+            id="filter-q"
+            name="q"
+            defaultValue={current.q ?? ""}
+            placeholder={f.searchPlaceholder}
+            className="w-full border border-brand-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red"
+          />
+        </div>
 
         {/* Make */}
         <div>

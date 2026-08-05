@@ -24,6 +24,7 @@
 
 import { useInventory } from "@/lib/useInventory";
 import type { Vehicle } from "@/lib/types";
+import type { GlobalBadgeConfig } from "@/lib/dmsInventory";
 import PhotoGallery from "./PhotoGallery";
 
 interface VDPLivePhotosProps {
@@ -31,6 +32,7 @@ interface VDPLivePhotosProps {
   seedImages: string[];
   alt: string;
   vehicle: Vehicle;
+  badgeConfig?: GlobalBadgeConfig;
 }
 
 export default function VDPLivePhotos({
@@ -38,6 +40,7 @@ export default function VDPLivePhotos({
   seedImages,
   alt,
   vehicle,
+  badgeConfig,
 }: VDPLivePhotosProps) {
   const { vehicles, source } = useInventory();
 
@@ -59,5 +62,12 @@ export default function VDPLivePhotos({
   // previous behavior — passing the branded "Coming Soon" PNG so
   // PhotoGallery painted it as a hero — was removed per the "no default
   // image for cars without pictures" change.
-  return <PhotoGallery images={images ?? []} alt={alt} vehicle={vehicle} />;
+  return (
+    <PhotoGallery
+      images={images ?? []}
+      alt={alt}
+      vehicle={vehicle}
+      badgeConfig={badgeConfig}
+    />
+  );
 }

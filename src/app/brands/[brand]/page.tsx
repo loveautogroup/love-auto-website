@@ -141,7 +141,7 @@ export default async function BrandPage({
 
         {content.relatedLinks && content.relatedLinks.length > 0 ? (
           <p className="text-base text-brand-gray-600 mt-8">
-            <T get={(t) => t.brandsChrome.browseBelowOr} />{" "}
+            <T path={["brandsChrome", "browseBelowOr"]} />{" "}
             {content.relatedLinks.map((link, i) => (
               <span key={link.href}>
                 <Link
@@ -150,7 +150,14 @@ export default async function BrandPage({
                 >
                   {link.label}
                 </Link>
-                {i < content.relatedLinks!.length - 1 ? <T get={(t) => ` ${t.brandsChrome.or} `} /> : "."}
+                {i < content.relatedLinks!.length - 1 ? (
+                  <>
+                    {" "}
+                    <T path={["brandsChrome", "or"]} />{" "}
+                  </>
+                ) : (
+                  "."
+                )}
               </span>
             ))}
           </p>
@@ -161,7 +168,7 @@ export default async function BrandPage({
       {content.faqs && content.faqs.length > 0 ? (
         <section className="max-w-4xl mx-auto px-4 pb-8">
           <h2 className="text-2xl font-bold text-brand-gray-900 mb-6">
-            <T get={(t) => t.brandsChrome.faqHeading} />
+            <T path={["brandsChrome", "faqHeading"]} />
           </h2>
           <div className="space-y-6">
             {content.faqs.map((faq) => (
@@ -192,23 +199,32 @@ export default async function BrandPage({
       <section className="bg-brand-gray-50 py-12">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-2xl font-bold text-brand-gray-900 mb-2">
-            <T get={(t) => t.brandsChrome.lookingForModel.replace("{make}", content.displayName)} />
+            <T
+              path={["brandsChrome", "lookingForModel"]}
+              replace={{ "{make}": content.displayName }}
+            />
           </h2>
           <p className="text-brand-gray-600 mb-6">
-            <T get={(t) => t.brandsChrome.callAndNotify.replace("{phone}", "(630) 359-3643")} />
+            <T
+              path={["brandsChrome", "callAndNotify"]}
+              replace={{ "{phone}": "(630) 359-3643" }}
+            />
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <a
               href="tel:6303593643"
               className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-xl font-semibold"
             >
-              <T get={(t) => t.brandsChrome.callPhone.replace("{phone}", "(630) 359-3643")} />
+              <T
+                path={["brandsChrome", "callPhone"]}
+                replace={{ "{phone}": "(630) 359-3643" }}
+              />
             </a>
             <Link
               href="/inventory"
               className="inline-flex items-center border-2 border-brand-gray-300 hover:bg-brand-gray-100 text-brand-gray-900 px-6 py-3 rounded-xl font-semibold"
             >
-              <T get={(t) => t.brandsChrome.viewFullInventory} />
+              <T path={["brandsChrome", "viewFullInventory"]} />
             </Link>
           </div>
         </div>

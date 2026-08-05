@@ -213,24 +213,35 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
 }
 
 /**
- * "This vehicle has been sold" page. Returned with HTTP 410 Gone so
- * Google deindexes the URL on its next crawl (days, not months).
+ * "This vehicle is no longer available" page. Returned with HTTP 410 Gone
+ * so Google deindexes the URL on its next crawl (days, not months).
  *
  * Canonical points at /inventory/ (not at the slug itself) — we don't
  * want Google to keep treating the gone URL as canonical for anything.
+ *
+ * `hidden` distinguishes "pulled from the site" (DMS "Hide from site"
+ * toggle — status unknown, could still be on the lot) from a genuine sale
+ * — the copy shouldn't claim "sold" for a car that was simply hidden.
  */
-function renderGonePage(v: DmsVehicle): string {
+function renderGonePage(v: DmsVehicle, hidden = false): string {
   const make = titleCase(v.make ?? "");
   const model = titleCase(v.model ?? "");
   const trim = v.trim ? titleCase(v.trim) : "";
   const title = `${v.year} ${make} ${model}${trim ? " " + trim : ""}`;
+  const badgeText = hidden ? "NO LONGER LISTED" : "SOLD";
+  const heading = hidden
+    ? `This ${title} is no longer listed.`
+    : `This ${title} found its new owner.`;
+  const lede = hidden
+    ? "This vehicle is no longer available on our site. There's a great chance we have something else that fits what you were looking for."
+    : "The vehicle that lived at this URL has been sold. We move fast on quality Japanese used cars — but there's a great chance we have something else that fits what you were looking for.";
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${title} has been sold | Love Auto Group</title>
+  <title>${title}${hidden ? " is no longer listed" : " has been sold"} | Love Auto Group</title>
   <meta name="description" content="This ${title} is no longer available. Browse our current inventory of quality used cars in Villa Park, IL." />
   <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="https://www.loveautogroup.net/inventory/" />
@@ -263,13 +274,9 @@ function renderGonePage(v: DmsVehicle): string {
     </div>
   </header>
   <main class="main">
-    <span class="badge">SOLD</span>
-    <h1>This ${title} found its new owner.</h1>
-    <p class="lede">
-      The vehicle that lived at this URL has been sold. We move fast on quality
-      Japanese used cars — but there's a great chance we have something else
-      that fits what you were looking for.
-    </p>
+    <span class="badge">${badgeText}</span>
+    <h1>${heading}</h1>
+    <p class="lede">${lede}</p>
     <div class="ctas">
       <a class="btn btn-primary" href="/inventory/">Browse current inventory</a>
       <a class="btn btn-secondary" href="tel:+16303593643">Call (630) 359-3643</a>
@@ -280,31 +287,49 @@ function renderGonePage(v: DmsVehicle): string {
 </html>`;
 }
 
-export const onRequest: PagesFunction = async (context) => {
+interface Env {
+  /** KV namespace binding configured in wrangler.jsonc — same binding
+   *  functions/api/merchandising.ts reads. */
+  MERCHANDISING: KVNamespace;
+}
+
+const MERCH_CONFIG_KEY = "config:v1";
+
+export const onRequest: PagesFunction<Env> = async (context) => {
   const staticResponse = await context.next();
   const slug = (context.params as Record<string, string>).slug as string;
   if (!slug) return staticResponse;
 
-  // If the build produced a genuine pre-rendered VDP for this slug, return it.
-  // Guard: when Railway hibernates during a CF Pages build, Next.js can't
-  // resolve live-only vehicles and calls notFound() — which generates a static
-  // file served as HTTP 200 (it IS a file, just the not-found page). Next.js
-  // embeds the string "NEXT_HTTP_ERROR_FALLBACK;404" in the RSC payload of
-  // every not-found page. Real VDPs never contain it. Use that as the signal.
+  // A genuine pre-rendered VDP for this slug (as opposed to a 404 or a
+  // 200-status not-found placeholder). Guard: when Railway hibernates
+  // during a CF Pages build, Next.js can't resolve live-only vehicles and
+  // calls notFound() — which generates a static file served as HTTP 200
+  // (it IS a file, just the not-found page). Next.js embeds the string
+  // "NEXT_HTTP_ERROR_FALLBACK;404" in the RSC payload of every not-found
+  // page. Real VDPs never contain it. Use that as the signal.
+  let isRealStaticPage = false;
   if (staticResponse.status === 200) {
     const body = await staticResponse.clone().text();
-    if (!body.includes("NEXT_HTTP_ERROR_FALLBACK")) {
-      return staticResponse; // Genuine pre-rendered VDP — serve it directly.
-    }
-    // Contains not-found marker → fall through to DMS bridge below.
+    isRealStaticPage = !body.includes("NEXT_HTTP_ERROR_FALLBACK");
   }
 
-  // Static returned 404, or was a 200 not-found placeholder — try the DMS.
+  // Found in the website audit: this used to return a genuine static page
+  // immediately, without ever checking DMS — so a vehicle that sold (or
+  // was hidden) after the page was last built kept showing full price,
+  // photos, and live CTAs, with no way to ever change, until the next full
+  // site rebuild happened to regenerate that one page. Now every request
+  // checks DMS's live status AND the KV "hidden" overlay (both edge-cached
+  // 30s, so the added upstream load is small) and overrides a stale static
+  // page the moment either says the car is off the site — no rebuild
+  // needed to detect a sale or a hide, and none needed to undo one either.
   try {
-    const res = await fetch(DMS_PUBLIC_URL, {
-      headers: { Accept: "application/json" },
-      cf: { cacheTtl: 30, cacheEverything: false },
-    });
+    const [res, hiddenVins] = await Promise.all([
+      fetch(DMS_PUBLIC_URL, {
+        headers: { Accept: "application/json" },
+        cf: { cacheTtl: 30, cacheEverything: false },
+      }),
+      fetchHiddenVins(context.env),
+    ]);
     if (!res.ok) return staticResponse;
 
     // The Railway public inventory endpoint returns a plain array at the
@@ -321,28 +346,22 @@ export const onRequest: PagesFunction = async (context) => {
     // Uses the SHARED vehicleSlug() so this matches what the sitemap and
     // generateStaticParams emit — no slug drift between modules.
     const match = vehicles.find((v) => vehicleSlug(v) === slug);
-    if (!match) return staticResponse; // Truly unknown — serve 404
-
-    // Available or coming-soon — render the bridge page with HTTP 200.
-    if (isComingSoon(match.status) || isAvailable(match.status)) {
-      const html = renderComingSoonPage(match, slug);
-      return new Response(html, {
-        status: 200,
-        headers: {
-          "Content-Type": "text/html;charset=UTF-8",
-          // Short cache so the page updates when the vehicle goes
-          // retail-ready or, eventually, sold.
-          "Cache-Control": "public, max-age=60, s-maxage=60",
-        },
-      });
+    if (!match) {
+      // DMS has no record of this slug. If a real static page still
+      // exists, prefer it (DMS may just be between syncs) — otherwise
+      // it's truly unknown, serve the static 404.
+      return staticResponse;
     }
 
-    // Sold / wholesale / archived — return HTTP 410 Gone.
-    // Google deindexes 410s in days vs months for 404s. Closes the
-    // "Not found (404)" fix-failed loop reported in Search Console
-    // (Charlotte audit 2026-05-07).
-    if (isGone(match.status)) {
-      const html = renderGonePage(match);
+    const hidden = hiddenVins.has(match.vin.toUpperCase());
+
+    // Sold / wholesale / archived, OR hidden via the DMS "Hide from site"
+    // toggle — always override, even a genuine static page. HTTP 410 so
+    // Google deindexes in days rather than months. Closes the "Not found
+    // (404)" fix-failed loop reported in Search Console (Charlotte audit
+    // 2026-05-07).
+    if (isGone(match.status) || hidden) {
+      const html = renderGonePage(match, hidden && !isGone(match.status));
       return new Response(html, {
         status: 410,
         headers: {
@@ -356,12 +375,52 @@ export const onRequest: PagesFunction = async (context) => {
       });
     }
 
+    // Still good — prefer the real static page when one exists.
+    if (isRealStaticPage) return staticResponse;
+
+    // Available or coming-soon with no static page yet — render the
+    // bridge page with HTTP 200.
+    if (isComingSoon(match.status) || isAvailable(match.status)) {
+      const html = renderComingSoonPage(match, slug);
+      return new Response(html, {
+        status: 200,
+        headers: {
+          "Content-Type": "text/html;charset=UTF-8",
+          // Short cache so the page updates when the vehicle goes
+          // retail-ready or, eventually, sold.
+          "Cache-Control": "public, max-age=60, s-maxage=60",
+        },
+      });
+    }
+
     // Unknown status that isn't available/coming-soon/gone (shouldn't
     // happen — DMS public feed only emits the canonical statuses — but
-    // belt-and-suspenders fall through to the static 404).
+    // belt-and-suspenders fall through to the static response).
     return staticResponse;
   } catch {
-    // DMS unreachable — fall through to the static 404
+    // DMS/KV unreachable — fall through to whatever the static build has.
     return staticResponse;
   }
 };
+
+/**
+ * Same public config the client fetches from /api/merchandising, read
+ * directly from KV since this runs server-side. Returns the set of VINs
+ * with `hidden: true`. Best-effort — an empty set on any failure means
+ * "nothing known to be hidden," never blocks serving the page.
+ */
+async function fetchHiddenVins(env: Env): Promise<Set<string>> {
+  try {
+    const raw = await env.MERCHANDISING.get(MERCH_CONFIG_KEY, { type: "json" });
+    const overlays = (raw as { overlays?: Record<string, { hidden?: boolean }> } | null)
+      ?.overlays;
+    if (!overlays) return new Set();
+    return new Set(
+      Object.entries(overlays)
+        .filter(([, o]) => o?.hidden === true)
+        .map(([vin]) => vin.toUpperCase())
+    );
+  } catch {
+    return new Set();
+  }
+}

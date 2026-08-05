@@ -206,6 +206,11 @@ export function VehicleSchema({ vehicle }: { vehicle: Vehicle }) {
     },
     color: vehicle.exteriorColor,
     vehicleInteriorColor: vehicle.interiorColor,
+    // Found in the website audit: this defaulted to FWD for ANY
+    // unrecognized value, including a blank/missing drivetrain field —
+    // a real RWD car with an empty drivetrain field would report FWD to
+    // Google. Omit the field (undefined drops from the JSON-LD output)
+    // rather than assert a specific, possibly wrong, configuration.
     driveWheelConfiguration:
       vehicle.drivetrain === "AWD"
         ? "AllWheelDriveConfiguration"
@@ -213,7 +218,9 @@ export function VehicleSchema({ vehicle }: { vehicle: Vehicle }) {
           ? "FourWheelDriveConfiguration"
           : vehicle.drivetrain === "RWD"
             ? "RearWheelDriveConfiguration"
-            : "FrontWheelDriveConfiguration",
+            : vehicle.drivetrain === "FWD"
+              ? "FrontWheelDriveConfiguration"
+              : undefined,
     vehicleTransmission: vehicle.transmission,
     fuelType: vehicle.fuelType,
     vehicleIdentificationNumber: vehicle.vin,

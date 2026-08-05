@@ -97,9 +97,9 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
         <section className="mb-10 bg-brand-gray-50 rounded-xl p-6 border border-brand-gray-200">
           <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
             {isBodyStyle ? (
-              <>{pluralNoun} <T get={(t) => t.makeLandingChrome.specializeInBodyStyle} /></>
+              <>{pluralNoun} <T path={["makeLandingChrome", "specializeInBodyStyle"]} /></>
             ) : (
-              <>{content.make} <T get={(t) => t.makeLandingChrome.specializeIn} /></>
+              <>{content.make} <T path={["makeLandingChrome", "specializeIn"]} /></>
             )}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -117,15 +117,15 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
 
         {/* CTA */}
         <section className="bg-brand-navy text-white rounded-xl p-8 text-center">
-          <h2 className="text-2xl font-bold mb-2"><T get={(t) => t.makeLandingChrome.ctaHeading} /></h2>
+          <h2 className="text-2xl font-bold mb-2"><T path={["makeLandingChrome", "ctaHeading"]} /></h2>
           <p className="text-brand-gray-300 mb-6">
             <T
-              get={(t) =>
-                t.makeLandingChrome.ctaBody.replace(
-                  "{thing}",
-                  isBodyStyle ? t.makeLandingChrome.vehicleGeneric : content.make
-                )
-              }
+              path={["makeLandingChrome", "ctaBody"]}
+              replace={{
+                "{thing}": isBodyStyle
+                  ? { path: ["makeLandingChrome", "vehicleGeneric"] }
+                  : content.make,
+              }}
             />
           </p>
           <div className="flex flex-wrap justify-center gap-3">
@@ -133,13 +133,16 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
               href="/inventory"
               className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-xl font-semibold"
             >
-              <T get={(t) => t.makeLandingChrome.browseFullInventory} />
+              <T path={["makeLandingChrome", "browseFullInventory"]} />
             </Link>
             <a
               href="tel:6303593643"
               className="inline-flex items-center border-2 border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-xl font-semibold"
             >
-              <T get={(t) => t.makeLandingChrome.callPhone.replace("{phone}", "(630) 359-3643")} />
+              <T
+                path={["makeLandingChrome", "callPhone"]}
+                replace={{ "{phone}": "(630) 359-3643" }}
+              />
             </a>
           </div>
         </section>

@@ -42,7 +42,7 @@
 
 import type { MetadataRoute } from "next";
 import { sampleInventory } from "@/data/inventory";
-import { fetchDmsInventory } from "@/lib/dmsInventory";
+import { fetchDmsInventory, fetchHiddenVins } from "@/lib/dmsInventory";
 import type { SyncedVehicle } from "@/lib/inventoryAdapter";
 
 // Required for static export.
@@ -155,6 +155,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     live = [];
   }
 
+  // Found in the website audit: a vehicle toggled "Hide from site" in the
+  // DMS kept its sitemap entry indefinitely — nothing here ever checked
+  // the KV-backed hidden overlay. Best-effort, build-time snapshot; a hide
+  // toggled between builds is excluded on the NEXT build, matching how a
+  // sold vehicle already only drops out of the sitemap on rebuild.
+  const hiddenVins = await fetchHiddenVins();
+
   // slug → { lastModified } so we keep the freshest signal per slug.
   const slugMap = new Map<string, { lastModified: Date }>();
 
@@ -166,6 +173,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const v of sampleInventory) {
     if (!INDEXABLE_STATUSES.has(v.status)) continue;
     if (KNOWN_DEAD_SLUGS.has(v.slug)) continue;
+    if (hiddenVins.has(v.vin.toUpperCase())) continue;
     // Live feed wins: a seed slug absent from it is a sold vehicle.
     if (!liveUnavailable && !liveSlugs.has(v.slug)) continue;
     slugMap.set(v.slug, { lastModified: now });
@@ -173,6 +181,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const v of live) {
     if (!INDEXABLE_STATUSES.has(v.status)) continue;
     if (KNOWN_DEAD_SLUGS.has(v.slug)) continue;
+    if (hiddenVins.has(v.vin.toUpperCase())) continue;
     let stamp = now;
     if (v.dateInStock) {
       const d = new Date(v.dateInStock);

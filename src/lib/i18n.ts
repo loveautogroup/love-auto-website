@@ -94,6 +94,8 @@ export const translations = {
     },
     filters: {
       filterVehicles: "Filter Vehicles",
+      search: "Search",
+      searchPlaceholder: "Try \"leather seats\" or a model name",
       browseByPrice: "Browse by Price",
       make: "Make",
       allMakes: "All Makes",
@@ -595,6 +597,8 @@ export const translations = {
     },
     filters: {
       filterVehicles: "Filtrar Vehículos",
+      search: "Buscar",
+      searchPlaceholder: "Prueba \"asientos de piel\" o un modelo",
       browseByPrice: "Buscar por Precio",
       make: "Marca",
       allMakes: "Todas las Marcas",
