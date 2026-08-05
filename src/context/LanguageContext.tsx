@@ -30,6 +30,13 @@ interface LanguageContextValue {
   toggle: () => void;
 }
 
+/**
+ * How many URL-pinned providers are currently mounted. Module scope on
+ * purpose — the root provider and a nested /es provider are different
+ * component instances and cannot see each other any other way.
+ */
+let pinnedProviderCount = 0;
+
 const LanguageContext = createContext<LanguageContextValue>({
   locale: "en",
   t: translations.en,
@@ -70,10 +77,31 @@ export function LanguageProvider({
     if (saved === "es") setLocaleState("es");
   }, [urlPinned]);
 
-  // Keep <html lang="..."> attribute in sync
+  // A URL-pinned provider claims ownership of <html lang> while it is
+  // mounted. Effects run children-first, so on /es/ the pinned provider set
+  // lang="es" and then the root provider immediately overwrote it with "en" —
+  // the Spanish page was serving lang="en" to screen readers. This ref count
+  // lets the outer provider stand down when an inner one owns the attribute.
   useEffect(() => {
+    if (!urlPinned) return;
+    pinnedProviderCount += 1;
+    return () => {
+      pinnedProviderCount -= 1;
+    };
+  }, [urlPinned]);
+
+  // Keep <html lang="..."> in sync.
+  //
+  // Note this only corrects the attribute after hydration; the static HTML
+  // still ships lang="en" because <html> is rendered by the root layout and a
+  // nested layout cannot change it. That is acceptable: Google does not use
+  // the lang attribute for language targeting (it uses hreflang, which is
+  // correct and static here) — this matters for screen readers, which run
+  // against the live DOM.
+  useEffect(() => {
+    if (!urlPinned && pinnedProviderCount > 0) return;
     document.documentElement.lang = locale;
-  }, [locale]);
+  }, [locale, urlPinned]);
 
   const setLocale = (l: Locale) => {
     setLocaleState(l);

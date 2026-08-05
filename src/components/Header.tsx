@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Link from "next/link";
 import Image from "next/image";
 import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants";
@@ -37,37 +38,6 @@ function CarfaxWordmark() {
         unoptimized
       />
     </span>
-  );
-}
-
-/** Language toggle pill — full language names, accessible. */
-function LangToggle() {
-  const { locale, setLocale } = useLanguage();
-  return (
-    <button
-      onClick={() => setLocale(locale === "en" ? "es" : "en")}
-      className="flex items-center gap-1 text-sm font-semibold rounded-full border border-white/30 overflow-hidden"
-      aria-label={locale === "en" ? "Switch to Spanish" : "Cambiar a inglés"}
-    >
-      <span
-        className={`px-4 py-1 transition-colors ${
-          locale === "en"
-            ? "bg-brand-red text-white"
-            : "text-brand-gray-400 hover:text-white"
-        }`}
-      >
-        English
-      </span>
-      <span
-        className={`px-4 py-1 transition-colors ${
-          locale === "es"
-            ? "bg-brand-red text-white"
-            : "text-brand-gray-400 hover:text-white"
-        }`}
-      >
-        Español
-      </span>
-    </button>
   );
 }
 
@@ -116,7 +86,7 @@ export default function Header() {
             >
               {SITE_CONFIG.phone}
             </a>
-            <LangToggle />
+            <LanguageSwitcher />
           </div>
         </div>
       </div>
@@ -128,7 +98,7 @@ export default function Header() {
           <span className="text-brand-gray-400">·</span>
           <span className="text-brand-gray-300 font-medium">{t.header.freeCarfax}</span>
         </div>
-        <LangToggle />
+        <LanguageSwitcher />
       </div>
 
       {/* Main nav */}

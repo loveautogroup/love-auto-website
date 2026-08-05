@@ -46,6 +46,8 @@ import { resolveIndexableVehicles } from "@/lib/dmsInventory";
 // Required for static export.
 export const dynamic = "force-static";
 
+import { LOCALIZED_PATHS, toSpanishPath } from "@/lib/localeRoutes";
+
 const BASE = "https://www.loveautogroup.net";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -140,5 +142,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // the [generateStaticParams] line emitted by /inventory/[slug]/page.tsx.
   console.log(`[sitemap] ${vehiclePages.length} vehicle URLs`);
 
-  return [...staticPages, ...landingPages, ...vehiclePages];
+  // -- Spanish pages -----------------------------------------------
+  // Built from the SAME list the language switcher uses, so the sitemap can
+  // never advertise a Spanish URL the switcher cannot reach, and the switcher
+  // can never offer one the sitemap forgot about.
+  //
+  // Each entry carries its hreflang pair too. A sitemap is one of the three
+  // places Google accepts hreflang, and it is the one that keeps working when
+  // a page's <head> is unavailable to the crawler for any reason.
+  const spanishPages: MetadataRoute.Sitemap = LOCALIZED_PATHS.map((path) => ({
+    url: `${BASE}${toSpanishPath(path)}`,
+    lastModified: now,
+    changeFrequency: "daily" as const,
+    priority: 0.9,
+    alternates: {
+      languages: {
+        "en-US": `${BASE}${path}`,
+        "es-US": `${BASE}${toSpanishPath(path)}`,
+      },
+    },
+  }));
+
+  return [...staticPages, ...landingPages, ...vehiclePages, ...spanishPages];
 }
