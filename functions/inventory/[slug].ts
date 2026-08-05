@@ -28,6 +28,7 @@
  */
 
 import { vehicleSlug, titleCase } from "../../shared/slug";
+import { rewritePhotoHost } from "../../shared/photoHost";
 
 const DMS_PUBLIC_URL =
   "https://dms.loveautogroup.net/api/v1/public/inventory";
@@ -105,8 +106,11 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
     : "";
   const color = v.exteriorColor ?? "";
   const available = isAvailable(v.status);
+  // Found in the website audit: rendered the raw r2.dev URL directly —
+  // the same rate-limited host already rewritten away from everywhere
+  // else photos are served.
   const vehiclePhotoUrl =
-    v.photos?.find((p) => p.isPrimary)?.url ?? v.photos?.[0]?.url ?? "";
+    rewritePhotoHost(v.photos?.find((p) => p.isPrimary)?.url ?? v.photos?.[0]?.url) ?? "";
   // For coming-soon / in-recon vehicles with no photos, use the branded
   // coming-soon placeholder rather than leaving the frame empty.
   const heroUrl = vehiclePhotoUrl

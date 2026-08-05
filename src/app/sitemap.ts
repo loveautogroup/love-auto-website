@@ -41,33 +41,12 @@
  */
 
 import type { MetadataRoute } from "next";
-import { sampleInventory } from "@/data/inventory";
-import { fetchDmsInventory, fetchHiddenVins } from "@/lib/dmsInventory";
-import type { SyncedVehicle } from "@/lib/inventoryAdapter";
+import { resolveIndexableVehicles } from "@/lib/dmsInventory";
 
 // Required for static export.
 export const dynamic = "force-static";
 
 const BASE = "https://www.loveautogroup.net";
-
-// Statuses that are publicly indexable. Mirrors the "Available" /
-// "Sale Pending" mapping in CLAUDE.md (RETAIL_READY → "available",
-// DEAL_PENDING → "sale-pending").
-const INDEXABLE_STATUSES = new Set(["available", "sale-pending"]);
-
-// 2026-05-05 — defense-in-depth deny list for known-dead VDP slugs that
-// somehow leaked into the live sitemap. These are old DMS vehicles
-// (Prisma IDs 7, 9, 12) that have been sold but their slugs were sticky
-// in the build artifact. Each returned HTTP 200 with the homepage HTML
-// (canonical=/), wasting Google crawl budget on duplicate content. The
-// next build that fetches `live` from DMS will naturally drop them, but
-// this filter is cheap insurance against future build-cache surprises.
-// Source: marketing-audit-2026-05-05/seo-audit.md.
-const KNOWN_DEAD_SLUGS = new Set<string>([
-  "2019-subaru-crosstrek-2-0i-limited-12",
-  "2014-lincoln-mkz-hybrid-9",
-  "2017-chrysler-pacifica-touring-l-plus-7",
-]);
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
@@ -144,68 +123,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // ── Per-vehicle VDPs ─────────────────────────────────────────────
   // Union of seed-known slugs and the live DMS list, filtered to
-  // INDEXABLE_STATUSES. lastModified prefers DMS dateInStock when
-  // available so Google sees a real recency signal per vehicle.
-  // Soft-fail to seed-only on DMS error — never crash the build.
-  let live: SyncedVehicle[] = [];
-  try {
-    live = await fetchDmsInventory();
-  } catch (err) {
-    console.warn("[sitemap] DMS fetch failed, using seed-only:", err);
-    live = [];
-  }
+  // INDEXABLE_STATUSES + KNOWN_DEAD_SLUGS + the KV hidden overlay, with
+  // lastModified preferring DMS dateInStock when available. Shared with
+  // sitemap-vehicles.xml so both routes agree on "what counts as
+  // indexable" by construction (src/lib/dmsInventory.ts).
+  const indexable = await resolveIndexableVehicles();
 
-  // Found in the website audit: a vehicle toggled "Hide from site" in the
-  // DMS kept its sitemap entry indefinitely — nothing here ever checked
-  // the KV-backed hidden overlay. Best-effort, build-time snapshot; a hide
-  // toggled between builds is excluded on the NEXT build, matching how a
-  // sold vehicle already only drops out of the sitemap on rebuild.
-  const hiddenVins = await fetchHiddenVins();
-
-  // slug → { lastModified } so we keep the freshest signal per slug.
-  const slugMap = new Map<string, { lastModified: Date }>();
-
-  // Empty means "could not read the lot", never "the lot is empty" — see
-  // the contract on fetchDmsInventory(). Only then does seed take over.
-  const liveUnavailable = live.length === 0;
-  const liveSlugs = new Set(live.map((v) => v.slug));
-
-  for (const v of sampleInventory) {
-    if (!INDEXABLE_STATUSES.has(v.status)) continue;
-    if (KNOWN_DEAD_SLUGS.has(v.slug)) continue;
-    if (hiddenVins.has(v.vin.toUpperCase())) continue;
-    // Live feed wins: a seed slug absent from it is a sold vehicle.
-    if (!liveUnavailable && !liveSlugs.has(v.slug)) continue;
-    slugMap.set(v.slug, { lastModified: now });
-  }
-  for (const v of live) {
-    if (!INDEXABLE_STATUSES.has(v.status)) continue;
-    if (KNOWN_DEAD_SLUGS.has(v.slug)) continue;
-    if (hiddenVins.has(v.vin.toUpperCase())) continue;
-    let stamp = now;
-    if (v.dateInStock) {
-      const d = new Date(v.dateInStock);
-      if (!isNaN(d.getTime())) stamp = d;
-    }
-    slugMap.set(v.slug, { lastModified: stamp });
-  }
-
-  const vehiclePages: MetadataRoute.Sitemap = Array.from(
-    slugMap.entries()
-  ).map(([slug, { lastModified }]) => ({
-    url: `${BASE}/inventory/${slug}/`,
-    lastModified,
+  const vehiclePages: MetadataRoute.Sitemap = indexable.map((v) => ({
+    url: `${BASE}/inventory/${v.slug}/`,
+    lastModified: v.lastModified,
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
 
   // Printed so a future divergence is one grep away: this count must match
   // the [generateStaticParams] line emitted by /inventory/[slug]/page.tsx.
-  console.log(
-    `[sitemap] ${vehiclePages.length} vehicle URLs ` +
-      `(live=${live.length}, seed=${sampleInventory.length}` +
-      `${liveUnavailable ? ", LIVE UNAVAILABLE - seed fallback" : ""})`
-  );
+  console.log(`[sitemap] ${vehiclePages.length} vehicle URLs`);
 
   return [...staticPages, ...landingPages, ...vehiclePages];
 }

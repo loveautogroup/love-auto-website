@@ -157,7 +157,11 @@ export function VehicleSchema({ vehicle }: { vehicle: Vehicle }) {
   // back-link, numberOfPreviousOwners (when available), seller.url +
   // seller.image, priceCurrency on offer, vehicleConfiguration trim line.
   // Gets us into the Google Vehicles search vertical.
-  const vdpUrl = `${SITE_CONFIG.url}/inventory/${vehicle.slug}`;
+  // Found in the website audit: missing the trailing slash the site's own
+  // trailingSlash: true policy (and every VDP's own canonical tag) uses —
+  // a real, byte-verifiable mismatch between this JSON-LD @id/url and the
+  // page's <link rel="canonical"> on every single VDP.
+  const vdpUrl = `${SITE_CONFIG.url}/inventory/${vehicle.slug}/`;
   const heroImage = vehicle.images?.[0]
     ? vehicle.images[0].startsWith("http")
       ? vehicle.images[0]

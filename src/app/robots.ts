@@ -13,7 +13,15 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
+        // Found in the website audit: every Google Merchant Center vehicle
+        // feed lives under /api/feed/ (google-vehicle-ads.csv and friends),
+        // and the blanket /api/ disallow below blocked exactly that path —
+        // "the feed URL is roboted" is a documented cause of failed
+        // scheduled Merchant Center fetches. The longer, more specific
+        // Allow wins over the shorter Disallow for the same path per the
+        // robots.txt spec, so this carves feeds back out without reopening
+        // the rest of /api/ (leads, admin, merchandising) to crawlers.
+        allow: ["/", "/api/feed/"],
         disallow: [
           // /admin is the merchandising console — login-gated anyway, but no
           // reason to invite crawlers in.

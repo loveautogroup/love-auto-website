@@ -26,7 +26,11 @@ export async function generateMetadata({
   const { town } = await params;
   const content = SERVICE_AREAS.find((s) => s.slug === town);
   if (!content) return {};
-  const url = `https://www.loveautogroup.net/serving/${content.slug}`;
+  // Found in the website audit: missing the trailing slash the site's own
+  // trailingSlash: true policy requires — 9 of the 10 town pages declared
+  // a canonical that itself 308-redirected to reach the URL it claimed
+  // was canonical.
+  const url = `https://www.loveautogroup.net/serving/${content.slug}/`;
   // villa-park-il duplicates the dedicated /used-cars-villa-park-il/ hub
   // (identical title/topic, both were self-canonical, splitting the geo
   // signal for our #2 gap-zone keyword). Consolidate onto the hub page.

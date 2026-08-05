@@ -152,10 +152,17 @@ function renderGoogleCsv(vehicles: FeedVehicle[]): string {
     // "mi" is unrecognized and caused "Missing value [mileage]" on all
     // vehicles (support.google.com/merchants/answer/14156166).
     const mileage = v.mileage ? `${v.mileage} miles` : "";
-    // Sale Pending vehicles still show "in stock" since they can fall
-    // back to available; if they sell, the upstream public/inventory
-    // endpoint stops returning them and they drop out of the feed.
-    const availability = "in stock";
+    // Found in the website audit: this hardcoded "in stock" unconditionally
+    // — a vehicle under an active deal (Sale Pending) would still advertise
+    // as purchasable right now. If it sells outright, the upstream
+    // public/inventory endpoint does stop returning it and it drops out of
+    // the feed — but a live deal in progress is a distinct, real state
+    // this feed's own Vehicle Ads sibling (google-vehicle-ads.csv.ts)
+    // already treats as unavailable. "out of stock" is the closest match
+    // in the general Shopping/local-inventory availability vocabulary
+    // (this feed doesn't use the Vehicle Ads spec's stricter AVAILABLE-only
+    // policy, so excluding the row entirely isn't required here).
+    const availability = v.status === "Sale Pending" ? "out of stock" : "in stock";
     const vdpUrl = v.vdpUrl ?? DEALER.website;
 
     return [

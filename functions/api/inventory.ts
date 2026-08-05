@@ -56,6 +56,8 @@
 
 import { vehicleSlug } from "../../shared/slug";
 import { displayCase, dedupeTrim } from "../../shared/displayCase";
+import { rewritePhotoHost } from "../../shared/photoHost";
+import { safeDescription } from "../../shared/descriptionGuard";
 
 const DMS_URL = "https://dms.loveautogroup.net/api/v1/public/inventory";
 
@@ -200,7 +202,18 @@ function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
   // Sort primary photo first, preserve relative order otherwise.
   const ordered = [...photos];
   ordered.sort((a, b) => Number(Boolean(b.isPrimary)) - Number(Boolean(a.isPrimary)));
-  const images = ordered.map((p) => p.url).filter(Boolean);
+  // Found in the website audit: this fed the client-side live-hydration
+  // path (VDPLivePrice/VDPLiveMileage/VDPLiveStatus/VDPLivePhotos, the
+  // inventory grid cards) with raw, unrewritten r2.dev URLs — the same
+  // rate-limited host the outbound marketing feeds already rewrite away
+  // from. Even after fixing the build-time adapter (src/lib/dmsInventory.ts),
+  // this endpoint would have swapped rate-limited URLs back in the moment
+  // the client hydrated.
+  const images = ordered
+    .map((p) => rewritePhotoHost(p.url))
+    .filter((url): url is string => Boolean(url));
+
+  const price = Number(v.retailPrice) || 0;
 
   return {
     vin: v.vin,
@@ -218,7 +231,7 @@ function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     exteriorColor: v.exteriorColor ?? "",
     interiorColor: v.interiorColor ?? "",
     mileage: Number(v.mileage) || 0,
-    price: Number(v.retailPrice) || 0,
+    price,
     status: mapStatus(v.status),
     features: Array.isArray(v.features) ? v.features.filter((f) => typeof f === "string") : [],
     daysOnLot: Number(v.daysOnLot) || 0,
@@ -226,9 +239,10 @@ function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     images,
     dealerCenterFirstSeen: "",
     dealerCenterLastSeen: "",
-    description: v.description ?? undefined,
+    // Found in the website audit: see shared/descriptionGuard.ts.
+    description: safeDescription(v.description ?? undefined, price) ?? undefined,
     recentlyReduced: Boolean(v.recently_reduced),
-    bakedHeroUrl: v.bakedHeroUrl ?? null,
+    bakedHeroUrl: rewritePhotoHost(v.bakedHeroUrl) ?? null,
     // E1: default asIs to TRUE — every Love Auto vehicle is sold as-is;
     // the flag only goes false if the DMS explicitly says so.
     asIs: v.asIs ?? true,

@@ -16,7 +16,10 @@ import type { Vehicle } from "@/lib/types";
 import type { SyncedVehicle } from "@/lib/inventoryAdapter";
 import { titleCase, vehicleSlug, SEED_SLUGS_BY_VIN as SHARED_SEED_SLUGS } from "../../shared/slug";
 import { displayCase, dedupeTrim } from "../../shared/displayCase";
+import { rewritePhotoHost } from "../../shared/photoHost";
+import { safeDescription } from "../../shared/descriptionGuard";
 import inventorySnapshot from "@/data/inventory-snapshot.json";
+import { sampleInventory } from "@/data/inventory";
 
 // Re-export for any external consumer that previously imported from here.
 // All slug logic lives in shared/slug.ts now — change there, not here.
@@ -99,6 +102,93 @@ export async function fetchHiddenVins(): Promise<Set<string>> {
   } catch {
     return new Set();
   }
+}
+
+// Statuses that are publicly indexable. Mirrors the "Available" /
+// "Sale Pending" mapping in CLAUDE.md (RETAIL_READY → "available",
+// DEAL_PENDING → "sale-pending").
+const INDEXABLE_STATUSES = new Set(["available", "sale-pending"]);
+
+// 2026-05-05 — defense-in-depth deny list for known-dead VDP slugs that
+// somehow leaked into the live sitemap. These are old DMS vehicles
+// (Prisma IDs 7, 9, 12) that have been sold but their slugs were sticky
+// in the build artifact. Source: marketing-audit-2026-05-05/seo-audit.md.
+const KNOWN_DEAD_SLUGS = new Set<string>([
+  "2019-subaru-crosstrek-2-0i-limited-12",
+  "2014-lincoln-mkz-hybrid-9",
+  "2017-chrysler-pacifica-touring-l-plus-7",
+]);
+
+export interface IndexableVehicle {
+  slug: string;
+  vin: string;
+  lastModified: Date;
+  heroImageUrl?: string;
+}
+
+/**
+ * The single, protected list of vehicles that should be publicly indexed —
+ * union of seed-known slugs and the live DMS list, filtered to
+ * INDEXABLE_STATUSES, KNOWN_DEAD_SLUGS, and the KV hidden overlay.
+ * lastModified prefers DMS dateInStock when available. Soft-fails to
+ * seed-only on a DMS error — never throws.
+ *
+ * Found in the website audit: sitemap-vehicles.xml used to read
+ * sampleInventory directly with none of this — no live/seed intersection
+ * to drop sold cars, no dead-slug denylist, no hidden-VIN exclusion — a
+ * second, materially weaker implementation of exactly what sitemap.ts
+ * already got right. Both now call this one function so there's only one
+ * place "what counts as indexable" can drift.
+ */
+export async function resolveIndexableVehicles(): Promise<IndexableVehicle[]> {
+  let live: SyncedVehicle[] = [];
+  try {
+    live = await fetchDmsInventory();
+  } catch (err) {
+    console.warn("[resolveIndexableVehicles] DMS fetch failed, using seed-only:", err);
+    live = [];
+  }
+
+  const hiddenVins = await fetchHiddenVins();
+
+  // Empty means "could not read the lot", never "the lot is empty" — see
+  // the contract on fetchDmsInventory(). Only then does seed take over.
+  const liveUnavailable = live.length === 0;
+  const liveSlugs = new Set(live.map((v) => v.slug));
+
+  const bySlug = new Map<string, IndexableVehicle>();
+
+  for (const v of sampleInventory) {
+    if (!INDEXABLE_STATUSES.has(v.status)) continue;
+    if (KNOWN_DEAD_SLUGS.has(v.slug)) continue;
+    if (hiddenVins.has(v.vin.toUpperCase())) continue;
+    // Live feed wins: a seed slug absent from it is a sold vehicle.
+    if (!liveUnavailable && !liveSlugs.has(v.slug)) continue;
+    bySlug.set(v.slug, {
+      slug: v.slug,
+      vin: v.vin,
+      lastModified: new Date(),
+      heroImageUrl: v.images?.[0],
+    });
+  }
+  for (const v of live) {
+    if (!INDEXABLE_STATUSES.has(v.status)) continue;
+    if (KNOWN_DEAD_SLUGS.has(v.slug)) continue;
+    if (hiddenVins.has(v.vin.toUpperCase())) continue;
+    let stamp = new Date();
+    if (v.dateInStock) {
+      const d = new Date(v.dateInStock);
+      if (!isNaN(d.getTime())) stamp = d;
+    }
+    bySlug.set(v.slug, {
+      slug: v.slug,
+      vin: v.vin,
+      lastModified: stamp,
+      heroImageUrl: v.images?.[0],
+    });
+  }
+
+  return Array.from(bySlug.values());
 }
 
 interface DmsPhoto {
@@ -197,7 +287,18 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
   ordered.sort(
     (a, b) => Number(Boolean(b.isPrimary)) - Number(Boolean(a.isPrimary))
   );
-  const images = ordered.map((p) => p.url).filter(Boolean);
+  // Found in the website audit: the outbound marketing feeds
+  // (functions/_lib/feed.ts) rewrite photo URLs off the rate-limited
+  // r2.dev dev-domain, but the website's own VDP rendering never did —
+  // every on-page <img>, the og:image, and the JSON-LD image array all
+  // served from the same host Cloudflare documents as rate-limited for
+  // non-browser fetchers (the exact cause of a past Google Merchant
+  // Center "Unsupported image type" rejection on the feeds).
+  const images = ordered
+    .map((p) => rewritePhotoHost(p.url))
+    .filter((url): url is string => Boolean(url));
+
+  const price = Number(v.retailPrice) || 0;
 
   return {
     vin: v.vin,
@@ -215,12 +316,15 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     exteriorColor: v.exteriorColor ?? "",
     interiorColor: v.interiorColor ?? "",
     mileage: Number(v.mileage) || 0,
-    price: Number(v.retailPrice) || 0,
+    price,
     status: mapStatus(v.status),
     features: Array.isArray(v.features)
       ? v.features.filter((f) => typeof f === "string")
       : [],
-    description: v.description ?? null,
+    // Found in the website audit: a stale price baked into free-text
+    // description copy rendered right next to the real, current price —
+    // see shared/descriptionGuard.ts for the full story.
+    description: safeDescription(v.description ?? null, price),
     daysOnLot: Number(v.daysOnLot) || 0,
     dateInStock: v.dateInStock ?? "",
     images,
@@ -228,7 +332,7 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     dealerCenterLastSeen: "",
     recentlyReduced: Boolean(v.recently_reduced),
     // Phase 2 photo pipeline — null in Phase 1 (VDPWalkaround renders nothing).
-    bakedHeroUrl: v.bakedHeroUrl ?? null,
+    bakedHeroUrl: rewritePhotoHost(v.bakedHeroUrl) ?? null,
     walkaroundUrl: v.media?.walkaround_url ?? null,
     walkaroundPosterUrl: v.media?.walkaround_poster_url ?? null,
     // AS-IS / legal disclosure fields (Diane, 2026-05-12)

@@ -1,4 +1,4 @@
-import { sampleInventory } from "@/data/inventory";
+import { resolveIndexableVehicles } from "@/lib/dmsInventory";
 
 /**
  * E7 — /sitemap-vehicles.xml
@@ -6,8 +6,18 @@ import { sampleInventory } from "@/data/inventory";
  * This URL has been advertised by robots.txt + the sitemap index since
  * the W-era SEO work but NEVER EXISTED (it 404'd in production — found
  * 2026-07-17 during the Phase D verification). This route generates it
- * for real at build time from the same inventory snapshot the pages
- * render from, so every live VDP is enumerated for crawlers.
+ * for real at build time so every live VDP is enumerated for crawlers.
+ *
+ * Found in the website audit: this used to read sampleInventory directly
+ * with none of sitemap.ts's protections — no live/seed intersection to
+ * drop sold cars, no dead-slug denylist, no hidden-VIN exclusion, and on
+ * a missing/malformed build snapshot sampleInventory itself silently
+ * falls back to hardcoded seed vehicles from the original site launch.
+ * That's the exact "sold car stays indexed" incident class sitemap.ts was
+ * specifically hardened against, reintroduced in a second, weaker,
+ * independently-maintained implementation. Now shares the one protected
+ * vehicle list sitemap.ts uses (src/lib/dmsInventory.ts) instead of
+ * duplicating the logic.
  *
  * Static export: force-static emits this once per build. The prebuild
  * snapshot fetch (Phase A) refreshes the data on every deploy, and the
@@ -29,14 +39,12 @@ function xmlEscape(s: string): string {
 }
 
 export async function GET() {
-  const live = sampleInventory.filter(
-    (v) => v.status === "available" || v.status === "sale-pending",
-  );
+  const indexable = await resolveIndexableVehicles();
 
-  const urls = live
+  const urls = indexable
     .map((v) => {
       const loc = xmlEscape(`${SITE}/inventory/${v.slug}/`);
-      const img = v.images?.[0];
+      const img = v.heroImageUrl;
       const imageTag =
         img && img.startsWith("http")
           ? `\n    <image:image><image:loc>${xmlEscape(img)}</image:loc></image:image>`

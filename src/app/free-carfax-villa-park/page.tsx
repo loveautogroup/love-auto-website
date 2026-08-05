@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "Free Carfax on Every Used Car | Love Auto Group, Villa Park IL",
   description:
     "Carfax Advantage Dealer in Villa Park, IL. Free Carfax history report on every used car in our inventory. No fees, no exceptions. Family owned since 2014.",
-  alternates: { canonical: "https://www.loveautogroup.net/free-carfax-villa-park" },
+  alternates: { canonical: "https://www.loveautogroup.net/free-carfax-villa-park/" },
   openGraph: {
     title: "Free Carfax on Every Used Car | Love Auto Group, Villa Park IL",
     description:

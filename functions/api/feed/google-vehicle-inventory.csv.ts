@@ -76,12 +76,17 @@ function renderLocalInventoryCsv(vehicles: FeedVehicle[]): string {
 
   const rows = vehicles.map((v) => {
     const price = v.retailPrice ? `${v.retailPrice} USD` : "";
+    // Found in the website audit: hardcoded regardless of status — a
+    // vehicle under an active deal (Sale Pending) advertised as
+    // purchasable right now. See the identical fix + full rationale in
+    // google-vehicles.csv.ts.
+    const availability = v.status === "Sale Pending" ? "out of stock" : "in stock";
     return [
       DEALER.googleStoreCode, // store_code (Google-assigned GBP store code)
       v.id,           // product id — matches primary feed
       price,          // price
       "",             // sale_price — not used
-      "in stock",     // availability — if it's in the feed, it's in stock
+      availability,   // availability
       "1",            // quantity — one vehicle per listing
     ]
       .map(csvCell)

@@ -32,6 +32,7 @@
  */
 
 import { vehicleSlug } from "../../shared/slug";
+import { rewritePhotoHost } from "../../shared/photoHost";
 
 export const DEALER = {
   name: "Love Auto Group",
@@ -97,21 +98,10 @@ interface DMSInventoryResponse {
  * out anything without a VIN or year (those would be malformed records
  * the 3rd-party platforms would reject anyway).
  */
-/**
- * R2 photo host rewrite (Jun 6 2026). The bucket's pub-*.r2.dev development
- * URL is RATE-LIMITED by Cloudflare and 403s some non-browser fetchers —
- * root cause of GMC's "Unsupported image type [additional_image_link]"
- * warnings (Googlebot bursts got throttled and received HTML error pages).
- * photos.loveautogroup.net is the bucket's custom domain: no rate limit,
- * real CDN caching. Stored URLs keep the old host; we rewrite at feed time.
- */
-const R2_DEV_HOST = "pub-bca02cfacd234bc68e6ad93b2ef61898.r2.dev";
-const R2_CUSTOM_HOST = "photos.loveautogroup.net";
-
-function rewritePhotoHost(url: string | null | undefined): string | undefined {
-  if (!url) return undefined;
-  return url.replace(`://${R2_DEV_HOST}/`, `://${R2_CUSTOM_HOST}/`);
-}
+// R2 photo host rewrite moved to shared/photoHost.ts (2026-08) so the
+// website's own VDP rendering (src/lib/dmsInventory.ts) uses the identical
+// fix instead of maintaining a second, drifted copy — see that module's
+// header comment for the full story.
 
 /**
  * Timeouts + retries (2026-08-03). This used to be a single fetch with NO
