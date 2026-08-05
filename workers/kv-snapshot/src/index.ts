@@ -26,6 +26,13 @@ export interface Env {
   MERCHANDISING_KV: KVNamespace;
   SNAPSHOTS: R2Bucket;
   HEALTHCHECK_URL?: string;
+  /**
+   * Bearer token gating the manual `POST /run` trigger below. When unset,
+   * the endpoint fails CLOSED (503) — no secret configured means no manual
+   * trigger, never an open one.
+   *   wrangler secret put MANUAL_TRIGGER_SECRET
+   */
+  MANUAL_TRIGGER_SECRET?: string;
 }
 
 interface NamespaceSpec {
@@ -49,9 +56,97 @@ export default {
   ): Promise<void> {
     ctx.waitUntil(runSnapshot(env));
   },
+
+  /**
+   * Manual trigger — `POST /run` with `Authorization: Bearer <secret>`.
+   *
+   * wrangler.toml has documented this endpoint since the worker shipped,
+   * but no fetch handler existed, so the documented command returned 404.
+   * That's a bad thing to discover during the incident you need an
+   * on-demand snapshot for (before a risky migration, or to capture state
+   * before repairing something you just found corrupted).
+   *
+   * Unlike the cron path this AWAITS the run and reports the outcome —
+   * the entire point of triggering by hand is learning whether it worked.
+   * The work is I/O-bound on KV and R2, which doesn't accrue Workers CPU
+   * time, so a large snapshot won't trip the CPU limit.
+   */
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const url = new URL(request.url);
+
+    if (url.pathname !== "/run") {
+      return json(404, { error: "Not found. The only route is POST /run." });
+    }
+    if (request.method !== "POST") {
+      return json(405, { error: "Use POST." });
+    }
+
+    // Fail closed when no secret is configured.
+    if (!env.MANUAL_TRIGGER_SECRET) {
+      console.warn("[kv-snapshot] manual trigger attempted but no secret set");
+      return json(503, {
+        error:
+          "Manual trigger is disabled: MANUAL_TRIGGER_SECRET is not set. " +
+          "Run `wrangler secret put MANUAL_TRIGGER_SECRET` to enable it.",
+      });
+    }
+
+    const auth = request.headers.get("authorization") ?? "";
+    const presented = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+    if (!timingSafeEqual(presented, env.MANUAL_TRIGGER_SECRET)) {
+      console.warn("[kv-snapshot] manual trigger rejected: bad bearer token");
+      return json(401, { error: "Unauthorized." });
+    }
+
+    try {
+      const result = await runSnapshot(env);
+      console.log("[kv-snapshot] manual run completed");
+      return json(200, { ok: true, trigger: "manual", ...result });
+    } catch (err) {
+      console.error("[kv-snapshot] manual run failed:", err);
+      return json(500, { ok: false, error: String(err) });
+    }
+  },
 };
 
-async function runSnapshot(env: Env): Promise<void> {
+/**
+ * Constant-time string comparison. A plain `===` on a secret leaks length
+ * and prefix information through timing. Compares the full token — the
+ * previous doc suggested sending only the first 12 characters, which would
+ * have thrown away most of the secret's entropy.
+ */
+function timingSafeEqual(a: string, b: string): boolean {
+  const enc = new TextEncoder();
+  const aBytes = enc.encode(a);
+  const bBytes = enc.encode(b);
+  // Compare lengths in a way that still walks a fixed number of bytes.
+  let diff = aBytes.length ^ bBytes.length;
+  const len = Math.max(aBytes.length, bBytes.length);
+  for (let i = 0; i < len; i++) {
+    diff |= (aBytes[i] ?? 0) ^ (bBytes[i] ?? 0);
+  }
+  return diff === 0;
+}
+
+function json(status: number, body: unknown): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
+interface SnapshotResult {
+  key: string;
+  totalKeys: number;
+  uncompressedBytes: number;
+  compressedBytes: number;
+  durationMs: number;
+}
+
+async function runSnapshot(env: Env): Promise<SnapshotResult> {
   const startedAt = Date.now();
   const date = new Date().toISOString().slice(0, 10);
   console.log(`[kv-snapshot] starting run for ${date}`);
@@ -132,6 +227,14 @@ async function runSnapshot(env: Env): Promise<void> {
       `[kv-snapshot] HEALTHCHECK_URL secret unset — no heartbeat sent`,
     );
   }
+
+  return {
+    key,
+    totalKeys,
+    uncompressedBytes: jsonBytes.byteLength,
+    compressedBytes: gzipped.byteLength,
+    durationMs: Date.now() - startedAt,
+  };
 }
 
 async function pruneOldSnapshots(env: Env, todayStr: string): Promise<void> {

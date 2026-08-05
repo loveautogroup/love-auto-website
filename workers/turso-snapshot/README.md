@@ -5,7 +5,12 @@ Phase 9 Wave 4.2. Weekly off-platform SQL dump of the prod Turso DB
 
 ## What it does
 
-Every Sunday at 08:00 UTC (03:00 CT):
+Every Sunday at 08:00 UTC (03:00 CT) — cron `0 8 * * SUN`.
+
+> Day-of-week in Cloudflare Workers cron is **1 = Sunday … 7 = Saturday**,
+> not the POSIX 0 = Sunday … 6 = Saturday. This worker was configured `… * * 7`
+> under a comment asserting that meant Sunday; it meant Saturday, so the dump
+> ran a day early every week until 2026-08-05. Use the `SUN`/`SAT` spelling.
 
 1. Connects to Turso via `@libsql/client/web` using `TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN`.
 2. Enumerates all user tables in `sqlite_master`.
@@ -47,7 +52,7 @@ wrangler secret put HEALTHCHECK_URL --config wrangler.toml
 # Trigger the scheduled handler against real Turso + R2 via wrangler dev
 wrangler dev --test-scheduled --remote --config wrangler.toml
 # In a second PowerShell window:
-curl "http://localhost:8787/__scheduled?cron=0+8+*+*+0"
+curl "http://localhost:8787/__scheduled?cron=0+8+*+*+SUN"
 # Watch first window for [turso-snapshot] log lines
 ```
 

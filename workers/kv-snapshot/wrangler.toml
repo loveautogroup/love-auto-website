@@ -22,9 +22,18 @@
 #   wrangler secret put HEALTHCHECK_URL
 #   # paste https://hc-ping.com/<uuid> when prompted
 #
+# Enable the manual trigger (one-time, optional — the endpoint fails closed
+# with 503 until this is set):
+#   wrangler secret put MANUAL_TRIGGER_SECRET
+#
 # Trigger manually (after deploy):
 #   curl -X POST https://kv-snapshot.<account>.workers.dev/run \
-#     -H "Authorization: Bearer <first-12-chars-of-MANUAL_TRIGGER_SECRET>"
+#     -H "Authorization: Bearer <MANUAL_TRIGGER_SECRET>"
+#
+# Send the WHOLE secret. This block used to say "first-12-chars-of-", which
+# would have thrown away most of its entropy — and until 2026-08-05 the
+# endpoint it describes did not exist at all (the worker had no fetch
+# handler, so this curl returned 404).
 
 name = "kv-snapshot"
 main = "src/index.ts"

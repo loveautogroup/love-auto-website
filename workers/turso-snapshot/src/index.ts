@@ -6,7 +6,9 @@
  * compromise or accidental deletion (vendor 14-day PITR covers
  * most other failure modes — see W3.1 audit).
  *
- * Cron: `0 8 * * 0` (Sundays 08:00 UTC = 03:00 CT). See wrangler.toml.
+ * Cron: `0 8 * * SUN` (Sundays 08:00 UTC = 03:00 CT). See wrangler.toml —
+ * Cloudflare's day-of-week is 1=Sunday..7=Saturday, so the numeric form is
+ * a trap here; the abbreviation is deliberate.
  *
  * Output: gzipped SQL dump at SNAPSHOTS R2 under
  *   turso-snapshots/{YYYY-MM-DD}.sql.gz
