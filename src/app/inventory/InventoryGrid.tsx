@@ -9,6 +9,7 @@ import { useInventory } from "@/lib/useInventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
 import { useVisibleVehicles } from "@/data/useMerchandising";
 import { trackInventoryFilter } from "@/lib/analytics";
+import { matchesVehicleSearch } from "@/lib/vehicleSearch";
 
 interface InventoryGridProps {
   /**
@@ -67,20 +68,22 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
       if (maxMileage !== null && v.mileage > maxMileage) return false;
       if (minYear !== null && v.year < minYear) return false;
       if (maxYear !== null && v.year > maxYear) return false;
-      if (q) {
-        const tokens = q.split(/\s+/).filter(Boolean);
-        const haystack = [
+      // Separators are not significant: "GS350" must find a "GS 350", and
+      // "SLK 350" must find an "SLK350". See src/lib/vehicleSearch.ts — the
+      // stored data uses both conventions, so normalising the query alone
+      // could never work.
+      if (
+        q &&
+        !matchesVehicleSearch(q, [
           v.make,
           v.model,
           v.trim,
           v.drivetrain,
           v.bodyStyle,
           ...(v.features ?? []),
-        ]
-          .filter(Boolean)
-          .join(" ")
-          .toLowerCase();
-        if (!tokens.every((t) => haystack.includes(t))) return false;
+        ])
+      ) {
+        return false;
       }
       return true;
     });
