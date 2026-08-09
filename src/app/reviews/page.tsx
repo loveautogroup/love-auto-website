@@ -91,8 +91,14 @@ export default function ReviewsPage() {
             mega-lots. It takes 60 seconds and means a lot to us.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
+            {/* The place-ID-anchored link from the Business Profile's own
+                Share dialog, owner-clicked and confirmed 2026-08-08. The old
+                slug link here (g.page/r/love-auto-group/review) landed on the
+                google.com HOMEPAGE — but returned HTTP 200 doing it, because
+                g.page answers 200 for unknown slugs. Following the redirect is
+                the only honest test for these links. */}
             <a
-              href="https://g.page/r/love-auto-group/review"
+              href="https://g.page/r/CZ_PEUY7mM9NEAI/review"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-xl font-semibold"

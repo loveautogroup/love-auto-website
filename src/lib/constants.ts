@@ -25,7 +25,14 @@ export const SITE_CONFIG = {
   social: {
     facebook: "https://www.facebook.com/loveautogroup",
     google: "https://g.page/loveautogroup",
-    googleReviews: "https://g.page/loveautogroup/review",
+    // Place-ID-anchored write-a-review link from the Business Profile's own
+    // Share dialog (place id ChIJt9XAD2OzD4gRn88RRjuYz00), owner-confirmed
+    // 2026-08-08. The slug form (g.page/loveautogroup/review) also worked at
+    // last check, but slugs can change and the SIBLING slug variant
+    // (g.page/r/love-auto-group/review) was already dead while returning 200
+    // — g.page answers 200 for unknown slugs, so only following the redirect
+    // proves anything. One canonical link everywhere: this one.
+    googleReviews: "https://g.page/r/CZ_PEUY7mM9NEAI/review",
   },
   reviews: {
     google: {
@@ -35,7 +42,7 @@ export const SITE_CONFIG = {
       rating: 4.7,
       count: 127,
       readUrl: "https://g.page/loveautogroup",
-      writeUrl: "https://g.page/loveautogroup/review",
+      writeUrl: "https://g.page/r/CZ_PEUY7mM9NEAI/review",
     },
   },
   geo: {
