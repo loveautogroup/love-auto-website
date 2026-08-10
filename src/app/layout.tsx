@@ -13,6 +13,7 @@ import TextUsButton from "@/components/TextUsButton";
 import StickyCTA from "@/components/StickyCTA";
 import { LocalBusinessSchema } from "@/components/StructuredData";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { SentryInit } from "@/components/SentryInit";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 // Montserrat powers the wordmark logo + the hero phone/URL badges so the
@@ -166,6 +167,7 @@ CarGurus.DealRatingBadge.options={
             click_phone events fire from VDPTracker, the lead + financing
             forms, and PhoneCTA. */}
         <GoogleAnalytics />
+        <SentryInit />
         {/* Cloudflare Web Analytics (W2, Jun 7 2026) — RUM beacon feeding the
             per-VDP view counts. Auto-injection doesn't work on Pages-served
             sites, so the snippet is embedded. The token is the PUBLIC site
