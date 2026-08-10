@@ -353,8 +353,21 @@ export function FAQSchema({ items }: { items: { question: string; answer: string
  * describes — and `numberOfItems` would report the truncated count as if it
  * were the whole lot. The previous bound was 25 — under the 28 active vehicles
  * CLAUDE.md records as measured live on 2026-08-07, so it was already a
- * truncation waiting to happen; it had not bitten only because the build
- * snapshot currently holds 8 available cars. 250 is ~9x that active count.
+ * truncation waiting to happen; it had not bitten only because the build-time
+ * list is much smaller than the live lot.
+ *
+ * Counts re-verified 2026-08-10, because the previous revision of this comment
+ * claimed "the build snapshot currently holds 8 available cars" and that was
+ * wrong — it conflated two different lists:
+ *   - src/data/inventory-snapshot.json — 5 vehicles, all status "available".
+ *     This is the list that actually feeds the ItemList on a normal build.
+ *   - HANDWRITTEN_FALLBACK in src/data/inventory.ts — 8 entries, also all
+ *     status "available". buildSampleInventory() only falls through to it when
+ *     the snapshot is missing or empty, so it feeds a rescued build, not a
+ *     normal one. The "8" came from here.
+ *
+ * The ~9x multiplier refers to NEITHER build-time list: 250 / 28 ≈ 8.9x the 28
+ * LIVE active vehicles cited above, which is the count this bound has to clear.
  */
 const MAX_ITEM_LIST_ENTRIES = 250;
 
@@ -372,6 +385,36 @@ export function ItemListSchema({
   vehicles: Vehicle[];
 }) {
   const items = vehicles.slice(0, MAX_ITEM_LIST_ENTRIES);
+  // The guard is `=== 0`, NOT `< 2`. A single-item ItemList is knowingly
+  // emitted. Checked against Google's docs 2026-08-10 rather than assumed:
+  //
+  // The two-item rule ("define an ItemList that contains at least two ListItem
+  // elements") lives on the CAROUSEL page, where it is an eligibility threshold
+  // for a host carousel rich result — and that result requires the ItemList be
+  // paired with one of exactly four supported features: Course list, Movie,
+  // Recipe, Restaurant. The newer Carousels (beta) feature asks for at least
+  // THREE items and covers only LocalBusiness subtypes, Product and Event.
+  // Vehicles are in neither list, so this markup cannot earn a carousel rich
+  // result by any item count, and that minimum does not bind it. What it does
+  // instead is the ungated job of a plain ItemList: telling a crawler the page
+  // is a listing hub and handing over every live VDP URL. schema.org sets no
+  // minimum for that.
+  //
+  // Suppressing the one-item case would also break the one requirement that
+  // DOES apply — the list must be "complete and contain all the items that are
+  // listed on the page". A one-item list on a one-car page satisfies that
+  // exactly; emitting nothing on a page that still renders a car does not.
+  //
+  // Live, not hypothetical: against the committed snapshot,
+  // /inventory/used-subaru/ and /inventory/used-sedans/ each match exactly one
+  // available vehicle (MakeLandingPage filters to status === "available"), so
+  // both ship a one-item ItemList today.
+  //
+  // If Google ever extends carousel eligibility to vehicle listings, revisit —
+  // the cost of being wrong here is losing a rich result we cannot get today,
+  // never a penalty.
+  // https://developers.google.com/search/docs/appearance/structured-data/carousel
+  // https://developers.google.com/search/docs/appearance/structured-data/carousels-beta
   if (items.length === 0) return null;
   const schema = {
     "@context": "https://schema.org",
