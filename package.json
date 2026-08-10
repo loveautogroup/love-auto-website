@@ -11,7 +11,9 @@
     "validate:photos": "tsx scripts/validate-photo-order.ts",
     "classify:photos": "tsx scripts/classify-photos.ts",
     "audit:heroes": "tsx scripts/audit-live-heroes.ts",
-    "audit:heroes-html": "tsx scripts/generate-hero-audit-html.ts"
+    "audit:heroes-html": "tsx scripts/generate-hero-audit-html.ts",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -27,6 +29,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260420.1",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

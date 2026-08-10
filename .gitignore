@@ -43,3 +43,9 @@ next-env.d.ts
 # Nested worker dependencies + wrangler build cache (W4.x backup workers)
 node_modules/
 .wrangler/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
