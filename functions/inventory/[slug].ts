@@ -88,11 +88,14 @@ function isGone(status: string | null | undefined): boolean {
 
 function formatCurrency(n: number | null | undefined): string {
   if (!n || n === 0) return "Call for price";
+  // Was maximumFractionDigits:0 with no floor, so $13,999.99 rendered as
+  // "$14,000" — a HIGHER price than we charge, on the server-rendered VDP
+  // that crawlers and social unfurls read. Now exact.
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: Math.round(n * 100) % 100 !== 0 ? 2 : 0,
+    maximumFractionDigits: 2,
   }).format(n);
 }
 

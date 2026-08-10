@@ -19,16 +19,18 @@ interface BaseProps {
   className?: string;
 }
 
-// E3: sticker prices display as whole dollars — FLOOR, never round.
-// Dealers price $13,999.99 deliberately under the next round number,
-// so it must render "$13,999", not "$14,000".
+// Prices render EXACTLY as priced: $13,999.99 shows its cents, $14,000 shows
+// none. Supersedes E3's floor-to-whole-dollars (2026-08-09, owner: the site
+// was dropping the .99 the DMS carries). E3's actual concern — never showing
+// a HIGHER price than we charge — is better served by exact cents than by
+// truncation, and two other call sites were rounding UP to $14,000.
 const formatPrice = (n: number) =>
   new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(Math.floor(n));
+    minimumFractionDigits: Math.round(n * 100) % 100 !== 0 ? 2 : 0,
+    maximumFractionDigits: 2,
+  }).format(n);
 
 const formatMileage = (n: number) => new Intl.NumberFormat("en-US").format(n);
 

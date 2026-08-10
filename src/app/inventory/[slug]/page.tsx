@@ -170,15 +170,14 @@ export default async function VehicleDetailPage({
   ]);
   if (!vehicle) notFound();
 
-  // E3: sticker prices display as whole dollars — FLOOR, never round.
-  // Dealers price $13,999.99 deliberately under the next round number,
-  // so it must render "$13,999", not "$14,000".
+  // Prices render EXACTLY as priced (supersedes E3's floor — see VDPLivePrice).
+  const priceHasCents = Math.round(vehicle.price * 100) % 100 !== 0;
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(Math.floor(vehicle.price));
+    minimumFractionDigits: priceHasCents ? 2 : 0,
+    maximumFractionDigits: 2,
+  }).format(vehicle.price);
 
   const formattedMileage = new Intl.NumberFormat("en-US").format(
     vehicle.mileage

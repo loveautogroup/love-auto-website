@@ -24,10 +24,14 @@ interface VDPFAQProps {
 function generateFAQs(vehicle: Vehicle) {
   const yearMakeModel = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
   const formattedMileage = new Intl.NumberFormat("en-US").format(vehicle.mileage);
+  // Was maximumFractionDigits:0 with no floor, so $13,999.99 rendered as
+  // "$14,000" — a HIGHER price than we charge, in FAQ text that also feeds
+  // structured data. Now exact.
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 0,
+    minimumFractionDigits: Math.round(vehicle.price * 100) % 100 !== 0 ? 2 : 0,
+    maximumFractionDigits: 2,
   }).format(vehicle.price);
 
   const faqs: { question: string; answer: string }[] = [];
