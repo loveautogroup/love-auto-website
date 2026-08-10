@@ -341,6 +341,24 @@ export function FAQSchema({ items }: { items: { question: string; answer: string
 }
 
 /**
+ * Upper bound on emitted ListItems. This is a page-weight backstop against a
+ * bad feed (each item is ~130 bytes inlined into the static HTML, and a whole
+ * archive pull would be ~1,200 of them), NOT a schema rule — schema.org sets
+ * no maximum and Google's carousel spec states only a MINIMUM of two items.
+ *
+ * It must stay well clear of real inventory, because Google's one hard
+ * requirement here is that the list be "complete and contains all the items
+ * that are listed on the page". Both callers pass the page's entire unpaginated
+ * card set, so any list this truncated would silently disagree with the page it
+ * describes — and `numberOfItems` would report the truncated count as if it
+ * were the whole lot. The previous bound was 25 — under the 28 active vehicles
+ * CLAUDE.md records as measured live on 2026-08-07, so it was already a
+ * truncation waiting to happen; it had not bitten only because the build
+ * snapshot currently holds 8 available cars. 250 is ~9x that active count.
+ */
+const MAX_ITEM_LIST_ENTRIES = 250;
+
+/**
  * E6 — ItemList of vehicle listing pages. Emitted on /inventory and the
  * make/body-style landing pages so Google understands them as listing
  * hubs and can crawl straight to every live VDP. Baked at build time
@@ -353,7 +371,7 @@ export function ItemListSchema({
   name: string;
   vehicles: Vehicle[];
 }) {
-  const items = vehicles.slice(0, 25);
+  const items = vehicles.slice(0, MAX_ITEM_LIST_ENTRIES);
   if (items.length === 0) return null;
   const schema = {
     "@context": "https://schema.org",
