@@ -1,10 +1,12 @@
 {
   "version": 1,
-  "description": "Force /api/* and /admin/* to Pages Functions. /api/* prevents GET fallthrough to static 404 before the dispatcher. /admin/* routes admin HTML through functions/admin/_middleware.ts so the code-based admin login gate runs (Sam 2026-06-11). Static sub-assets under /_next/* are unaffected.",
+  "description": "Force /api/*, /admin/* and /vdp/* to Pages Functions. /api/* prevents GET fallthrough to static 404 before the dispatcher. /admin/* routes admin HTML through functions/admin/_middleware.ts so the code-based admin login gate runs (Sam 2026-06-11). /vdp/* runs the legacy DealerCenter VDP resolver (2026-08-10) — DC syndicates /vdp/<DCID>-<stock>/ links to CarGurus and they were all 404ing. Static sub-assets under /_next/* are unaffected.",
   "include": [
     "/api/*",
     "/admin",
-    "/admin/*"
+    "/admin/*",
+    "/vdp",
+    "/vdp/*"
   ],
   "exclude": []
 }
