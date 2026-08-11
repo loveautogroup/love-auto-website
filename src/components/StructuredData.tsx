@@ -45,7 +45,7 @@ export function LocalBusinessSchema() {
       "Love Auto Villa Park",
       "Love Auto Group Villa Park",
     ],
-    logo: `${SITE_CONFIG.url}/images/logo-primary.svg`,
+    logo: `${SITE_CONFIG.url}/images/logo-primary-v2.svg`,
     legalName: "Love Auto Group Inc.",
     description:
       "Japanese makes specialist in Villa Park, IL — 20 miles from Chicago. Family owned since 2014. Specializing in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Serving DuPage County and the western Chicago suburbs.",

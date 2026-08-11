@@ -109,7 +109,7 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center group">
           <Image
-            src="/images/logo-primary.svg"
+            src="/images/logo-primary-v2.svg"
             alt="Love Auto Group — Since 2014"
             width={440}
             height={160}
