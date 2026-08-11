@@ -173,3 +173,82 @@ test.describe("error tracking is actually wired", () => {
     expect(csp, "connect-src must allow the Sentry ingest host").toContain("ingest.us.sentry.io");
   });
 });
+
+test.describe("VDP routing contract", () => {
+  /**
+   * THE BUGS THIS EXISTS FOR (all found 2026-08-10/11):
+   *
+   *  1. functions/inventory/[slug].ts had NEVER run in production — it was
+   *     missing from public/_routes.json, and Pages only invokes Functions for
+   *     paths in that include list. Every sold VDP hard-404'd instead of
+   *     returning its 410 Gone page, so Search Console kept re-reporting them.
+   *     1,163 retired slugs were affected.
+   *
+   *  2. Routing that Function exposed a latent trailing-slash bug: with
+   *     `trailingSlash: true`, /inventory/<slug> (no slash) 308s to the canonical
+   *     form, and the Function would have answered that 308 with a 200 bridge
+   *     page — the same vehicle at two URLs. Verified by disabling the guard
+   *     locally and watching the 308 turn into a 200.
+   *
+   *  3. DealerCenter syndicates /vdp/<DCID>-<stock>/ links to CarGurus. The site
+   *     never served /vdp/*, so every CarGurus click landed on a 404.
+   *
+   * These assert status codes, not markup, so they survive inventory turnover.
+   */
+
+  test("a live VDP without the trailing slash redirects, never renders", async ({ page }) => {
+    const vehicles = (await liveInventory(page)).filter(available);
+    test.skip(vehicles.length === 0, "no available vehicles on the lot right now");
+    const v = vehicles[0];
+
+    const res = await page.request.get(`/inventory/${v.slug}`, { maxRedirects: 0 });
+    expect(
+      res.status(),
+      `/inventory/${v.slug} must redirect to the canonical trailing-slash URL, not serve a second copy of the page`
+    ).toBeGreaterThanOrEqual(300);
+    expect(res.status()).toBeLessThan(400);
+    expect(res.headers()["location"]).toBe(`/inventory/${v.slug}/`);
+  });
+
+  test("a retired vehicle's VDP returns 410, not 404", async ({ page }) => {
+    // Straight from the DMS so this keeps working as cars sell.
+    const res = await page.request.get(
+      "https://dms.loveautogroup.net/api/v1/public/retired-slugs"
+    );
+    expect(res.ok(), "retired-slugs must respond").toBeTruthy();
+    const rows: Array<{ slug: string; status: string | null }> =
+      (await res.json()).data ?? [];
+    test.skip(rows.length === 0, "nothing retired yet");
+
+    const live = new Set((await liveInventory(page)).map((v) => v.slug));
+    const retired = rows.find((r) => /-\d{3,}$/.test(r.slug) && !live.has(r.slug));
+    test.skip(!retired, "no retired slug available to probe");
+
+    const vdp = await page.request.get(`/inventory/${retired!.slug}/`, { maxRedirects: 0 });
+    expect(
+      vdp.status(),
+      `${retired!.slug} is ${retired!.status} — must be 410 Gone so Google deindexes it in days rather than months`
+    ).toBe(410);
+  });
+
+  test("legacy DealerCenter /vdp/ links resolve to the real VDP", async ({ page }) => {
+    const vehicles = (await liveInventory(page)).filter(available);
+    test.skip(vehicles.length === 0, "no available vehicles on the lot right now");
+    const v = vehicles[0];
+    const stock = v.slug.match(/-(\d{3,})$/)?.[1];
+    test.skip(!stock, "slug carries no stock number");
+
+    // 9079472 is the DealerCenter ID baked into every syndicated CarGurus link.
+    const res = await page.request.get(`/vdp/9079472-${stock}/`, { maxRedirects: 0 });
+    expect(res.status(), "legacy DC link must redirect, not 404").toBe(302);
+    expect(res.headers()["location"]).toBe(`/inventory/${v.slug}/`);
+  });
+
+  test("an unknown VDP slug still 404s", async ({ page }) => {
+    // The 410 path must not turn every typo into "this car was sold."
+    const res = await page.request.get("/inventory/not-a-real-vehicle-999999/", {
+      maxRedirects: 0,
+    });
+    expect(res.status()).toBe(404);
+  });
+});

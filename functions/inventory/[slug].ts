@@ -34,6 +34,26 @@ import { rewritePhotoHost } from "../../shared/photoHost";
 const DMS_PUBLIC_URL =
   "https://dms.loveautogroup.net/api/v1/public/inventory";
 
+/**
+ * Slugs of vehicles that have permanently left the public feed (Sold /
+ * Archived / Arbitration Return), computed with the SAME slug function the
+ * live feed uses. 1,163 of them as of 2026-08-11.
+ *
+ * This is why the 410 path below can fire at all. The live inventory feed
+ * was narrowed to Available / Sale Pending after this Function was written
+ * (see the route comment in love-auto-dms: "sold/recon/acquired vehicles
+ * are never included in this response"), which quietly made `isGone()`
+ * unreachable — a sold car simply vanished from the feed, `match` came back
+ * undefined, and the request fell through to a plain 404. Consulting the
+ * retired list on a miss is what restores the deindex behavior.
+ *
+ * Railway already excludes any retired slug that collides with a currently
+ * live vehicle, and we only reach this lookup when the live feed had no
+ * match, so a for-sale car can never be served a Gone page.
+ */
+const RETIRED_SLUGS_URL =
+  "https://dms.loveautogroup.net/api/v1/public/retired-slugs";
+
 interface DmsVehicle {
   id: string | number;
   vin: string;
@@ -231,6 +251,14 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
 </html>`;
 }
 
+/** Escaped "2016 Lincoln MKX Reserve" display name from a DMS record. */
+function escapedVehicleTitle(v: DmsVehicle): string {
+  const make = escapeHtml(titleCase(v.make ?? ""));
+  const model = escapeHtml(titleCase(v.model ?? ""));
+  const trim = v.trim ? escapeHtml(titleCase(v.trim)) : "";
+  return `${escapeHtml(v.year)} ${make} ${model}${trim ? " " + trim : ""}`;
+}
+
 /**
  * "This vehicle is no longer available" page. Returned with HTTP 410 Gone
  * so Google deindexes the URL on its next crawl (days, not months).
@@ -240,18 +268,29 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
  *
  * `hidden` distinguishes "pulled from the site" (DMS "Hide from site"
  * toggle — status unknown, could still be on the lot) from a genuine sale
- * — the copy shouldn't claim "sold" for a car that was simply hidden.
+ * — the copy shouldn't claim "sold" for a car that was simply hidden. It
+ * also covers Arbitration Return, where "found its new owner" would be
+ * flatly untrue.
+ *
+ * `title` is an ALREADY-ESCAPED display name, or null when we only know
+ * the slug is retired and not what car it was. The retired-slugs endpoint
+ * returns slug/stock/status only, and reconstructing "2014 Lexus ES 350"
+ * from "2014-lexus-es-350-11428" reliably is not possible — titleCase
+ * renders it "Es 350". Generic copy beats a mangled model name.
  */
-function renderGonePage(v: DmsVehicle, hidden = false): string {
-  // Escaped at derivation — see the note on renderComingSoonPage above.
-  const make = escapeHtml(titleCase(v.make ?? ""));
-  const model = escapeHtml(titleCase(v.model ?? ""));
-  const trim = v.trim ? escapeHtml(titleCase(v.trim)) : "";
-  const title = `${escapeHtml(v.year)} ${make} ${model}${trim ? " " + trim : ""}`;
+function renderGonePage(opts: { title?: string | null; hidden?: boolean }): string {
+  const title = opts.title ?? null;
+  const hidden = opts.hidden ?? false;
   const badgeText = hidden ? "NO LONGER LISTED" : "SOLD";
+  const pageTitle = title
+    ? `${title}${hidden ? " is no longer listed" : " has been sold"} | Love Auto Group`
+    : `${hidden ? "Vehicle no longer listed" : "Vehicle has been sold"} | Love Auto Group`;
+  const metaDescription = title
+    ? `This ${title} is no longer available. Browse our current inventory of quality used cars in Villa Park, IL.`
+    : "This vehicle is no longer available. Browse our current inventory of quality used cars in Villa Park, IL.";
   const heading = hidden
-    ? `This ${title} is no longer listed.`
-    : `This ${title} found its new owner.`;
+    ? `This ${title ?? "vehicle"} is no longer listed.`
+    : `This ${title ?? "vehicle"} found its new owner.`;
   const lede = hidden
     ? "This vehicle is no longer available on our site. There's a great chance we have something else that fits what you were looking for."
     : "The vehicle that lived at this URL has been sold. We move fast on quality Japanese used cars — but there's a great chance we have something else that fits what you were looking for.";
@@ -261,8 +300,8 @@ function renderGonePage(v: DmsVehicle, hidden = false): string {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${title}${hidden ? " is no longer listed" : " has been sold"} | Love Auto Group</title>
-  <meta name="description" content="This ${title} is no longer available. Browse our current inventory of quality used cars in Villa Park, IL." />
+  <title>${pageTitle}</title>
+  <meta name="description" content="${metaDescription}" />
   <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="https://www.loveautogroup.net/inventory/" />
   <style>
@@ -320,6 +359,23 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   const slug = (context.params as Record<string, string>).slug as string;
   if (!slug) return staticResponse;
 
+  // Pass redirects straight through, untouched.
+  //
+  // next.config.ts sets `trailingSlash: true`, so a request to
+  // /inventory/<slug> (no slash) gets a 308 to /inventory/<slug>/ from the
+  // static handler. Without this guard that 308 would fall through to the
+  // logic below: `isRealStaticPage` stays false on a non-200, the live feed
+  // matches, and we'd answer the no-slash URL with a 200 bridge page —
+  // publishing the same vehicle at two URLs and destroying the canonical
+  // form. That is the exact trailing-slash regression that took /inventory,
+  // /reviews and the brand pages out of Google for hours on 2026-04-30.
+  // It has never bitten in production only because this Function was not
+  // routed until 2026-08-11; enabling the route without this guard would
+  // have shipped it.
+  if (staticResponse.status >= 300 && staticResponse.status < 400) {
+    return staticResponse;
+  }
+
   // A genuine pre-rendered VDP for this slug (as opposed to a 404 or a
   // 200-status not-found placeholder). Guard: when Railway hibernates
   // during a CF Pages build, Next.js can't resolve live-only vehicles and
@@ -367,9 +423,34 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     // generateStaticParams emit — no slug drift between modules.
     const match = vehicles.find((v) => vehicleSlug(v) === slug);
     if (!match) {
-      // DMS has no record of this slug. If a real static page still
-      // exists, prefer it (DMS may just be between syncs) — otherwise
-      // it's truly unknown, serve the static 404.
+      // Not in the live feed. Before falling back, ask whether this slug
+      // is one the dealership has RETIRED — sold, archived, or returned to
+      // the auction. Those are the URLs Google keeps re-crawling and
+      // re-reporting as "Not found (404)", and a 404 takes months to clear
+      // where a 410 clears in days.
+      //
+      // This also overrides a STALE static page: a car that sold after the
+      // last CF Pages build still has its pre-rendered VDP on disk, showing
+      // a live price and working CTAs. Retired wins over the static file.
+      const retiredStatus = await fetchRetiredStatus(slug);
+      if (retiredStatus) {
+        const html = renderGonePage({
+          title: null,
+          // Only a genuine sale gets the "found its new owner" copy.
+          // Archived and Arbitration Return get the neutral wording.
+          hidden: retiredStatus.trim().toLowerCase() !== "sold",
+        });
+        return new Response(html, {
+          status: 410,
+          headers: {
+            "Content-Type": "text/html;charset=UTF-8",
+            "Cache-Control": "public, max-age=300, s-maxage=300",
+            "X-Robots-Tag": "noindex, follow",
+          },
+        });
+      }
+      // Genuinely unknown. If a real static page still exists, prefer it
+      // (DMS may just be between syncs) — otherwise serve the static 404.
       return staticResponse;
     }
 
@@ -381,7 +462,10 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     // (404)" fix-failed loop reported in Search Console (Charlotte audit
     // 2026-05-07).
     if (isGone(match.status) || hidden) {
-      const html = renderGonePage(match, hidden && !isGone(match.status));
+      const html = renderGonePage({
+        title: escapedVehicleTitle(match),
+        hidden: hidden && !isGone(match.status),
+      });
       return new Response(html, {
         status: 410,
         headers: {
@@ -422,6 +506,43 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     return staticResponse;
   }
 };
+
+/**
+ * Is this slug a retired vehicle, and with what status? Returns the status
+ * string ("Sold" / "Archived" / "Arbitration Return") or null when the slug
+ * isn't retired, doesn't look like a vehicle slug, or the lookup fails.
+ *
+ * Best-effort by design: null means "don't claim it's gone," so a DMS
+ * outage degrades to today's behavior (static page or 404) rather than
+ * telling a shopper a car for sale has been sold.
+ *
+ * The list is ~1,163 entries and grows by one per sale, so it is fetched
+ * only on a live-feed miss and held in the edge cache for 5 minutes. The
+ * digit-suffix test keeps the non-vehicle pages under /inventory/ — the
+ * brand hubs like /inventory/used-lexus/ — from spending a fetch at all;
+ * every real and retired vehicle slug ends in its stock number.
+ */
+async function fetchRetiredStatus(slug: string): Promise<string | null> {
+  if (!/-\d{3,}$/.test(slug)) return null;
+  try {
+    const res = await fetch(RETIRED_SLUGS_URL, {
+      headers: { Accept: "application/json" },
+      cf: { cacheTtl: 300, cacheEverything: false },
+    });
+    if (!res.ok) return null;
+    const raw = (await res.json()) as
+      | { data?: Array<{ slug?: string; status?: string | null }> }
+      | Array<{ slug?: string; status?: string | null }>;
+    const rows = Array.isArray(raw) ? raw : raw?.data ?? [];
+    const hit = rows.find((r) => r?.slug === slug);
+    if (!hit) return null;
+    // A retired row with a blank status is still retired — don't lose the
+    // 410 to a missing field.
+    return hit.status?.trim() || "Archived";
+  } catch {
+    return null;
+  }
+}
 
 /**
  * Same public config the client fetches from /api/merchandising, read

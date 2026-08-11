@@ -1,12 +1,13 @@
 {
   "version": 1,
-  "description": "Force /api/*, /admin/* and /vdp/* to Pages Functions. /api/* prevents GET fallthrough to static 404 before the dispatcher. /admin/* routes admin HTML through functions/admin/_middleware.ts so the code-based admin login gate runs (Sam 2026-06-11). /vdp/* runs the legacy DealerCenter VDP resolver (2026-08-10) — DC syndicates /vdp/<DCID>-<stock>/ links to CarGurus and they were all 404ing. Static sub-assets under /_next/* are unaffected.",
+  "description": "Force /api/*, /admin/*, /vdp/* and /inventory/* to Pages Functions. /api/* prevents GET fallthrough to static 404 before the dispatcher. /admin/* routes admin HTML through functions/admin/_middleware.ts so the code-based admin login gate runs (Sam 2026-06-11). /vdp/* runs the legacy DealerCenter VDP resolver (2026-08-10) — DC syndicates /vdp/<DCID>-<stock>/ links to CarGurus and they were all 404ing. /inventory/* runs functions/inventory/[slug].ts, which had NEVER executed in production because it was missing from this list (2026-08-11) — that is why sold VDPs 404 instead of returning its 410 Gone page. Static sub-assets under /_next/* are unaffected.",
   "include": [
     "/api/*",
     "/admin",
     "/admin/*",
     "/vdp",
-    "/vdp/*"
+    "/vdp/*",
+    "/inventory/*"
   ],
   "exclude": []
 }
