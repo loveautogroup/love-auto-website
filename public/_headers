@@ -49,26 +49,55 @@
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-store, no-cache, must-revalidate, private
 
-# Long-cache immutable static assets
+# ── Caching ──────────────────────────────────────────────────────────────
+#
+# `immutable` means "never revalidate, not even on reload". That is a promise
+# about the URL, not the file: it is only honest when the FILENAME changes
+# whenever the bytes change.
+#
+# ⚠️ THIS RULE USED TO BE BLANKET, BY EXTENSION, AND IT MADE EVERY ASSET IN
+# public/ WRITE-ONCE. 650 files sat at stable paths under a one-year immutable
+# promise, so editing one changed nothing that anybody could see. The logo is
+# the case that proved it: logo-primary.svg was corrected on 2026-08-11, the
+# deploy went green, the origin bytes were right, and the live site kept
+# serving the old logo because nothing ever re-requested the file
+# (cf-cache-status: HIT, Age ~13 days, and browser copies pinned for a year).
+# The fix was a new filename, which is the only thing that works once a URL
+# has been declared immutable.
+#
+# Two different kinds of asset, so two different rules:
+
+# 1. Next.js build output. The filename IS a content hash
+#    (chunks/00m0-r~h.hnn..js), so a change always produces a new URL.
+#    immutable is both correct and load-bearing here — without it the browser
+#    revalidates every chunk on every navigation.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 2. Everything else — logos, brand art, vehicle photos, favicons. These live
+#    at STABLE, hand-written paths and are edited in place, so they must stay
+#    reachable by a new version. Still cached hard at the edge; the browser
+#    just re-checks hourly instead of assuming for a year, and a revalidation
+#    that finds no change costs a 304, not a re-download.
 /*.js
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 /*.css
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 /*.svg
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 /*.png
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 /*.jpg
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 /*.jpeg
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 /*.webp
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 /*.avif
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 /*.woff
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 /*.woff2
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 /*.ico
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
