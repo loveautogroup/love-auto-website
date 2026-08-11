@@ -1,0 +1,56 @@
+name: Storefront canary
+
+# Runs the Playwright storefront suite against the LIVE site.
+#
+# ⚠️ DELIBERATELY NOT A PR GATE. These tests hit https://www.loveautogroup.net,
+# which serves the LAST DEPLOYED build — so running them on a pull request would
+# test the old site and tell you nothing about the change. Cloudflare Pages also
+# lags a push by several minutes (measured 2026-08-10: a build queued ~15 min
+# after the push), so a push trigger would race the deploy and fail spuriously.
+#
+# It is a CANARY instead: on a schedule, plus manual dispatch. What it watches
+# for is the class of bug that only shows up in production and that unit tests
+# cannot see — a price rendering without its cents, a sold car appearing on the
+# public grid, the Sentry DSN vanishing from the bundle, the CSP dropping the
+# ingest host. Every one of those has actually happened here.
+
+on:
+  schedule:
+    # 07:00 and 19:00 UTC — roughly before and after the dealership's day
+    # (America/Chicago). Cron here is UTC; there is no local-time option.
+    - cron: "0 7,19 * * *"
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Target base URL (defaults to production)"
+        required: false
+
+concurrency:
+  group: storefront-canary
+  cancel-in-progress: true
+
+jobs:
+  canary:
+    name: Playwright storefront (live)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      # Browsers are not in node_modules; fetch just Chromium.
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run storefront suite
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ github.event.inputs.base_url || 'https://www.loveautogroup.net' }}
+        run: npx playwright test
+      - name: Upload report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
