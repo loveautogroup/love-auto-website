@@ -27,7 +27,6 @@ export type DocumentKind =
   | "power-of-attorney"
   | "as-is-disclosure"
   | "arbitration-agreement"
-  | "porter-authorization"
   | "other";
 
 export interface SigningDocument {
@@ -111,7 +110,6 @@ const VALID_KINDS: DocumentKind[] = [
   "power-of-attorney",
   "as-is-disclosure",
   "arbitration-agreement",
-  "porter-authorization",
   "other",
 ];
 

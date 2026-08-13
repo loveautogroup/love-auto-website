@@ -23,7 +23,6 @@ type DocumentKind =
   | "power-of-attorney"
   | "as-is-disclosure"
   | "arbitration-agreement"
-  | "porter-authorization"
   | "other";
 
 interface Document {

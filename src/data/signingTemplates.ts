@@ -17,11 +17,6 @@
  *     as an authorized e-sig dealer — Illinois has approved this).
  *   - Any dollar figures in [brackets] are placeholders — REPLACE
  *     before sending.
- *   - One template ("porter-authorization") is NOT a customer document.
- *     It is issued by the dealership and signed by the porter, so the
- *     session's "customer" fields hold the porter's name and phone. It
- *     grants authority to move a vehicle and nothing else — do not use
- *     it to stand in for a Power of Attorney.
  */
 
 export type DocumentKind =
@@ -31,7 +26,6 @@ export type DocumentKind =
   | "power-of-attorney"
   | "as-is-disclosure"
   | "arbitration-agreement"
-  | "porter-authorization"
   | "other";
 
 export interface DocumentTemplate {
@@ -238,73 +232,6 @@ provisions shall remain in full force and effect.
 By signing below, the Buyer acknowledges they have read and understood
 this Arbitration Agreement and are knowingly and voluntarily agreeing
 to arbitrate any future disputes.`,
-  },
-
-  {
-    kind: "porter-authorization",
-    title: "Porter Vehicle Movement Authorization",
-    body: `PORTER VEHICLE MOVEMENT AUTHORIZATION
-
-Issued by: Love Auto Group Inc.
-           735 N Yale Ave, Unit A, Villa Park, IL 60181
-           Dealer License: [IL Dealer #]
-           Phone: (630) 359-3643
-
-Authorized porter: [Porter Full Name]
-Driver's license:  [DL Number / State]
-Valid: [Start Date] through [End Date]
-
-Vehicle:
-  [Year Make Model]
-  VIN: [VIN]
-  Plate in use: [Dealer Plate # or Vehicle Plate #]
-
-Movement authorized:
-  Pick up from: [Origin — seller, auction, service shop, or lot]
-  Deliver to:   [Destination]
-
-TO WHOM IT MAY CONCERN: the individual named above is acting as a porter
-for Love Auto Group Inc. and is authorized to take custody of, operate on
-public roads, and transport the single vehicle described above, for the
-single movement described above, within the dates shown. The vehicle
-remains the property of Love Auto Group Inc. at all times. This letter is
-not a bill of sale and transfers no ownership interest in the vehicle.
-
-THIS AUTHORIZATION IS STRICTLY LIMITED. The porter named above has NO
-authority to:
-
-  1. Sign, execute, or accept ANY document on behalf of Love Auto Group —
-     including titles, odometer disclosures, bills of sale, condition
-     reports, repair orders, or any gate pass that transfers ownership.
-  2. Pay, receive, negotiate, or promise ANY funds, deposit, or payment
-     of any kind.
-  3. Negotiate price, terms, or condition, or make any representation
-     about the vehicle to any party.
-  4. Take possession of the certificate of title or any lien release.
-  5. Permit any other person to drive the vehicle, or to sublet or
-     reassign this authorization.
-  6. Bind Love Auto Group Inc. to any obligation whatsoever.
-
-Anything outside the movement described above requires prior authorization
-from Love Auto Group at (630) 359-3643. Anyone releasing a vehicle to this
-porter may — and should — call that number to verify this letter before
-handing over keys.
-
-The porter must hold a valid driver's license. While operating the vehicle
-the porter is covered under the dealership's garage liability policy for
-the authorized movement above only; operation outside that scope, or after
-the expiration date, is both unauthorized and uninsured.
-
-This authorization expires on [End Date] or upon completion of the movement
-described above, whichever is earlier, and may be revoked by Love Auto
-Group Inc. at any time without notice.
-
-Issued by: [Dealer Representative Name], [Title], Love Auto Group Inc.
-Date issued: [Date]
-
-By signing below, the porter acknowledges they have read this
-authorization, understand the limits placed on it, and agree to operate
-strictly within them.`,
   },
 ];
 
