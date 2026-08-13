@@ -10,6 +10,7 @@ type DocumentKind =
   | "power-of-attorney"
   | "as-is-disclosure"
   | "arbitration-agreement"
+  | "porter-authorization"
   | "other";
 
 const KIND_LABELS: Record<DocumentKind, string> = {
@@ -19,6 +20,7 @@ const KIND_LABELS: Record<DocumentKind, string> = {
   "power-of-attorney": "Power of Attorney",
   "as-is-disclosure": "As-Is Disclosure",
   "arbitration-agreement": "Arbitration Agreement",
+  "porter-authorization": "Porter Authorization",
   other: "Other",
 };
 
