@@ -1,6 +1,7 @@
 "use client";
 
 import VehicleCard from "@/components/VehicleCard";
+import { useLanguage } from "@/context/LanguageContext";
 import type { Vehicle } from "@/lib/types";
 import { useInventory } from "@/lib/useInventory";
 import { useVisibleVehicles } from "@/data/useMerchandising";
@@ -29,6 +30,8 @@ export default function RecentlyReducedRail({
    *  used directly as the SSR/fallback render. */
   vehicles: Vehicle[];
 }) {
+  const { t } = useLanguage();
+  const r = t.reducedRail;
   const { vehicles: liveVehicles, source } = useInventory();
   // Both hooks called unconditionally (Rules of Hooks) even though only
   // one branch below ends up using each result.
@@ -63,16 +66,14 @@ export default function RecentlyReducedRail({
           id="recently-reduced-heading"
           className="text-2xl font-bold text-brand-gray-900"
         >
-          Recently Reduced
+          {r.heading}
         </h2>
         <span className="text-sm text-brand-gray-500">
-          {vehicles.length} price drop{vehicles.length === 1 ? "" : "s"} in the
-          last 14 days
+          {vehicles.length} {vehicles.length === 1 ? r.drop : r.drops}{" "}
+          {r.window}
         </span>
       </div>
-      <p className="text-brand-gray-500 mb-4 text-sm">
-        These prices just came down — they tend not to stay long.
-      </p>
+      <p className="text-brand-gray-500 mb-4 text-sm">{r.subtitle}</p>
       <div
         className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory [-webkit-overflow-scrolling:touch]"
         role="list"

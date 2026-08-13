@@ -46,7 +46,11 @@ import { resolveIndexableVehicles } from "@/lib/dmsInventory";
 // Required for static export.
 export const dynamic = "force-static";
 
-import { LOCALIZED_PATHS, toSpanishPath } from "@/lib/localeRoutes";
+import {
+  LOCALIZED_PATHS,
+  toSpanishPath,
+  withTrailingSlash,
+} from "@/lib/localeRoutes";
 
 const BASE = "https://www.loveautogroup.net";
 
@@ -157,7 +161,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
     alternates: {
       languages: {
-        "en-US": `${BASE}${path}`,
+        // Slash-terminated on both sides — the English half was emitting
+        // `/inventory`, which production 308s, so the pair pointed at a
+        // redirect rather than the page it was meant to annotate.
+        "en-US": `${BASE}${withTrailingSlash(path)}`,
         "es-US": `${BASE}${toSpanishPath(path)}`,
       },
     },

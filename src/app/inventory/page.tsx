@@ -12,7 +12,16 @@ export const metadata: Metadata = {
   title: "Browse Our Full Used Car Inventory | Love Auto Group",
   description:
     "Browse our Villa Park, IL inventory of quality used cars from $4,500 to $18,000. Lexus, Subaru, Acura, Mazda. Fully reconditioned and ready to drive.",
-  alternates: { canonical: "https://www.loveautogroup.net/inventory/" },
+  // hreflang must be reciprocal or search engines ignore it — /es/inventory/
+  // points back here. See src/lib/localeRoutes.ts.
+  alternates: {
+    canonical: "https://www.loveautogroup.net/inventory/",
+    languages: {
+      "en-US": "https://www.loveautogroup.net/inventory/",
+      "es-US": "https://www.loveautogroup.net/es/inventory/",
+      "x-default": "https://www.loveautogroup.net/inventory/",
+    },
+  },
 };
 
 export default function InventoryPage() {

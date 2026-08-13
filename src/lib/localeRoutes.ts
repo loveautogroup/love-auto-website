@@ -19,13 +19,30 @@
 /** English paths that have a Spanish counterpart at /es/<path>. */
 export const LOCALIZED_PATHS: readonly string[] = [
   "/", // homepage — the pilot
+  "/inventory", // the page a Spanish-speaking shopper actually wants
 ];
+
+/**
+ * Trailing slashes are load-bearing on this site: production 308s `/inventory`
+ * to `/inventory/`, so a URL emitted without one is a redirect, not a page.
+ * Google reports a redirecting sitemap entry as "Page with redirect" and
+ * indexes neither, and an hreflang pair pointing at a redirect fails the
+ * reciprocity check. Everything this module hands out is slash-terminated.
+ *
+ * This only became visible when /inventory was added: "/" was special-cased
+ * to "/es/" from the start, so the single pilot path hid the bug.
+ */
+export function withTrailingSlash(path: string): string {
+  if (!path) return "/";
+  const clean = path.split("?")[0].split("#")[0];
+  return clean.endsWith("/") ? clean : `${clean}/`;
+}
 
 /** Canonical English path for a Spanish one, and vice versa. */
 export function toSpanishPath(englishPath: string): string {
   const p = normalize(englishPath);
   if (!LOCALIZED_PATHS.includes(p)) return "/es/";
-  return p === "/" ? "/es/" : `/es${p}`;
+  return p === "/" ? "/es/" : withTrailingSlash(`/es${p}`);
 }
 
 export function toEnglishPath(spanishPath: string): string {

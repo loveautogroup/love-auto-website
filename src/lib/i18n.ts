@@ -182,6 +182,16 @@ export const translations = {
       sortMileageAsc: "Mileage: Low to High",
       sortNewest: "Year: Newest First",
     },
+    // Recently Reduced rail. `drops` is pluralised by the component, which
+    // picks `drop` or `drops` — Spanish uses the same split (bajada/bajadas),
+    // so no gender or agreement logic is needed here.
+    reducedRail: {
+      heading: "Recently Reduced",
+      drop: "price drop",
+      drops: "price drops",
+      window: "in the last 14 days",
+      subtitle: "These prices just came down — they tend not to stay long.",
+    },
     card: {
       vin: "VIN",
       mi: "mi",
@@ -746,6 +756,13 @@ export const translations = {
       sortPriceDesc: "Precio: Mayor a Menor",
       sortMileageAsc: "Millaje: Menor a Mayor",
       sortNewest: "Año: Más Reciente",
+    },
+    reducedRail: {
+      heading: "Precios Rebajados",
+      drop: "rebaja de precio",
+      drops: "rebajas de precio",
+      window: "en los últimos 14 días",
+      subtitle: "Estos precios acaban de bajar — no suelen durar mucho.",
     },
     card: {
       vin: "VIN",
