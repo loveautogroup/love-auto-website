@@ -6,18 +6,14 @@ import { useSearchParams } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import VehicleAlertSignup from "@/components/VehicleAlertSignup";
 import { trackInventoryFilter } from "@/lib/analytics";
-import { useInventory } from "@/lib/useInventory";
-import { useVisibleVehicles } from "@/data/useMerchandising";
+import { useInventoryFacets } from "@/lib/inventoryFacets";
 
 // Found in the website audit: this used to be a hardcoded list that had
 // already drifted from the real lot (no Ford/Lincoln/Mercedes-Benz option,
 // no Convertible body style, while current inventory had all three) — a
 // shopper could never isolate makes/styles that were actually on the lot.
-// Derived from live inventory now, falling back to the same seed data
-// InventoryGrid renders from until the live fetch resolves.
-function uniqueSorted(values: (string | undefined)[]): string[] {
-  return Array.from(new Set(values.filter((v): v is string => !!v))).sort();
-}
+// Derived from live inventory now via the shared facets hook, which the
+// homepage hero search uses too (it had the same defect, found 2026-08-12).
 
 const PRICE_TABS = [
   { label: "All Vehicles",  href: "/inventory",                              minPrice: null,  maxPrice: null  },
@@ -37,12 +33,9 @@ function InventoryFiltersInner() {
   const { t } = useLanguage();
   const f = t.filters;
   const searchParams = useSearchParams();
-  // useInventory() already holds the seed data until the live fetch
-  // resolves, then swaps in — no separate fallback branch needed here.
-  const { vehicles: liveVehicles } = useInventory();
-  const visibleVehicles = useVisibleVehicles(liveVehicles);
-  const MAKES = uniqueSorted(visibleVehicles.map((v) => v.make));
-  const BODY_STYLES = uniqueSorted(visibleVehicles.map((v) => v.bodyStyle));
+  // The hook already holds the seed data until the live fetch resolves,
+  // then swaps in — no separate fallback branch needed here.
+  const { makes: MAKES, bodyStyles: BODY_STYLES } = useInventoryFacets();
   const current = {
     make: searchParams.get("make") ?? "",
     bodyStyle: searchParams.get("bodyStyle") ?? "",

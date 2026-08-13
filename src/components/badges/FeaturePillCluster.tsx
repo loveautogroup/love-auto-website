@@ -4,6 +4,12 @@
  * Jordan-authored custom copy per vehicle. Up to 5 pills, each supports a
  * two-line break via \n in full mode.
  *
+ * Casing: rendered UPPERCASE via CSS (owner, 2026-08-12 — "easier to read
+ * on photos"). This is presentational only; the authored copy stays as
+ * typed in KV and in the DMS Trust Signals editor. The bake does the same
+ * thing in photo_overlay.py, so all three surfaces read identically —
+ * see BAKE RULES in CLAUDE.md.
+ *
  * Heavy frosted-glass treatment — pills are 18% opacity dark over a
  * blurred backdrop so the photo reads through clearly. White text with
  * a hard-edge shadow keeps the copy legible against any photo subject.
@@ -66,7 +72,7 @@ export default function FeaturePillCluster({
           <div
             key={i}
             className={`
-              rounded-full text-white ${textAlign}
+              rounded-full text-white uppercase ${textAlign}
               border border-white/25
               shadow-[0_2px_6px_rgba(0,0,0,0.35)]
               ${compact

@@ -13,10 +13,17 @@ import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import { GoogleReviewsLockup } from "@/components/badges/DealerCluster";
 import { SITE_CONFIG } from "@/lib/constants";
 import { useReviews } from "@/context/ReviewsContext";
+import { useInventoryFacets } from "@/lib/inventoryFacets";
 
 export default function HomeHero() {
   const googleReviews = useReviews();
   const { t } = useLanguage();
+  // Was a hardcoded Subaru/Lexus/Acura/Mazda/Honda/Toyota + SUV/Sedan/Wagon/
+  // Truck/Coupe list. It had drifted completely off the lot — measured
+  // 2026-08-12, all six make options returned zero vehicles (the lot was
+  // Ford, Lincoln, Mercedes-Benz), so the homepage's main search box could
+  // not produce a single result. Derived from live inventory now.
+  const { makes, bodyStyles } = useInventoryFacets();
 
   const pills = [
     { key: "under10" as const, href: "/inventory?maxPrice=10000" },
@@ -91,12 +98,11 @@ export default function HomeHero() {
                 className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-white placeholder-brand-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-red"
               >
                 <option value="">{t.hero.makeAll}</option>
-                <option value="subaru">Subaru</option>
-                <option value="lexus">Lexus</option>
-                <option value="acura">Acura</option>
-                <option value="mazda">Mazda</option>
-                <option value="honda">Honda</option>
-                <option value="toyota">Toyota</option>
+                {makes.map((make) => (
+                  <option key={make} value={make.toLowerCase()}>
+                    {make}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
@@ -132,11 +138,11 @@ export default function HomeHero() {
                 className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-brand-red"
               >
                 <option value="">{t.hero.bodyAll}</option>
-                <option value="suv">SUV</option>
-                <option value="sedan">Sedan</option>
-                <option value="wagon">Wagon</option>
-                <option value="truck">Truck</option>
-                <option value="coupe">Coupe</option>
+                {bodyStyles.map((style) => (
+                  <option key={style} value={style.toLowerCase()}>
+                    {style}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="flex items-end">

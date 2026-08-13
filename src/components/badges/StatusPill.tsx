@@ -58,7 +58,7 @@ export default function StatusPill({ kind, compact = false }: StatusPillProps) {
   return (
     <span
       className={`
-        inline-block rounded-md font-semibold leading-none
+        inline-block rounded-md font-semibold uppercase leading-none
         shadow-[0_2px_4px_rgba(0,0,0,0.15)]
         ${compact
           ? "px-1.5 py-[2px] text-[8px] sm:px-2 sm:py-0.5 sm:text-[10px]"

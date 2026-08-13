@@ -11,12 +11,21 @@
 
 import { useRef, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useInventoryFacets, uniqueSorted } from "@/lib/inventoryFacets";
 
-const MAKES = ["Subaru", "Lexus", "Acura", "Mazda", "Honda", "Toyota"];
+// Unlike the filter dropdowns, this list is deliberately NOT limited to the
+// current lot — the whole point is to be told when a make we don't have yet
+// arrives, so the makes we habitually stock must stay selectable at zero
+// inventory. But it can't be that list ALONE either: it offered only these
+// six while the lot was Ford/Lincoln/Mercedes-Benz, so a shopper looking at
+// a Lincoln could not ask to hear about the next one. Union of both.
+const HOUSE_MAKES = ["Subaru", "Lexus", "Acura", "Mazda", "Honda", "Toyota"];
 
 export default function VehicleAlertSignup({ defaultMake = "" }: { defaultMake?: string }) {
   const { t, locale } = useLanguage();
   const a = t.alerts;
+  const { makes: lotMakes } = useInventoryFacets();
+  const MAKES = uniqueSorted([...HOUSE_MAKES, ...lotMakes]);
   const [email, setEmail] = useState("");
   const [make, setMake] = useState(defaultMake.toLowerCase());
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
