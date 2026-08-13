@@ -79,7 +79,7 @@ export default function VehicleAlertSignup({ defaultMake = "" }: { defaultMake?:
       </h3>
       <p className="text-xs text-brand-gray-500 px-1">{a.blurb}</p>
       <select
-        aria-label={t.filters.make}
+        aria-label={t.alerts.makeLabel}
         value={make}
         onChange={(e) => setMake(e.target.value)}
         className="w-full border border-brand-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-red"

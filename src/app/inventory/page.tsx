@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { sampleInventory } from "@/data/inventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
-import InventoryFilters from "./InventoryFilters";
 import InventoryGrid from "./InventoryGrid";
+import VehicleAlertSignup from "@/components/VehicleAlertSignup";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
 import InventoryHero from "./InventoryHero";
 import RecentlyReducedRail from "./RecentlyReducedRail";
@@ -60,15 +60,22 @@ export default function InventoryPage() {
 
       <RecentlyReducedRail vehicles={recentlyReduced} />
 
+      {/* Owner, 2026-08-12: the filter sidebar came out. With a lot this size
+          a shopper can see everything at once, so a seven-control filter panel
+          was asking them to narrow a list that was never long enough to need
+          narrowing — it cost width the cars could use. The grid still honours
+          ?make=/?maxPrice=/?q= from the URL, so the homepage quick-links and
+          any existing shared or indexed filtered link keep working. */}
       <section className="max-w-7xl mx-auto px-4 py-8">
-        <div className="lg:grid lg:grid-cols-[280px_1fr] lg:gap-8">
-          <aside aria-label="Filter vehicles">
-            <InventoryFilters />
-          </aside>
+        <InventoryGrid vehicles={vehicles} />
+      </section>
 
-          <div>
-            <InventoryGrid vehicles={vehicles} />
-          </div>
+      {/* Was mounted at the bottom of the filter sidebar. It is demand capture,
+          not a filter, so it outlives the panel — kept here where it reads as a
+          closing ask after the shopper has been through the grid. */}
+      <section className="max-w-3xl mx-auto px-4 pb-12">
+        <div className="bg-white border border-brand-gray-200 rounded-xl p-6">
+          <VehicleAlertSignup />
         </div>
       </section>
     </>

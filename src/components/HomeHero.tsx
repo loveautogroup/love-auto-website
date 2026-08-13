@@ -13,18 +13,13 @@ import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import { GoogleReviewsLockup } from "@/components/badges/DealerCluster";
 import { SITE_CONFIG } from "@/lib/constants";
 import { useReviews } from "@/context/ReviewsContext";
-import { useInventoryFacets } from "@/lib/inventoryFacets";
 
 export default function HomeHero() {
   const googleReviews = useReviews();
   const { t } = useLanguage();
-  // Was a hardcoded Subaru/Lexus/Acura/Mazda/Honda/Toyota + SUV/Sedan/Wagon/
-  // Truck/Coupe list. It had drifted completely off the lot — measured
-  // 2026-08-12, all six make options returned zero vehicles (the lot was
-  // Ford, Lincoln, Mercedes-Benz), so the homepage's main search box could
-  // not produce a single result. Derived from live inventory now.
-  const { makes, bodyStyles } = useInventoryFacets();
 
+  // These stay: they are one-tap shortcuts, not a filter form, and the grid
+  // still reads these params from the URL.
   const pills = [
     { key: "under10" as const, href: "/inventory?maxPrice=10000" },
     { key: "under15" as const, href: "/inventory?maxPrice=15000" },
@@ -79,82 +74,11 @@ export default function HomeHero() {
           </div>
         </div>
 
-        {/* Quick Search */}
-        <div className="mt-4 bg-white/10 backdrop-blur-sm rounded-xl p-3 max-w-4xl">
-          <form
-            action="/inventory"
-            className="grid grid-cols-1 sm:grid-cols-4 gap-4"
-          >
-            <div>
-              <label
-                htmlFor="hero-make"
-                className="block text-sm font-medium text-brand-gray-300 mb-1"
-              >
-                {t.hero.makeLabel}
-              </label>
-              <select
-                id="hero-make"
-                name="make"
-                className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-white placeholder-brand-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-red"
-              >
-                <option value="">{t.hero.makeAll}</option>
-                {makes.map((make) => (
-                  <option key={make} value={make.toLowerCase()}>
-                    {make}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label
-                htmlFor="hero-price"
-                className="block text-sm font-medium text-brand-gray-300 mb-1"
-              >
-                {t.hero.priceLabel}
-              </label>
-              <select
-                id="hero-price"
-                name="maxPrice"
-                className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-brand-red"
-              >
-                <option value="">{t.hero.priceAny}</option>
-                <option value="8000">Under $8,000</option>
-                <option value="10000">Under $10,000</option>
-                <option value="12000">Under $12,000</option>
-                <option value="15000">Under $15,000</option>
-                <option value="18000">Under $18,000</option>
-              </select>
-            </div>
-            <div>
-              <label
-                htmlFor="hero-type"
-                className="block text-sm font-medium text-brand-gray-300 mb-1"
-              >
-                {t.hero.bodyLabel}
-              </label>
-              <select
-                id="hero-type"
-                name="bodyStyle"
-                className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-brand-red"
-              >
-                <option value="">{t.hero.bodyAll}</option>
-                {bodyStyles.map((style) => (
-                  <option key={style} value={style.toLowerCase()}>
-                    {style}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex items-end">
-              <button
-                type="submit"
-                className="w-full bg-brand-gold hover:bg-brand-gold-light text-brand-navy font-bold px-6 py-2.5 rounded-lg transition-colors"
-              >
-                {t.hero.searchLabel}
-              </button>
-            </div>
-          </form>
-        </div>
+        {/* Quick Search removed 2026-08-12 (owner): a Make / Max Price /
+            Body Style row is a narrowing tool, and with a lot this size
+            there is nothing to narrow — every option either matched the
+            whole lot or one car. The quick-links below cover the same
+            intent in one tap, and /inventory shows everything anyway. */}
 
         {/* Quick-Filter Pills */}
         <div className="mt-6 flex flex-wrap gap-2">
