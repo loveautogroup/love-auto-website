@@ -275,17 +275,17 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           style={{ paddingTop: cardHasBakedHero ? "5.5%" : undefined }}
         >
           {showCarfaxBadge && (
-            <div className="scale-[0.44] origin-top-left">
+            <div className="scale-[0.51] origin-top-left">
               <CarfaxBadge vin={vehicle.vin} />
             </div>
           )}
           {!isComingSoon && (
-            <div className="scale-[0.58] sm:scale-75 origin-top-left">
+            <div className="scale-[0.67] sm:scale-[0.86] origin-top-left">
               <CarfaxPillStack overlay={overlay} compact />
             </div>
           )}
           {!isComingSoon && overlay.effectiveStatus && (
-            <div className="scale-[0.58] sm:scale-75 origin-top-left">
+            <div className="scale-[0.67] sm:scale-[0.86] origin-top-left">
               <StatusPill kind={overlay.effectiveStatus} compact />
             </div>
           )}
@@ -295,7 +295,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             or when already baked into the hero pixels. */}
         {!isComingSoon && !cardHasBakedHero && (
           <div className="absolute top-1.5 left-0 right-0 flex justify-center z-10 pointer-events-none">
-            <div className="pointer-events-auto scale-[0.55] sm:scale-100 origin-top">
+            <div className="pointer-events-auto scale-[0.63] sm:scale-[1.15] origin-top">
               <DealerCluster
                 compact
                 rating={googleReviews.rating}
@@ -338,7 +338,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             Hidden when baked into the hero pixels. */}
         {!cardHasBakedHero && !isComingSoon && (
           <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
-            <div className="scale-[0.66] sm:scale-100 origin-bottom-right">
+            <div className="scale-[0.76] sm:scale-[1.15] origin-bottom-right">
               <GoogleReviewsLockup
                 rating={googleReviews.rating}
                 reviewCount={googleReviews.reviewCount}
