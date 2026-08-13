@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Love Auto Recon Highlights — inspection checklist for the VDP.
  *
@@ -10,19 +12,13 @@
  * column of the VDP layout.
  */
 
-const CHECKLIST_ITEMS = [
-  "Multi-point mechanical inspection",
-  "Oil & fluids serviced",
-  "Tire tread & pressure verified",
-  "Brakes inspected front & rear",
-  "Battery tested & charged",
-  "All exterior lights confirmed",
-  "A/C & heat tested",
-  "Interior fully detailed & cleaned",
-  "All electronics & features verified",
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function VDPReconHighlights() {
+  const { t } = useLanguage();
+  // Heading and subtitle are word-for-word trust.reconTitle/reconSub,
+  // which were already translated for the homepage trust block.
+  const CHECKLIST_ITEMS = t.vdp.reconItems;
   return (
     <section
       className="bg-white rounded-xl border border-brand-gray-200 p-5"
@@ -51,10 +47,10 @@ export default function VDPReconHighlights() {
             id="recon-heading"
             className="text-sm font-bold text-brand-gray-900 uppercase tracking-wide"
           >
-            Love Auto Recon Checklist
+            {t.trust.reconTitle}
           </h2>
           <p className="text-xs text-brand-gray-500 mt-0.5">
-            Every car inspected &amp; reconditioned before it leaves our lot
+            {t.trust.reconSub}
           </p>
         </div>
       </div>

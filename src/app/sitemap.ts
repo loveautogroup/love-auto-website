@@ -140,6 +140,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: v.lastModified,
     changeFrequency: "weekly" as const,
     priority: 0.8,
+    alternates: {
+      languages: {
+        "en-US": `${BASE}/inventory/${v.slug}/`,
+        "es-US": `${BASE}/es/inventory/${v.slug}/`,
+      },
+    },
+  }));
+
+  // Spanish VDPs. Generated from the SAME `indexable` list, so the two locales
+  // cannot disagree about which cars are live — a Spanish sitemap entry for a
+  // car the English side dropped would advertise a sold vehicle.
+  const spanishVehiclePages: MetadataRoute.Sitemap = indexable.map((v) => ({
+    url: `${BASE}/es/inventory/${v.slug}/`,
+    lastModified: v.lastModified,
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+    alternates: {
+      languages: {
+        "en-US": `${BASE}/inventory/${v.slug}/`,
+        "es-US": `${BASE}/es/inventory/${v.slug}/`,
+      },
+    },
   }));
 
   // Printed so a future divergence is one grep away: this count must match
@@ -170,5 +192,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   }));
 
-  return [...staticPages, ...landingPages, ...vehiclePages, ...spanishPages];
+  return [
+    ...staticPages,
+    ...landingPages,
+    ...vehiclePages,
+    ...spanishVehiclePages,
+    ...spanishPages,
+  ];
 }

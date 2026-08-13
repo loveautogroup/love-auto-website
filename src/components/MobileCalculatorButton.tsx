@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 import VDPPaymentCalculator from "./VDPPaymentCalculator";
 
 interface MobileCalculatorButtonProps {
@@ -20,6 +21,8 @@ export default function MobileCalculatorButton({
   vehicleSlug,
   vehicleLabel,
 }: MobileCalculatorButtonProps) {
+  const { t } = useLanguage();
+  const v = t.vdp;
   const [open, setOpen] = useState(false);
 
   // Lock body scroll while modal is open
@@ -57,7 +60,7 @@ export default function MobileCalculatorButton({
         <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
           <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zM7 7h10v2H7V7zm10 12H7v-2h10v2zm0-4H7v-4h10v4z" />
         </svg>
-        Calculate
+        {v.calculate}
       </button>
 
       {open && (
@@ -70,7 +73,7 @@ export default function MobileCalculatorButton({
           {/* Backdrop */}
           <button
             type="button"
-            aria-label="Close calculator"
+            aria-label={v.closeCalculator}
             onClick={() => setOpen(false)}
             className="absolute inset-0 bg-black/55"
           />
@@ -82,13 +85,13 @@ export default function MobileCalculatorButton({
                 id="calc-modal-heading"
                 className="text-base font-bold text-brand-gray-900"
               >
-                Estimate Your Payment
+                {v.estimatePayment}
               </h2>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
                 className="text-brand-gray-500 hover:text-brand-gray-900 p-1 -m-1"
-                aria-label="Close"
+                aria-label={v.closeCalculator}
               >
                 <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
                   <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />

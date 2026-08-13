@@ -22,6 +22,7 @@
  */
 
 import { useRef } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface VDPWalkaroundProps {
   walkaroundUrl: string;
@@ -34,6 +35,8 @@ export default function VDPWalkaround({
   posterUrl,
   vehicleLabel,
 }: VDPWalkaroundProps) {
+  const { t } = useLanguage();
+  const v = t.vdp;
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleMouseEnter = () => {
@@ -49,9 +52,9 @@ export default function VDPWalkaround({
   };
 
   return (
-    <section className="mt-6" aria-label="Vehicle walkaround video">
+    <section className="mt-6" aria-label={v.walkaroundAria}>
       <h2 className="text-base font-semibold text-brand-text mb-2 font-brand">
-        Walkaround Video
+        {v.walkaroundVideo}
       </h2>
       <div
         className="relative w-full rounded-lg overflow-hidden bg-black aspect-video"
@@ -80,7 +83,7 @@ export default function VDPWalkaround({
               className="underline text-brand-red"
               download
             >
-              Download the video
+              {v.downloadVideo}
             </a>
           </p>
         </video>

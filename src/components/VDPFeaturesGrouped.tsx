@@ -1,3 +1,7 @@
+"use client";
+
+import { useLanguage } from "@/context/LanguageContext";
+
 /**
  * Features grouped by category for the VDP Features tab.
  *
@@ -15,7 +19,8 @@ interface VDPFeaturesGroupedProps {
 
 interface CategoryDef {
   key: string;
-  label: string;
+  /** Dictionary key under t.vdp — the visible label. */
+  labelKey: "groupSafety" | "groupComfort" | "groupTechnology" | "groupDrivetrain" | "groupConvenience";
   Icon: () => React.ReactElement;
   /** Keyword patterns (case-insensitive) used to assign features. */
   match: RegExp;
@@ -24,35 +29,35 @@ interface CategoryDef {
 const CATEGORIES: CategoryDef[] = [
   {
     key: "safety",
-    label: "Safety",
+    labelKey: "groupSafety",
     Icon: SafetyIcon,
     match:
       /\b(airbag|safety|abs|brake|stability|traction|blind\s*spot|lane|lanewatch|collision|adaptive cruise|backup|rearview|camera|park\s*assist|tire pressure|rollover|child)\b/i,
   },
   {
     key: "comfort",
-    label: "Comfort",
+    labelKey: "groupComfort",
     Icon: ComfortIcon,
     match:
       /\b(leather|heated|cooled|ventilated|seat|moonroof|sunroof|panoramic|climate|air conditioning|a\/c|power liftgate|power lift|auto-dim|memory)\b/i,
   },
   {
     key: "tech",
-    label: "Technology",
+    labelKey: "groupTechnology",
     Icon: TechIcon,
     match:
       /\b(navigation|nav|bluetooth|sync|infotainment|touchscreen|sirius|xm|satellite|premium audio|harman|pioneer|bose|jbl|apple|android|carplay|usb|wireless|wi-?fi|onstar|safety connect|hands\s*free|premium sound)\b/i,
   },
   {
     key: "drivetrain",
-    label: "Drivetrain & Performance",
+    labelKey: "groupDrivetrain",
     Icon: PerformanceIcon,
     match:
       /\b(awd|all-wheel|4wd|four-wheel|sh-awd|symmetrical|rwd|fwd|turbo|ecoboost|vtec|v6|v8|hp|horsepower|engine|transmission|automatic|manual|paddle|sport|sentronic|selectshift|select\s*shift|exhaust)\b/i,
   },
   {
     key: "convenience",
-    label: "Convenience",
+    labelKey: "groupConvenience",
     Icon: ConvenienceIcon,
     match:
       /\b(keyless|push button|remote start|start|cruise control|fog|hid|led|headlamp|headlight|daytime|running|wheel|alloy|chrome|roof rack|roof box|tow|trailer|hitch|cargo)\b/i,
@@ -89,6 +94,8 @@ function categorize(features: string[]): { buckets: Bucket[]; other: string[] } 
 }
 
 export default function VDPFeaturesGrouped({ features }: VDPFeaturesGroupedProps) {
+  const { t } = useLanguage();
+  const v = t.vdp;
   const { buckets, other } = categorize(features);
   const totalShown = buckets.reduce((n, b) => n + b.items.length, 0) + other.length;
 
@@ -96,7 +103,7 @@ export default function VDPFeaturesGrouped({ features }: VDPFeaturesGroupedProps
     <div>
       <div className="flex items-baseline justify-between mb-4">
         <h3 className="text-lg font-bold text-brand-gray-900">
-          Features &amp; Specifications
+          {v.featuresSpecs}
         </h3>
         <span className="text-xs text-brand-gray-500">
           {totalShown} {totalShown === 1 ? "feature" : "features"}
@@ -111,7 +118,7 @@ export default function VDPFeaturesGrouped({ features }: VDPFeaturesGroupedProps
                 <category.Icon />
               </div>
               <h4 className="text-xs font-bold uppercase tracking-wide text-brand-gray-700">
-                {category.label}
+                {v[category.labelKey]}
               </h4>
             </div>
             <ul className="space-y-1.5">
@@ -132,7 +139,7 @@ export default function VDPFeaturesGrouped({ features }: VDPFeaturesGroupedProps
                 <OtherIcon />
               </div>
               <h4 className="text-xs font-bold uppercase tracking-wide text-brand-gray-700">
-                Other
+                {v.groupOther}
               </h4>
             </div>
             <ul className="space-y-1.5">

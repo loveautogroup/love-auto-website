@@ -12,6 +12,7 @@
  */
 
 import { getGoogleReviews, type GoogleReviewSnippet } from "@/lib/google-reviews";
+import T from "@/components/T";
 import { SITE_CONFIG } from "@/lib/constants";
 
 // Jordan-curated fallback reviews — used when the Places API key isn't
@@ -100,7 +101,7 @@ export default async function VDPReviews() {
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
           <h2 id="vdp-reviews-heading" className="text-2xl font-bold text-brand-gray-900">
-            What Our Customers Say
+            <T path={["vdp", "reviewsHeading"]} />
           </h2>
           <div className="flex items-center gap-2 mt-1 text-sm text-brand-gray-600">
             <span className="flex gap-0.5" aria-hidden="true">
@@ -119,7 +120,7 @@ export default async function VDPReviews() {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-sm font-semibold text-brand-red hover:underline"
         >
-          See all reviews on Google →
+          <T path={["vdp", "seeAllReviews"]} /> →
         </a>
       </div>
 

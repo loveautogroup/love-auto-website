@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { sampleInventory, getVehicleBySlug } from "@/data/inventory";
-import { fetchDmsInventory, syncedToVehicle, fetchGlobalBadgeConfig } from "@/lib/dmsInventory";
+import { fetchGlobalBadgeConfig } from "@/lib/dmsInventory";
+import { resolveVehicle, vehicleStaticParams } from "@/lib/vdpRoute";
 import { VehicleSchema, BreadcrumbSchema } from "@/components/StructuredData";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -50,56 +50,10 @@ function estimateMonthlyPayment(
   );
 }
 
+// Both live in src/lib/vdpRoute.ts so /es/inventory/[slug]/ publishes the
+// exact same vehicle set and resolves each slug identically.
 export async function generateStaticParams() {
-  // Reads the SAME build snapshot as sitemap.ts (see fetchDmsInventory).
-  // These two used to fetch independently, which is how the 2026-08-03 build
-  // shipped a sitemap entry for Lincoln MKX #11423 with no page behind it —
-  // the sitemap's fetch succeeded and this one silently returned [].
-  //
-  // The live feed is authoritative: we generate a page for exactly the
-  // vehicles currently on the lot. Seed slugs absent from the feed are sold
-  // vehicles, and a sold VDP is meant to 404 rather than render stale seed
-  // data claiming the car is still available (CLAUDE.md, 2026-07-28).
-  //
-  // Empty means "could not read the lot", never "the lot is empty" — only
-  // then do we fall back to seed so an upstream outage still ships pages.
-  const live = await fetchDmsInventory();
-  const slugs = new Set<string>();
-  if (live.length > 0) {
-    for (const v of live) slugs.add(v.slug);
-  } else {
-    console.warn(
-      "[generateStaticParams] live DMS inventory unavailable — falling back " +
-        "to seed slugs. Sold cars may be published and new arrivals missing."
-    );
-    for (const v of sampleInventory) slugs.add(v.slug);
-  }
-  // Must match the [sitemap] count logged by src/app/sitemap.ts.
-  console.log(
-    `[generateStaticParams] ${slugs.size} vehicle pages ` +
-      `(live=${live.length}, seed=${sampleInventory.length})`
-  );
-  return Array.from(slugs).map((slug) => ({ slug }));
-}
-
-
-async function resolveVehicle(slug: string) {
-  // Prefer live DMS — has current photos, price, and status.
-  // Fall back to seed only for vehicles absent from the DMS feed.
-  const live = await fetchDmsInventory();
-  const dmsMatch = live.find((v) => v.slug === slug);
-  if (dmsMatch) {
-    const vehicle = syncedToVehicle(dmsMatch);
-    // Documented intent: DMS marketing copy wins; if the feed has none yet,
-    // keep the hand-written seed description for this slug.
-    if (!vehicle.description) {
-      const seed = getVehicleBySlug(slug);
-      if (seed?.description) vehicle.description = seed.description;
-    }
-    return vehicle;
-  }
-
-  return getVehicleBySlug(slug);
+  return vehicleStaticParams();
 }
 
 export async function generateMetadata({
@@ -144,7 +98,16 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: url },
+    // Reciprocal with /es/inventory/<slug>/ — hreflang is ignored unless both
+    // sides agree. Slash-terminated because production 308s the bare form.
+    alternates: {
+      canonical: url,
+      languages: {
+        "en-US": url,
+        "es-US": `https://www.loveautogroup.net/es/inventory/${slug}/`,
+        "x-default": url,
+      },
+    },
     openGraph: {
       title,
       description,

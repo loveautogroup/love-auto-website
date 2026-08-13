@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import type { Translations } from "@/lib/i18n";
+import { useLanguage } from "@/context/LanguageContext";
 import { Vehicle } from "@/lib/types";
 import { FAQSchema } from "@/components/StructuredData";
 
@@ -21,71 +23,87 @@ interface VDPFAQProps {
   vehicle: Vehicle;
 }
 
-function generateFAQs(vehicle: Vehicle) {
-  const yearMakeModel = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
-  const formattedMileage = new Intl.NumberFormat("en-US").format(vehicle.mileage);
+type FaqCopy = Translations["vdp"]["faq"];
+
+/**
+ * Build the Q&A from the active dictionary.
+ *
+ * The copy lives in i18n so the Spanish VDP asks and answers in Spanish —
+ * these strings also feed FAQSchema, so a Spanish page emitting English
+ * structured data would misdescribe itself to search engines.
+ *
+ * fill() substitutes {model}/{miles}/{price}. The numbers are formatted with
+ * the active locale so a Spanish page reads 142.849 rather than 142,849.
+ */
+function fill(tpl: string, vars: Record<string, string>): string {
+  return Object.entries(vars).reduce(
+    (out, [k, val]) => out.split(`{${k}}`).join(val),
+    tpl
+  );
+}
+
+function generateFAQs(vehicle: Vehicle, f: FaqCopy, locale: string) {
+  const model = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
+  const nf = new Intl.NumberFormat(locale === "es" ? "es-US" : "en-US");
+  const miles = nf.format(vehicle.mileage);
   // Was maximumFractionDigits:0 with no floor, so $13,999.99 rendered as
   // "$14,000" — a HIGHER price than we charge, in FAQ text that also feeds
   // structured data. Now exact.
-  const formattedPrice = new Intl.NumberFormat("en-US", {
+  const price = new Intl.NumberFormat(locale === "es" ? "es-US" : "en-US", {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: Math.round(vehicle.price * 100) % 100 !== 0 ? 2 : 0,
     maximumFractionDigits: 2,
   }).format(vehicle.price);
 
+  const V = { model, miles, price };
   const faqs: { question: string; answer: string }[] = [];
 
-  // 1. Drivetrain — most-asked spec for Chicago-area shoppers
+  // Only answer this when the DMS actually knows the drivetrain.
+  //
+  // The final branch used to be a bare `else`, so ANY unknown value — and the
+  // feed does send "" — produced a confident "this is front-wheel drive".
+  // Stock 11331, a rear-wheel-drive Mustang, was telling shoppers it was FWD
+  // in both the visible copy and the FAQ structured data Google can surface.
+  // A missing spec now omits the question instead of inventing an answer.
+  const drivetrainAnswer: string | null =
+    vehicle.drivetrain === "AWD"
+      ? f.drivetrainAwd
+      : vehicle.drivetrain === "4WD"
+        ? f.drivetrain4wd
+        : vehicle.drivetrain === "RWD"
+          ? f.drivetrainRwd
+          : vehicle.drivetrain === "FWD"
+            ? f.drivetrainFwd
+            : null;
+  if (drivetrainAnswer) {
+    faqs.push({
+      question: fill(f.drivetrainQ, V),
+      answer: fill(drivetrainAnswer, V),
+    });
+  }
+
+  const mileageTail =
+    vehicle.mileage < 60000
+      ? f.mileageLow
+      : vehicle.mileage < 120000
+        ? f.mileageTypical
+        : f.mileageHigh;
   faqs.push({
-    question: `Is this ${yearMakeModel} all-wheel drive?`,
-    answer:
-      vehicle.drivetrain === "AWD"
-        ? `Yes — this ${yearMakeModel} has all-wheel drive (AWD), which is a real advantage for Chicago-area winters and is one of the reasons we keep these in inventory.`
-        : vehicle.drivetrain === "4WD"
-          ? `This ${yearMakeModel} has four-wheel drive (4WD). 4WD is engaged on demand — different from a full-time AWD system but excellent for off-road and severe-weather conditions.`
-          : vehicle.drivetrain === "RWD"
-            ? `No — this ${yearMakeModel} is rear-wheel drive (RWD). It's a great driver's setup but you'll want quality winter tires for Chicago-area snow.`
-            : `This ${yearMakeModel} is front-wheel drive (FWD). Fuel-efficient and predictable in most conditions; quality all-season or winter tires are recommended for Illinois winters.`,
+    question: fill(f.mileageQ, V),
+    answer: `${fill(f.mileageIntro, V)} ${mileageTail}`,
   });
 
-  // 2. Mileage — second-most-asked
-  faqs.push({
-    question: `How many miles does this ${yearMakeModel} have?`,
-    answer: `This ${yearMakeModel} currently shows ${formattedMileage} miles on the odometer. ${
-      vehicle.mileage < 60000
-        ? "That's well below average for the model year — a low-mileage example."
-        : vehicle.mileage < 120000
-          ? "That's typical for the model year and well within the useful service life of this vehicle."
-          : "Higher-mileage examples like this one are priced to reflect the additional miles. The drivetrain has been inspected and is operating within spec — happy to walk you through the inspection results."
-    }`,
-  });
-
-  // 3. Carfax availability
-  faqs.push({
-    question: `Can I see a Carfax report on this ${yearMakeModel}?`,
-    answer:
-      "Yes. Love Auto Group is a Carfax Advantage Dealer, which means we provide a free Carfax history report on every vehicle in our inventory. The report shows accident history, service records, ownership chain, and title status. You can pull it directly from the CARFAX badge on this vehicle's photo.",
-  });
-
-  // 4. Pricing / financing
-  faqs.push({
-    question: `What's the price and can I finance this ${yearMakeModel}?`,
-    answer: `This ${yearMakeModel} is priced at ${formattedPrice}. We work with multiple lenders including options for buyers with less-than-perfect credit. Our quick estimator on this page shows monthly payments by down payment, term, and credit tier — or stop by and we'll run an actual approval in about 15 minutes.`,
-  });
-
-  // 6. Test drive / location
-  faqs.push({
-    question: `Where can I see this ${yearMakeModel} in person?`,
-    answer:
-      "We're at 735 N Yale Ave, Unit A, Villa Park, IL 60181 — easy to reach from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the broader DuPage County area. Test drives are walk-in friendly during business hours; call (630) 359-3643 to confirm the vehicle is on the lot before you head over.",
-  });
+  faqs.push({ question: fill(f.carfaxQ, V), answer: fill(f.carfaxA, V) });
+  faqs.push({ question: fill(f.priceQ, V), answer: fill(f.priceA, V) });
+  faqs.push({ question: fill(f.locationQ, V), answer: fill(f.locationA, V) });
 
   return faqs;
 }
 
 export default function VDPFAQ({ vehicle }: VDPFAQProps) {
-  const faqs = generateFAQs(vehicle);
+  const { t, locale } = useLanguage();
+  const faqs = generateFAQs(vehicle, t.vdp.faq, locale);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
@@ -99,7 +117,7 @@ export default function VDPFAQ({ vehicle }: VDPFAQProps) {
           id="vdp-faq-heading"
           className="text-2xl font-bold text-brand-gray-900 mb-6"
         >
-          Common Questions About This Vehicle
+          {t.vdp.faqHeading}
         </h2>
         <ul className="divide-y divide-brand-gray-200">
           {faqs.map((faq, i) => {

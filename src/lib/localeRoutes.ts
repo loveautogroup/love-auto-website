@@ -23,6 +23,24 @@ export const LOCALIZED_PATHS: readonly string[] = [
 ];
 
 /**
+ * Localized routes that can't be enumerated, because the paths come from
+ * inventory and change every time a car lands or sells.
+ *
+ * Vehicle detail pages are generated for both locales from the same slug list
+ * (src/lib/vdpRoute.ts), so any live English VDP has a Spanish twin by
+ * construction. The switcher needs to know that without holding a list that
+ * would be stale the moment stock changes.
+ *
+ * Deliberately ONE segment: live VDPs are always /inventory/<slug>/, and a
+ * looser pattern would claim a Spanish twin for the deeper legacy
+ * /inventory/<make>/<model>/<stock> URLs, which have no page in either
+ * language.
+ */
+const DYNAMIC_LOCALIZED_PATTERNS: readonly RegExp[] = [
+  /^\/inventory\/[^/]+$/,
+];
+
+/**
  * Trailing slashes are load-bearing on this site: production 308s `/inventory`
  * to `/inventory/`, so a URL emitted without one is a redirect, not a page.
  * Google reports a redirecting sitemap entry as "Page with redirect" and
@@ -41,7 +59,7 @@ export function withTrailingSlash(path: string): string {
 /** Canonical English path for a Spanish one, and vice versa. */
 export function toSpanishPath(englishPath: string): string {
   const p = normalize(englishPath);
-  if (!LOCALIZED_PATHS.includes(p)) return "/es/";
+  if (!hasSpanishVersion(p)) return "/es/";
   return p === "/" ? "/es/" : withTrailingSlash(`/es${p}`);
 }
 
@@ -64,7 +82,11 @@ export function isSpanishPath(path: string): boolean {
  * static export and that is a hard 404, not a soft redirect.
  */
 export function hasSpanishVersion(englishPath: string): boolean {
-  return LOCALIZED_PATHS.includes(normalize(englishPath));
+  const p = normalize(englishPath);
+  return (
+    LOCALIZED_PATHS.includes(p) ||
+    DYNAMIC_LOCALIZED_PATTERNS.some((rx) => rx.test(p))
+  );
 }
 
 function normalize(path: string): string {

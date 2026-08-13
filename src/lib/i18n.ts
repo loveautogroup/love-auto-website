@@ -162,6 +162,96 @@ export const translations = {
       window: "in the last 14 days",
       subtitle: "These prices just came down — they tend not to stay long.",
     },
+    // Vehicle detail page. The page shell already resolved through <T>; this
+    // covers the child components that were still hardcoded.
+    //
+    // Deliberately NOT here: the per-vehicle Public Description and the
+    // feature list, which are authored in the DMS in English and arrive as
+    // data — no dictionary can reach them. Customer review text is absent for
+    // a different reason: those are real quotes, and translating them would
+    // misrepresent what somebody actually said.
+    //
+    // The recon checklist heading and subtitle are NOT duplicated here — they
+    // are word-for-word `trust.reconTitle` / `trust.reconSub`, which are
+    // already translated. Only the item list is new.
+    vdp: {
+      estimatePayment: "Estimate Your Payment",
+      downPayment: "Down Payment",
+      credit: "Credit",
+      term: "Term",
+      months: "months",
+      estimatedMonthly: "Estimated Monthly Payment",
+      creditExcellent: "Excellent (720+)",
+      creditGood: "Good (680-719)",
+      creditFair: "Fair (620-679)",
+      creditRebuilding: "Rebuilding (<620)",
+      calculate: "Calculate",
+      closeCalculator: "Close calculator",
+      statusAvailable: "Available",
+      statusSalePending: "Sale Pending",
+      statusComingSoon: "Coming Soon",
+      statusSold: "Sold",
+      similarVehicles: "Similar Vehicles",
+      scrollLeft: "Scroll left",
+      scrollRight: "Scroll right",
+      featuresSpecs: "Features & Specifications",
+      walkaroundVideo: "Walkaround Video",
+      downloadVideo: "Download the video",
+      walkaroundAria: "Vehicle walkaround video",
+      reviewsHeading: "What Our Customers Say",
+      seeAllReviews: "See all reviews on Google",
+      // Display labels only. CATEGORIES[].key and .match in
+      // VDPFeaturesGrouped stay English — they identify and match, they
+      // are never shown.
+      groupSafety: "Safety",
+      groupComfort: "Comfort",
+      groupTechnology: "Technology",
+      groupDrivetrain: "Drivetrain & Performance",
+      groupConvenience: "Convenience",
+      groupOther: "Other",
+      reconItems: [
+        "Multi-point mechanical inspection",
+        "Oil & fluids serviced",
+        "Tire tread & pressure verified",
+        "Brakes inspected front & rear",
+        "Battery tested & charged",
+        "All exterior lights confirmed",
+        "A/C & heat tested",
+        "Interior fully detailed & cleaned",
+        "All electronics & features verified",
+      ],
+      faqHeading: "Common Questions About This Vehicle",
+      // {model}, {miles} and {price} are substituted by VDPFAQ. Every
+      // placeholder must survive translation or the sentence loses its fact.
+      faq: {
+        drivetrainQ: "Is this {model} all-wheel drive?",
+        drivetrainAwd:
+          "Yes — this {model} has all-wheel drive (AWD), which is a real advantage for Chicago-area winters and is one of the reasons we keep these in inventory.",
+        drivetrain4wd:
+          "This {model} has four-wheel drive (4WD). 4WD is engaged on demand — different from a full-time AWD system but excellent for off-road and severe-weather conditions.",
+        drivetrainRwd:
+          "No — this {model} is rear-wheel drive (RWD). It's a great driver's setup but you'll want quality winter tires for Chicago-area snow.",
+        drivetrainFwd:
+          "This {model} is front-wheel drive (FWD). Fuel-efficient and predictable in most conditions; quality all-season or winter tires are recommended for Illinois winters.",
+        mileageQ: "How many miles does this {model} have?",
+        mileageIntro: "This {model} currently shows {miles} miles on the odometer.",
+        mileageLow:
+          "That's well below average for the model year — a low-mileage example.",
+        mileageTypical:
+          "That's typical for the model year and well within the useful service life of this vehicle.",
+        mileageHigh:
+          "Higher-mileage examples like this one are priced to reflect the additional miles. The drivetrain has been inspected and is operating within spec — happy to walk you through the inspection results.",
+        carfaxQ: "Can I see a Carfax report on this {model}?",
+        carfaxA:
+          "Yes. Love Auto Group is a Carfax Advantage Dealer, which means we provide a free Carfax history report on every vehicle in our inventory. The report shows accident history, service records, ownership chain, and title status. You can pull it directly from the CARFAX badge on this vehicle's photo.",
+        priceQ: "What's the price and can I finance this {model}?",
+        priceA:
+          "This {model} is priced at {price}. We work with multiple lenders including options for buyers with less-than-perfect credit. Our quick estimator on this page shows monthly payments by down payment, term, and credit tier — or stop by and we'll run an actual approval in about 15 minutes.",
+        locationQ: "Where can I see this {model} in person?",
+        locationA:
+          "We're at 735 N Yale Ave, Unit A, Villa Park, IL 60181 — easy to reach from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the broader DuPage County area. Test drives are walk-in friendly during business hours; call (630) 359-3643 to confirm the vehicle is on the lot before you head over.",
+      },
+    },
     card: {
       vin: "VIN",
       mi: "mi",
@@ -702,6 +792,80 @@ export const translations = {
       drops: "rebajas de precio",
       window: "en los últimos 14 días",
       subtitle: "Estos precios acaban de bajar — no suelen durar mucho.",
+    },
+    vdp: {
+      estimatePayment: "Calcule Su Pago",
+      downPayment: "Pago Inicial",
+      credit: "Crédito",
+      term: "Plazo",
+      months: "meses",
+      estimatedMonthly: "Pago Mensual Estimado",
+      creditExcellent: "Excelente (720+)",
+      creditGood: "Bueno (680-719)",
+      creditFair: "Regular (620-679)",
+      creditRebuilding: "En Recuperación (menos de 620)",
+      calculate: "Calcular",
+      closeCalculator: "Cerrar calculadora",
+      statusAvailable: "Disponible",
+      statusSalePending: "Venta Pendiente",
+      statusComingSoon: "Próximamente",
+      statusSold: "Vendido",
+      similarVehicles: "Vehículos Similares",
+      scrollLeft: "Desplazar a la izquierda",
+      scrollRight: "Desplazar a la derecha",
+      featuresSpecs: "Características y Especificaciones",
+      walkaroundVideo: "Video del Vehículo",
+      downloadVideo: "Descargar el video",
+      walkaroundAria: "Video de recorrido del vehículo",
+      reviewsHeading: "Lo Que Dicen Nuestros Clientes",
+      seeAllReviews: "Ver todas las reseñas en Google",
+      groupSafety: "Seguridad",
+      groupComfort: "Confort",
+      groupTechnology: "Tecnología",
+      groupDrivetrain: "Tracción y Rendimiento",
+      groupConvenience: "Comodidad",
+      groupOther: "Otros",
+      reconItems: [
+        "Inspección mecánica de múltiples puntos",
+        "Aceite y fluidos revisados",
+        "Banda de rodadura y presión de llantas verificadas",
+        "Frenos inspeccionados adelante y atrás",
+        "Batería probada y cargada",
+        "Todas las luces exteriores confirmadas",
+        "A/C y calefacción probados",
+        "Interior completamente detallado y limpio",
+        "Todos los sistemas electrónicos y funciones verificados",
+      ],
+      faqHeading: "Preguntas Frecuentes Sobre Este Vehículo",
+      faq: {
+        drivetrainQ: "¿Este {model} tiene tracción en las cuatro ruedas?",
+        drivetrainAwd:
+          "Sí — este {model} tiene tracción integral (AWD), una ventaja real para los inviernos del área de Chicago y una de las razones por las que mantenemos estos vehículos en inventario.",
+        drivetrain4wd:
+          "Este {model} tiene tracción en las cuatro ruedas (4WD). El 4WD se activa cuando usted lo necesita — distinto de un sistema AWD permanente, pero excelente para terreno difícil y clima severo.",
+        drivetrainRwd:
+          "No — este {model} es de tracción trasera (RWD). Es una configuración estupenda para manejar, pero conviene usar llantas de invierno de calidad para la nieve del área de Chicago.",
+        drivetrainFwd:
+          "Este {model} es de tracción delantera (FWD). Eficiente en combustible y predecible en la mayoría de las condiciones; recomendamos llantas para toda estación o de invierno de calidad para los inviernos de Illinois.",
+        mileageQ: "¿Cuántas millas tiene este {model}?",
+        mileageIntro:
+          "Este {model} muestra actualmente {miles} millas en el odómetro.",
+        mileageLow:
+          "Eso está muy por debajo del promedio para el año del modelo — un ejemplar de bajo millaje.",
+        mileageTypical:
+          "Eso es típico para el año del modelo y está dentro de la vida útil de servicio de este vehículo.",
+        mileageHigh:
+          "Los ejemplares con más millas como este tienen un precio que refleja las millas adicionales. El tren motriz fue inspeccionado y funciona dentro de especificación — con gusto le explicamos los resultados de la inspección.",
+        carfaxQ: "¿Puedo ver un reporte Carfax de este {model}?",
+        carfaxA:
+          "Sí. Love Auto Group es Distribuidor Carfax Advantage, lo que significa que ofrecemos un reporte de historial Carfax gratis en cada vehículo de nuestro inventario. El reporte muestra historial de accidentes, registros de servicio, cadena de propietarios y estado del título. Puede abrirlo directamente desde el distintivo CARFAX en la foto de este vehículo.",
+        priceQ: "¿Cuál es el precio y puedo financiar este {model}?",
+        priceA:
+          "Este {model} tiene un precio de {price}. Trabajamos con varios prestamistas, incluyendo opciones para compradores con crédito imperfecto. Nuestra calculadora rápida en esta página muestra los pagos mensuales según el pago inicial, el plazo y el nivel de crédito — o visítenos y hacemos una aprobación real en unos 15 minutos.",
+        locationQ: "¿Dónde puedo ver este {model} en persona?",
+        locationA:
+          "Estamos en 735 N Yale Ave, Unit A, Villa Park, IL 60181 — de fácil acceso desde Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison y el área del condado de DuPage. Las pruebas de manejo no requieren cita durante el horario de atención; llame al (630) 359-3643 para confirmar que el vehículo está en el lote antes de venir.",
+      },
     },
     card: {
       vin: "VIN",

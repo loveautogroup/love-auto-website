@@ -13,6 +13,7 @@
  */
 
 import { useInventory } from "@/lib/useInventory";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface BaseProps {
   vin: string;
@@ -65,6 +66,8 @@ export function VDPLiveStatus({
 }: BaseProps & {
   fallback: "available" | "sale-pending" | "sold" | "coming-soon";
 }) {
+  const { t } = useLanguage();
+  const v = t.vdp;
   const { vehicles, source } = useInventory();
   const value = (() => {
     if (source === "fallback") return fallback;
@@ -80,7 +83,7 @@ export function VDPLiveStatus({
         }
       >
         <span className="w-2 h-2 bg-brand-green rounded-full animate-pulse" />
-        Available
+        {v.statusAvailable}
       </span>
     );
   }
@@ -93,7 +96,7 @@ export function VDPLiveStatus({
         }
       >
         <span className="w-2 h-2 bg-amber-500 rounded-full" />
-        Sale Pending
+        {v.statusSalePending}
       </span>
     );
   }
@@ -106,7 +109,7 @@ export function VDPLiveStatus({
         }
       >
         <span className="w-2 h-2 bg-brand-red rounded-full animate-pulse" />
-        Coming Soon
+        {v.statusComingSoon}
       </span>
     );
   }
@@ -118,7 +121,7 @@ export function VDPLiveStatus({
       }
     >
       <span className="w-2 h-2 bg-brand-gray-400 rounded-full" />
-      Sold
+      {v.statusSold}
     </span>
   );
 }

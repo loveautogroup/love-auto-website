@@ -10,6 +10,7 @@
  */
 
 import { useRef, useState, useEffect, useCallback } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
 import { useInventory } from "@/lib/useInventory";
 import { useVisibleVehicles } from "@/data/useMerchandising";
@@ -25,6 +26,8 @@ export default function SimilarVehiclesCarousel({
   make,
   bodyStyle,
 }: Props) {
+  const { t } = useLanguage();
+  const v = t.vdp;
   const { vehicles, loading } = useInventory();
   const visible = useVisibleVehicles(vehicles);
 
@@ -82,7 +85,7 @@ export default function SimilarVehiclesCarousel({
     <section className="mt-12">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-brand-gray-900">
-          Similar Vehicles
+          {v.similarVehicles}
         </h2>
 
         {/* Arrow buttons — only shown when there are enough cards to scroll */}
@@ -91,7 +94,7 @@ export default function SimilarVehiclesCarousel({
             <button
               onClick={() => scroll("left")}
               disabled={!canScrollLeft}
-              aria-label="Scroll left"
+              aria-label={v.scrollLeft}
               className="w-9 h-9 rounded-full border border-brand-gray-200 flex items-center justify-center transition-colors
                 disabled:opacity-30 disabled:cursor-not-allowed
                 enabled:hover:border-brand-red enabled:hover:text-brand-red enabled:hover:bg-red-50"
@@ -110,7 +113,7 @@ export default function SimilarVehiclesCarousel({
             <button
               onClick={() => scroll("right")}
               disabled={!canScrollRight}
-              aria-label="Scroll right"
+              aria-label={v.scrollRight}
               className="w-9 h-9 rounded-full border border-brand-gray-200 flex items-center justify-center transition-colors
                 disabled:opacity-30 disabled:cursor-not-allowed
                 enabled:hover:border-brand-red enabled:hover:text-brand-red enabled:hover:bg-red-50"
