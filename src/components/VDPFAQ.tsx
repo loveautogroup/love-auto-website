@@ -96,6 +96,11 @@ function generateFAQs(vehicle: Vehicle, f: FaqCopy, locale: string) {
 
   faqs.push({ question: fill(f.carfaxQ, V), answer: fill(f.carfaxA, V) });
   faqs.push({ question: fill(f.priceQ, V), answer: fill(f.priceA, V) });
+  // Straight after price, where "so what's the catch" is the next thought.
+  // This one also feeds FAQSchema, so it is the no-dealer-fees claim's only
+  // route into Google rich results and voice/AI answers — the badges and
+  // trust strip are invisible to both.
+  faqs.push({ question: fill(f.feesQ, V), answer: fill(f.feesA, V) });
   faqs.push({ question: fill(f.locationQ, V), answer: fill(f.locationA, V) });
 
   return faqs;

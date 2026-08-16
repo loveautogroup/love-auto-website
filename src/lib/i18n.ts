@@ -247,6 +247,17 @@ export const translations = {
         priceQ: "What's the price and can I finance this {model}?",
         priceA:
           "This {model} is priced at {price}. We work with multiple lenders including options for buyers with less-than-perfect credit. Our quick estimator on this page shows monthly payments by down payment, term, and credit tier — or stop by and we'll run an actual approval in about 15 minutes.",
+        // Deliberately states only facts about our own pricing. The stronger
+        // comparative framing ("Illinois dealers can charge up to $377") is
+        // held back until Diane reviews it — a claim about competitors' fees
+        // is a materially higher advertising bar than a claim about ours.
+        //
+        // No dollar figures for title/registration on purpose: those are set
+        // by the state and change, and a hardcoded number in copy is exactly
+        // the drift that put a stale tax rate on printed forms for months.
+        feesQ: "Are there any dealer fees on this {model}?",
+        feesA:
+          "No. We charge no dealer fee, no doc fee, and no prep fee — on this {model} or anything else on the lot. The advertised price is the price of the car. On top of it you pay Illinois sales tax, title, and registration, which are set by the state and go to the Secretary of State, not to us. If a charge ever shows up on your paperwork that nobody explained to you first, stop and ask.",
         locationQ: "Where can I see this {model} in person?",
         locationA:
           "We're at 735 N Yale Ave, Unit A, Villa Park, IL 60181 — easy to reach from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the broader DuPage County area. Test drives are walk-in friendly during business hours; call (630) 359-3643 to confirm the vehicle is on the lot before you head over.",
@@ -862,6 +873,9 @@ export const translations = {
         priceQ: "¿Cuál es el precio y puedo financiar este {model}?",
         priceA:
           "Este {model} tiene un precio de {price}. Trabajamos con varios prestamistas, incluyendo opciones para compradores con crédito imperfecto. Nuestra calculadora rápida en esta página muestra los pagos mensuales según el pago inicial, el plazo y el nivel de crédito — o visítenos y hacemos una aprobación real en unos 15 minutos.",
+        feesQ: "¿Hay cargos de concesionario en este {model}?",
+        feesA:
+          "No. No cobramos cargos de concesionario, ni de documentación, ni de preparación — ni en este {model} ni en ningún otro vehículo del lote. El precio anunciado es el precio del auto. Además de eso, usted paga el impuesto sobre la venta de Illinois, el título y la placa, que fija el estado y se pagan a la Secretaría de Estado, no a nosotros. Si alguna vez aparece un cargo en su documentación que nadie le explicó antes, deténgase y pregunte.",
         locationQ: "¿Dónde puedo ver este {model} en persona?",
         locationA:
           "Estamos en 735 N Yale Ave, Unit A, Villa Park, IL 60181 — de fácil acceso desde Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison y el área del condado de DuPage. Las pruebas de manejo no requieren cita durante el horario de atención; llame al (630) 359-3643 para confirmar que el vehículo está en el lote antes de venir.",
