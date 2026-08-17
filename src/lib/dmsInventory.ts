@@ -37,6 +37,7 @@ export interface GlobalBadgeConfig {
   dealer_badge_size_pct: number;
   google_badge_enabled: boolean;
   no_fee_badge_enabled?: boolean;
+  no_fee_badge_copy?: string;
   google_badge_position: "bottom-right" | "bottom-left" | "top-right" | "top-left";
   phone_badge_enabled: boolean;
   phone_number: string;
@@ -58,6 +59,7 @@ export const BADGE_CONFIG_FALLBACK: GlobalBadgeConfig = {
   google_badge_enabled: true,
   // Off unless the DMS turns it on, matching the column default.
   no_fee_badge_enabled: false,
+  no_fee_badge_copy: "No Dealer Fees",
   google_badge_position: "bottom-right",
   phone_badge_enabled: true,
   phone_number: "(630) 359-3643",

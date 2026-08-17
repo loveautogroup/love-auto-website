@@ -478,7 +478,10 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     <WarrantyBadge copy={warrantyCopy} compact />
                   )}
                   {!isComingSoon && showNoFeeBadge && (
-                    <NoDealerFeesBadge compact />
+                    <NoDealerFeesBadge
+                      copy={badgeConfig?.no_fee_badge_copy}
+                      compact
+                    />
                   )}
                   {showGoogleBadge && (
                     <GoogleReviewsLockup
