@@ -20,6 +20,7 @@ import {
   PhotoScrim,
   StatusPill,
   WarrantyBadge,
+  NoDealerFeesBadge,
 } from "./badges";
 
 interface PhotoGalleryProps {
@@ -263,6 +264,11 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
   // treatment, baked into the hero pixels when the hero is baked.
   const showUrlBadge = !hasBakedHero && hasRealPhotos && !forcePlaceholder;
   const showCarfaxBadge = !hasBakedHero && badgeConfig?.carfax_badge_enabled !== false;
+  // Same !hasBakedHero gate as its siblings: when the hero is baked the mark
+  // is already in the pixels, so rendering the HTML copy would double-stamp.
+  // Opt-in rather than opt-out, mirroring no_fee_badge_enabled's default.
+  const showNoFeeBadge =
+    !hasBakedHero && !isComingSoon && badgeConfig?.no_fee_badge_enabled === true;
 
   // Only open on mobile; desktop keeps thumbnail-swap-only behaviour
   const openLightbox = (index: number) => {
@@ -460,14 +466,19 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                   </div>
                 )}
 
-                {/* Bottom-right: warranty chip + Google Reviews lockup.
-                    Logo is now top-center; only reviews badge lives here. */}
+                {/* Bottom-right: no-dealer-fees mark + Google Reviews lockup.
+                    Stacked in that order so the mark sits ABOVE the lockup,
+                    matching composite_all_badges in photo_overlay.py, which
+                    lifts the baked mark clear of the Google pill. */}
                 <div
                   className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.37] sm:scale-[0.86] origin-bottom-right"
                   style={{ bottom: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
                 >
                   {!isComingSoon && warrantyCopy && (
                     <WarrantyBadge copy={warrantyCopy} compact />
+                  )}
+                  {!isComingSoon && showNoFeeBadge && (
+                    <NoDealerFeesBadge compact />
                   )}
                   {showGoogleBadge && (
                     <GoogleReviewsLockup

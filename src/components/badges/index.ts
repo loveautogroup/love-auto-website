@@ -18,3 +18,4 @@ export { UrlBadge } from "./PhoneCTA";
 export { default as PhotoScrim } from "./PhotoScrim";
 export { default as StatusPill } from "./StatusPill";
 export { default as WarrantyBadge } from "./WarrantyBadge";
+export { default as NoDealerFeesBadge } from "./NoDealerFeesBadge";
