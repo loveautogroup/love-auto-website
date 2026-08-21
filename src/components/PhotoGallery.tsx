@@ -368,7 +368,19 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
 
                 {/* Top-left: CARFAX logo + feature pills (1-Owner, No Accidents…) + status.
                     The CARFAX card hides when baked into the hero pixels; the
-                    feature/status pills are never baked so they always render. */}
+                    feature/status pills are never baked so they always render.
+
+                    ⚠ These three use `zoom`, NOT `transform: scale`, and that is
+                    deliberate. They are the only scaled elements that are
+                    siblings in a flow layout, and transforms do not affect
+                    layout — the column reserves each badge's PRE-transform
+                    height, so scaling up makes them render on top of each
+                    other while the layout still thinks they fit. At the old
+                    1.15 the overflow was ~11px and the gap hid it; at 1.725 the
+                    CARFAX card laid out at ~83px, rendered at 144px, and
+                    covered the pill stack by 54px. `zoom` scales the layout box
+                    too, so the flex gap just works. Do not "tidy" these back
+                    to scale-[...]. */}
                 <div
                   className="absolute z-10 flex flex-col items-start gap-1 sm:gap-1.5"
                   style={{
@@ -385,17 +397,17 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                        spec (Jeremiah 2026-06-05): carfax/dealer/google all
                        186px wide on the desktop VDP. Mobile gets the same
                        0.6 treatment as the lockup wrapper below. */
-                    <div className="scale-[0.78] sm:scale-[1.725] origin-top-left">
+                    <div className="[zoom:0.78] sm:[zoom:1.725]">
                       <CarfaxBadge vin={vehicle.vin} />
                     </div>
                   )}
                   {!isComingSoon && (
-                    <div className="scale-[0.705] sm:scale-[1.29] origin-top-left">
+                    <div className="[zoom:0.705] sm:[zoom:1.29]">
                       <CarfaxPillStack overlay={overlay} />
                     </div>
                   )}
                   {!isComingSoon && overlay.effectiveStatus && (
-                    <div className="scale-[0.705] sm:scale-[1.29] origin-top-left">
+                    <div className="[zoom:0.705] sm:[zoom:1.29]">
                       <StatusPill kind={overlay.effectiveStatus} />
                     </div>
                   )}
