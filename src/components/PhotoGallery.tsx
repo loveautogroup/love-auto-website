@@ -385,17 +385,17 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                        spec (Jeremiah 2026-06-05): carfax/dealer/google all
                        186px wide on the desktop VDP. Mobile gets the same
                        0.6 treatment as the lockup wrapper below. */
-                    <div className="scale-[0.52] sm:scale-[1.15] origin-top-left">
+                    <div className="scale-[0.78] sm:scale-[1.725] origin-top-left">
                       <CarfaxBadge vin={vehicle.vin} />
                     </div>
                   )}
                   {!isComingSoon && (
-                    <div className="scale-[0.47] sm:scale-[0.86] origin-top-left">
+                    <div className="scale-[0.705] sm:scale-[1.29] origin-top-left">
                       <CarfaxPillStack overlay={overlay} />
                     </div>
                   )}
                   {!isComingSoon && overlay.effectiveStatus && (
-                    <div className="scale-[0.47] sm:scale-[0.86] origin-top-left">
+                    <div className="scale-[0.705] sm:scale-[1.29] origin-top-left">
                       <StatusPill kind={overlay.effectiveStatus} />
                     </div>
                   )}
@@ -423,7 +423,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                 {/* Top-right: merchandising feature pills */}
                 {!isComingSoon && (
                   <div
-                    className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.44] sm:scale-[0.86] origin-top-right"
+                    className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.66] sm:scale-[1.29] origin-top-right"
                     style={{ top: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
                   >
                     <FeaturePillCluster pills={overlay.featurePills} stack="inline" />
@@ -434,7 +434,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                 {showPhoneBadge && (
                   <>
                     <div
-                      className="absolute z-10 md:hidden scale-[0.83] origin-bottom-left"
+                      className="absolute z-10 md:hidden scale-[1.245] origin-bottom-left"
                       style={{ bottom: `${MARGIN_PCT}%`, left: `${MARGIN_PCT}%` }}
                     >
                       <PhoneCTA
@@ -461,7 +461,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                     style={{ bottom: `${MARGIN_PCT}%` }}
                   >
-                    <span className="md:hidden inline-block scale-[0.83] origin-bottom"><UrlBadge compact /></span>
+                    <span className="md:hidden inline-block scale-[1.245] origin-bottom"><UrlBadge compact /></span>
                     <span className="hidden md:inline"><UrlBadge /></span>
                   </div>
                 )}
@@ -471,7 +471,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     matching composite_all_badges in photo_overlay.py, which
                     lifts the baked mark clear of the Google pill. */}
                 <div
-                  className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.37] sm:scale-[0.86] origin-bottom-right"
+                  className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.555] sm:scale-[1.29] origin-bottom-right"
                   style={{ bottom: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
                 >
                   {!isComingSoon && warrantyCopy && (
@@ -520,7 +520,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                   className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                   style={{ bottom: `${MARGIN_PCT}%` }}
                 >
-                  <span className="md:hidden inline-block scale-[0.83] origin-bottom"><UrlBadge compact /></span>
+                  <span className="md:hidden inline-block scale-[1.245] origin-bottom"><UrlBadge compact /></span>
                   <span className="hidden md:inline"><UrlBadge /></span>
                 </div>
               </div>
