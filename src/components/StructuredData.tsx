@@ -228,6 +228,13 @@ export function VehicleSchema({ vehicle }: { vehicle: Vehicle }) {
     vehicleTransmission: vehicle.transmission,
     fuelType: vehicle.fuelType,
     vehicleIdentificationNumber: vehicle.vin,
+    // Stock number as sku/mpn. Machine-readable is the point: this is what
+    // scrapers, AI assistants and our own lead bots read off the page, and a
+    // shopper who writes "do you still have stock 11415?" can only be matched
+    // to a car if the number is published somewhere addressable. The VIN alone
+    // is not enough -- nobody quotes a VIN in an email.
+    sku: vehicle.stockNumber,
+    mpn: vehicle.stockNumber,
     bodyType: vehicle.bodyStyle,
     itemCondition: "https://schema.org/UsedCondition",
     vehicleEngine: {

@@ -45,12 +45,23 @@ const INVENTORY_PATH = "/api/v1/public/inventory";
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const ANTHROPIC_MODEL = "claude-sonnet-4-6";
 
+const MODE: "strict" | "warn" = process.argv.includes("--warn") ? "warn" : "strict";
+
+// The key check has to sit BELOW the MODE parse. It used to sit above it and
+// exit 2 unconditionally, which meant --warn ("exit 0 always", per this file's
+// own contract) could never take effect for the one failure a local machine
+// actually hits: no key in the environment. Every `npm run build` off a
+// developer box died in prebuild.
 if (!ANTHROPIC_API_KEY) {
+  if (MODE === "warn") {
+    console.warn(
+      "[hero-audit] ANTHROPIC_API_KEY not set - skipping the hero audit (warn mode)."
+    );
+    process.exit(0);
+  }
   console.error("ANTHROPIC_API_KEY env var is required.");
   process.exit(2);
 }
-
-const MODE: "strict" | "warn" = process.argv.includes("--warn") ? "warn" : "strict";
 
 // Acceptable hero categories — only these two are valid as photo #1.
 const ACCEPTABLE_HERO = new Set([

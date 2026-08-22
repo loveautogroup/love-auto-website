@@ -89,7 +89,8 @@ function renderGenericCsv(vehicles: FeedVehicle[]): string {
     const photoCells = Array.from({ length: MAX_PHOTOS }, (_, i) => photos[i]?.url ?? "");
 
     return [
-      v.id,
+      // Stock number, not the row id -- see cargurus.xml.ts.
+      v.stockNumber ?? v.id,
       v.vin,
       v.year,
       v.make,

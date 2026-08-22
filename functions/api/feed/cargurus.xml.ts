@@ -95,8 +95,12 @@ function renderVehicle(v: FeedVehicle): string {
   // We only feed Available + Sale Pending (filter is upstream).
   const status = v.status ?? "Available";
 
+  // Stock number, NOT the row id. A shopper or a lead bot quotes the number
+  // printed on the window and shown on our VDP; publishing the Railway row
+  // id here made that number unanswerable. dealercenter.csv.ts already does
+  // it this way -- id stays only as a fallback for a car with no stock #.
   return `  <vehicle>
-    <stock_number>${xmlEscape(v.id)}</stock_number>
+    <stock_number>${xmlEscape(v.stockNumber ?? v.id)}</stock_number>
     <vin>${xmlEscape(v.vin)}</vin>
     <year>${xmlEscape(v.year)}</year>
     <make>${xmlEscape(v.make)}</make>

@@ -288,6 +288,17 @@ export default async function VehicleDetailPage({
                   )}
                   <span className="text-brand-gray-300">·</span>
                   <VDPLiveStatus vin={vehicle.vin} fallback={vehicle.status} />
+                  {vehicle.stockNumber && (
+                    <>
+                      <span className="text-brand-gray-300">·</span>
+                      {/* Stock # published so a shopper can quote it back to
+                          us. Lead bots match "do you still have 11415?" to a
+                          vehicle; nobody quotes a VIN in an email. */}
+                      <span className="font-mono text-brand-gray-400">
+                        Stock #{vehicle.stockNumber}
+                      </span>
+                    </>
+                  )}
                   {vehicle.vin && (
                     <>
                       <span className="text-brand-gray-300">·</span>
@@ -360,6 +371,7 @@ export default async function VehicleDetailPage({
                     {vehicle.vin && (
                       <p className="text-xs text-brand-gray-400 mt-1 font-mono tracking-wide">
                         VIN: {vehicle.vin}
+                        {vehicle.stockNumber ? ` · Stock #${vehicle.stockNumber}` : ""}
                       </p>
                     )}
                     <p className="text-3xl font-bold text-brand-red mt-3">
@@ -482,6 +494,7 @@ export default async function VehicleDetailPage({
               {vehicle.vin && (
                 <p className="text-xs text-brand-gray-400 mt-1 font-mono tracking-wide">
                   VIN: {vehicle.vin}
+                  {vehicle.stockNumber ? ` · Stock #${vehicle.stockNumber}` : ""}
                 </p>
               )}
               <div className="flex items-baseline gap-3 mt-2">

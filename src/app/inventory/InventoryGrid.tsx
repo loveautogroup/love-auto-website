@@ -75,6 +75,11 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
       if (
         q &&
         !matchesVehicleSearch(q, [
+          // Identifiers first: a shopper who has the stock number off a
+          // listing, a window sticker or one of our own replies must be able
+          // to paste it here and land on the car. Same for a pasted VIN.
+          v.stockNumber,
+          v.vin,
           v.make,
           v.model,
           v.trim,
