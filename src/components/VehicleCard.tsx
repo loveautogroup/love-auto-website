@@ -307,14 +307,19 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
               still keyed to the VIEWPORT, so a 298px card at a 1312px viewport
               rendered them at 0.86 and the left column ran 147px down a 199px
               card — far enough to collide with the phone+URL stack in the
-              corner below it. */}
+              corner below it.
+
+              The narrow tier is 0.52 rather than 0.6: at 0.6 the column still
+              ended at y151 against a stack starting at y146 on a 199px-tall
+              card. Measured, not estimated — the pill stack is the tallest
+              thing on a card and it is what has to give. */}
           {!isComingSoon && (
-            <div className="scale-[0.6] @min-[330px]:scale-[0.72] @min-[380px]:scale-[0.86] origin-top-left">
+            <div className="scale-[0.52] @min-[330px]:scale-[0.72] @min-[380px]:scale-[0.86] origin-top-left">
               <CarfaxPillStack overlay={overlay} compact />
             </div>
           )}
           {!isComingSoon && overlay.effectiveStatus && (
-            <div className="scale-[0.6] @min-[330px]:scale-[0.72] @min-[380px]:scale-[0.86] origin-top-left">
+            <div className="scale-[0.52] @min-[330px]:scale-[0.72] @min-[380px]:scale-[0.86] origin-top-left">
               <StatusPill kind={overlay.effectiveStatus} compact />
             </div>
           )}
