@@ -104,13 +104,25 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   if (liveSource !== "fallback") {
     const live = liveVehicles.find((v) => v.vin === vehicle.vin);
     if (live) {
-      // Prefer the baked hero — all badges are already composited at the
-      // correct proportions and scale naturally as a thumbnail. No CSS
-      // scale-transform hacks needed. cardHasBakedHero detects "hero-baked"
-      // in the URL and suppresses HTML overlays automatically.
-      if (live.bakedHeroUrl) {
-        heroOverride = live.bakedHeroUrl;
-      } else if (
+      // Use the RAW photo and let the HTML badges render, the same way the VDP
+      // does. This used to prefer live.bakedHeroUrl, reasoning that baked
+      // badges "scale naturally as a thumbnail". They do not. They are
+      // composited against a 1600px hero, so on a 244px card every gap shrinks
+      // by the same factor — the 24px separation the bake is checked for
+      // becomes 3.7px and the marks read as merged. That is the overlap
+      // reported on the homepage thumbnails.
+      //
+      // It also contradicts the standing rule (CLAUDE.md, BAKE RULES): the
+      // WEBSITE always shows interactive HTML badges; baked photos are for
+      // external surfaces — feeds, DealerCenter, og:image. The VDP already
+      // follows that rule, which is exactly why cards "didn't reflect their
+      // VDP images". Those consumers read bakedHeroUrl directly and are
+      // unaffected by this.
+      //
+      // With raw photos the HTML overlay runs, and its @container scales size
+      // each badge against the actual card width. That code was dead while
+      // every card served a baked hero.
+      if (
         Array.isArray(live.images) &&
         live.images.length > 0 &&
         live.images[0] !== vehicle.images[0]
