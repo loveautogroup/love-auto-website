@@ -220,7 +220,13 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
       {/* Photo + full overlay (compact-scaled) */}
       {/* 3:2 box — matches the VDP hero so the baked badge layer crops
           identically on cards and detail pages (Session 17). */}
-      <div className="relative aspect-[3/2] bg-brand-gray-100 overflow-hidden">
+      {/* @container: the badge scales below key off the CARD width, not the
+          viewport. They have to — this grid renders cards at 298px (3-up),
+          341px (mobile) and 398px, and a viewport breakpoint cannot tell those
+          apart. A single scale cannot satisfy all three: at 298px the top row
+          has to fit CARFAX + a centred logo + the pill column, and the centred
+          logo's left edge closes on the left column as the card narrows. */}
+      <div className="@container relative aspect-[3/2] bg-brand-gray-100 overflow-hidden">
         {showImage ? (
           <Image
             src={heroImage}
@@ -275,7 +281,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           style={{ paddingTop: cardHasBakedHero ? "5.5%" : undefined }}
         >
           {showCarfaxBadge && (
-            <div className="scale-[0.51] origin-top-left">
+            <div className="scale-[0.38] @min-[330px]:scale-[0.45] @min-[380px]:scale-[0.51] origin-top-left">
               <CarfaxBadge vin={vehicle.vin} />
             </div>
           )}
@@ -295,14 +301,28 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             or when already baked into the hero pixels. */}
         {!isComingSoon && !cardHasBakedHero && (
           <div className="absolute top-1.5 left-0 right-0 flex justify-center z-10 pointer-events-none">
-            {/* NO sm: bump. The 1.15 here was copied from the VDP hero, which
+            {/* Clearance either side of the centred logo is
+                  (cardW - logoW) / 2 - inset - sideClusterW
+                and it must stay positive at EVERY card width. Worked through,
+                with the logo 252.2px natural and CARFAX 186.3px natural:
+
+                  card  logo   half-gap   CARFAX needs   pills need
+                  298   105.9    96.0          88.8          89.5
+                  341   131.1   105.0          99.8          97.8
+                  398   158.8   119.6         113.0         113.5
+
+                Every row clears. At a single fixed scale it cannot: 0.63
+                everywhere overlaps CARFAX by 10px at 341px and by far more at
+                298px, which is the mobile overlap this fixes.
+
+                NO sm: bump. The 1.15 that used to be here was copied from the VDP hero, which
                 is ~1233px wide; a card is ~398px, so the same multiplier made
                 the logo 72.8% of the card against 39.9% of the hero and drove
                 it straight through the CARFAX badge on the left and the
                 feature pills on the right. At 0.63 it is 158.8px = 39.9% of
                 the card — the same fraction the VDP shows. Measured, not
                 guessed. */}
-            <div className="pointer-events-auto scale-[0.63] origin-top">
+            <div className="pointer-events-auto scale-[0.42] @min-[330px]:scale-[0.52] @min-[380px]:scale-[0.63] origin-top">
               <DealerCluster
                 compact
                 rating={googleReviews.rating}
