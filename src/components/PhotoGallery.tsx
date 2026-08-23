@@ -414,13 +414,23 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                 </div>
 
                 {/* Top-center: dealer logo pill — hidden when baked into hero pixels
-                    or when the photo is the coming-soon placeholder. */}
+                    or when the photo is the coming-soon placeholder.
+
+                    Scale is 1.15 x 1.15 = 1.3225 (owner, 2026-08-22: "increase
+                    our dealership logo by 15%"). The logo was deliberately held
+                    OUT of the earlier +50% badge bump because a uniform
+                    increase put it at 51% of the hero width and it competed
+                    with the car; 15% is the deliberate, smaller correction.
+                    Mobile keeps the same ratio (0.46 x 1.15 = 0.529).
+
+                    KEEP IN SYNC: photo_overlay.py _LOGO_UPSCALE_COMPENSATION
+                    and the DMS VdpHeroReplica. */}
                 {!hideDealerPill && !isComingSoon && (
                   <div
                     className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                     style={{ top: `${MARGIN_PCT}%` }}
                   >
-                    <div className="pointer-events-auto scale-[0.46] sm:scale-[1.15] origin-top">
+                    <div className="pointer-events-auto scale-[0.529] sm:scale-[1.3225] origin-top">
                       <DealerCluster
                         showBadge={false}
                         hideDealerPill={false}
@@ -518,7 +528,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                   className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                   style={{ top: `${MARGIN_PCT}%` }}
                 >
-                  <div className="pointer-events-auto scale-[0.46] sm:scale-[1.15] origin-top">
+                  <div className="pointer-events-auto scale-[0.529] sm:scale-[1.3225] origin-top">
                     <DealerCluster
                       showBadge={false}
                       hideDealerPill={false}
