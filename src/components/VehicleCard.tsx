@@ -295,7 +295,14 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             or when already baked into the hero pixels. */}
         {!isComingSoon && !cardHasBakedHero && (
           <div className="absolute top-1.5 left-0 right-0 flex justify-center z-10 pointer-events-none">
-            <div className="pointer-events-auto scale-[0.63] sm:scale-[1.15] origin-top">
+            {/* NO sm: bump. The 1.15 here was copied from the VDP hero, which
+                is ~1233px wide; a card is ~398px, so the same multiplier made
+                the logo 72.8% of the card against 39.9% of the hero and drove
+                it straight through the CARFAX badge on the left and the
+                feature pills on the right. At 0.63 it is 158.8px = 39.9% of
+                the card — the same fraction the VDP shows. Measured, not
+                guessed. */}
+            <div className="pointer-events-auto scale-[0.63] origin-top">
               <DealerCluster
                 compact
                 rating={googleReviews.rating}
@@ -308,11 +315,15 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
 
         {/* Top-right column: compact feature pill stack only. Right-
             aligned, mirrors the VDP. */}
-        {/* w-[40%] gives the pill column an actual layout width so max-w
+        {/* w-[32%] gives the pill column an actual layout width so max-w
             inside the cluster resolves correctly and long pill labels
-            truncate instead of spanning to the card center. */}
+            truncate instead of spanning to the card center.
+
+            32%, was 40%: with the logo corrected to 158.8px the pill column
+            still ran 7.5px into it. 32% -> 95.5px visible, starting at 294.5
+            against the logo's right edge at 278.5 — 16px of daylight. */}
         {!isComingSoon && (
-          <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 flex flex-col items-end gap-1 w-[40%] scale-75 origin-top-right">
+          <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 flex flex-col items-end gap-1 w-[32%] scale-75 origin-top-right">
             <FeaturePillCluster pills={overlay.featurePills} compact stack="inline" />
           </div>
         )}
@@ -338,7 +349,12 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             Hidden when baked into the hero pixels. */}
         {!cardHasBakedHero && !isComingSoon && (
           <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
-            <div className="scale-[0.76] sm:scale-[1.15] origin-bottom-right">
+            {/* Same copied-from-the-VDP 1.15 as the logo above. Left at 0.76
+                rather than taken all the way down to the VDP's 19.4%: the
+                lockup carries real text and at that size "132+ reviews" is
+                unreadable. Nothing collides bottom-right, so proportion loses
+                to legibility here. */}
+            <div className="scale-[0.76] origin-bottom-right">
               <GoogleReviewsLockup
                 rating={googleReviews.rating}
                 reviewCount={googleReviews.reviewCount}
