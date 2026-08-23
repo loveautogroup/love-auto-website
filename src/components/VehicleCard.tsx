@@ -19,6 +19,7 @@ import {
   PhoneCTA,
   PhotoScrim,
   StatusPill,
+  UrlBadge,
 } from "./badges";
 import { useReviews } from "@/context/ReviewsContext";
 import { useBadgeConfig } from "@/context/BadgeConfigContext";
@@ -370,15 +371,29 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             widths and conflicts with the phone CTA, which is the higher
             priority callout (bypasses third-party spoofed lead numbers). */}
 
-        {/* Bottom-left: compact phone CTA (anchored left so it can't collide
-            with the dealer cluster on the right at narrow card widths). */}
+        {/* Bottom-left: phone CTA with the site URL stacked under it.
+            (Anchored left so it can't collide with the dealer cluster on the
+            right at narrow card widths.)
+
+            The VDP puts the URL bottom-CENTRE. That is impossible on a card:
+            the phone is 119px and the Google lockup 121px, so on a 298px card
+            they already take 240px and leave a 31.7px centre gap. Measured max
+            width for a centred URL — 398px card 96px, 341px card 63px, 298px
+            card nothing — works out at a 4-7px font, i.e. present but
+            unreadable. Stacking it under the phone keeps the mark, keeps it
+            legible, and keeps the corner it belongs to.
+
+            0.72 puts it at ~120px, matching the phone above it. */}
         {!cardHasBakedHero && !isComingSoon && (
-          <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 z-10">
+          <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 z-10 flex flex-col items-start gap-0.5">
             <PhoneCTA
               phone={SITE_CONFIG.phone}
               phoneRaw={SITE_CONFIG.phoneRaw}
               compact
             />
+            <div className="scale-[0.72] origin-bottom-left">
+              <UrlBadge compact />
+            </div>
           </div>
         )}
 
