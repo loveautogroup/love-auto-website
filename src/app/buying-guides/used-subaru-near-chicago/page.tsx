@@ -181,8 +181,8 @@ export default function UsedSubaruNearChicagoPage() {
           </p>
 
           <p>
-            We typically stock used Subarus in this range, focused on 80,000
-            to 140,000 miles. That sounds like a lot of miles to first-time
+            When we buy a Subaru for the lot, we look hardest at the 80,000
+            to 140,000 mile band. That sounds like a lot of miles to first-time
             buyers, but on a 2014 to 2018 Subaru, 100,000 miles is barely
             halfway through life if the previous owner followed the service
             schedule. The Carfax tells us whether they did. We pull a free

@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BRANDS } from "@/data/brands";
+import { fetchDmsInventory } from "@/lib/dmsInventory";
+import {
+  applyStockToken,
+  computeBrandStock,
+  stockSentence,
+} from "@/lib/brandStock";
 import MakeLandingInventory from "@/components/MakeLandingInventory";
 import { BreadcrumbSchema, FAQSchema } from "@/components/StructuredData";
 import SiteBreadcrumb from "@/components/SiteBreadcrumb";
@@ -62,6 +68,28 @@ export default async function BrandPage({
   if (!content) notFound();
 
   const pageUrl = `${BASE}/brands/${content.slug}/`;
+
+  // Live stock claim, resolved at build so it lands in the served HTML.
+  // These pages earn their impressions from conversational queries that
+  // feed AI Overviews, and an assistant grounds on the prose it can read
+  // without running JS — a number injected after hydration would be
+  // invisible to the exact reader this is for. Copy without the
+  // {{STOCK}} token passes through untouched.
+  const inventory = await fetchDmsInventory();
+  const body = content.body.some((p) => p.includes("{{STOCK}}"))
+    ? content.body
+        .map((p) =>
+          applyStockToken(
+            p,
+            stockSentence(
+              computeBrandStock(inventory, content.displayName),
+              content.displayName,
+              content.pluralName
+            )
+          )
+        )
+        .filter((p) => p.length > 0)
+    : content.body;
 
   // CollectionPage JSON-LD — these are commercial listing pages, not articles.
   const collectionSchema = {
@@ -130,7 +158,7 @@ export default async function BrandPage({
 
       {/* Editorial content */}
       <article className="max-w-4xl mx-auto px-4 py-12">
-        {content.body.map((paragraph, i) => (
+        {body.map((paragraph, i) => (
           <p
             key={i}
             className="text-lg text-brand-gray-700 leading-relaxed mb-6"
@@ -191,7 +219,7 @@ export default async function BrandPage({
       <MakeLandingInventory
         filterType="make"
         filterValue={content.displayName.toLowerCase()}
-        pluralNoun={`${content.displayName}s`}
+        pluralNoun={content.pluralName}
         make={content.displayName}
       />
 
