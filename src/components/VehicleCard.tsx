@@ -299,7 +299,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           style={{ paddingTop: cardHasBakedHero ? "5.5%" : undefined }}
         >
           {showCarfaxBadge && (
-            <div className="scale-[0.38] @min-[330px]:scale-[0.45] @min-[380px]:scale-[0.51] origin-top-left">
+            <div className="[zoom:0.38] @min-[330px]:[zoom:0.45] @min-[380px]:[zoom:0.51]">
               <CarfaxBadge vin={vehicle.vin} />
             </div>
           )}
@@ -312,14 +312,22 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
               The narrow tier is 0.52 rather than 0.6: at 0.6 the column still
               ended at y151 against a stack starting at y146 on a 199px-tall
               card. Measured, not estimated — the pill stack is the tallest
-              thing on a card and it is what has to give. */}
+              thing on a card and it is what has to give.
+
+              And these are `zoom`, not scale-[...], for the same reason the
+              VDP's top-left stack is: transform:scale shrinks a child
+              VISUALLY but leaves its layout box full size, so the flex column
+              below keeps stacking at unscaled offsets and the column never
+              actually gets shorter. Dropping 0.6 -> 0.52 under scale changed
+              the overlap by exactly 0px. zoom scales the box, so the column
+              shortens. Do not "tidy" these back to scale-[...]. */}
           {!isComingSoon && (
-            <div className="scale-[0.52] @min-[330px]:scale-[0.72] @min-[380px]:scale-[0.86] origin-top-left">
+            <div className="[zoom:0.52] @min-[330px]:[zoom:0.72] @min-[380px]:[zoom:0.86]">
               <CarfaxPillStack overlay={overlay} compact />
             </div>
           )}
           {!isComingSoon && overlay.effectiveStatus && (
-            <div className="scale-[0.52] @min-[330px]:scale-[0.72] @min-[380px]:scale-[0.86] origin-top-left">
+            <div className="[zoom:0.52] @min-[330px]:[zoom:0.72] @min-[380px]:[zoom:0.86]">
               <StatusPill kind={overlay.effectiveStatus} compact />
             </div>
           )}
