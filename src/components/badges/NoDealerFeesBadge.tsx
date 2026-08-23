@@ -13,6 +13,14 @@
  * the same commit — the baked hero is what DealerCenter republishes to
  * CarGurus, and it is supposed to match what a shopper sees here.
  *
+ * SIZE: matched to the Google lockup beside it (owner, 2026-08-23 — "the
+ * 'No dealer fees' should be larger and match the google review badge").
+ * Measured live on the desktop VDP: the mark was 140.5px wide against the
+ * lockup's 239.8px, i.e. 0.59x. 13px -> 22px puts it at 237.8px, within 1%.
+ * The mobile size moves with it so the ratio holds at both breakpoints —
+ * both marks sit in the same scaled cluster, so it is the RATIO that has to
+ * be right, not either number on its own.
+ *
  * ⚠ No container means legibility depends on the photo behind it. Measured
  * across the five live heroes 2026-08-15: backdrop luminance 117-150 (asphalt),
  * white type reads well. A hero against sky, snow or a white wall is the
@@ -35,7 +43,7 @@ export default function NoDealerFeesBadge({
       <span
         className={`
           block font-extrabold uppercase leading-none text-white whitespace-nowrap
-          ${compact ? "text-[11px] sm:text-[13px]" : "text-[22px]"}
+          ${compact ? "text-[19px] sm:text-[22px]" : "text-[22px]"}
         `}
         style={{
           // Matches the multi-pass shadow the bake draws, and the treatment
@@ -49,7 +57,7 @@ export default function NoDealerFeesBadge({
       {/* Rule in the logo red (#dc2626, the LOVE wordmark fill), spanning the
           headline exactly — the same accent device the logo itself uses. */}
       <span
-        className={`block bg-brand-red ${compact ? "mt-1 h-[2px]" : "mt-[14px] h-[3px]"}`}
+        className={`block bg-brand-red ${compact ? "mt-[7px] h-[3px]" : "mt-[14px] h-[3px]"}`}
         aria-hidden="true"
       />
     </div>
