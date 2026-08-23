@@ -15,6 +15,7 @@ import {
   DealerCluster,
   GoogleReviewsLockup,
   FeaturePillCluster,
+  NoDealerFeesBadge,
   PhoneCTA,
   PhotoScrim,
   StatusPill,
@@ -174,6 +175,10 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   // components into hero photos (Session 17). When the displayed image is
   // baked, suppress the HTML twins below to avoid double-stamping.
   const cardHasBakedHero = heroSrc.includes("hero-baked");
+  // Opt-IN, exactly as PhotoGallery gates it — `=== true`, not a truthiness
+  // check, so a missing config does not silently switch the mark on.
+  const showNoFeeBadge =
+    !cardHasBakedHero && badgeConfig?.no_fee_badge_enabled === true;
   // The CARFAX badge honors the DMS merchandising opt-out, exactly as the
   // VDP's PhotoGallery does. It previously checked only the baked-hero
   // flag, so turning the badge OFF in the DMS hid it on vehicle detail
@@ -377,16 +382,23 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           </div>
         )}
 
-        {/* Bottom-right: Google Reviews lockup (dealer logo is now top-center).
+        {/* Bottom-right column: NO DEALER FEES over the Google lockup, the same
+            order and stacking the VDP hero uses. Both sit in ONE scaled
+            wrapper, which is what keeps them the same width — the two badges
+            have near-identical natural widths (184.3 vs 185.9), so any shared
+            scale lands them matched, exactly as on the VDP.
+
+            Scale stays 0.76 rather than dropping to the VDP's proportion: the
+            lockup carries real text and "132+ reviews" is unreadable smaller.
+            Nothing collides bottom-right, so legibility wins over proportion.
+
             Hidden when baked into the hero pixels. */}
         {!cardHasBakedHero && !isComingSoon && (
           <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
-            {/* Same copied-from-the-VDP 1.15 as the logo above. Left at 0.76
-                rather than taken all the way down to the VDP's 19.4%: the
-                lockup carries real text and at that size "132+ reviews" is
-                unreadable. Nothing collides bottom-right, so proportion loses
-                to legibility here. */}
-            <div className="scale-[0.76] origin-bottom-right">
+            <div className="flex flex-col items-end gap-1 scale-[0.76] origin-bottom-right">
+              {showNoFeeBadge && (
+                <NoDealerFeesBadge copy={badgeConfig?.no_fee_badge_copy} compact />
+              )}
               <GoogleReviewsLockup
                 rating={googleReviews.rating}
                 reviewCount={googleReviews.reviewCount}
