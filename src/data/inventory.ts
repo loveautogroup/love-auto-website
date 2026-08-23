@@ -1,6 +1,11 @@
 import { Vehicle } from "@/lib/types";
 import inventorySnapshot from "./inventory-snapshot.json";
-import { adaptSnapshot, type InventorySnapshot } from "@/lib/inventoryAdapter";
+import {
+  adaptSnapshot,
+  snapshotAgeMs,
+  SNAPSHOT_MAX_AGE_MS,
+  type InventorySnapshot,
+} from "@/lib/inventoryAdapter";
 
 /**
  * Real inventory data synced from Dealer Center.
@@ -355,12 +360,77 @@ function buildSampleInventory(): Vehicle[] {
     const snap = inventorySnapshot as unknown as InventorySnapshot;
     if (snap && Array.isArray(snap.vehicles) && snap.vehicles.length > 0) {
       const adapted = adaptSnapshot(snap);
-      if (adapted.length > 0) return adapted;
+      if (adapted.length > 0) {
+        assertSnapshotFresh(snap);
+        return adapted;
+      }
     }
-  } catch {
+  } catch (err) {
+    if (err instanceof StaleSnapshotError) throw err;
     // fall through to the hand-written fallback
   }
   return HANDWRITTEN_FALLBACK;
+}
+
+class StaleSnapshotError extends Error {}
+
+/**
+ * Refuse to prerender a listing grid from a snapshot prebuild did not refresh.
+ *
+ * This is the missing half of a check that already existed. dmsInventory.ts
+ * age-checked the same file and fell back to a live fetch; this path did not,
+ * so on 2026-08-23 the prerendered /inventory/ and /brands/subaru/ grids
+ * advertised a 2018 Forester at $6,999.99 that had already sold, while the
+ * server-rendered prose on the same page was correct.
+ *
+ * A person never saw it -- the page hydrates and refetches -- but Googlebot
+ * and any LLM read the HTML as served, and to them the car was for sale.
+ *
+ * Production fails hard rather than publishing that. Cloudflare keeps the
+ * previous deployment serving when a build fails, so the cost of stopping is
+ * a retry and the cost of continuing is advertising cars nobody can buy.
+ * Dev only warns: a local snapshot is routinely hours old and blocking
+ * `next dev` over it would help nobody.
+ *
+ * The root cause this guards against is real and was live for months: the
+ * Cloudflare build command was `npx next build`, which silently skips the
+ * `prebuild` npm lifecycle hook. If that ever regresses, this stops it at
+ * the build instead of at a customer.
+ */
+function assertSnapshotFresh(snap: InventorySnapshot): void {
+  const age = snapshotAgeMs(snap);
+  const stale = age === null || age > SNAPSHOT_MAX_AGE_MS;
+  if (!stale) return;
+
+  const detail =
+    age === null
+      ? "snapshot has no parseable syncedAt"
+      : `snapshot is ${Math.round(age / 3_600_000)}h old (limit ${
+          SNAPSHOT_MAX_AGE_MS / 3_600_000
+        }h)`;
+
+  if (process.env.NODE_ENV === "production") {
+    throw new StaleSnapshotError(
+      [
+        "",
+        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+        "!! [inventory] STALE BUILD SNAPSHOT -- REFUSING TO PRERENDER.",
+        `!! ${detail}.`,
+        "!! `prebuild` did not refresh src/data/inventory-snapshot.json, so",
+        "!! the listing grids would ship SOLD CARS to crawlers.",
+        "!!",
+        "!! Check the Cloudflare Pages build command is `npm run build`",
+        "!! and NOT `npx next build` -- the latter skips prebuild silently.",
+        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+        "",
+      ].join("\n")
+    );
+  }
+
+  console.warn(
+    `[inventory] build snapshot is stale (${detail}). Fine in dev; this ` +
+      "would fail a production build. Run `npm run build` to refresh it."
+  );
 }
 
 export const sampleInventory: Vehicle[] = buildSampleInventory();

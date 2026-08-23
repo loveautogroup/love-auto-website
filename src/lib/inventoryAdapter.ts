@@ -81,6 +81,31 @@ export interface InventorySnapshot {
   vehicles: SyncedVehicle[];
 }
 
+/**
+ * How fresh the committed snapshot must be to be trusted as build input.
+ *
+ * `prebuild` rewrites inventory-snapshot.json seconds before `next build`
+ * starts, so any real deploy satisfies this comfortably. Anything older
+ * means prebuild did not run, and the file on disk is whatever was last
+ * committed.
+ *
+ * Shared deliberately. This constant used to live privately inside
+ * dmsInventory.ts, which meant the server path age-checked the snapshot
+ * and the static path (data/inventory.ts -> sampleInventory) did not.
+ * On 2026-08-23 that split shipped a sold Forester into the prerendered
+ * listing grids while the server-rendered copy on the very same page was
+ * correct: one page, two data ages. One constant, both readers.
+ */
+export const SNAPSHOT_MAX_AGE_MS = 6 * 60 * 60 * 1000;
+
+/** Age of a snapshot in ms, or null when it carries no parseable
+ *  `syncedAt` — which callers must treat as untrustworthy, not as fresh. */
+export function snapshotAgeMs(snapshot: InventorySnapshot): number | null {
+  const stamp = snapshot?.syncedAt ? Date.parse(snapshot.syncedAt) : NaN;
+  if (!Number.isFinite(stamp)) return null;
+  return Date.now() - stamp;
+}
+
 export function adaptSnapshot(snapshot: InventorySnapshot): Vehicle[] {
   return snapshot.vehicles.map(adaptVehicle);
 }

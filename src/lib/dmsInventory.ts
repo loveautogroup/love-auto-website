@@ -13,7 +13,10 @@
  * the other — the contract has to stay symmetric.
  */
 import type { Vehicle } from "@/lib/types";
-import type { SyncedVehicle } from "@/lib/inventoryAdapter";
+import {
+  SNAPSHOT_MAX_AGE_MS,
+  type SyncedVehicle,
+} from "@/lib/inventoryAdapter";
 import { titleCase, vehicleSlug, SEED_SLUGS_BY_VIN as SHARED_SEED_SLUGS } from "../../shared/slug";
 import { displayCase, dedupeTrim } from "../../shared/displayCase";
 import { rewritePhotoHost } from "../../shared/photoHost";
@@ -375,11 +378,8 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
  * Do NOT reintroduce a second independent fetch of this endpoint.
  */
 
-/** How fresh the committed snapshot must be to serve as THE build
- *  snapshot. `prebuild` rewrites it seconds before `next build` starts, so
- *  a real deploy always satisfies this. In `next dev` the committed copy is
- *  usually older, and we fall through to a live fetch below. */
-const SNAPSHOT_MAX_AGE_MS = 6 * 60 * 60 * 1000;
+/* SNAPSHOT_MAX_AGE_MS now lives in inventoryAdapter.ts so the static
+   path (data/inventory.ts) enforces the same freshness bar. */
 
 /** Retry budget for the live fallback path. An empty array is treated as a
  *  TRANSIENT failure, not as an answer: Railway's shared read rate-limit
