@@ -415,17 +415,17 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                        spec (Jeremiah 2026-06-05): carfax/dealer/google all
                        186px wide on the desktop VDP. Mobile gets the same
                        0.6 treatment as the lockup wrapper below. */
-                    <div className="[zoom:0.53] @min-[600px]:[zoom:0.95] @min-[800px]:[zoom:1.22] @min-[1000px]:[zoom:1.725]">
+                    <div className="[zoom:0.43] @min-[400px]:[zoom:0.545] @min-[500px]:[zoom:0.69] @min-[620px]:[zoom:0.864] @min-[760px]:[zoom:1.07] @min-[920px]:[zoom:1.301] @min-[1100px]:[zoom:1.563] @min-[1220px]:[zoom:1.725]">
                       <CarfaxBadge vin={vehicle.vin} />
                     </div>
                   )}
                   {!isComingSoon && (
-                    <div className="[zoom:0.4] @min-[600px]:[zoom:0.72] @min-[800px]:[zoom:0.92] @min-[1000px]:[zoom:1.29]">
+                    <div className="[zoom:0.321] @min-[400px]:[zoom:0.408] @min-[500px]:[zoom:0.516] @min-[620px]:[zoom:0.646] @min-[760px]:[zoom:0.8] @min-[920px]:[zoom:0.973] @min-[1100px]:[zoom:1.169] @min-[1220px]:[zoom:1.29]">
                       <CarfaxPillStack overlay={overlay} />
                     </div>
                   )}
                   {!isComingSoon && overlay.effectiveStatus && (
-                    <div className="[zoom:0.4] @min-[600px]:[zoom:0.72] @min-[800px]:[zoom:0.92] @min-[1000px]:[zoom:1.29]">
+                    <div className="[zoom:0.321] @min-[400px]:[zoom:0.408] @min-[500px]:[zoom:0.516] @min-[620px]:[zoom:0.646] @min-[760px]:[zoom:0.8] @min-[920px]:[zoom:0.973] @min-[1100px]:[zoom:1.169] @min-[1220px]:[zoom:1.29]">
                       <StatusPill kind={overlay.effectiveStatus} />
                     </div>
                   )}
@@ -448,7 +448,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                     style={{ top: `${MARGIN_PCT}%` }}
                   >
-                    <div className="pointer-events-auto scale-[0.38] @min-[600px]:scale-[0.74] @min-[800px]:scale-[0.94] @min-[1000px]:scale-[1.3225] origin-top">
+                    <div className="pointer-events-auto scale-[0.329] @min-[400px]:scale-[0.418] @min-[500px]:scale-[0.529] @min-[620px]:scale-[0.663] @min-[760px]:scale-[0.82] @min-[920px]:scale-[0.997] @min-[1100px]:scale-[1.198] @min-[1220px]:scale-[1.323] origin-top">
                       <DealerCluster
                         showBadge={false}
                         hideDealerPill={false}
@@ -463,7 +463,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                 {/* Top-right: merchandising feature pills */}
                 {!isComingSoon && (
                   <div
-                    className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.4] @min-[600px]:scale-[0.72] @min-[800px]:scale-[0.92] @min-[1000px]:scale-[1.29] origin-top-right"
+                    className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.321] @min-[400px]:scale-[0.408] @min-[500px]:scale-[0.516] @min-[620px]:scale-[0.646] @min-[760px]:scale-[0.8] @min-[920px]:scale-[0.973] @min-[1100px]:scale-[1.169] @min-[1220px]:scale-[1.29] origin-top-right"
                     style={{ top: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
                   >
                     <FeaturePillCluster pills={overlay.featurePills} stack="inline" />
@@ -474,7 +474,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                 {showPhoneBadge && (
                   <>
                     <div
-                      className="absolute z-10 md:hidden scale-[0.6] @min-[600px]:scale-[1.0] origin-bottom-left"
+                      className="absolute z-10 md:hidden scale-[0.6] @min-[500px]:scale-[0.78] @min-[620px]:scale-[0.96] @min-[720px]:scale-[1.14] origin-bottom-left"
                       style={{ bottom: `${MARGIN_PCT}%`, left: `${MARGIN_PCT}%` }}
                     >
                       <PhoneCTA
@@ -501,7 +501,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                     style={{ bottom: `${MARGIN_PCT}%` }}
                   >
-                    <span className="md:hidden inline-block scale-[0.64] @min-[600px]:scale-[1.05] origin-bottom"><UrlBadge compact /></span>
+                    <span className="md:hidden inline-block scale-[0.64] @min-[500px]:scale-[0.85] @min-[620px]:scale-[1.05] @min-[720px]:scale-[1.25] origin-bottom"><UrlBadge compact /></span>
                     <span className="hidden md:inline"><UrlBadge /></span>
                   </div>
                 )}
@@ -511,7 +511,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     matching composite_all_badges in photo_overlay.py, which
                     lifts the baked mark clear of the Google pill. */}
                 <div
-                  className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.4] @min-[600px]:scale-[0.72] @min-[800px]:scale-[0.92] @min-[1000px]:scale-[1.29] origin-bottom-right"
+                  className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.321] @min-[400px]:scale-[0.408] @min-[500px]:scale-[0.516] @min-[620px]:scale-[0.646] @min-[760px]:scale-[0.8] @min-[920px]:scale-[0.973] @min-[1100px]:scale-[1.169] @min-[1220px]:scale-[1.29] origin-bottom-right"
                   style={{ bottom: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
                 >
                   {!isComingSoon && warrantyCopy && (
@@ -546,7 +546,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                   className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                   style={{ top: `${MARGIN_PCT}%` }}
                 >
-                  <div className="pointer-events-auto scale-[0.38] @min-[600px]:scale-[0.74] @min-[800px]:scale-[0.94] @min-[1000px]:scale-[1.3225] origin-top">
+                  <div className="pointer-events-auto scale-[0.329] @min-[400px]:scale-[0.418] @min-[500px]:scale-[0.529] @min-[620px]:scale-[0.663] @min-[760px]:scale-[0.82] @min-[920px]:scale-[0.997] @min-[1100px]:scale-[1.198] @min-[1220px]:scale-[1.323] origin-top">
                     <DealerCluster
                       showBadge={false}
                       hideDealerPill={false}
@@ -560,7 +560,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                   className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                   style={{ bottom: `${MARGIN_PCT}%` }}
                 >
-                  <span className="md:hidden inline-block scale-[0.64] @min-[600px]:scale-[1.05] origin-bottom"><UrlBadge compact /></span>
+                  <span className="md:hidden inline-block scale-[0.64] @min-[500px]:scale-[0.85] @min-[620px]:scale-[1.05] @min-[720px]:scale-[1.25] origin-bottom"><UrlBadge compact /></span>
                   <span className="hidden md:inline"><UrlBadge /></span>
                 </div>
               </div>
