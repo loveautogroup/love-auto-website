@@ -391,7 +391,14 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     Worse, sm: also flipped to the DESKTOP values at a 640px
                     viewport while the hero was still only ~600px, so there was
                     a second broken band from 640-1000px that nobody had looked
-                    at. Container tiers track the box itself. */}
+                    at. Container tiers track the box itself.
+
+                    Four tiers, not three: at a 728px hero the first attempt's
+                    mid tier still put CARFAX at 28.6% and the logo at 43.9%
+                    (targets 26% / 39.9%) and they collided by 20x93px. Each
+                    tier is sized so a mark holds roughly the same FRACTION of
+                    the hero it holds on desktop -- that fraction is the thing
+                    being conserved, not any single px value. */}
                 <div
                   className="absolute z-10 flex flex-col items-start gap-1 sm:gap-1.5"
                   style={{
@@ -408,17 +415,17 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                        spec (Jeremiah 2026-06-05): carfax/dealer/google all
                        186px wide on the desktop VDP. Mobile gets the same
                        0.6 treatment as the lockup wrapper below. */
-                    <div className="[zoom:0.53] @min-[600px]:[zoom:1.12] @min-[1000px]:[zoom:1.725]">
+                    <div className="[zoom:0.53] @min-[600px]:[zoom:0.95] @min-[800px]:[zoom:1.22] @min-[1000px]:[zoom:1.725]">
                       <CarfaxBadge vin={vehicle.vin} />
                     </div>
                   )}
                   {!isComingSoon && (
-                    <div className="[zoom:0.4] @min-[600px]:[zoom:0.84] @min-[1000px]:[zoom:1.29]">
+                    <div className="[zoom:0.4] @min-[600px]:[zoom:0.72] @min-[800px]:[zoom:0.92] @min-[1000px]:[zoom:1.29]">
                       <CarfaxPillStack overlay={overlay} />
                     </div>
                   )}
                   {!isComingSoon && overlay.effectiveStatus && (
-                    <div className="[zoom:0.4] @min-[600px]:[zoom:0.84] @min-[1000px]:[zoom:1.29]">
+                    <div className="[zoom:0.4] @min-[600px]:[zoom:0.72] @min-[800px]:[zoom:0.92] @min-[1000px]:[zoom:1.29]">
                       <StatusPill kind={overlay.effectiveStatus} />
                     </div>
                   )}
@@ -441,7 +448,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                     style={{ top: `${MARGIN_PCT}%` }}
                   >
-                    <div className="pointer-events-auto scale-[0.38] @min-[600px]:scale-[0.86] @min-[1000px]:scale-[1.3225] origin-top">
+                    <div className="pointer-events-auto scale-[0.38] @min-[600px]:scale-[0.74] @min-[800px]:scale-[0.94] @min-[1000px]:scale-[1.3225] origin-top">
                       <DealerCluster
                         showBadge={false}
                         hideDealerPill={false}
@@ -456,7 +463,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                 {/* Top-right: merchandising feature pills */}
                 {!isComingSoon && (
                   <div
-                    className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.4] @min-[600px]:scale-[0.84] @min-[1000px]:scale-[1.29] origin-top-right"
+                    className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.4] @min-[600px]:scale-[0.72] @min-[800px]:scale-[0.92] @min-[1000px]:scale-[1.29] origin-top-right"
                     style={{ top: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
                   >
                     <FeaturePillCluster pills={overlay.featurePills} stack="inline" />
@@ -504,7 +511,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     matching composite_all_badges in photo_overlay.py, which
                     lifts the baked mark clear of the Google pill. */}
                 <div
-                  className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.4] @min-[600px]:scale-[0.84] @min-[1000px]:scale-[1.29] origin-bottom-right"
+                  className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.4] @min-[600px]:scale-[0.72] @min-[800px]:scale-[0.92] @min-[1000px]:scale-[1.29] origin-bottom-right"
                   style={{ bottom: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
                 >
                   {!isComingSoon && warrantyCopy && (
@@ -539,7 +546,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                   className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
                   style={{ top: `${MARGIN_PCT}%` }}
                 >
-                  <div className="pointer-events-auto scale-[0.38] @min-[600px]:scale-[0.86] @min-[1000px]:scale-[1.3225] origin-top">
+                  <div className="pointer-events-auto scale-[0.38] @min-[600px]:scale-[0.74] @min-[800px]:scale-[0.94] @min-[1000px]:scale-[1.3225] origin-top">
                     <DealerCluster
                       showBadge={false}
                       hideDealerPill={false}
