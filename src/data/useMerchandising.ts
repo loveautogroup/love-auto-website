@@ -115,10 +115,18 @@ export function useResolveOverlay(
     effectiveStatus = "just-arrived";
   }
 
-  // Default-on for Carfax — see comment in resolveOverlay(). undefined or
-  // true both mean "show the Carfax shield"; only an explicit `false` in
-  // KV opts a vehicle out.
-  const carfax = override.carfax !== false;
+  // CARFAX needs BOTH answers to be yes, from two different owners:
+  //   carfax         — "do we want to advertise CARFAX on this car?" (dealer)
+  //   carfaxLinkLive — "does the link actually serve a free report?" (Routine)
+  // Either one explicitly false hides the badge and the button.
+  //
+  // Both default ON when absent. That is deliberate: a missing verdict must
+  // not blank the badge across the whole lot if the Routine stops running.
+  // The car that actually needs protecting is a NEWLY listed one, which has
+  // not reached CARFAX's Hot Listings index yet — and the DMS writes
+  // carfaxLinkLive:false at the moment a car goes Listed, so those start
+  // hidden and are switched on once the Routine sees a real report.
+  const carfax = override.carfax !== false && override.carfaxLinkLive !== false;
 
   return { ...override, carfax, effectiveStatus };
 }

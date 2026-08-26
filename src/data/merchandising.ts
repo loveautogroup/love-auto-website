@@ -33,8 +33,28 @@ export interface VehicleOverlay {
   /** Status pill shown top-left when no Carfax is available. Overrides auto-detected status. */
   status?: StatusBadgeKind;
 
-  /** Whether the CARFAX Free Report button shows. Requires a Carfax report for the VIN. */
+  /**
+   * Whether we WANT to advertise CARFAX on this car — the dealer's own call,
+   * set from the DMS merchandising panel. Turned off for cars where a report
+   * exists and works but we would rather not lead with it (a branded title, a
+   * rough history). Never written by automation.
+   */
   carfax?: boolean;
+
+  /**
+   * Whether the public CARFAX link actually SERVES a free report right now,
+   * as observed by the daily carfax-link-check Routine. CARFAX only honours
+   * our partner=DVW_1 link while the car is in their Hot Listings index and
+   * within 2 months of the report being run; outside that window it redirects
+   * the shopper to a $49.99 order page. `false` means we watched it do exactly
+   * that. Written ONLY by the Routine.
+   *
+   * Kept separate from `carfax` on purpose. They answer different questions
+   * ("should we?" vs "does it work?") and have different owners, and while
+   * they shared one flag the robot's nightly verdict would overwrite the
+   * dealer's merchandising decision.
+   */
+  carfaxLinkLive?: boolean;
 
   /**
    * Up to 5 custom feature pills displayed top-center over the photo.
@@ -228,17 +248,22 @@ export const MERCHANDISING: MerchandisingConfig = {
   ],
 
   overlays: {
-    // 2011 Subaru Legacy 2.5i Limited — stock 10976. CARFAX opted OUT: the
-    // VIN is not in our CARFAX Advantage inventory yet, so the report link
-    // lands on the purchase/offer page instead of a report (owner,
-    // 2026-08-26). The live KV overlay carries the same `carfax: false`; this
-    // static entry is what keeps it out of the PRERENDERED HTML too. Without
-    // it the badge and button ship in the HTML and are only removed after
-    // hydration — a visible flash, and a link crawlers still follow.
+    // 2011 Subaru Legacy 2.5i Limited — stock 10976. Verified 2026-08-26:
+    // the public CARFAX link redirects to the $49.99 order page, because the
+    // car was only just listed and has not reached CARFAX's Hot Listings
+    // index yet. Nothing is wrong with the car or the report — 72 history
+    // records exist.
     //
-    // Remove this entry once the report is live for the VIN.
+    // This is `carfaxLinkLive`, not `carfax`: it records what the link DOES,
+    // not a merchandising decision, so when the carfax-link-check Routine
+    // sees the report go live it flips this and the badge returns on its own.
+    //
+    // The live KV overlay carries the same value; this static entry is what
+    // keeps it out of the PRERENDERED HTML too. Without it the badge and
+    // button ship in the markup and are only removed after hydration — a
+    // visible flash, and a link crawlers still follow.
     "4S3BMCK61B3263681": {
-      carfax: false,
+      carfaxLinkLive: false,
     },
 
     // 2016 Honda Pilot Touring — fresh arrival, third-row family hauler
