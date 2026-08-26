@@ -409,7 +409,23 @@ function assertSnapshotFresh(snap: InventorySnapshot): void {
           SNAPSHOT_MAX_AGE_MS / 3_600_000
         }h)`;
 
-  if (process.env.NODE_ENV === "production") {
+  // ⚠ SERVER/BUILD ONLY. This module is bundled into the CLIENT as well, and
+  // `process.env.NODE_ENV === "production"` is true there too — so this threw
+  // in customers' browsers and took the entire site down with
+  // "This page couldn't load" on every page, while the origin served perfect
+  // HTML and every asset returned 200 (2026-08-26 outage).
+  //
+  // The check is time-relative and the timestamp is baked into the bundle, so
+  // it is a delayed-action fault: a deploy renders fine, then every visitor
+  // starts hitting it once the snapshot crosses the age limit. Nothing about
+  // the site changes at that moment, which makes it look like a CDN or DNS
+  // problem rather than a code one.
+  //
+  // Blocking a BUILD over a stale snapshot is right — it stops sold cars
+  // reaching crawlers. Blocking a RENDER is not: the browser hydrates against
+  // live inventory (useInventory) within a second anyway, so a stale build
+  // snapshot is cosmetic client-side. Degrade to a warning there.
+  if (process.env.NODE_ENV === "production" && typeof window === "undefined") {
     throw new StaleSnapshotError(
       [
         "",
