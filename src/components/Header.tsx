@@ -74,15 +74,18 @@ export default function Header() {
 
   // Collapse to zero height rather than display:none so it animates, and mark
   // it inert + hidden from assistive tech when closed.
+  // py-0 matters: max-height:0 clips the CONTENT but leaves vertical padding,
+  // so the collapsed strip still measured 12px on desktop. Zero the padding too
+  // or the bar never fully disappears.
   const stripCollapse = condensed
-    ? "max-h-0 opacity-0 overflow-hidden pointer-events-none"
+    ? "max-h-0 py-0 opacity-0 overflow-hidden pointer-events-none"
     : "max-h-24 opacity-100";
 
   return (
     <header className="bg-brand-navy text-white sticky top-0 z-50">
       {/* Top bar — phone + hours + lang toggle */}
       <div
-        className={`bg-brand-gray-900 text-sm py-1.5 px-4 hidden md:block transition-all duration-200 ${stripCollapse}`}
+        className={`bg-brand-gray-900 text-sm px-4 hidden md:block transition-all duration-200 ${condensed ? "" : "py-1.5"} ${stripCollapse}`}
         aria-hidden={condensed}
       >
         <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -128,7 +131,7 @@ export default function Header() {
 
       {/* Mobile-only credibility strip */}
       <div
-        className={`md:hidden bg-brand-gray-900 px-4 py-1.5 flex items-center justify-between gap-2 text-[11px] transition-all duration-200 ${stripCollapse}`}
+        className={`md:hidden bg-brand-gray-900 px-4 flex items-center justify-between gap-2 text-[11px] transition-all duration-200 ${condensed ? "" : "py-1.5"} ${stripCollapse}`}
         aria-hidden={condensed}
       >
         <div className="flex items-center gap-2">
