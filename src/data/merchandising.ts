@@ -228,6 +228,19 @@ export const MERCHANDISING: MerchandisingConfig = {
   ],
 
   overlays: {
+    // 2011 Subaru Legacy 2.5i Limited — stock 10976. CARFAX opted OUT: the
+    // VIN is not in our CARFAX Advantage inventory yet, so the report link
+    // lands on the purchase/offer page instead of a report (owner,
+    // 2026-08-26). The live KV overlay carries the same `carfax: false`; this
+    // static entry is what keeps it out of the PRERENDERED HTML too. Without
+    // it the badge and button ship in the HTML and are only removed after
+    // hydration — a visible flash, and a link crawlers still follow.
+    //
+    // Remove this entry once the report is live for the VIN.
+    "4S3BMCK61B3263681": {
+      carfax: false,
+    },
+
     // 2016 Honda Pilot Touring — fresh arrival, third-row family hauler
     "5FNYF6H9XGB041495": {
       carfax: true,
