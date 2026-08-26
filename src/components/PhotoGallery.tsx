@@ -263,7 +263,17 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
   // URL badge mirrors the phone gating — bottom-center, same Montserrat
   // treatment, baked into the hero pixels when the hero is baked.
   const showUrlBadge = !hasBakedHero && hasRealPhotos && !forcePlaceholder;
-  const showCarfaxBadge = !hasBakedHero && badgeConfig?.carfax_badge_enabled !== false;
+  // ALSO honours the per-vehicle opt-out, not just the global flag. The badge
+  // links straight to carfax.com/.../Report.cfx?vin=..., which renders an OFFER
+  // / purchase page rather than a report when the VIN is not in our CARFAX
+  // Advantage inventory yet. Opting a vehicle out (overlay.carfax === false) is
+  // exactly the documented case "while waiting for a fresh report" — it used to
+  // hide only the SHOW ME THE CARFAX button and leave this badge pointing at
+  // the offer page.
+  const showCarfaxBadge =
+    !hasBakedHero &&
+    badgeConfig?.carfax_badge_enabled !== false &&
+    overlay?.carfax !== false;
   // Same !hasBakedHero gate as its siblings: when the hero is baked the mark
   // is already in the pixels, so rendering the HTML copy would double-stamp.
   // Opt-in rather than opt-out, mirroring no_fee_badge_enabled's default.

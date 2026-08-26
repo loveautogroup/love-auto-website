@@ -187,8 +187,13 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   // NOTE: deliberately NOT gated on isComingSoon — per Jeremiah's
   // 2026-06-10 ruling the CARFAX badge is the ONE badge that still shows
   // on a Coming Soon card (that's why its siblings below are suppressed).
+  // Per-vehicle opt-out honoured here too — see the note in PhotoGallery.
+  // An explicit `carfax: false` is a deliberate instruction and outranks the
+  // Coming Soon exception above.
   const showCarfaxBadge =
-    !cardHasBakedHero && badgeConfig.carfax_badge_enabled !== false;
+    !cardHasBakedHero &&
+    badgeConfig.carfax_badge_enabled !== false &&
+    overlay.carfax !== false;
   // Track the specific URL that 404'd so we can prevent retrying it while
   // still allowing a *different* (live) URL to replace it. A boolean latch
   // would block the upgrade from a failed seed path to a working R2/DC URL.
