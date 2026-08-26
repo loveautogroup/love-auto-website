@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Link from "next/link";
 import Image from "next/image";
@@ -46,10 +46,45 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
 
+  /**
+   * Condensed header once the reader has scrolled past the top.
+   *
+   * The whole <header> is `sticky top-0`, so everything inside it stayed
+   * pinned: on a 915px phone the utility strip plus the full-size logo held
+   * ~390px — over 40% of the screen — while reading a vehicle page.
+   *
+   * Scrolled state drops the utility strips entirely and shrinks the logo,
+   * keeping the phone button and the menu reachable, which are the two things
+   * a shopper actually reaches for mid-page.
+   *
+   * Hysteresis (24 down / 8 up) rather than a single threshold: with one value,
+   * collapsing changes the page height, which can move the scroll position back
+   * across the boundary and oscillate.
+   */
+  const [condensed, setCondensed] = useState(false);
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setCondensed((was) => (was ? y > 8 : y > 24));
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Collapse to zero height rather than display:none so it animates, and mark
+  // it inert + hidden from assistive tech when closed.
+  const stripCollapse = condensed
+    ? "max-h-0 opacity-0 overflow-hidden pointer-events-none"
+    : "max-h-24 opacity-100";
+
   return (
     <header className="bg-brand-navy text-white sticky top-0 z-50">
       {/* Top bar — phone + hours + lang toggle */}
-      <div className="bg-brand-gray-900 text-sm py-1.5 px-4 hidden md:block">
+      <div
+        className={`bg-brand-gray-900 text-sm py-1.5 px-4 hidden md:block transition-all duration-200 ${stripCollapse}`}
+        aria-hidden={condensed}
+      >
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
             <span className="text-brand-gray-300">
@@ -92,7 +127,10 @@ export default function Header() {
       </div>
 
       {/* Mobile-only credibility strip */}
-      <div className="md:hidden bg-brand-gray-900 px-4 py-1.5 flex items-center justify-between gap-2 text-[11px]">
+      <div
+        className={`md:hidden bg-brand-gray-900 px-4 py-1.5 flex items-center justify-between gap-2 text-[11px] transition-all duration-200 ${stripCollapse}`}
+        aria-hidden={condensed}
+      >
         <div className="flex items-center gap-2">
           <CarfaxWordmark />
           <span className="text-brand-gray-400">·</span>
@@ -103,7 +141,9 @@ export default function Header() {
 
       {/* Main nav */}
       <nav
-        className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between"
+        className={`max-w-7xl mx-auto px-4 flex items-center justify-between transition-all duration-200 ${
+          condensed ? "py-1.5" : "py-3"
+        }`}
         aria-label="Main navigation"
       >
         {/* Logo */}
@@ -113,7 +153,9 @@ export default function Header() {
             alt="Love Auto Group — Since 2014"
             width={440}
             height={160}
-            className="h-28 md:h-32 w-auto object-contain"
+            className={`w-auto object-contain transition-all duration-200 ${
+              condensed ? "h-14 md:h-16" : "h-28 md:h-32"
+            }`}
             priority
           />
         </Link>
