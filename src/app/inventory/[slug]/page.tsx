@@ -132,23 +132,6 @@ export async function generateMetadata({
   };
 }
 
-/** "August 20, 2026" from an ISO date, or "" when we do not have one. */
-function formatSoldDate(iso: string): string {
-  try {
-    // Parse as a plain calendar date — new Date("2026-08-20") is UTC midnight,
-    // which renders as the 19th in Central time.
-    const [y, m, d] = iso.slice(0, 10).split("-").map(Number);
-    if (!y || !m || !d) return "";
-    return new Date(y, m - 1, d).toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-  } catch {
-    return "";
-  }
-}
-
 export default async function VehicleDetailPage({
   params,
 }: {
@@ -283,20 +266,35 @@ export default async function VehicleDetailPage({
           the banner is what stops the page reading as a live listing. */}
       {isSold && (
         <div className="bg-[#dc2626] text-white">
-          <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-            <p className="text-center text-sm font-semibold tracking-wide sm:text-base">
-              <span className="mr-2 inline-block rounded bg-white/20 px-2 py-0.5 text-xs font-bold uppercase tracking-widest">
-                Sold
-              </span>
-              This one found its new owner
-              {vehicle.soldDate ? ` on ${formatSoldDate(vehicle.soldDate)}` : ""}.{" "}
-              <a
-                href="/inventory/"
-                className="underline underline-offset-2 hover:no-underline"
-              >
-                See what we have now
-              </a>
+          <div className="mx-auto max-w-7xl px-4 py-8 text-center sm:px-6 sm:py-10 lg:px-8">
+            {/* The word itself, at headline scale. A shopper scrolling fast has
+                to see this before they see a price and a photo of a car they
+                cannot buy — the whole risk of keeping the page up. */}
+            <p className="text-5xl font-black uppercase leading-none tracking-[0.2em] sm:text-7xl">
+              Sold
             </p>
+            <p className="mx-auto mt-4 max-w-2xl text-base font-semibold sm:text-lg">
+              This {vehicle.year} {vehicle.make} {vehicle.model} found its new owner.
+            </p>
+            <p className="mx-auto mt-1 max-w-2xl text-sm text-white/80 sm:text-base">
+              It is no longer available — but we usually have something close.
+            </p>
+            <a
+              href="/inventory/"
+              className="mt-6 inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-bold uppercase tracking-wide text-[#dc2626] transition-colors hover:bg-white/90 sm:text-base"
+            >
+              See what we have now
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                aria-hidden="true"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
           </div>
         </div>
       )}

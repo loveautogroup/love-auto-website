@@ -376,6 +376,28 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     top of them and wash them out (Session 18 finding). */}
                 {!hasBakedHero && <PhotoScrim />}
 
+                {/* SOLD stamp across the hero (Jeremiah, 2026-08-25: "put the
+                    stamp across the vdp image that says sold").
+                    
+                    Rejected for the inventory GRID — at 8-sold-of-15 a wall of
+                    stamps reads "clearance sale". On a single VDP there is no
+                    density problem and it is the clearest possible signal that
+                    the car in the photo is gone.
+
+                    pointer-events-none so it never blocks the gallery controls
+                    underneath, and aria-hidden because the page already says
+                    SOLD in text — a screen reader should not hear it twice. */}
+                {overlay.effectiveStatus === "sold" && (
+                  <div
+                    className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center overflow-hidden"
+                    aria-hidden="true"
+                  >
+                    <span className="-rotate-[18deg] select-none rounded-xl border-[6px] border-white/90 bg-[#dc2626]/85 px-[6%] py-[1.5%] text-[13vw] font-black uppercase leading-none tracking-[0.12em] text-white shadow-[0_8px_30px_rgba(0,0,0,0.45)] @min-[760px]:text-[9vw] @min-[1100px]:text-[7rem]">
+                      Sold
+                    </span>
+                  </div>
+                )}
+
                 {/* Top-left: CARFAX logo + feature pills (1-Owner, No Accidents…) + status.
                     The CARFAX card hides when baked into the hero pixels; the
                     feature/status pills are never baked so they always render.
