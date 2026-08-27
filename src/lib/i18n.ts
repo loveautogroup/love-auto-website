@@ -677,7 +677,7 @@ export const translations = {
       businessHours: "Horario",
       contactUs: "Contáctenos",
       about:
-        "Especialistas en vehículos japoneses en Villa Park, IL — a 20 millas de Chicago. Negocio familiar desde 2014. Cada vehículo inspeccionado y reacondicionado antes de salir de nuestro lote.",
+        "Concesionario independiente familiar en Villa Park, IL — a 20 millas de Chicago. Negocio familiar desde 2014. Cada vehículo inspeccionado y reacondicionado antes de salir de nuestro lote.",
       rights: "Todos los derechos reservados.",
       areasServed: "Áreas Que Atendemos",
       privacy: "Política de Privacidad",
@@ -687,7 +687,7 @@ export const translations = {
       headline: "Encuentra Tu Próximo Auto",
       headlineSub: "en Love Auto Group",
       subtext:
-        "Especialistas en marcas japonesas — Lexus, Subaru, Acura, Mazda, Honda. Inspeccionados, reacondicionados y listos para manejar. Villa Park, IL — a 20 millas de Chicago.",
+        "Concesionario independiente familiar — Lexus, Subaru, Acura, Mazda, Honda. Inspeccionados, reacondicionados y listos para manejar. Villa Park, IL — a 20 millas de Chicago.",
       cta: "Ver Inventario",
       ctaFinancing: "Pre-Aprobación",
       pills: {
@@ -1150,7 +1150,7 @@ export const translations = {
     vdpTrustStrip: {
       inspected: "Totalmente Inspeccionado",
       inspectedSuffix: "Carfax Gratis Incluido",
-      specialist: "Especialistas en Marcas Japonesas",
+      specialist: "Concesionario Independiente Familiar",
       specialistSuffix: "Más de una Década en Villa Park",
       noFees: "Sin Cuotas Ocultas",
       noFeesSuffix: "Todo Crédito Bienvenido · Título y Placas el Mismo Día",
@@ -1250,7 +1250,7 @@ export const translations = {
       viewAll: "Ver Todos \u2192",
       aboutHeading: "Un Concesionario Independiente en Villa Park, IL",
       aboutP1: "Love Auto Group es un concesionario peque\u00f1o y familiar en 735 N Yale Ave, Unit A, en Villa Park, a unas 20 millas al oeste de Chicago. Aqu\u00ed llevamos desde 2014. Sin letrero de franquicia, sin un mar de globos y sin que te manden a una oficina de financiamiento. Tratas directamente con las personas que encontraron el auto, lo inspeccionaron y le pusieron el precio.",
-      aboutP2Lead: "La mayor parte de nuestro lote son marcas japonesas:",
+      aboutP2Lead: "La mayor parte de nuestro lote:",
       aboutP2Tail: ", Lexus, Honda, Acura, Toyota y Mazda, porque duran. Cada veh\u00edculo se inspecciona antes de publicarse, y todos incluyen un reporte Carfax gratis. Si un auto no es lo bastante bueno para llevar nuestro nombre, no lo vendemos.",
       aboutP3: "El precio que ves es el precio que pagas, m\u00e1s impuestos, t\u00edtulo y placas. Sin cargos de concesionario. Si est\u00e1s comparando concesionarios en Villa Park o en cualquier parte del condado de DuPage, ven a recorrer el lote o empieza por las p\u00e1ginas de abajo.",
       moreAboutUs: "M\u00e1s sobre nosotros \u2192",
