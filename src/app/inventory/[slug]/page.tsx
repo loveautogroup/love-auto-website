@@ -98,6 +98,14 @@ export async function generateMetadata({
   return {
     title,
     description,
+    // A recently-sold car keeps a PAGE so links to it still land somewhere
+    // useful, but it must never be INDEXED — Google would be advertising a car
+    // nobody can buy, and it would compete with the live inventory in search.
+    // The sitemap already excludes sold; this is the second half of that.
+    // (Jeremiah, 2026-08-25.)
+    ...(vehicle.status === "sold"
+      ? { robots: { index: false, follow: true } }
+      : {}),
     // Reciprocal with /es/inventory/<slug>/ — hreflang is ignored unless both
     // sides agree. Slash-terminated because production 308s the bare form.
     alternates: {
@@ -121,6 +129,23 @@ export async function generateMetadata({
   };
 }
 
+/** "August 20, 2026" from an ISO date, or "" when we do not have one. */
+function formatSoldDate(iso: string): string {
+  try {
+    // Parse as a plain calendar date — new Date("2026-08-20") is UTC midnight,
+    // which renders as the 19th in Central time.
+    const [y, m, d] = iso.slice(0, 10).split("-").map(Number);
+    if (!y || !m || !d) return "";
+    return new Date(y, m - 1, d).toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  } catch {
+    return "";
+  }
+}
+
 export default async function VehicleDetailPage({
   params,
 }: {
@@ -132,6 +157,11 @@ export default async function VehicleDetailPage({
     fetchGlobalBadgeConfig(),
   ]);
   if (!vehicle) notFound();
+
+  // Sold within Railway's 30-day window. The car still has a page (a link from
+  // CarGurus, a text or a bookmark should land on the car, not a dead end) but
+  // it is not for sale, so nothing on the page may invite a purchase.
+  const isSold = vehicle.status === "sold";
 
   // Prices render EXACTLY as priced (supersedes E3's floor — see VDPLivePrice).
   const priceHasCents = Math.round(vehicle.price * 100) % 100 !== 0;
@@ -244,6 +274,29 @@ export default async function VehicleDetailPage({
           },
         ]}
       />
+
+      {/* SOLD banner — the first thing a visitor sees, above the fold, before
+          any price or CTA. A sold car keeps its page so links to it still work;
+          the banner is what stops the page reading as a live listing. */}
+      {isSold && (
+        <div className="bg-[#dc2626] text-white">
+          <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+            <p className="text-center text-sm font-semibold tracking-wide sm:text-base">
+              <span className="mr-2 inline-block rounded bg-white/20 px-2 py-0.5 text-xs font-bold uppercase tracking-widest">
+                Sold
+              </span>
+              This one found its new owner
+              {vehicle.soldDate ? ` on ${formatSoldDate(vehicle.soldDate)}` : ""}.{" "}
+              <a
+                href="/inventory/"
+                className="underline underline-offset-2 hover:no-underline"
+              >
+                See what we have now
+              </a>
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Breadcrumb */}
       <SiteBreadcrumb
@@ -447,7 +500,8 @@ export default async function VehicleDetailPage({
                         pipeline tagged "website-test-drive". Books nothing;
                         we call back to confirm. Outlined on purpose so it
                         sits below the solid Call CTA in the hierarchy. */}
-                    <VDPTestDriveButton
+                    {!isSold && (
+                      <VDPTestDriveButton
                       vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.trim ? " " + vehicle.trim : ""}`}
                       vehicleVin={vehicle.vin}
                       stockNumber={vehicle.stockNumber}
@@ -455,6 +509,7 @@ export default async function VehicleDetailPage({
                       model={vehicle.model}
                       className="w-full"
                     />
+                    )}
                   </div>
                 </div>
 
@@ -538,7 +593,8 @@ export default async function VehicleDetailPage({
               </a>
               {/* Test drive request (mobile) - same LEAD-ONLY flow as the
                   desktop CTA card above. */}
-              <VDPTestDriveButton
+              {!isSold && (
+                      <VDPTestDriveButton
                 vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.trim ? " " + vehicle.trim : ""}`}
                 vehicleVin={vehicle.vin}
                 stockNumber={vehicle.stockNumber}
@@ -546,6 +602,7 @@ export default async function VehicleDetailPage({
                 model={vehicle.model}
                 className="mt-3 w-full"
               />
+                    )}
             </div>
 
             {/* Market price comparison — only renders when Jordan has set

@@ -98,6 +98,15 @@ function isAvailable(status: string | null | undefined): boolean {
  * found (404)" fix-failed loop in Search Console for vehicles that sold
  * after the last CF Pages build.
  */
+/**
+ * Sold specifically — as opposed to archived / wholesale / arbitration return.
+ * A sold car in the live feed is inside Railway's recently-sold window and has
+ * its own static page; the others never appear in the feed at all.
+ */
+function isSold(status: string | null | undefined): boolean {
+  return (status ?? "").toLowerCase().trim() === "sold";
+}
+
 function isGone(status: string | null | undefined): boolean {
   const s = (status ?? "").toLowerCase().trim();
   return (
@@ -564,12 +573,19 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
     const hidden = hiddenVins.has(match.vin.toUpperCase());
 
-    // Sold / wholesale / archived, OR hidden via the DMS "Hide from site"
-    // toggle — always override, even a genuine static page. HTTP 410 so
-    // Google deindexes in days rather than months. Closes the "Not found
-    // (404)" fix-failed loop reported in Search Console (Charlotte audit
-    // 2026-05-07).
-    if (isGone(match.status) || hidden) {
+    // Hidden via the DMS "Hide from site" toggle, or gone for good — override
+    // even a genuine static page. HTTP 410 so Google deindexes in days rather
+    // than months. Closes the "Not found (404)" fix-failed loop reported in
+    // Search Console (Charlotte audit 2026-05-07).
+    //
+    // ⚠️ A car that is IN THIS FEED and sold is RECENTLY sold — Railway only
+    // emits sold rows inside its 30-day window — and it has a real static VDP
+    // built for it on purpose (Jeremiah, 2026-08-25). Serving it a Gone page
+    // here would delete the page we just built. Older sales are not in the
+    // feed at all and still 410 via the retired-slugs branch above, which is
+    // the path that does the deindexing.
+    const recentlySold = isSold(match.status);
+    if ((isGone(match.status) && !recentlySold) || hidden) {
       const html = renderGonePage({
         title: escapedVehicleTitle(match),
         hidden: hidden && !isGone(match.status),

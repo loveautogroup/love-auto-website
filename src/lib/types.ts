@@ -22,6 +22,10 @@ export interface Vehicle {
   /** Branded hero with baked badges — og:image / social preview only. */
   bakedHeroUrl?: string | null;
   status: "available" | "sale-pending" | "sold" | "coming-soon";
+  /** ISO date the car sold. Present only on recently-sold rows — Railway emits
+   *  sold cars for 30 days so their VDP keeps working. PARITY CHAIN:
+   *  routers/public.py -> DMS proxy -> functions/api/inventory.ts -> here. */
+  soldDate?: string | null;
   dateInStock: string;
   daysOnLot: number;
   /** Public feed flag — true if vehicle had a price decrease in the

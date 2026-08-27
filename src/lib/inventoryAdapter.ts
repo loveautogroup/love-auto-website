@@ -46,6 +46,9 @@ export interface SyncedVehicle {
   mileage: number;
   price: number;
   status: "available" | "sale-pending" | "sold" | "coming-soon";
+  /** ISO date the car sold — present only on recently-sold rows.
+   *  PARITY CHAIN: routers/public.py -> DMS proxy -> here -> Vehicle. */
+  soldDate?: string | null;
   features: string[];
   /** Long-form marketing copy from the DMS public feed
    *  (Railway vehicle.description). Empty/absent -> the VDP falls back to

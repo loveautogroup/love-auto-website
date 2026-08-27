@@ -110,6 +110,7 @@ interface DmsVehicle {
   engine?: string | null;
   description?: string | null;
   status?: string | null;
+  soldDate?: string | null;
   daysOnLot?: number | null;
   features?: string[] | null;
   photos?: DmsPhoto[] | null;
@@ -233,6 +234,7 @@ function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     mileage: Number(v.mileage) || 0,
     price,
     status: mapStatus(v.status),
+    soldDate: v.soldDate ?? null,
     features: Array.isArray(v.features) ? v.features.filter((f) => typeof f === "string") : [],
     daysOnLot: Number(v.daysOnLot) || 0,
     dateInStock: v.dateInStock ?? "",
@@ -295,9 +297,24 @@ async function fetchDmsOnce(
     const vehicles = json.data
       .filter((v) => v && v.vin && v.year && v.make && v.model)
       .map(adaptDmsVehicle)
-      // Only surface vehicles Jeremiah has explicitly marked Listed (available)
-      // or Sale Pending. Coming Soon / In Recon vehicles stay off the public site.
-      .filter((v) => v.status === "available" || v.status === "sale-pending");
+      // Listed (available), Sale Pending, and cars SOLD in the last 30 days.
+      // Coming Soon / In Recon vehicles stay off the public site.
+      //
+      // Sold is here so a recently-sold car still gets a real VDP — a link from
+      // CarGurus, a text or a bookmark should land on the car, not a dead end
+      // (Jeremiah, 2026-08-25). Railway decides the 30-day window; this feed
+      // just carries what it sends.
+      //
+      // It does NOT put sold cars in the storefront: InventoryGrid.tsx and
+      // inventory/page.tsx both filter `status !== "sold"`, and sitemap.ts
+      // indexes only available/sale-pending. Those are the display gates and
+      // they are deliberately separate from this one.
+      .filter(
+        (v) =>
+          v.status === "available" ||
+          v.status === "sale-pending" ||
+          v.status === "sold"
+      );
     return {
       syncedAt: new Date().toISOString(),
       syncedBy: "live-dms",

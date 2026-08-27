@@ -228,6 +228,7 @@ interface DmsVehicle {
   engine?: string | null;
   description?: string | null;
   status?: string | null;
+  soldDate?: string | null;
   daysOnLot?: number | null;
   features?: string[] | null;
   photos?: DmsPhoto[] | null;
@@ -331,6 +332,7 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     mileage: Number(v.mileage) || 0,
     price,
     status: mapStatus(v.status),
+    soldDate: v.soldDate ?? null,
     features: Array.isArray(v.features)
       ? v.features.filter((f) => typeof f === "string")
       : [],
@@ -566,6 +568,7 @@ export function syncedToVehicle(s: SyncedVehicle): Vehicle {
     features: s.features,
     images: s.images,
     status: s.status,
+    soldDate: s.soldDate ?? null,
     dateInStock: s.dateInStock,
     daysOnLot: s.daysOnLot,
     recentlyReduced: s.recentlyReduced,
