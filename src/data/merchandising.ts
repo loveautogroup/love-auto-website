@@ -364,6 +364,36 @@ export const MERCHANDISING: MerchandisingConfig = {
  * Helper — resolves the effective overlay for a vehicle, applying auto-detected
  * defaults (e.g. Just Arrived for new inventory) when no override is set.
  */
+/**
+ * Which status pill a vehicle wears. ONE definition — the server/build
+ * resolveOverlay() and the client useResolveOverlay() both call this.
+ *
+ * It lived in both files as copy-pasted twins, and they drifted the moment
+ * "sold" was added: the hero of a sold Outback kept a green JUST ARRIVED pill
+ * because only the server copy had been fixed.
+ *
+ * Priority, highest first:
+ *   sold          a sold car keeps its VDP for 30 days and must never look
+ *                 available. Outranks a manual override — nobody meant to
+ *                 advertise "Staff Pick" on a car that is gone.
+ *   coming-soon   set by the DMS, not a merchandising choice.
+ *   manual        whatever Jordan picked in the merchandising panel.
+ *   sale-pending  a deposit is down.
+ *   just-arrived  on the lot 14 days or less.
+ */
+export function pickStatusPill(
+  vehicleStatus: "available" | "sale-pending" | "sold" | "coming-soon",
+  manual: StatusBadgeKind | undefined,
+  daysOnLot: number,
+): StatusBadgeKind | undefined {
+  if (vehicleStatus === "sold") return "sold";
+  if (vehicleStatus === "coming-soon") return "coming-soon";
+  if (manual) return manual;
+  if (vehicleStatus === "sale-pending") return "sale-pending";
+  if (daysOnLot > 0 && daysOnLot <= 14) return "just-arrived";
+  return undefined;
+}
+
 export function resolveOverlay(
   vin: string,
   daysOnLot: number,
@@ -378,14 +408,7 @@ export function resolveOverlay(
   // kept intact so the merchandising admin can still pick it manually if
   // desired — only the auto-flip from the DMS feed is suppressed.
   void recentlyReduced;
-  let effectiveStatus: StatusBadgeKind | undefined =
-    vehicleStatus === "coming-soon" ? "coming-soon" : override.status;
-  if (!effectiveStatus && vehicleStatus === "sale-pending") {
-    effectiveStatus = "sale-pending";
-  }
-  if (!effectiveStatus && daysOnLot > 0 && daysOnLot <= 14) {
-    effectiveStatus = "just-arrived";
-  }
+  const effectiveStatus = pickStatusPill(vehicleStatus, override.status, daysOnLot);
 
   // Default-on for the Carfax shield/button: every Love Auto vehicle is
   // sold with a free Carfax, so it should appear on every VDP unless

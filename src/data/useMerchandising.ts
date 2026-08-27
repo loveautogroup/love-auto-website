@@ -19,6 +19,7 @@
  * runtime data.
  */
 
+import { pickStatusPill } from "./merchandising";
 import { useEffect, useState } from "react";
 import {
   MERCHANDISING,
@@ -98,22 +99,17 @@ export function useResolveOverlay(
   const config = useMerchandising();
   const override = config.overlays?.[vin] ?? {};
 
-  // Same logic as the synchronous resolveOverlay() in src/data/merchandising.ts:
-  // Priority: coming-soon > manual status > sale-pending > just-arrived.
+  // Priority lives in pickStatusPill() — ONE definition shared with the
+  // server-side resolveOverlay(). This used to be a copy of that logic and the
+  // two drifted, which is how a sold car kept a green JUST ARRIVED pill on its
+  // hero after the server copy alone was fixed.
+  //
   // NOTE: the auto "price-reduced" flag (fired off the DMS public feed's
-  // recentlyReduced signal) was removed per Jeremiah 2026-05-09 — he doesn't
-  // want the Price Reduced pill surfacing on the website. The
+  // recentlyReduced signal) was removed per Jeremiah 2026-05-09. The
   // `recentlyReduced` arg + the `price-reduced` StatusPill variant are kept
   // intact so the merchandising admin can still set it manually if desired.
   void recentlyReduced;
-  let effectiveStatus: StatusBadgeKind | undefined =
-    vehicleStatus === "coming-soon" ? "coming-soon" : override.status;
-  if (!effectiveStatus && vehicleStatus === "sale-pending") {
-    effectiveStatus = "sale-pending";
-  }
-  if (!effectiveStatus && daysOnLot > 0 && daysOnLot <= 14) {
-    effectiveStatus = "just-arrived";
-  }
+  const effectiveStatus = pickStatusPill(vehicleStatus, override.status, daysOnLot);
 
   // CARFAX needs BOTH answers to be yes, from two different owners:
   //   carfax         — "do we want to advertise CARFAX on this car?" (dealer)

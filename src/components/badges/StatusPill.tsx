@@ -29,6 +29,9 @@ const VARIANTS: Record<
   "staff-pick": { label: "Staff Pick", className: "bg-[#2563EB] text-white" },
   "low-mileage": { label: "Low Mileage", className: "bg-[#0D9488] text-white" },
   "sale-pending": { label: "Sale Pending", className: "bg-[#64748B] text-white" },
+  // Red, matching the SOLD banner. Slate is Sale Pending — a deposit down,
+  // still gettable — and the two states must not look alike.
+  sold: { label: "Sold", className: "bg-[#DC2626] text-white" },
   "coming-soon": { label: "Coming Soon", className: "bg-brand-red text-white" },
   "hot-deal": { label: "Hot Deal", className: "bg-[#DC2626] text-white" },
   "great-deal": { label: "Great Deal", className: "bg-[#059669] text-white" },

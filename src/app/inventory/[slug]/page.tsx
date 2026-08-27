@@ -72,8 +72,11 @@ export async function generateMetadata({
   // just repeats the model) — join with filter(Boolean) so empty trims
   // can't leave a double space in the <title>.
   const base = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
-  const withTrim = `${[base, vehicle.trim].filter(Boolean).join(" ")} for Sale | Love Auto Group`;
-  const withoutTrim = `${base} for Sale | Love Auto Group`;
+  // A sold car must not be titled "for Sale" — that is what shows in a browser
+  // tab, a shared link and any search result that still carries the old title.
+  const saleSuffix = vehicle.status === "sold" ? "(Sold)" : "for Sale";
+  const withTrim = `${[base, vehicle.trim].filter(Boolean).join(" ")} ${saleSuffix} | Love Auto Group`;
+  const withoutTrim = `${base} ${saleSuffix} | Love Auto Group`;
   const title = withTrim.length <= 60 ? withTrim : withoutTrim;
 
   const formattedMileage = new Intl.NumberFormat().format(vehicle.mileage);
@@ -528,11 +531,13 @@ export default async function VehicleDetailPage({
 
                 {/* Card 3 — payment calculator */}
                 <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
+                  {!isSold && (
                   <VDPPaymentCalculator
                     vehiclePrice={vehicle.price}
                     vehicleSlug={vehicle.slug}
                     vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
                   />
+                )}
                 </div>
 
               </div>

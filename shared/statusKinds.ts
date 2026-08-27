@@ -22,6 +22,10 @@ export const STATUS_KINDS = [
   "staff-pick",
   "low-mileage",
   "sale-pending",
+  // Set automatically from the DMS when a car sells — a recently-sold car
+  // keeps its VDP for 30 days and must not wear "Just Arrived".
+  // resolveOverlay() gives it priority over every other kind.
+  "sold",
   "coming-soon",
   "hot-deal",
   "great-deal",
