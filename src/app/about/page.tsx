@@ -6,7 +6,7 @@ import AboutHero from "./AboutHero";
 export const metadata: Metadata = {
   title: "About Love Auto Group, Family Owned in Villa Park IL",
   description:
-    "Family owned in Villa Park, IL since 2014. We specialize in quality Japanese used cars, every one carefully selected, fully reconditioned, and inspected.",
+    "Family-owned independent dealer in Villa Park, IL since 2014. Every vehicle carefully selected, fully reconditioned, and inspected.",
   alternates: { canonical: "https://www.loveautogroup.net/about/" },
 };
 
@@ -34,7 +34,7 @@ export default function AboutPage() {
             inspect, and recondition each one before it gets a price tag.
           </p>
           <p className="text-brand-gray-700 leading-relaxed mb-6">
-            Our focus is on Japanese vehicles like Lexus,{" "}
+            Our focus is on vehicles like Lexus,{" "}
             <Link href="/brands/subaru/" className="text-brand-red hover:underline">
               Subaru
             </Link>

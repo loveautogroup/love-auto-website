@@ -162,7 +162,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "Where can I buy a used Subaru near Chicago?",
         answer:
-          "Love Auto Group at 735 N Yale Ave in Villa Park is a family owned used Subaru dealer, twenty minutes west of downtown Chicago and central to the western suburbs. We're a small specialist lot focused on Japanese makes including Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Our customers regularly come from across DuPage County, the Chicago suburbs, and the wider Chicagoland area. Call (630) 359-3643 or check current Subaru inventory below.",
+          "Love Auto Group at 735 N Yale Ave in Villa Park is a family owned used Subaru dealer, twenty minutes west of downtown Chicago and central to the western suburbs. We're a small specialist lot focused on makes including Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Our customers regularly come from across DuPage County, the Chicago suburbs, and the wider Chicagoland area. Call (630) 359-3643 or check current Subaru inventory below.",
       },
       {
         question: "Do you serve buyers from Chicago and the western suburbs?",
@@ -322,7 +322,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "Do Mazdas hold their value?",
         answer:
-          "Better than they used to. The pre-2014 Mazdas depreciated faster than Honda or Toyota equivalents. Post-Skyactiv generation, resale has tightened up because reliability data is now in line with Japanese-segment leaders. The CX-5 in particular holds value well, and the Mazda3 has cult appeal that keeps used prices firm in nicer trims.",
+          "Better than they used to. The pre-2014 Mazdas depreciated faster than Honda or Toyota equivalents. Post-Skyactiv generation, resale has tightened up because reliability data is now in line with segment leaders. The CX-5 in particular holds value well, and the Mazda3 has cult appeal that keeps used prices firm in nicer trims.",
       },
       {
         question: "What should I check before buying a used CX-5?",

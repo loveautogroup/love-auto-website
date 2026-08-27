@@ -94,7 +94,7 @@ export const blogPosts: BlogPost[] = [
       </ul>
 
       <h2>Our Take</h2>
-      <p>A used SUV under $15,000 is one of the best values in the car market right now. Someone else absorbed the depreciation, the vehicles have proven themselves through three to five years of real-world use, and the right Japanese makes have another 100,000 miles of service life ahead.</p>
+      <p>A used SUV under $15,000 is one of the best values in the car market right now. Someone else absorbed the depreciation, the vehicles have proven themselves through three to five years of real-world use, and the right makes have another 100,000 miles of service life ahead.</p>
 
       <p>At Love Auto Group, SUVs make up a big portion of our inventory — we specifically seek out the models above because we know how they hold up. Every one is thoroughly inspected and reconditioned before listing, and we provide a free Carfax report. <a href="/inventory">Browse the current inventory</a> or call us at (630) 359-3643 to ask what's coming in.</p>
     `,
@@ -150,9 +150,9 @@ export const blogPosts: BlogPost[] = [
       </ul>
 
       <h2>Where to Buy a Used Lexus in the Chicago Suburbs</h2>
-      <p>You have three options: a Lexus franchise dealer (highest price, certified pre-owned with warranty), a large used-car supermarket (competitive pricing, variable quality), or an independent dealer that specializes in Japanese makes. Franchise dealers charge a premium for the badge and the warranty, which can make sense if you want maximum peace of mind. Supermarkets have volume but the inspection depth can vary.</p>
+      <p>You have three options: a Lexus franchise dealer (highest price, certified pre-owned with warranty), a large used-car supermarket (competitive pricing, variable quality), or an independent dealer that is a family-owned independent dealer. Franchise dealers charge a premium for the badge and the warranty, which can make sense if you want maximum peace of mind. Supermarkets have volume but the inspection depth can vary.</p>
 
-      <p>Specialist independents are the third option, and for most buyers, the best value. We've been selling Lexus and other Japanese makes in Villa Park since 2014. Every vehicle on our lot is thoroughly inspected and reconditioned before it's listed. We know which model years have issues and which ones are gold. And our prices reflect the fact that we don't have a franchise fee baked in.</p>
+      <p>Specialist independents are the third option, and for most buyers, the best value. We've been selling Lexus and other makes in Villa Park since 2014. Every vehicle on our lot is thoroughly inspected and reconditioned before it's listed. We know which model years have issues and which ones are gold. And our prices reflect the fact that we don't have a franchise fee baked in.</p>
 
       <p>If you're shopping for a used Lexus in DuPage County or anywhere in the Chicago suburbs, we typically keep two to four clean models in stock at any given time. <a href="/inventory">Browse our current inventory</a> or call us at (630) 359-3643 to ask what's coming in next.</p>
     `,
@@ -202,7 +202,7 @@ export const blogPosts: BlogPost[] = [
 
       <h2>6. Mazda CX-5 AWD (2015–2018)</h2>
       <p><strong>Price range:</strong> $9,000 to $13,000</p>
-      <p><strong>Why it wins:</strong> Mazda doesn't get enough credit. The CX-5 drives better than anything in its class — sharper steering, better handling, more character. The SkyActiv 2.5L engine and transmission combo is reliable. Interior quality punches above the price point. If you want an AWD SUV that feels more European than Japanese, this is the pick.</p>
+      <p><strong>Why it wins:</strong> Mazda doesn't get enough credit. The CX-5 drives better than anything in its class — sharper steering, better handling, more character. The SkyActiv 2.5L engine and transmission combo is reliable. Interior quality punches above the price point. If you want an AWD SUV that feels more European than mainstream, this is the pick.</p>
       <p><strong>Watch out for:</strong> Fewer on the used market than Honda or Toyota products, so patience helps. Service records matter — Mazda's recommended oil change intervals are shorter than competitors.</p>
 
       <h2>What to Skip</h2>
@@ -214,8 +214,8 @@ export const blogPosts: BlogPost[] = [
         <li><strong>Jeep Grand Cherokee:</strong> Hit or miss depending on the engine and drivetrain. More rewards for mechanically inclined owners.</li>
       </ul>
 
-      <h2>Our Take: Japanese AWD is the Sweet Spot</h2>
-      <p>Love Auto Group specializes in Japanese makes specifically because they hit the best value in winter-ready used vehicles. Reliability that doesn't break down when it's 10 degrees, parts that are affordable when something does need service, and depreciation curves that let you get a quality AWD vehicle for under $15,000.</p>
+      <h2>Our Take: AWD is the Sweet Spot</h2>
+      <p>Love Auto Group is a family-owned independent dealer specifically because they hit the best value in winter-ready used vehicles. Reliability that doesn't break down when it's 10 degrees, parts that are affordable when something does need service, and depreciation curves that let you get a quality AWD vehicle for under $15,000.</p>
 
       <p>We typically keep a rotating selection of AWD SUVs in stock — Subaru Forester and Outback, Acura MDX, Lexus RX, and others as they come through. Every one is thoroughly inspected and reconditioned before it's listed. <a href="/inventory">Browse the current inventory</a> or call (630) 359-3643 to ask what's coming in.</p>
     `,

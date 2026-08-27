@@ -298,7 +298,7 @@ function escapedVehicleTitle(v: DmsVehicle): string {
  *
  * Ranked, because a Subaru buyer wants another Subaru far more than they want
  * the cheapest thing on the lot:
- *   1. same make          — this lot is a Japanese-makes specialist
+ *   1. same make          — this lot is a family-owned independent dealer
  *   2. similar price      — within 30% either way
  *   3. anything available — better than an empty page
  *

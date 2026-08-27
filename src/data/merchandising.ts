@@ -234,7 +234,7 @@ export interface MerchandisingConfig {
 
 export const MERCHANDISING: MerchandisingConfig = {
   // Jordan's hero picks in display order. Four selected to match the
-  // Japanese specialist positioning + highest-margin units.
+  // family-owned independent dealer positioning + highest-margin units.
   featuredVins: [
     // 2026-04-27: Featured rotated to the 3 cleanest active units after a
     // full Carfax sweep on every vehicle. Previous picks pulled because:
@@ -324,7 +324,7 @@ export const MERCHANDISING: MerchandisingConfig = {
       marketEstimate: 4500, // priced at $3,999 — Good Deal
     },
 
-    // 2016 Lexus RC 350 — Japanese luxury coupe, premium margin hero
+    // 2016 Lexus RC 350 — luxury coupe, premium margin hero
     "JTHHE5BC2G5011456": {
       carfax: true,
       status: "staff-pick",

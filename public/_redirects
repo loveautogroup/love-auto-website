@@ -198,3 +198,10 @@
 # no redirect chain and no loop risk. Canonical/og tags already point at the
 # slash form, so no duplicate-content penalty.
 /inventory/:slug    /inventory/:slug/index.html    200
+
+# Retired 2026-08-25 (Jeremiah): the Japanese-makes positioning is gone
+# site-wide, and this page could not be reworded — that claim WAS the page.
+# 301 rather than delete: it was indexed, and a bare 404 is exactly what the
+# 2026-05 Search Console cleanup existed to stop. /brands/ is the closest
+# surviving page — the same makes, without the framing.
+/buying-guides/independent-japanese-makes-dealer-chicago/*  /brands/  301

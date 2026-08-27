@@ -40,7 +40,7 @@ const FAQS = [
   {
     question: "What kinds of used cars do you sell?",
     answer:
-      "We specialize in Japanese makes including Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Inventory is typically priced from around $4,500 to $18,000, with most vehicles in the 2013 to 2018 model years and 80,000 to 140,000 mile range. Every vehicle is carefully selected, fully reconditioned, and comes with a free Carfax.",
+      "We carry Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Inventory is typically priced from around $4,500 to $18,000, with most vehicles in the 2013 to 2018 model years and 80,000 to 140,000 mile range. Every vehicle is carefully selected, fully reconditioned, and comes with a free Carfax.",
   },
   {
     question: "Are you a family owned dealer?",
@@ -50,7 +50,7 @@ const FAQS = [
   {
     question: "Why buy from a small DuPage County dealer instead of a big-name lot?",
     answer:
-      "Lower overhead means lower prices on the same drivetrains. Our specialty in Japanese makes means we know the watch points on every model we stock and can spot a problem car at the buying stage before it gets to you. And our size means you work directly with the owner instead of a rotating sales floor. The trade-off is a smaller inventory than a big franchise lot, so if you have a specific car in mind, call ahead and we'll let you know what's coming in.",
+      "Lower overhead means lower prices on the same drivetrains. Our focus on the makes we know means we know the watch points on every model we stock and can spot a problem car at the buying stage before it gets to you. And our size means you work directly with the owner instead of a rotating sales floor. The trade-off is a smaller inventory than a big franchise lot, so if you have a specific car in mind, call ahead and we'll let you know what's coming in.",
   },
   {
     question: "Do you offer financing for DuPage County buyers?",
@@ -230,7 +230,7 @@ export default function DuPageCountyPage() {
           is thoroughly inspected and reconditioned before it goes on the lot.
         </p>
         <p className="text-brand-gray-700 leading-relaxed mb-4">
-          Our specialty is Japanese makes, the cars built to run past 200,000
+          Our focus is the makes we know, the cars built to run past 200,000
           miles when properly maintained. That means used Subarus with
           symmetrical all-wheel drive for Chicago winters, used Lexus models
           with the same drivetrains the franchise stores recondition at twice
@@ -281,7 +281,7 @@ export default function DuPageCountyPage() {
           Used cars by make
         </h2>
         <p className="text-brand-gray-700 leading-relaxed mb-6">
-          We focus on Japanese makes because they&apos;re the cars that hold
+          We focus on the makes we know because they&apos;re the cars that hold
           up best in our market. Browse current inventory by make:
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 not-prose">

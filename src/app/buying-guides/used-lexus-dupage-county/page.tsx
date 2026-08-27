@@ -27,7 +27,7 @@ const FAQS = [
   {
     question: "Where can I buy a used Lexus in DuPage County?",
     answer:
-      "Love Auto Group at 735 N Yale Ave in Villa Park, IL is a family owned independent used Lexus dealer in DuPage County. We specialize in Japanese makes including Lexus, Subaru, Acura, Honda, Toyota, and Mazda. Buyers regularly come from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Wheaton, Naperville, Hinsdale, and the wider western Chicago suburbs. Franchise Lexus dealers nearby include McGrath Lexus of Westmont, Lexus of Naperville, Woodfield Lexus in Schaumburg, Lexus of Arlington Heights, and Bill Jacobs Lexus in Naperville.",
+      "Love Auto Group at 735 N Yale Ave in Villa Park, IL is a family owned independent used Lexus dealer in DuPage County. We carry Lexus, Subaru, Acura, Honda, Toyota, and Mazda. Buyers regularly come from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Wheaton, Naperville, Hinsdale, and the wider western Chicago suburbs. Franchise Lexus dealers nearby include McGrath Lexus of Westmont, Lexus of Naperville, Woodfield Lexus in Schaumburg, Lexus of Arlington Heights, and Bill Jacobs Lexus in Naperville.",
   },
   {
     question: "Independent used Lexus dealer vs. franchise Lexus store: which is right for me?",
@@ -52,7 +52,7 @@ const FAQS = [
   {
     question: "Should I buy a used Lexus IS 250 or IS 350?",
     answer:
-      "The IS 250 with the 2.5L V6 is the volume car and the better used-market value. The 2.5L is reliable and parts are cheap, though the car is not fast (zero to sixty around 7.7 seconds). The IS 350 with the 3.5L V6 is genuinely quick (around 5.6 seconds) and the engine is bulletproof, but used examples are rarer and command a price premium. For daily driving in the Chicago suburbs, the IS 250 is the smart pick. If you want a fast Japanese sedan that also handles winter well with snow tires, the IS 350 is the one.",
+      "The IS 250 with the 2.5L V6 is the volume car and the better used-market value. The 2.5L is reliable and parts are cheap, though the car is not fast (zero to sixty around 7.7 seconds). The IS 350 with the 3.5L V6 is genuinely quick (around 5.6 seconds) and the engine is bulletproof, but used examples are rarer and command a price premium. For daily driving in the Chicago suburbs, the IS 250 is the smart pick. If you want a fast sedan that also handles winter well with snow tires, the IS 350 is the one.",
   },
   {
     question: "Do you stock used Lexus GX 460?",
@@ -153,7 +153,7 @@ export default function UsedLexusDuPageCountyPage() {
 
           <p>
             Love Auto Group is family owned, has operated in Villa Park
-            since 2014, and specializes in Japanese makes. Lexus is one
+            since 2014, and is a family-owned independent dealer. Lexus is one
             of the makes we know best. Every vehicle is personally inspected
             and reconditioned before it goes on the lot.
           </p>
@@ -371,7 +371,7 @@ export default function UsedLexusDuPageCountyPage() {
 
           <p>
             Family owned, in business since 2014, specializing in
-            Japanese makes including Lexus, Subaru, Acura, Honda, Toyota,
+            makes including Lexus, Subaru, Acura, Honda, Toyota,
             and Mazda.
           </p>
         </div>

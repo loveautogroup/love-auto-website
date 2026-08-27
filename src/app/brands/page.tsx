@@ -25,7 +25,7 @@ const PAGE_URL = `${BASE}/brands/`;
 export const metadata: Metadata = {
   title: "Browse Used Cars by Brand | Love Auto Group",
   description:
-    "Browse used Honda, Subaru, Lexus, Acura, and Mazda inventory at Love Auto Group in Villa Park, IL. Japanese-makes specialist since 2014. Free Carfax on every vehicle.",
+    "Browse used Honda, Subaru, Lexus, Acura, and Mazda inventory at Love Auto Group in Villa Park, IL. Family-owned independent dealer since 2014. Free Carfax on every vehicle.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Browse Used Cars by Brand | Love Auto Group",
@@ -46,7 +46,7 @@ export default function BrandsIndexPage() {
     url: PAGE_URL,
     name: "Browse Used Cars by Brand",
     description:
-      "Brand index for Love Auto Group's Japanese-makes inventory: Honda, Subaru, Lexus, Acura, and Mazda.",
+      "Brand index for Love Auto Group's inventory: Honda, Subaru, Lexus, Acura, and Mazda.",
     inLanguage: "en-US",
     isPartOf: {
       "@type": "WebSite",
@@ -93,7 +93,7 @@ export default function BrandsIndexPage() {
             </span>
           </h1>
           <p className="mt-4 text-lg md:text-xl text-brand-gray-300 max-w-3xl">
-            Japanese-makes specialist since 2014. Honda, Subaru, Lexus, Acura,
+            family-owned independent dealer since 2014. Honda, Subaru, Lexus, Acura,
             and Mazda in steady rotation on our Villa Park lot.
           </p>
         </div>
@@ -103,7 +103,7 @@ export default function BrandsIndexPage() {
       <section className="max-w-4xl mx-auto px-4 py-10">
         <p className="text-lg text-brand-gray-700 leading-relaxed mb-4">
           Love Auto Group is a family owned independent dealership in Villa
-          Park, IL focused on Japanese makes. Honda, Subaru, Lexus, Acura,
+          Park, IL focused on makes. Honda, Subaru, Lexus, Acura,
           and Mazda are the five brands you will see in regular rotation on
           our lot, because they are the brands with the longest service lives,
           the strongest resale curves, and the lowest cost of ownership in

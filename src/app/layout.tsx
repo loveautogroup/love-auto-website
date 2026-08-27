@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   keywords: [
     "used cars Villa Park IL",
     "used car dealership Villa Park",
-    "Japanese used cars DuPage County",
+    "used cars DuPage County",
     "family owned dealership",
     "used Lexus",
     "used Subaru",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     "used Mazda",
     "cars for sale near Chicago",
     "used car dealer 20 miles from Chicago",
-    "Japanese makes Villa Park IL",
+    "makes Villa Park IL",
   ],
   icons: {
     icon: [
@@ -81,7 +81,7 @@ export const metadata: Metadata = {
     creator: "@loveautogroup",
     title: "Love Auto Group | Used Car Dealership in Villa Park, IL",
     description:
-      "Family-owned car dealership in Villa Park, IL. Japanese makes specialist. No dealer fees, free Carfax. Since 2014.",
+      "Family-owned independent dealer in Villa Park, IL. No dealer fees, free Carfax. Since 2014.",
     images: ["https://www.loveautogroup.net/og-image.png"],
   },
   verification: {

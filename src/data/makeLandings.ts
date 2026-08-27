@@ -3,7 +3,7 @@
  *
  * Each entry powers a `/inventory/used-{slug}` route that targets queries
  * like "used Subaru Villa Park IL" / "used Lexus DuPage County". These
- * pages reinforce Love Auto Group's Japanese-specialist positioning and
+ * pages reinforce Love Auto Group's family-owned independent dealer positioning and
  * are the single biggest organic-traffic opportunity per the SEO audit.
  *
  * Content guidelines (Mark):
@@ -54,7 +54,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     hero:
       "Symmetrical AWD, legendary reliability, and Chicago-winter-ready performance — every used Subaru on our lot.",
     intro:
-      "If you're looking for a used Subaru in Villa Park, IL or anywhere in DuPage County, you're in the right place. Love Auto Group has been a Japanese-vehicle specialist since 2014, and Subaru's reputation for symmetrical all-wheel drive, boxer-engine durability, and four-season versatility is exactly the kind of vehicle our buyers come looking for. Whether you need an Outback to handle Lake Geneva ski runs, a Forester for the daily commute on I-290, or a Crosstrek that makes school drop-off feel like an adventure, we keep our Subaru inventory carefully curated.",
+      "If you're looking for a used Subaru in Villa Park, IL or anywhere in DuPage County, you're in the right place. Love Auto Group has been a family-owned independent dealer since 2014, and Subaru's reputation for symmetrical all-wheel drive, boxer-engine durability, and four-season versatility is exactly the kind of vehicle our buyers come looking for. Whether you need an Outback to handle Lake Geneva ski runs, a Forester for the daily commute on I-290, or a Crosstrek that makes school drop-off feel like an adventure, we keep our Subaru inventory carefully curated.",
     sections: [
       {
         heading: "Why a Used Subaru Makes Sense in the Chicago Suburbs",
@@ -79,7 +79,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Serving Villa Park, Lombard, Elmhurst, and the Western Suburbs",
         body: [
-          "We're located at 735 N Yale Ave, Unit A, Villa Park, IL 60181 — easy to reach from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the rest of DuPage County. Customers regularly drive in from Naperville, Wheaton, and the I-290 / I-294 corridor for our Japanese-vehicle specialization. Browse the current Subaru inventory below or stop by during our extended afternoon hours.",
+          "We're located at 735 N Yale Ave, Unit A, Villa Park, IL 60181 — easy to reach from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the rest of DuPage County. Customers regularly drive in from Naperville, Wheaton, and the I-290 / I-294 corridor for our focus. Browse the current Subaru inventory below or stop by during our extended afternoon hours.",
         ],
       },
     ],
@@ -98,7 +98,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     make: "Lexus",
     title: "Used Lexus for Sale in Villa Park, IL | Love Auto Group",
     description:
-      "Used Lexus sedans, SUVs, and coupes in Villa Park, IL. Inspected, reconditioned, free Carfax. Japanese-vehicle specialists serving DuPage County since 2014.",
+      "Used Lexus sedans, SUVs, and coupes in Villa Park, IL. Inspected, reconditioned, free Carfax. Family-owned independent dealers serving DuPage County since 2014.",
     hero:
       "Toyota reliability with the materials and refinement of a German luxury car — at half the depreciation curve.",
     intro:
@@ -127,7 +127,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Serving Villa Park, Oak Brook, Naperville, and the Western Suburbs",
         body: [
-          "Our Villa Park, IL location at 735 N Yale Ave puts us within a 15-minute drive of Oak Brook, Lombard, Elmhurst, Hinsdale, and the rest of DuPage County's luxury-car-shopping market. We're one of the few independent Japanese-vehicle specialists in the area, which means our Lexus inventory is hand-picked rather than whatever the franchise-dealer auctions had to dump. Browse the live inventory below or call us to ask about a specific model — we source to order when we don't have what you want in stock.",
+          "Our Villa Park, IL location at 735 N Yale Ave puts us within a 15-minute drive of Oak Brook, Lombard, Elmhurst, Hinsdale, and the rest of DuPage County's luxury-car-shopping market. We're one of the few family-owned independent dealers in the area, which means our Lexus inventory is hand-picked rather than whatever the franchise-dealer auctions had to dump. Browse the live inventory below or call us to ask about a specific model — we source to order when we don't have what you want in stock.",
         ],
       },
     ],
@@ -150,7 +150,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     hero:
       "Honda reliability, near-luxury features, and the SH-AWD system — at independent-dealer prices.",
     intro:
-      "Acura is the smart-money luxury brand. Built on Honda mechanicals, refined with extra sound insulation and premium interior materials, and consistently priced below European competitors on the used market. If you're looking for a used Acura in Villa Park, IL or anywhere in DuPage County, Love Auto Group is one of the few independent dealerships specializing in Japanese vehicles that actively curates Acura inventory. We've been doing this since 2014.",
+      "Acura is the smart-money luxury brand. Built on Honda mechanicals, refined with extra sound insulation and premium interior materials, and consistently priced below European competitors on the used market. If you're looking for a used Acura in Villa Park, IL or anywhere in DuPage County, Love Auto Group is one of the few independent dealerships specializing in vehicles that actively curates Acura inventory. We've been doing this since 2014.",
     sections: [
       {
         heading: "Why Used Acura Makes Sense",
@@ -175,7 +175,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Serving Villa Park, Elmhurst, Lombard, and the Chicago Suburbs",
         body: [
-          "Love Auto Group is at 735 N Yale Ave in Villa Park, IL — close to Elmhurst, Lombard, Oak Brook, and the rest of DuPage County. We're a Carfax Advantage Dealer, family-owned since 2014, and one of the few independent dealers in the area that genuinely specializes in Japanese vehicles rather than carrying whatever the auctions had on hand. Browse the live Acura inventory below.",
+          "Love Auto Group is at 735 N Yale Ave in Villa Park, IL — close to Elmhurst, Lombard, Oak Brook, and the rest of DuPage County. We're a Carfax Advantage Dealer, family-owned since 2014, and one of the few independent dealers in the area that genuinely is a family-owned independent dealer rather than carrying whatever the auctions had on hand. Browse the live Acura inventory below.",
         ],
       },
     ],
@@ -198,7 +198,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     hero:
       "The brand that puts driving feel ahead of marketing budgets — and prices its used inventory accordingly.",
     intro:
-      "Mazda is the underrated player in the Japanese-vehicle market. The brand consistently builds cars that drivers genuinely enjoy — sharp steering, well-judged suspension tuning, premium interior materials at mainstream prices — and yet they depreciate at competitive rates. That's the buyer opportunity we work with at Love Auto Group, and Mazda has been a quiet specialty of ours since we opened in Villa Park, IL in 2014.",
+      "Mazda is the underrated player in the used-vehicle market. The brand consistently builds cars that drivers genuinely enjoy — sharp steering, well-judged suspension tuning, premium interior materials at mainstream prices — and yet they depreciate at competitive rates. That's the buyer opportunity we work with at Love Auto Group, and Mazda has been a quiet specialty of ours since we opened in Villa Park, IL in 2014.",
     sections: [
       {
         heading: "Why Mazda Stands Out in the Used Market",
@@ -245,7 +245,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     hero:
       "The benchmark for reliability, fuel economy, and resale value — at independent-dealer pricing.",
     intro:
-      "Honda is the brand that built the modern Japanese-vehicle reputation in the U.S. market — bulletproof drivetrains, exceptional fuel economy, the strongest resale value curve in the segment, and the kind of repair costs that make Honda ownership pay for itself over time. Love Auto Group has been a Honda specialist since opening in Villa Park, IL in 2014, and Civic, Accord, CR-V, Pilot, and Odyssey are constants on our lot.",
+      "Honda is the brand that built the modern reliability reputation in the U.S. market — bulletproof drivetrains, exceptional fuel economy, the strongest resale value curve in the segment, and the kind of repair costs that make Honda ownership pay for itself over time. Love Auto Group has been a Honda specialist since opening in Villa Park, IL in 2014, and Civic, Accord, CR-V, Pilot, and Odyssey are constants on our lot.",
     sections: [
       {
         heading: "Why Honda Holds Value",
@@ -269,7 +269,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Easy to Reach From the Western Suburbs",
         body: [
-          "Our Villa Park location at 735 N Yale Ave is a 5-15 minute drive from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the rest of DuPage County. We're family-owned, Japanese-specialty since 2014, and one of the few independent dealers in the area where you can browse Honda inventory without the franchise-dealer markup. Browse the current selection below.",
+          "Our Villa Park location at 735 N Yale Ave is a 5-15 minute drive from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the rest of DuPage County. We're family-owned, family-owned since 2014, and one of the few independent dealers in the area where you can browse Honda inventory without the franchise-dealer markup. Browse the current selection below.",
         ],
       },
     ],
@@ -295,12 +295,12 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     hero:
       "Family-ready used SUVs and crossovers — AWD options, third-row availability, and the kind of long-term reliability that makes one car last a decade.",
     intro:
-      "If you're shopping for a used SUV in Villa Park, IL or anywhere in DuPage County, Love Auto Group keeps a curated rotation of compact, midsize, and three-row SUVs on the lot. Our specialty is Japanese vehicles — Subaru Outback and Forester, Honda CR-V and Pilot, Acura MDX, Lexus RX, Mazda CX-5 — which are consistently the strongest long-term picks in the SUV segment for total cost of ownership.",
+      "If you're shopping for a used SUV in Villa Park, IL or anywhere in DuPage County, Love Auto Group keeps a curated rotation of compact, midsize, and three-row SUVs on the lot. Our specialty is vehicles — Subaru Outback and Forester, Honda CR-V and Pilot, Acura MDX, Lexus RX, Mazda CX-5 — which are consistently the strongest long-term picks in the SUV segment for total cost of ownership.",
     sections: [
       {
         heading: "Why a Used SUV Makes Sense for Chicago Families",
         body: [
-          "Chicago-suburb winters demand AWD or 4WD, family schedules demand cargo space and third-row seating capability, and household budgets demand a vehicle that won't depreciate to nothing in three years. The used SUV market — specifically Japanese-made used SUVs — solves all three problems at the same time.",
+          "Chicago-suburb winters demand AWD or 4WD, family schedules demand cargo space and third-row seating capability, and household budgets demand a vehicle that won't depreciate to nothing in three years. The used SUV market — specifically used SUVs — solves all three problems at the same time.",
           "We see this in our buyer mix: families upgrading from sedans to a Subaru Outback for the AWD and ground clearance, growing families stepping up to a Honda Pilot or Acura MDX for the third row, empty-nesters downsizing into a CR-V or RAV4-equivalent. The SUV segment is where most of our inventory turnover happens.",
         ],
       },
@@ -340,16 +340,16 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     filterValue: "sedan",
     title: "Used Sedans for Sale in Villa Park, IL | Love Auto Group",
     description:
-      "Used sedans in Villa Park, IL — Honda Accord, Toyota Camry, Lexus ES, Acura TLX. Free Carfax, family owned since 2014. DuPage County's Japanese specialists.",
+      "Used sedans in Villa Park, IL — Honda Accord, Toyota Camry, Lexus ES, Acura TLX. Free Carfax, family owned since 2014. DuPage County's independent used-car dealer.",
     hero:
       "Commuter-ready used sedans with the highest resale value, lowest cost of ownership, and most efficient fuel economy in the market.",
     intro:
-      "Sedans are still the smart-money play for commuters and value-focused buyers, and Love Auto Group has been a Japanese-sedan specialist since opening in Villa Park, IL in 2014. Our rotation includes Honda Accord and Civic, Toyota Camry and Corolla, Lexus ES and IS, Acura TLX and ILX, Mazda3 and Mazda6, and Subaru Legacy and Impreza — the deepest Japanese sedan inventory of any independent dealer in DuPage County.",
+      "Sedans are still the smart-money play for commuters and value-focused buyers, and Love Auto Group has been a used-sedan specialist since opening in Villa Park, IL in 2014. Our rotation includes Honda Accord and Civic, Toyota Camry and Corolla, Lexus ES and IS, Acura TLX and ILX, Mazda3 and Mazda6, and Subaru Legacy and Impreza — the deepest sedan inventory of any independent dealer in DuPage County.",
     sections: [
       {
         heading: "Why a Used Sedan Still Wins",
         body: [
-          "The market has shifted heavily toward SUVs over the last decade, which has had a useful side effect: used Japanese sedans are some of the most underpriced vehicles in the secondary market right now. A clean 2018 Honda Accord with 80,000 miles costs less than the equivalent CR-V, gets 30+ MPG highway, drives noticeably better, and will likely outlast the SUV alternative in long-term reliability.",
+          "The market has shifted heavily toward SUVs over the last decade, which has had a useful side effect: used sedans are some of the most underpriced vehicles in the secondary market right now. A clean 2018 Honda Accord with 80,000 miles costs less than the equivalent CR-V, gets 30+ MPG highway, drives noticeably better, and will likely outlast the SUV alternative in long-term reliability.",
           "For commuters running I-290, I-355, or the I-294 corridor every day, that's the math that matters.",
         ],
       },

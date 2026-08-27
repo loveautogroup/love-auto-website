@@ -27,7 +27,7 @@ const FAQS = [
   {
     question: "Where can I buy a used Subaru near Chicago?",
     answer:
-      "Love Auto Group at 735 N Yale Ave in Villa Park, IL is a family owned independent used Subaru dealer twenty minutes west of downtown Chicago. We specialize in Japanese makes including Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Buyers regularly come from across DuPage County, the western Chicago suburbs, and the city itself. Franchise Subaru dealers near Chicago include Berman Subaru of Chicago (Irving Park Rd), Grand Subaru in Bensenville, McGrath Subaru of Evanston in Skokie, Autobarn Subaru of Countryside, Muller Subaru in Highland Park, and International Subaru in Tinley Park.",
+      "Love Auto Group at 735 N Yale Ave in Villa Park, IL is a family owned independent used Subaru dealer twenty minutes west of downtown Chicago. We carry Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Buyers regularly come from across DuPage County, the western Chicago suburbs, and the city itself. Franchise Subaru dealers near Chicago include Berman Subaru of Chicago (Irving Park Rd), Grand Subaru in Bensenville, McGrath Subaru of Evanston in Skokie, Autobarn Subaru of Countryside, Muller Subaru in Highland Park, and International Subaru in Tinley Park.",
   },
   {
     question: "What is the difference between buying a used Subaru from an independent dealer vs. a franchise Subaru store?",
@@ -161,7 +161,7 @@ export default function UsedSubaruNearChicagoPage() {
 
           <p>
             Love Auto Group is family owned, has operated in Villa Park
-            since 2014, and specializes in Japanese makes. Subaru is one
+            since 2014, and is a family-owned independent dealer. Subaru is one
             of the makes we know best. Every vehicle is personally inspected
             and reconditioned before it goes on the lot.
           </p>
@@ -388,7 +388,7 @@ export default function UsedSubaruNearChicagoPage() {
 
           <p>
             Family owned, in business since 2014, specializing in
-            Japanese makes including Subaru, Lexus, Acura, Honda, Toyota,
+            makes including Subaru, Lexus, Acura, Honda, Toyota,
             and Mazda.
           </p>
         </div>

@@ -33,7 +33,7 @@ export const translations = {
       businessHours: "Business Hours",
       contactUs: "Contact Us",
       about:
-        "Japanese makes specialist in Villa Park, IL — 20 miles from Chicago. Family owned since 2014. Every vehicle inspected and fully reconditioned before it leaves our lot.",
+        "Family-owned independent dealer in Villa Park, IL — 20 miles from Chicago. Since 2014. Every vehicle inspected and fully reconditioned before it leaves our lot.",
       rights: "All rights reserved.",
       privacy: "Privacy Policy",
       terms: "Terms",
@@ -43,7 +43,7 @@ export const translations = {
       headline: "Find Your Next Ride",
       headlineSub: "at Love Auto Group",
       subtext:
-        "Japanese makes specialist — Lexus, Subaru, Acura, Mazda, Honda. Inspected, reconditioned, and ready to drive. Villa Park, IL — 20 miles from Chicago.",
+        "Family-owned independent dealer — Lexus, Subaru, Acura, Mazda, Honda. Inspected, reconditioned, and ready to drive. Villa Park, IL — 20 miles from Chicago.",
       cta: "Browse Inventory",
       ctaFinancing: "Get Pre-Approved",
       pills: {
@@ -533,7 +533,7 @@ export const translations = {
     vdpTrustStrip: {
       inspected: "Fully Inspected",
       inspectedSuffix: "Free CARFAX Included",
-      specialist: "Japanese Makes Specialist",
+      specialist: "Family-Owned Independent Dealer",
       specialistSuffix: "Over a Decade in Villa Park",
       noFees: "No Hidden Fees",
       noFeesSuffix: "All Credit Welcome · Same-Day Title & Plates",
@@ -633,7 +633,7 @@ export const translations = {
       viewAll: "View All \u2192",
       aboutHeading: "An Independent Car Dealership in Villa Park, IL",
       aboutP1: "Love Auto Group is a small, family-owned car dealership at 735 N Yale Ave, Unit A in Villa Park \u2014 about 20 miles west of Chicago. We have been here since 2014. No franchise banner, no acre of balloons, no handoff to a finance office. You deal directly with the people who found the car, inspected it, and priced it.",
-      aboutP2Lead: "Most of our lot is Japanese makes \u2014",
+      aboutP2Lead: "Most of our lot is makes \u2014",
       aboutP2Tail: ", Lexus, Honda, Acura, Toyota, Mazda \u2014 because they hold up. Every vehicle is inspected before it is listed, and every one comes with a free Carfax report. If a car is not good enough to put our name on, we do not sell it.",
       aboutP3: "The price you see is the price you pay, plus tax, title, and license. No dealer fees. If you are comparing car dealerships in Villa Park or anywhere in DuPage County, come walk the lot \u2014 or start with the pages below.",
       moreAboutUs: "More about us \u2192",
@@ -650,7 +650,6 @@ export const translations = {
       buyingGuides: "Buying Guides",
       guideLexus: "Used Lexus in DuPage County",
       guideSubaru: "Used Subaru Near Chicago",
-      guideIndependent: "Why an Independent Japanese-Makes Dealer",
       guideCarfax: "Free Carfax on Every Vehicle",
       guideFinancing: "Used Car Financing, All Credit Welcome",
       faqArrow: "FAQ \u2192",
@@ -1268,7 +1267,6 @@ export const translations = {
       buyingGuides: "Gu\u00edas de Compra",
       guideLexus: "Lexus Usados en el Condado de DuPage",
       guideSubaru: "Subaru Usados Cerca de Chicago",
-      guideIndependent: "Por Qu\u00e9 un Concesionario Independiente de Marcas Japonesas",
       guideCarfax: "Carfax Gratis en Cada Veh\u00edculo",
       guideFinancing: "Financiamiento de Autos Usados, Todo Cr\u00e9dito Bienvenido",
       faqArrow: "Preguntas Frecuentes \u2192",

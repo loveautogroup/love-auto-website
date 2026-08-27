@@ -12,7 +12,7 @@ const faqs = [
   {
     question: "What types of vehicles does Love Auto Group sell?",
     answer:
-      "We specialize in quality Japanese vehicles, including Lexus, Subaru, Acura, and Mazda. We also carry other reliable makes when they meet our standards. Every vehicle on our lot is in the $4,500 to $18,000 price range.",
+      "We're a family-owned independent dealer, including Lexus, Subaru, Acura, and Mazda. We also carry other reliable makes when they meet our standards. Every vehicle on our lot is in the $4,500 to $18,000 price range.",
   },
   {
     question: "Are your vehicles inspected before sale?",
@@ -70,9 +70,9 @@ const faqs = [
       "Bring a valid driver's license and proof of insurance. If you're financing, we'll walk you through any additional paperwork. If you're paying cash or with a cashier's check, that's all you need.",
   },
   {
-    question: "Why does Love Auto Group specialize in Japanese vehicles?",
+    question: "Why does Love Auto Group specialize in vehicles?",
     answer:
-      "Japanese makes (Lexus, Subaru, Acura, Mazda) consistently rank highest in reliability and hold their value best over time. Over a decade of buying and reconditioning these specific brands, we've learned exactly what to look for and what to avoid on each model. That expertise lets us price competitively and stand behind every vehicle with confidence.",
+      "makes (Lexus, Subaru, Acura, Mazda) consistently rank highest in reliability and hold their value best over time. Over a decade of buying and reconditioning these specific brands, we've learned exactly what to look for and what to avoid on each model. That expertise lets us price competitively and stand behind every vehicle with confidence.",
   },
   {
     question: "Do you have AWD cars for Illinois winters?",
@@ -97,7 +97,7 @@ const faqs = [
   {
     question: "Do you sell vehicles with high mileage?",
     answer:
-      "Yes, and we think it's a smart way to buy. A well-maintained Japanese vehicle at 150,000 to 200,000 miles often has another 100,000 miles of service life ahead. Every high-mileage vehicle is carefully inspected, and any issues are addressed before listing. The value is better than low-mileage alternatives for most buyers.",
+      "Yes, and we think it's a smart way to buy. A well-maintained vehicle at 150,000 to 200,000 miles often has another 100,000 miles of service life ahead. Every high-mileage vehicle is carefully inspected, and any issues are addressed before listing. The value is better than low-mileage alternatives for most buyers.",
   },
   {
     question: "Do you work with buyers who have bankruptcy or repossession on their credit?",

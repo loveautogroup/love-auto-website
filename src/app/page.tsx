@@ -566,14 +566,6 @@ export default function HomePage() {
                 </li>
                 <li>
                   <Link
-                    href="/buying-guides/independent-japanese-makes-dealer-chicago/"
-                    className="text-brand-navy hover:text-brand-red transition-colors"
-                  >
-                    <T path={["homePage", "guideIndependent"]} />
-                  </Link>
-                </li>
-                <li>
-                  <Link
                     href="/free-carfax-villa-park/"
                     className="text-brand-navy hover:text-brand-red transition-colors"
                   >

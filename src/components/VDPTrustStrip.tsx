@@ -5,7 +5,7 @@
  *
  * Three credibility pillars for Love Auto Group:
  *   1. Fully Inspected · Free CARFAX Included
- *   2. Japanese Makes Specialist · Over a Decade in Villa Park
+ *   2. Family-Owned Independent Dealer · Over a Decade in Villa Park
  *   3. No Hidden Fees · All Credit Welcome · Same-Day Title & Plates
  */
 

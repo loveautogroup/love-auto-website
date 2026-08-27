@@ -73,7 +73,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // ── SEO landing pages — make + body style + service area + Carfax ──
   const landingPages: MetadataRoute.Sitemap = [
-    // Makes — Japanese specialist positioning
+    // Makes — family-owned independent dealer positioning
     { url: `${BASE}/inventory/used-subaru/`,   lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${BASE}/inventory/used-lexus/`,    lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${BASE}/inventory/used-acura/`,    lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
@@ -116,8 +116,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/buying-guides/used-subaru-near-chicago/`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/buying-guides/used-lexus-dupage-county/`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     // 2026-05-05 — closes the AEO Q8 gap (engines were returning JDM importers
-    // for "Japanese car dealer near Chicago" instead of independent US-market dealers)
-    { url: `${BASE}/buying-guides/independent-japanese-makes-dealer-chicago/`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    // for "used car dealer near Chicago" instead of independent US-market dealers)
     // Differentiator landing
     { url: `${BASE}/free-carfax-villa-park/`,  lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     // Geo keyword landing — "used cars villa park il" cluster (pos 12.3, 360 imp)

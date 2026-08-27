@@ -85,7 +85,7 @@ const HANDWRITTEN_FALLBACK: Vehicle[] = [
     bodyStyle: "SUV",
     fuelType: "Gasoline",
     description:
-      "A three-row luxury SUV for under $5,000 is rare. One that still drives this well at 213,000 miles is rarer. The MDX Sport is built on the same platform as the Honda Pilot but with Acura's Super Handling AWD, the high-output 3.7L VTEC V6, leather interior, moonroof, and the kind of reliability Japanese engineering is known for. Thoroughly inspected and fully reconditioned. $4,499, priced at the value end but built to the same standard as everything else on the lot. Call or text (630) 359-3643 to see it at 735 N Yale Ave, Villa Park.",
+      "A three-row luxury SUV for under $5,000 is rare. One that still drives this well at 213,000 miles is rarer. The MDX Sport is built on the same platform as the Honda Pilot but with Acura's Super Handling AWD, the high-output 3.7L VTEC V6, leather interior, moonroof, and the kind of reliability the brand is known for. Thoroughly inspected and fully reconditioned. $4,499, priced at the value end but built to the same standard as everything else on the lot. Call or text (630) 359-3643 to see it at 735 N Yale Ave, Villa Park.",
     features: [
       "Super Handling All-Wheel Drive (SH-AWD)",
       "3.7L VTEC V6",

@@ -27,7 +27,7 @@ const FAQ_ITEMS = [
   {
     question: "Where can I find used cars for sale in Villa Park, IL?",
     answer:
-      "Love Auto Group is a family owned used car dealership located at 735 N Yale Ave, Unit A, Villa Park, IL 60181. We carry a carefully selected inventory of quality used cars, SUVs, and trucks — with a specialty in Japanese makes like Subaru, Lexus, Acura, Honda, and Mazda.",
+      "Love Auto Group is a family owned used car dealership located at 735 N Yale Ave, Unit A, Villa Park, IL 60181. We carry a carefully selected inventory of quality used cars, SUVs, and trucks — with a specialty in makes like Subaru, Lexus, Acura, Honda, and Mazda.",
   },
   {
     question: "What are the best used car dealerships in Villa Park, Illinois?",
@@ -37,7 +37,7 @@ const FAQ_ITEMS = [
   {
     question: "What used cars does Love Auto Group have in Villa Park?",
     answer:
-      "Our inventory changes regularly, but we specialize in used Japanese vehicles — Subaru Forester, Outback, and Crosstrek; Lexus RX, ES, and IS; Honda CR-V, Accord, and Pilot; Acura MDX and TLX; and Mazda CX-5. We also carry select domestic and other import vehicles. Browse our current inventory at loveautogroup.net/inventory.",
+      "Our inventory changes regularly, but we carry used vehicles — Subaru Forester, Outback, and Crosstrek; Lexus RX, ES, and IS; Honda CR-V, Accord, and Pilot; Acura MDX and TLX; and Mazda CX-5. We also carry select domestic and other import vehicles. Browse our current inventory at loveautogroup.net/inventory.",
   },
   {
     question: "Do Villa Park used car dealers offer financing?",
@@ -81,7 +81,7 @@ export default function UsedCarsVillaParkPage() {
           </h1>
           <p className="mt-4 text-lg md:text-xl text-brand-gray-300 max-w-3xl">
             Love Auto Group is Villa Park&apos;s used car specialist — 735 N
-            Yale Ave, one mile from Route 83. Japanese makes, a free Carfax
+            Yale Ave, one mile from Route 83. makes, a free Carfax
             report on every car, 4.7 stars on Google.
           </p>
           <div className="mt-6 flex flex-wrap gap-4">
@@ -139,7 +139,7 @@ export default function UsedCarsVillaParkPage() {
             Yale Ave, Unit A, right here in Villa Park.
           </p>
           <p className="text-brand-gray-700 leading-relaxed mb-4">
-            We specialize in Japanese makes because they hold up. Subaru,
+            We're a family-owned independent dealer because they hold up. Subaru,
             Lexus, Acura, Honda, Toyota, and Mazda make up the core of our
             used car inventory in Villa Park. These vehicles have the longest
             service lives, the strongest resale curves, and the lowest
@@ -282,7 +282,7 @@ export default function UsedCarsVillaParkPage() {
               Get a quick offer
             </Link>{" "}
             — no obligation. We&apos;re particularly interested in clean
-            Japanese makes (Subaru, Lexus, Honda, Acura, Mazda, Toyota) in
+            makes (Subaru, Lexus, Honda, Acura, Mazda, Toyota) in
             good condition, but we&apos;ll look at anything.
           </p>
         </section>
