@@ -28,6 +28,7 @@
  */
 
 import { vehicleSlug, titleCase } from "../../shared/slug";
+import { displayCase, dedupeTrim } from "../../shared/displayCase";
 import { escapeHtml, escapeUrl } from "../../shared/escapeHtml";
 import { rewritePhotoHost } from "../../shared/photoHost";
 
@@ -253,9 +254,14 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
 
 /** Escaped "2016 Lincoln MKX Reserve" display name from a DMS record. */
 function escapedVehicleTitle(v: DmsVehicle): string {
-  const make = escapeHtml(titleCase(v.make ?? ""));
-  const model = escapeHtml(titleCase(v.model ?? ""));
-  const trim = v.trim ? escapeHtml(titleCase(v.trim)) : "";
+  // displayCase, not titleCase: titleCase renders "SLK350" as "Slk350" and
+  // "CX-3" as "Cx-3". Same helper the inventory grid uses, so a car is named
+  // the same way wherever it appears.
+  const make = escapeHtml(displayCase(v.make ?? ""));
+  const model = escapeHtml(displayCase(v.model ?? ""));
+  // dedupeTrim for the same reason functions/api/inventory.ts uses it: DC
+  // repeats the model inside the trim ("Boxster" + "Boxster S").
+  const trim = v.trim ? escapeHtml(dedupeTrim(displayCase(v.model ?? ""), displayCase(v.trim))) : "";
   return `${escapeHtml(v.year)} ${make} ${model}${trim ? " " + trim : ""}`;
 }
 
@@ -278,9 +284,82 @@ function escapedVehicleTitle(v: DmsVehicle): string {
  * from "2014-lexus-es-350-11428" reliably is not possible — titleCase
  * renders it "Es 350". Generic copy beats a mangled model name.
  */
-function renderGonePage(opts: { title?: string | null; hidden?: boolean }): string {
+/**
+ * Pick vehicles to offer someone who just landed on a car that is gone.
+ *
+ * Ranked, because a Subaru buyer wants another Subaru far more than they want
+ * the cheapest thing on the lot:
+ *   1. same make          — this lot is a Japanese-makes specialist
+ *   2. similar price      — within 30% either way
+ *   3. anything available — better than an empty page
+ *
+ * Availability is the hard filter: never offer a car that is itself sold or
+ * coming-soon. That is the whole failure this page exists to avoid.
+ */
+export function pickSimilar(
+  all: DmsVehicle[],
+  gone: { make?: string | null; retailPrice?: number | null } | null,
+  limit = 3,
+): DmsVehicle[] {
+  const available = all.filter((v) => isAvailable(v.status));
+  if (available.length === 0) return [];
+
+  const wantMake = (gone?.make ?? "").trim().toLowerCase();
+  const wantPrice =
+    typeof gone?.retailPrice === "number" && gone.retailPrice > 0 ? gone.retailPrice : null;
+
+  const scored = available.map((v) => {
+    const sameMake = wantMake && (v.make ?? "").trim().toLowerCase() === wantMake ? 1 : 0;
+    const price = typeof v.retailPrice === "number" ? v.retailPrice : null;
+    const closePrice =
+      wantPrice && price && Math.abs(price - wantPrice) <= wantPrice * 0.3 ? 1 : 0;
+    return { v, score: sameMake * 2 + closePrice };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, limit).map((x) => x.v);
+}
+
+/** One card in the "what we do have" row. */
+export function renderSimilarCard(v: DmsVehicle): string {
+  // escapeUrl only passes http(s) or ROOT-RELATIVE values — a bare slug
+  // fragment comes back as "" and yields href="/inventory//". Build the whole
+  // path, then escape it.
+  const href = `/inventory/${vehicleSlug(v)}/`;
+  const name = escapedVehicleTitle(v);
+  const price = formatCurrency(typeof v.retailPrice === "number" ? v.retailPrice : null);
+  // photos is Array<{url, isPrimary?}> — NOT string[]. Passing the object
+  // straight to rewritePhotoHost renders src="[object Object]".
+  const rawPhoto =
+    v.photos?.find((ph) => ph?.isPrimary)?.url ?? v.photos?.[0]?.url ?? "";
+  const photo = rawPhoto ? rewritePhotoHost(rawPhoto) : "";
+  const miles =
+    typeof v.mileage === "number" && v.mileage > 0
+      ? `${v.mileage.toLocaleString("en-US")} mi`
+      : "";
+  const media = photo
+    ? `<img src="${escapeUrl(photo)}" alt="${name}" loading="lazy" />`
+    : `<div class="sim-nophoto">Photos coming soon</div>`;
+  return `
+      <a class="sim-card" href="${escapeUrl(href)}">
+        <div class="sim-photo">${media}</div>
+        <div class="sim-body">
+          <div class="sim-name">${name}</div>
+          <div class="sim-meta">${miles}</div>
+          <div class="sim-price">${price}</div>
+        </div>
+      </a>`;
+}
+
+export function renderGonePage(opts: {
+  title?: string | null;
+  hidden?: boolean;
+  /** Cars we actually have, already filtered to available. */
+  similar?: DmsVehicle[];
+}): string {
   const title = opts.title ?? null;
   const hidden = opts.hidden ?? false;
+  const similar = opts.similar ?? [];
   const badgeText = hidden ? "NO LONGER LISTED" : "SOLD";
   const pageTitle = title
     ? `${title}${hidden ? " is no longer listed" : " has been sold"} | Love Auto Group`
@@ -293,7 +372,7 @@ function renderGonePage(opts: { title?: string | null; hidden?: boolean }): stri
     : `This ${title ?? "vehicle"} found its new owner.`;
   const lede = hidden
     ? "This vehicle is no longer available on our site. There's a great chance we have something else that fits what you were looking for."
-    : "The vehicle that lived at this URL has been sold. We move fast on quality Japanese used cars — but there's a great chance we have something else that fits what you were looking for.";
+    : "The vehicle that lived at this URL has been sold. We move fast on quality used cars — but there's a great chance we have something else that fits what you were looking for.";
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -322,6 +401,19 @@ function renderGonePage(opts: { title?: string | null; hidden?: boolean }): stri
     .btn-primary { background: #dc2626; color: #fff; }
     .btn-secondary { background: #fff; color: #1a1a1a; border: 1.5px solid #d4d4d4; }
     .footer-note { font-size: 0.8125rem; color: #888; text-align: center; padding-bottom: 2rem; }
+    .sim { max-width: 1100px; margin: 3.5rem auto 0; padding: 0 1.5rem; }
+    .sim-head { font-size: 1.05rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.35rem; }
+    .sim-sub { font-size: 0.875rem; color: #666; margin-bottom: 1.5rem; }
+    .sim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; }
+    .sim-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; overflow: hidden; text-align: left; transition: box-shadow 0.15s, transform 0.15s; display: block; }
+    .sim-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.09); transform: translateY(-2px); }
+    .sim-photo { aspect-ratio: 3 / 2; background: #eee; overflow: hidden; }
+    .sim-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .sim-nophoto { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.8125rem; color: #999; }
+    .sim-body { padding: 0.9rem 1rem 1.1rem; }
+    .sim-name { font-size: 0.95rem; font-weight: 700; line-height: 1.3; margin-bottom: 0.25rem; }
+    .sim-meta { font-size: 0.8125rem; color: #777; margin-bottom: 0.5rem; min-height: 1em; }
+    .sim-price { font-size: 1.05rem; font-weight: 800; color: #dc2626; }
     @media (max-width: 640px) { h1 { font-size: 1.5rem; } .lede { font-size: 0.95rem; } .ctas { flex-direction: column; } .btn { justify-content: center; } }
   </style>
 </head>
@@ -340,6 +432,15 @@ function renderGonePage(opts: { title?: string | null; hidden?: boolean }): stri
       <a class="btn btn-primary" href="/inventory/">Browse current inventory</a>
       <a class="btn btn-secondary" href="tel:+16303593643">Call (630) 359-3643</a>
     </div>
+${
+    similar.length > 0
+      ? `<section class="sim">
+      <div class="sim-head">Here&#39;s what we have right now</div>
+      <div class="sim-sub">Hand-picked from our current lot in Villa Park.</div>
+      <div class="sim-grid">${similar.map(renderSimilarCard).join("")}</div>
+    </section>`
+      : ""
+  }
   </main>
   <p class="footer-note">Love Auto Group · 735 N Yale Ave, Villa Park, IL 60181</p>
 </body>
@@ -432,13 +533,20 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       // This also overrides a STALE static page: a car that sold after the
       // last CF Pages build still has its pre-rendered VDP on disk, showing
       // a live price and working CTAs. Retired wins over the static file.
-      const retiredStatus = await fetchRetiredStatus(slug);
+      const retired = await fetchRetiredVehicle(slug);
+      const retiredStatus = retired?.status ?? null;
       if (retiredStatus) {
         const html = renderGonePage({
-          title: null,
+          title: retiredTitle(retired),
           // Only a genuine sale gets the "found its new owner" copy.
           // Archived and Arbitration Return get the neutral wording.
           hidden: retiredStatus.trim().toLowerCase() !== "sold",
+          // Someone followed a link to a car that is gone. Offering what we
+          // DO have is the difference between a dead end and a sale.
+          similar: pickSimilar(vehicles, {
+            make: retired?.make ?? null,
+            retailPrice: null,
+          }),
         });
         return new Response(html, {
           status: 410,
@@ -465,6 +573,13 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       const html = renderGonePage({
         title: escapedVehicleTitle(match),
         hidden: hidden && !isGone(match.status),
+        // Same reasoning as the retired-slug branch: offer what we have
+        // rather than ending the visit. `match` is excluded by pickSimilar's
+        // availability filter, so a sold car never recommends itself.
+        similar: pickSimilar(vehicles, {
+          make: match.make ?? null,
+          retailPrice: typeof match.retailPrice === "number" ? match.retailPrice : null,
+        }),
       });
       return new Response(html, {
         status: 410,
@@ -522,7 +637,22 @@ export const onRequest: PagesFunction<Env> = async (context) => {
  * brand hubs like /inventory/used-lexus/ — from spending a fetch at all;
  * every real and retired vehicle slug ends in its stock number.
  */
-async function fetchRetiredStatus(slug: string): Promise<string | null> {
+interface RetiredRow {
+  slug?: string;
+  status?: string | null;
+  year?: number | null;
+  make?: string | null;
+  model?: string | null;
+  trim?: string | null;
+}
+
+/**
+ * Look a retired slug up. Returns the status AND enough identity to name the
+ * car — the endpoint used to hand back slug/stock/status only, so this page
+ * could not say WHICH car had sold and fell back to generic copy.
+ * (PARITY CHAIN: Railway routers/public.py -> DMS proxy -> here.)
+ */
+async function fetchRetiredVehicle(slug: string): Promise<RetiredRow | null> {
   if (!/-\d{3,}$/.test(slug)) return null;
   try {
     const res = await fetch(RETIRED_SLUGS_URL, {
@@ -530,18 +660,26 @@ async function fetchRetiredStatus(slug: string): Promise<string | null> {
       cf: { cacheTtl: 300, cacheEverything: false },
     });
     if (!res.ok) return null;
-    const raw = (await res.json()) as
-      | { data?: Array<{ slug?: string; status?: string | null }> }
-      | Array<{ slug?: string; status?: string | null }>;
+    const raw = (await res.json()) as { data?: RetiredRow[] } | RetiredRow[];
     const rows = Array.isArray(raw) ? raw : raw?.data ?? [];
     const hit = rows.find((r) => r?.slug === slug);
     if (!hit) return null;
     // A retired row with a blank status is still retired — don't lose the
     // 410 to a missing field.
-    return hit.status?.trim() || "Archived";
+    return { ...hit, status: hit.status?.trim() || "Archived" };
   } catch {
     return null;
   }
+}
+
+/** "2016 Subaru Outback Premium" from a retired row, HTML-escaped, or null. */
+function retiredTitle(r: RetiredRow | null): string | null {
+  if (!r) return null;
+  const parts = [r.year, displayCase(r.make ?? ""), displayCase(r.model ?? "")]
+    .filter((x) => x !== null && x !== undefined && String(x).trim() !== "")
+    .map((x) => String(x).trim());
+  if (parts.length < 2) return null;
+  return escapeHtml(parts.join(" "));
 }
 
 /**
