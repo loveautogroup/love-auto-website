@@ -1,0 +1,34 @@
+{
+  // Type-checking for the Cloudflare edge code — Pages Functions and Workers.
+  //
+  // WHY A SECOND CONFIG. The main tsconfig.json EXCLUDES `functions` and
+  // `workers`, so `tsc --noEmit` and `next build` never looked at them. That is
+  // not an oversight to simply delete: this code runs in the Workers runtime,
+  // not the browser or Node, and pulling it into the Next.js program would type
+  // it against DOM/Next globals it does not have and lose the ones it does
+  // (Env bindings, KVNamespace, the `cf` fetch option).
+  //
+  // The cost of having no check at all was four real bugs in one afternoon
+  // (2026-08-25), every one of which tsc would have caught instantly:
+  //   * a block spliced into the wrong function
+  //   * `v.price` where the field is `retailPrice`
+  //   * `photos` treated as string[] when they are {url,isPrimary} objects
+  //   * a bare slug handed to escapeUrl, which only accepts root-relative
+  // They were found by rendering the page by hand. That is not a check.
+  //
+  // Run: npm run typecheck:functions   (also runs in prebuild)
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Workers runtime, not the browser: no DOM lib, and the Cloudflare globals
+    // instead. This is the whole reason the files cannot join the main program.
+    "lib": ["esnext"],
+    "types": ["@cloudflare/workers-types"],
+    "noEmit": true,
+    // The main config's Next plugin and incremental cache are irrelevant here
+    // and the plugin errors without a Next program.
+    "plugins": [],
+    "incremental": false
+  },
+  "include": ["functions/**/*.ts", "workers/**/*.ts", "shared/**/*.ts"],
+  "exclude": ["node_modules", ".next", "out"]
+}

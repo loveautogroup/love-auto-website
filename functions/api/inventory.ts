@@ -150,6 +150,10 @@ interface SyncedVehicle {
   mileage: number;
   price: number;
   status: "available" | "sale-pending" | "sold" | "coming-soon";
+  /** ISO date the car sold — recently-sold rows only. Mirrors the field on
+   *  src/lib/inventoryAdapter.ts's SyncedVehicle, which this interface is a
+   *  runtime-side copy of (the edge bundle cannot import from src/). */
+  soldDate?: string | null;
   features: string[];
   daysOnLot: number;
   dateInStock: string;

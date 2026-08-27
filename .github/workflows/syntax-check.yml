@@ -56,7 +56,7 @@ jobs:
           done
 
   tsc:
-    name: TypeScript syntax (project-wide tsc --noEmit)
+    name: TypeScript syntax (app + Cloudflare edge)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -65,10 +65,23 @@ jobs:
           node-version: '22'
           cache: 'npm'
       - run: npm ci
-      - name: tsc --noEmit
+      - name: tsc --noEmit (app)
         run: |
           npx tsc --noEmit 2>&1 | grep -v "src/generated/prisma" | tee tsc.log
           if grep -q "error TS" tsc.log; then
             echo "::error::TypeScript errors detected (see annotations)"
+            exit 1
+          fi
+
+      # The app tsconfig EXCLUDES `functions` and `workers` — that code targets
+      # the Workers runtime, not the browser, so it cannot join the Next.js
+      # program. It was therefore checked by NOTHING: not tsc, not next build.
+      # Four real bugs reached the sold-vehicle page that way on 2026-08-25 and
+      # were only caught by rendering it by hand. See tsconfig.functions.json.
+      - name: tsc --noEmit (Cloudflare Pages Functions + Workers)
+        run: |
+          npx tsc -p tsconfig.functions.json --noEmit 2>&1 | tee tsc-functions.log
+          if grep -q "error TS" tsc-functions.log; then
+            echo "::error::TypeScript errors in edge code (functions/ or workers/)"
             exit 1
           fi

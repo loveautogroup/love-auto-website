@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "tsx scripts/fetch-inventory-snapshot.ts && tsx scripts/fetch-google-reviews.ts && tsx scripts/validate-photo-order.ts && tsx scripts/audit-live-heroes.ts --warn",
+    "prebuild": "npm run typecheck:functions && tsx scripts/fetch-inventory-snapshot.ts && tsx scripts/fetch-google-reviews.ts && tsx scripts/validate-photo-order.ts && tsx scripts/audit-live-heroes.ts --warn",
     "build": "next build",
     "postbuild": "node scripts/check-no-client-throw.mjs",
     "start": "next start",
@@ -14,7 +14,8 @@
     "audit:heroes": "tsx scripts/audit-live-heroes.ts",
     "audit:heroes-html": "tsx scripts/generate-hero-audit-html.ts",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "typecheck:functions": "tsc -p tsconfig.functions.json --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
