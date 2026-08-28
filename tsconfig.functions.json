@@ -29,6 +29,23 @@
     "plugins": [],
     "incremental": false
   },
-  "include": ["functions/**/*.ts", "workers/**/*.ts", "shared/**/*.ts"],
-  "exclude": ["node_modules", ".next", "out"]
+  // SCOPE: Pages Functions and the code they share -- NOT `workers/`.
+  //
+  // Each worker under workers/ is its OWN project: own package.json, own
+  // node_modules, own tsconfig. Including them here typechecks their source
+  // against the WEBSITE's installed dependencies, which do not contain theirs.
+  // That passes locally (the nested node_modules exists on a dev machine) and
+  // fails on Cloudflare, which only runs `npm ci` at the repo root:
+  //
+  //   workers/turso-snapshot/src/index.ts(30,60): error TS2307:
+  //     Cannot find module '@libsql/client/web'
+  //
+  // Because this config runs in `prebuild`, that error took the whole site
+  // build down -- production sat on a 16-hour-old deployment while six pushes
+  // silently failed (2026-08-27). A check that only passes on one machine is
+  // worse than no check.
+  //
+  // Each worker is typechecked by its own tsconfig, from its own directory.
+  "include": ["functions/**/*.ts", "shared/**/*.ts"],
+  "exclude": ["node_modules", ".next", "out", "workers"]
 }
