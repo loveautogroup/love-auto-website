@@ -156,7 +156,7 @@ export default function FinancingForm() {
   // Identity of the car the applicant clicked "apply" from. Held in a ref, not
   // in FormValues, because it is machine-supplied and must not be editable --
   // the free-text "vehicle of interest" box remains the customer's own words.
-  const vehicleIdent = useRef<{ vin?: string; stock?: string }>({});
+  const vehicleIdent = useRef<{ vin?: string; stock?: string; price?: string }>({});
 
   useEffect(() => {
     // Capture timestamp on mount for the min-elapsed anti-spam check.
@@ -174,6 +174,7 @@ export default function FinancingForm() {
       vehicleIdent.current = {
         vin: q.get("vin") || undefined,
         stock: q.get("stock") || undefined,
+        price: q.get("price") || undefined,
       };
       setValues((prev) => ({
         ...prev,
@@ -248,10 +249,14 @@ export default function FinancingForm() {
         vin: vehicleIdent.current.vin,
         stock: vehicleIdent.current.stock,
         model: values.vehicleInterest || undefined,
-        price:
-          values.desiredMonthlyPayment === ""
-            ? undefined
-            : `~${values.desiredMonthlyPayment}/mo desired`,
+        // `price` is the CAR'S price, taken from the VDP the applicant came
+        // from. It used to hold the payment goal as free text
+        // ("~300/mo desired"), which the DMS lender document then rendered as a
+        // sale price -- "$300" against a 2014 Lincoln MKZ. The goal now travels
+        // in its own field.
+        price: vehicleIdent.current.price,
+        desiredMonthlyPayment:
+          values.desiredMonthlyPayment === "" ? undefined : values.desiredMonthlyPayment,
         downPayment: values.desiredDownPayment || undefined,
       },
       tradeIn: values.hasTradeIn

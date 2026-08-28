@@ -155,7 +155,7 @@ export default function VDPPaymentCalculator({
       </div>
 
       <Link
-        href={`/financing?vehicle=${encodeURIComponent(vehicleLabel)}&down=${downPayment}&term=${termMonths}&vin=${encodeURIComponent(vehicleVin ?? "")}&stock=${encodeURIComponent(vehicleStock ?? "")}`}
+        href={`/financing?vehicle=${encodeURIComponent(vehicleLabel)}&down=${downPayment}&term=${termMonths}&vin=${encodeURIComponent(vehicleVin ?? "")}&stock=${encodeURIComponent(vehicleStock ?? "")}&price=${vehiclePrice}`}
         className="
           block w-full text-center
           bg-brand-red hover:bg-brand-red-dark text-white
