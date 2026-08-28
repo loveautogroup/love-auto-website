@@ -534,6 +534,8 @@ export default async function VehicleDetailPage({
                     vehiclePrice={vehicle.price}
                     vehicleSlug={vehicle.slug}
                     vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+                    vehicleVin={vehicle.vin}
+                    vehicleStock={vehicle.stockNumber}
                   />
                 )}
                 </div>
@@ -718,6 +720,8 @@ export default async function VehicleDetailPage({
             vehiclePrice={vehicle.price}
             vehicleSlug={vehicle.slug}
             vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+            vehicleVin={vehicle.vin}
+            vehicleStock={vehicle.stockNumber}
           />
         </div>
 

@@ -8,6 +8,8 @@ interface MobileCalculatorButtonProps {
   vehiclePrice: number;
   vehicleSlug: string;
   vehicleLabel: string;
+  vehicleVin?: string;
+  vehicleStock?: string;
 }
 
 /**
@@ -20,6 +22,8 @@ export default function MobileCalculatorButton({
   vehiclePrice,
   vehicleSlug,
   vehicleLabel,
+  vehicleVin,
+  vehicleStock,
 }: MobileCalculatorButtonProps) {
   const { t } = useLanguage();
   const v = t.vdp;
@@ -103,6 +107,8 @@ export default function MobileCalculatorButton({
                 vehiclePrice={vehiclePrice}
                 vehicleSlug={vehicleSlug}
                 vehicleLabel={vehicleLabel}
+                vehicleVin={vehicleVin}
+                vehicleStock={vehicleStock}
               />
             </div>
           </div>

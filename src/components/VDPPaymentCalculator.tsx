@@ -18,6 +18,13 @@ interface VDPPaymentCalculatorProps {
   vehiclePrice: number;
   vehicleSlug: string;
   vehicleLabel: string;
+  /**
+   * Carried into the apply link so the credit application reaches the DMS
+   * knowing WHICH car, not just its display label. Optional so the calculator
+   * still renders anywhere the identifiers are not to hand.
+   */
+  vehicleVin?: string;
+  vehicleStock?: string;
 }
 
 /**
@@ -34,6 +41,8 @@ export default function VDPPaymentCalculator({
   vehiclePrice,
   vehicleSlug,
   vehicleLabel,
+  vehicleVin,
+  vehicleStock,
 }: VDPPaymentCalculatorProps) {
   const { t } = useLanguage();
   const v = t.vdp;
@@ -146,7 +155,7 @@ export default function VDPPaymentCalculator({
       </div>
 
       <Link
-        href={`/financing?vehicle=${encodeURIComponent(vehicleLabel)}&down=${downPayment}&term=${termMonths}`}
+        href={`/financing?vehicle=${encodeURIComponent(vehicleLabel)}&down=${downPayment}&term=${termMonths}&vin=${encodeURIComponent(vehicleVin ?? "")}&stock=${encodeURIComponent(vehicleStock ?? "")}`}
         className="
           block w-full text-center
           bg-brand-red hover:bg-brand-red-dark text-white

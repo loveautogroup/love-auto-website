@@ -153,6 +153,10 @@ export default function FinancingForm() {
   const [values, setValues] = useState<FormValues>(INITIAL);
   const [state, setState] = useState<SubmitState>({ kind: "idle" });
   const renderTimestamp = useRef<number>(0);
+  // Identity of the car the applicant clicked "apply" from. Held in a ref, not
+  // in FormValues, because it is machine-supplied and must not be editable --
+  // the free-text "vehicle of interest" box remains the customer's own words.
+  const vehicleIdent = useRef<{ vin?: string; stock?: string }>({});
 
   useEffect(() => {
     // Capture timestamp on mount for the min-elapsed anti-spam check.
@@ -162,6 +166,15 @@ export default function FinancingForm() {
       const q = new URLSearchParams(window.location.search);
       const v = q.get("vehicle");
       const down = q.get("down");
+      // The VDP now carries the VIN and stock number through the apply link.
+      // Before this, the application reached the DMS with only the display
+      // label, so the lender document had no VIN to print -- zero of the 8
+      // applications on file had one, though every applicant had come from a
+      // specific car's page.
+      vehicleIdent.current = {
+        vin: q.get("vin") || undefined,
+        stock: q.get("stock") || undefined,
+      };
       setValues((prev) => ({
         ...prev,
         vehicleInterest: prev.vehicleInterest || (v ?? ""),
@@ -232,6 +245,8 @@ export default function FinancingForm() {
       },
       employment: employment(values),
       vehicle: {
+        vin: vehicleIdent.current.vin,
+        stock: vehicleIdent.current.stock,
         model: values.vehicleInterest || undefined,
         price:
           values.desiredMonthlyPayment === ""

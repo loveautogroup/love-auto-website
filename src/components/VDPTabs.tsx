@@ -228,7 +228,13 @@ export default function VDPTabs({
             </div>
 
             <Link
-              href={`/financing?vehicle=${encodeURIComponent(`${vehicle.year} ${vehicle.make} ${vehicle.model}`)}`}
+              // The VIN and stock number travel with the apply link. Without
+              // them the credit application reaches the DMS carrying only the
+              // display label the customer saw, so the lender document printed
+              // no VIN -- measured 2026-08-27: zero of the 8 applications on
+              // file had one, even though every applicant had clicked through
+              // from a specific car's page.
+              href={`/financing?vehicle=${encodeURIComponent(`${vehicle.year} ${vehicle.make} ${vehicle.model}`)}&vin=${encodeURIComponent(vehicle.vin ?? "")}&stock=${encodeURIComponent(vehicle.stockNumber ?? "")}`}
               className="flex items-center justify-center w-full bg-brand-red hover:bg-brand-red-dark text-white py-4 rounded-xl font-bold text-lg transition-colors"
             >
               {t.vdpTabs.getPreApprovedNow}
