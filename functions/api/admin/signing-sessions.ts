@@ -10,6 +10,9 @@
  */
 
 import {
+  accessCodeHash,
+  documentContentHash,
+  mintAccessCode,
   validateCreateSessionInput,
   type SigningSession,
 } from "../../_lib/signing";
@@ -43,15 +46,30 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     now.getTime() + expiresHours * 3600 * 1000
   ).toISOString();
 
+  // Diane 2026-09-02: the URL alone must not be enough to sign. A six-digit
+  // code is minted here, shown to the dealer ONCE, and only its hash is kept.
+  // The dealer gives it by phone — never in the same message as the link.
+  const accessCode = mintAccessCode();
+  const codeHash = await accessCodeHash(id, accessCode);
+
+  // Freeze what is being signed: each document's text is hashed now, and a
+  // signature later binds to that hash (refused if the text no longer matches).
+  const frozenDocuments = await Promise.all(
+    documents.map(async (d) => ({ ...d, contentHash: await documentContentHash(d) })),
+  );
+
   const session: SigningSession = {
     id,
     createdAt: now.toISOString(),
     createdBy: accessEmail,
     customer,
     vehicle,
-    documents,
+    documents: frozenDocuments,
     expiresAt,
     status: "created",
+    codeHash,
+    codeAttempts: 0,
+    codeToPhone: customer.phone,
   };
 
   try {
@@ -68,14 +86,19 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return json(503, { error: "Could not save session." });
   }
 
-  const signingUrl = `https://www.loveautogroup.net/sign/${id}`;
+  const signingUrl = `https://www.loveautogroup.net/sign/${id}/`;
 
+  // The code is returned once and is deliberately NOT in the SMS text.
+  const { codeHash: _omit, ...sessionForAdmin } = session;
   return json(200, {
     ok: true,
-    session,
+    session: sessionForAdmin,
     signingUrl,
+    accessCode,
+    codeInstructions:
+      `Call ${customer.phone ?? "the customer"} and read this code aloud. Never put it in the same text or email as the link. It is not saved anywhere — if it is lost, create a new session. The number you read it to is recorded on the session.`,
     smsText:
-      `Hi ${customer.firstName}, please click to e-sign your paperwork with Love Auto Group: ${signingUrl} (expires in ${expiresHours}h).`,
+      `Hi ${customer.firstName}, here is your link to e-sign your paperwork with Love Auto Group: ${signingUrl} (expires in ${expiresHours}h). I will call you with the 6-digit code that opens it.`,
   });
 };
 

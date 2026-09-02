@@ -35,6 +35,8 @@ export interface SigningDocument {
   title: string;
   /** Plain-text body the customer sees before signing. Keep simple. */
   body?: string;
+  /** SHA-256 of kind + title + body, fixed at mint. A signature is bound to this. */
+  contentHash?: string;
 }
 
 export type SessionStatus =
@@ -48,6 +50,8 @@ export type SessionStatus =
 export interface SignedDocument {
   kind: DocumentKind;
   title: string;
+  /** The document's contentHash at the moment it was signed — proof of WHAT was signed. */
+  documentHash?: string;
   /** Base64 PNG data URL of the signature. */
   signatureDataUrl: string;
   /** Any metadata captured from the signature pad. */
@@ -87,6 +91,21 @@ export interface SigningSession {
   /** Set when the customer ticks the ESIGN consent checkbox. */
   consentedAt?: string;
   consentIp?: string;
+  /** Which consent copy was agreed to (shared/esignConsent.ts) and its hash. */
+  consentVersion?: string;
+  consentTextHash?: string;
+  /** When the customer proved they can open our PDFs (typed the demo word). */
+  pdfDemoAt?: string;
+  // ── second factor (Diane 2026-09-02: holding the URL must not equal being the signer) ──
+  /** SHA-256 of `${id}:${code}`; the code itself is shown to the dealer once, never stored. */
+  codeHash?: string;
+  codeAttempts?: number;
+  codeVerifiedAt?: string;
+  /** The phone number on file when the code was minted — the one the dealer is
+   *  to read it to (Diane: turns "we called him" into a record, 815 ILCS 333/9). */
+  codeToPhone?: string;
+  /** SHA-256 of the signer token handed to the browser that entered the code. */
+  signerTokenHash?: string;
   /** Populated as the customer signs each document. */
   signedDocuments?: SignedDocument[];
   /** Set when every document is signed. */
@@ -129,16 +148,89 @@ export const ESIGNABLE_KINDS: readonly DocumentKind[] = [
 //      so the key dies when the session does. KV refuses an expiration under
 //      60 s away; a session that close to the end is treated as expired.
 
+// A COMPLETED signing is a record, not a link: it is retained (815 ILCS
+// 333/12 — a record must stay accurate and accessible), so neither rule
+// applies once status is "signed"/"archived". Only unfinished sessions expire.
+const RETAINED: ReadonlySet<SessionStatus> = new Set(["signed", "archived"]);
+
 /** Refuse an expired session before reading or writing it. */
-export function isSessionExpired(session: Pick<SigningSession, "expiresAt">, nowMs = Date.now()): boolean {
+export function isSessionExpired(
+  session: Pick<SigningSession, "expiresAt"> & Partial<Pick<SigningSession, "status">>,
+  nowMs = Date.now(),
+): boolean {
+  if (session.status && RETAINED.has(session.status)) return false;
   const exp = Date.parse(session.expiresAt);
   if (!Number.isFinite(exp)) return true; // no parsable expiry = not trusted
   return exp - nowMs < 60_000;
 }
 
-/** Options for `SIGNING.put` that keep the key's death tied to `expiresAt`. */
-export function sessionPutOptions(session: Pick<SigningSession, "expiresAt">): { expiration: number } {
+/** Options for `SIGNING.put`: the key dies with the session, unless it is a signed record. */
+export function sessionPutOptions(
+  session: Pick<SigningSession, "expiresAt"> & Partial<Pick<SigningSession, "status">>,
+): { expiration?: number } {
+  if (session.status && RETAINED.has(session.status)) return {};
   return { expiration: Math.floor(Date.parse(session.expiresAt) / 1000) };
+}
+
+// ── Binding: what was signed, and by whom ────────────────────────────────────
+
+export async function sha256Hex(text: string): Promise<string> {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/** Deterministic hash of a document's kind, title and body — the thing a signature binds to. */
+export function documentContentHash(doc: Pick<SigningDocument, "kind" | "title" | "body">): Promise<string> {
+  return sha256Hex(`${doc.kind}\n${doc.title}\n${doc.body ?? ""}`);
+}
+
+export const ACCESS_CODE_LENGTH = 6;
+export const ACCESS_CODE_MAX_ATTEMPTS = 5;
+
+/** Six digits from a CSPRNG, zero-padded. Shown to the dealer once; never stored. */
+export function mintAccessCode(): string {
+  const n = crypto.getRandomValues(new Uint32Array(1))[0] % 10 ** ACCESS_CODE_LENGTH;
+  return String(n).padStart(ACCESS_CODE_LENGTH, "0");
+}
+
+export function accessCodeHash(sessionId: string, code: string): Promise<string> {
+  return sha256Hex(`${sessionId}:${code}`);
+}
+
+/** 32 random bytes as hex — handed to the browser that entered the code. */
+export function mintSignerToken(): string {
+  return Array.from(crypto.getRandomValues(new Uint8Array(32)), (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/** The word printed in public/esign/can-you-read-this.pdf. Case-insensitive. */
+export const ESIGN_DEMO_WORD = "OAKS";
+
+export function validateVerifyCodeInput(input: unknown): { ok: true; code: string } | { ok: false; issues: string[] } {
+  const o = (input ?? {}) as Record<string, unknown>;
+  const code = typeof o.code === "string" ? o.code.replace(/\D/g, "") : "";
+  if (code.length !== ACCESS_CODE_LENGTH) return { ok: false, issues: [`code must be ${ACCESS_CODE_LENGTH} digits`] };
+  return { ok: true, code };
+}
+
+export interface ConsentInput {
+  consentVersion: string;
+  pdfWord: string;
+}
+
+export function validateConsentInput(input: unknown): { ok: true; value: ConsentInput } | { ok: false; issues: string[] } {
+  const o = (input ?? {}) as Record<string, unknown>;
+  const issues: string[] = [];
+  if (o.consent !== true) issues.push("consent must be true");
+  if (typeof o.consentVersion !== "string" || !o.consentVersion) issues.push("consentVersion is required");
+  const pdfWord = typeof o.pdfWord === "string" ? o.pdfWord.trim() : "";
+  if (!pdfWord) issues.push("pdfWord is required — open the test PDF and type the word it shows");
+  if (issues.length) return { ok: false, issues };
+  return { ok: true, value: { consentVersion: o.consentVersion as string, pdfWord } };
+}
+
+/** True when the customer typed the word from the demonstration PDF. */
+export function pdfDemoPassed(pdfWord: string): boolean {
+  return pdfWord.trim().toUpperCase() === ESIGN_DEMO_WORD;
 }
 
 export interface CreateSessionInput {

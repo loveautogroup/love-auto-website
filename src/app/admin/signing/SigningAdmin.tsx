@@ -78,6 +78,9 @@ export default function SigningAdmin() {
   const [lastCreated, setLastCreated] = useState<{
     signingUrl: string;
     smsText: string;
+    /** Shown once. The customer needs it to open the link; give it by phone. */
+    accessCode: string;
+    codeInstructions: string;
   } | null>(null);
 
   async function fetchSessions() {
@@ -144,6 +147,8 @@ export default function SigningAdmin() {
       setLastCreated({
         signingUrl: data.signingUrl,
         smsText: data.smsText,
+        accessCode: data.accessCode,
+        codeInstructions: data.codeInstructions,
       });
       // Reset and refresh
       setFirstName("");
@@ -191,6 +196,15 @@ export default function SigningAdmin() {
               <p className="font-mono text-sm bg-white border border-brand-gray-200 p-2 rounded break-all">
                 {lastCreated.signingUrl}
               </p>
+            </div>
+            <div className="rounded-lg border-2 border-amber-400 bg-amber-50 p-3">
+              <p className="text-xs text-amber-900 uppercase font-bold mb-1">
+                Access code — give by PHONE CALL, never with the link
+              </p>
+              <p className="font-mono text-2xl font-bold tracking-[0.3em] text-brand-gray-900 select-all">
+                {lastCreated.accessCode}
+              </p>
+              <p className="text-xs text-amber-900 mt-1">{lastCreated.codeInstructions}</p>
             </div>
             <div>
               <p className="text-xs text-brand-gray-500 uppercase font-semibold mb-1">
