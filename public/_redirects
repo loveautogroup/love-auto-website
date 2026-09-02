@@ -205,10 +205,3 @@
 # 2026-05 Search Console cleanup existed to stop. /brands/ is the closest
 # surviving page — the same makes, without the framing.
 /buying-guides/independent-japanese-makes-dealer-chicago/*  /brands/  301
-
-# E-sign (2026-09-02, review #1). The admin tool texts customers
-# https://www.loveautogroup.net/sign/<uuid>; the static export has ONE page,
-# /sign/shell/, and SignFlow reads the id off window.location. Without this
-# rewrite every signing link ever sent was a 404 (live-probed). 200 = serve
-# the shell at the customer's URL, not a redirect, so the id stays in the path.
-/sign/*  /sign/shell/  200

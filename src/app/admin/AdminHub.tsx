@@ -16,8 +16,6 @@ interface Stats {
   contactedLeads: number;
   qualifiedLeads: number;
   lostLeads: number;
-  openSigningSessions: number;
-  completedSigningSessions: number;
   inventoryCount: number | null;
   /** "ok" | "degraded" | "unknown" from /api/admin/sync-status?scope=quick. */
   inventoryHealth: string | null;
@@ -31,8 +29,6 @@ export default function AdminHub() {
     contactedLeads: 0,
     qualifiedLeads: 0,
     lostLeads: 0,
-    openSigningSessions: 0,
-    completedSigningSessions: 0,
     inventoryCount: null,
     inventoryHealth: null,
     loading: true,
@@ -42,12 +38,8 @@ export default function AdminHub() {
   useEffect(() => {
     async function load() {
       try {
-        const [leadsRes, sessionsRes, syncRes] = await Promise.all([
+        const [leadsRes, syncRes] = await Promise.all([
           fetch("/api/admin/leads", {
-            credentials: "include",
-            cache: "no-store",
-          }).catch(() => null),
-          fetch("/api/admin/signing-sessions", {
             credentials: "include",
             cache: "no-store",
           }).catch(() => null),
@@ -62,12 +54,9 @@ export default function AdminHub() {
 
         const leadsData =
           leadsRes && leadsRes.ok ? await leadsRes.json() : null;
-        const sessData =
-          sessionsRes && sessionsRes.ok ? await sessionsRes.json() : null;
         const syncData = syncRes && syncRes.ok ? await syncRes.json() : null;
 
         const leads: Array<{ status: string }> = leadsData?.leads ?? [];
-        const sessions: Array<{ status: string }> = sessData?.sessions ?? [];
 
         // Live count from the DMS read, NOT a stored snapshot. Null whenever
         // the probe could not establish one — the badge then says so.
@@ -81,15 +70,6 @@ export default function AdminHub() {
           contactedLeads: leads.filter((l) => l.status === "contacted").length,
           qualifiedLeads: leads.filter((l) => l.status === "qualified").length,
           lostLeads: leads.filter((l) => l.status === "lost").length,
-          openSigningSessions: sessions.filter(
-            (s) =>
-              s.status === "created" ||
-              s.status === "opened" ||
-              s.status === "consented"
-          ).length,
-          completedSigningSessions: sessions.filter(
-            (s) => s.status === "signed" || s.status === "archived"
-          ).length,
           inventoryCount,
           inventoryHealth,
           loading: false,
@@ -131,20 +111,6 @@ export default function AdminHub() {
             href="/admin/leads"
             loading={stats.loading}
           />
-          <StatCard
-            label="Open signings"
-            value={stats.openSigningSessions}
-            tone="warning"
-            href="/admin/signing"
-            loading={stats.loading}
-          />
-          <StatCard
-            label="Completed signings"
-            value={stats.completedSigningSessions}
-            tone="success"
-            href="/admin/signing"
-            loading={stats.loading}
-          />
         </div>
       </section>
 
@@ -162,16 +128,6 @@ export default function AdminHub() {
             title="Finance Leads"
             description="Review new applications from the /financing form. Call, text, or email each lead with one click and track status through the pipeline."
             badge={stats.newLeads > 0 ? `${stats.newLeads} new` : undefined}
-          />
-          <NavCard
-            href="/admin/signing"
-            title="E-Sign Sessions"
-            description="Create a new e-signature session for a customer and review active ones. Works on any device the customer or dealer uses."
-            badge={
-              stats.openSigningSessions > 0
-                ? `${stats.openSigningSessions} open`
-                : undefined
-            }
           />
           <NavCard
             href="/admin/merchandising"

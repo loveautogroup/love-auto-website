@@ -30,15 +30,6 @@
       "preview_id": "e111ee4ce8f3446082e15efe99ca9ee8"
     },
     {
-      // E-signature sessions from /admin/signing + /sign/[id].
-      // Create via Cloudflare dashboard → Workers & Pages → KV → Create:
-      //   SIGNING and SIGNING_preview
-      // Then paste the IDs here. Until created, signing endpoints return 503.
-      "binding": "SIGNING",
-      "id": "381080f3f56447968df1499a7db628be",
-      "preview_id": "f92bcf98233e45d2b60e14d66426cef4"
-    },
-    {
       // Created via Cloudflare dashboard Apr 24 2026.
       //
       // KEEP THIS BINDING. Its original purpose (the `inventory:current`
