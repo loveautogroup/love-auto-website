@@ -18,6 +18,7 @@ import { consentHashesFor, CONSENT_LANGUAGE, splitAroundPhrase } from "@/lib/con
 
 const CONSENT_VERSION = "prequalify-2026-07" as const;
 import { useLanguage } from "@/context/LanguageContext";
+import VehiclePicker from "./VehiclePicker";
 
 /**
  * Normalize any US phone string to E.164 (+1XXXXXXXXXX) — the public lead
@@ -56,12 +57,19 @@ export default function QuickPreQualifyForm() {
   });
   const [state, setState] = useState<State>({ kind: "idle" });
   const renderTimestamp = useRef<number>(0);
+  const [linkIdent, setLinkIdent] = useState<{ vin: string | null; stock: string | null }>({
+    vin: null,
+    stock: null,
+  });
 
   useEffect(() => {
     renderTimestamp.current = Date.now();
     try {
       const q = new URLSearchParams(window.location.search);
       const v = q.get("vehicle");
+      // 2026-09-01: the picker preselects the car a VDP apply link named.
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot read of the apply-link query on mount; `window` does not exist during the static export's render, so a lazy initializer would hydrate with a different value (React #418)
+      setLinkIdent({ vin: q.get("vin"), stock: q.get("stock") });
       const down = q.get("down");
       setValues((prev) => ({
         ...prev,
@@ -244,9 +252,26 @@ export default function QuickPreQualifyForm() {
             value={values.monthlyIncome} onChange={(e) => update("monthlyIncome", e.target.value)} />
         </label>
         <label className="block">
-          <span className="block text-sm font-medium text-brand-gray-900 mb-1">{t.prequalify.vehicleInterest}</span>
-          <input type="text" placeholder={t.prequalify.vehicleInterestPlaceholder} className={fieldClass}
-            value={values.vehicleInterest} onChange={(e) => update("vehicleInterest", e.target.value)} />
+          {/* 2026-09-01: pick the car from live inventory; the typed
+              description survives as "another vehicle". The label text is
+              what reaches the DMS lead (vehicleInterestText). */}
+          <VehiclePicker
+            labels={{
+              pick: t.prequalify.vehiclePick,
+              placeholder: t.prequalify.vehiclePickPlaceholder,
+              other: t.prequalify.vehiclePickOther,
+              loading: t.prequalify.vehiclePickLoading,
+              salePending: t.prequalify.vehiclePickSalePending,
+              otherText: t.prequalify.vehiclePickOtherText,
+              otherPlaceholder: t.prequalify.vehicleInterestPlaceholder,
+            }}
+            initialStock={linkIdent.stock}
+            initialVin={linkIdent.vin}
+            otherText={values.vehicleInterest}
+            onOtherText={(text) => update("vehicleInterest", text)}
+            onPick={(picked) => { if (picked) update("vehicleInterest", picked.label); }}
+            className={fieldClass}
+          />
         </label>
         <label className="block">
           <span className="block text-sm font-medium text-brand-gray-900 mb-1">{t.prequalify.downPayment}</span>

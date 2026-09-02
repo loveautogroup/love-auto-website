@@ -23,6 +23,8 @@ import Link from "next/link";
 import { trackFormSubmit, trackLeadFinancing } from "@/lib/analytics";
 import { consentHashesFor, CONSENT_LANGUAGE, splitAroundPhrase } from "@/lib/consent-language";
 import { useLanguage } from "@/context/LanguageContext";
+import VehiclePicker from "./VehiclePicker";
+import type { PickedVehicle } from "./vehiclePickerOptions";
 
 const US_STATES = [
   "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA",
@@ -153,10 +155,41 @@ export default function FinancingForm() {
   const [values, setValues] = useState<FormValues>(INITIAL);
   const [state, setState] = useState<SubmitState>({ kind: "idle" });
   const renderTimestamp = useRef<number>(0);
+  const [linkIdent, setLinkIdent] = useState<{ vin: string | null; stock: string | null }>({
+    vin: null,
+    stock: null,
+  });
   // Identity of the car the applicant clicked "apply" from. Held in a ref, not
   // in FormValues, because it is machine-supplied and must not be editable --
   // the free-text "vehicle of interest" box remains the customer's own words.
-  const vehicleIdent = useRef<{ vin?: string; stock?: string; price?: string }>({});
+  const vehicleIdent = useRef<{
+    vin?: string;
+    stock?: string;
+    price?: string;
+    year?: string;
+    make?: string;
+    model?: string;
+  }>({});
+  // 2026-09-01: the picker fills the ident from LIVE INVENTORY when the
+  // applicant chooses a car; "another vehicle" clears it and the free-text box
+  // carries their own words. Until now only a VDP apply link could set these,
+  // and every application on file reached the lender with year, VIN and price
+  // blank.
+  const onPickVehicle = (picked: PickedVehicle | null) => {
+    if (!picked) {
+      vehicleIdent.current = {};
+      return;
+    }
+    vehicleIdent.current = {
+      vin: picked.vin,
+      stock: picked.stock,
+      price: picked.price != null ? String(picked.price) : undefined,
+      year: String(picked.year),
+      make: picked.make,
+      model: picked.model,
+    };
+    setValues((prev) => ({ ...prev, vehicleInterest: picked.label }));
+  };
 
   useEffect(() => {
     // Capture timestamp on mount for the min-elapsed anti-spam check.
@@ -176,6 +209,10 @@ export default function FinancingForm() {
         stock: q.get("stock") || undefined,
         price: q.get("price") || undefined,
       };
+      // The picker preselects from these and then overwrites the ident with
+      // the full inventory record (year/make/model too).
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot read of the apply-link query on mount; `window` does not exist during the static export's render, so a lazy initializer would hydrate with a different value (React #418)
+      setLinkIdent({ vin: q.get("vin"), stock: q.get("stock") });
       setValues((prev) => ({
         ...prev,
         vehicleInterest: prev.vehicleInterest || (v ?? ""),
@@ -248,7 +285,13 @@ export default function FinancingForm() {
       vehicle: {
         vin: vehicleIdent.current.vin,
         stock: vehicleIdent.current.stock,
-        model: values.vehicleInterest || undefined,
+        year: vehicleIdent.current.year,
+        make: vehicleIdent.current.make,
+        // A picked inventory car sends its real model (+trim); "another
+        // vehicle" sends the customer's own words as the model, as before, and
+        // flags them as a request for a car we do not hold.
+        model: vehicleIdent.current.model || values.vehicleInterest || undefined,
+        requestedText: vehicleIdent.current.vin ? undefined : values.vehicleInterest || undefined,
         // `price` is the CAR'S price, taken from the VDP the applicant came
         // from. It used to hold the payment goal as free text
         // ("~300/mo desired"), which the DMS lender document then rendered as a
@@ -755,15 +798,22 @@ export default function FinancingForm() {
           {t.creditApp.sectionVehicle}
         </legend>
         <label className="block">
-          <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-            {t.creditApp.vehicleInterested}
-          </span>
-          <input
-            type="text"
-            placeholder={t.creditApp.vehicleInterestedPlaceholder}
+          <VehiclePicker
+            labels={{
+              pick: t.creditApp.vehiclePick,
+              placeholder: t.creditApp.vehiclePickPlaceholder,
+              other: t.creditApp.vehiclePickOther,
+              loading: t.creditApp.vehiclePickLoading,
+              salePending: t.creditApp.vehiclePickSalePending,
+              otherText: t.creditApp.vehiclePickOtherText,
+              otherPlaceholder: t.creditApp.vehicleInterestedPlaceholder,
+            }}
+            initialStock={linkIdent.stock}
+            initialVin={linkIdent.vin}
+            otherText={values.vehicleInterest}
+            onOtherText={(text) => update("vehicleInterest", text)}
+            onPick={onPickVehicle}
             className={fieldClass}
-            value={values.vehicleInterest}
-            onChange={(e) => update("vehicleInterest", e.target.value)}
           />
         </label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
