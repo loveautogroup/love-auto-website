@@ -39,6 +39,8 @@ interface AcquisitionInput {
 
 const MAX_PHOTOS = 6;
 const MAX_PHOTO_BYTES = 600_000; // ~600KB data-URL each (client compresses)
+/** 180 days — same retention as the finance-application store. */
+export const ACQ_TTL_SECONDS = 180 * 24 * 60 * 60;
 
 async function checkRateLimit(
   ip: string | undefined,
@@ -128,9 +130,12 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     status: "new" as const,
   };
 
-  await ctx.env.LEADS.put(`acq:${id}`, JSON.stringify(lead));
+  // Review 2026-09-02 #2: these carried no expiry, so every request since the
+  // form launched (2026-06-07) sat in KV forever, photos included. 180 days,
+  // matching the finance-application store; the DMS can still delete earlier.
+  await ctx.env.LEADS.put(`acq:${id}`, JSON.stringify(lead), { expirationTtl: ACQ_TTL_SECONDS });
   await Promise.all(
-    photos.map((p, n) => ctx.env.LEADS.put(`acqphoto:${id}:${n}`, p))
+    photos.map((p, n) => ctx.env.LEADS.put(`acqphoto:${id}:${n}`, p, { expirationTtl: ACQ_TTL_SECONDS }))
   );
 
   return new Response(JSON.stringify({ ok: true }), {
