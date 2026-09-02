@@ -22,7 +22,9 @@
  */
 import { execFileSync } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { readFileSync, unlinkSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 const BASE = process.argv[2] ?? "https://www.loveautogroup.net";
 const NS = (() => {
@@ -76,7 +78,15 @@ function check(name, ok, detail) {
 }
 
 console.log(`drill session ${id} on ${BASE}`);
-wrangler("put", `session:${id}`, JSON.stringify(session), "--ttl", "7200");
+// Write the value from a FILE: on Windows the JSON passed as a shell argument
+// loses its quotes, KV then holds a broken string, and every load 500s.
+const tmp = join(tmpdir(), `esign-drill-${id}.json`);
+writeFileSync(tmp, JSON.stringify(session));
+try {
+  wrangler("put", `session:${id}`, "--path", tmp, "--ttl", "7200");
+} finally {
+  unlinkSync(tmp);
+}
 try {
   // 1. preview only
   let r = await call("GET", `/api/sign/${id}`);
