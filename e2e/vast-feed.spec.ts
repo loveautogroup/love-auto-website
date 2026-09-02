@@ -110,8 +110,14 @@ test.describe("vast feed — the deployed file", () => {
     // Independent dealer: no manufacturer CPO program.
     expect(xml).not.toMatch(/<cpo>\s*YES/i);
     // 🔴 invoice_price reads as DEALER COST on a dealer feed. Always empty.
-    expect(xml).not.toMatch(/<invoice_price>\s*\S/);
-    expect(xml).not.toMatch(/<MSRP>\s*\S/);
+    // Assert the element is EMPTY, positively. The first version of this
+    // read /<invoice_price>\s*\S/ and failed on a correct feed, because the
+    // "<" of the closing tag is itself a non-whitespace character.
+    for (const [, block] of xml.matchAll(/<listing>([\s\S]*?)<\/listing>/g)) {
+      expect(block).toContain("<invoice_price></invoice_price>");
+      expect(block).toContain("<MSRP></MSRP>");
+      expect(block).toContain("<dealer_fee>0</dealer_fee>");
+    }
   });
 
   test("every price field on a listing carries the same number", async ({ request }) => {
