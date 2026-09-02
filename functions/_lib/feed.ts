@@ -33,6 +33,7 @@
 
 import { vehicleSlug } from "../../shared/slug";
 import { rewritePhotoHost } from "../../shared/photoHost";
+import { safeDescription } from "../../shared/descriptionGuard";
 
 export const DEALER = {
   name: "Love Auto Group",
@@ -209,6 +210,24 @@ export async function fetchInventory(): Promise<FeedVehicle[]> {
           ? [{ url: v.bakedHeroUrl, isPrimary: true }]
           : v.photos
       )?.map((p) => ({ ...p, url: rewritePhotoHost(p.url) ?? p.url })),
+      // Drop a description that quotes a price contradicting the real one,
+      // e.g. "priced to move at $7,999" still sitting on a car that was cut
+      // to $5,999.99. See shared/descriptionGuard.ts.
+      //
+      // 🔑 GUARDED HERE, AT THE SOURCE, NOT PER FEED. The website's own VDP
+      // and /api/inventory have routed through this guard since the 2026-08
+      // audit; all SIX feeds that emit a description skipped it, so a stale
+      // price was suppressed on our own page and still shipped to CarGurus,
+      // Google, Facebook and DealerCenter. Six call sites each writing
+      // `v.description ?? ""` is the "correct helper exists and callers
+      // bypass it" shape — fixing it in one place converts every current
+      // feed AND every feed written later, which is the half that matters.
+      //
+      // `description` is optional/recommended in the Google Vehicle Ads
+      // spec, so dropping one cannot disapprove a listing. The upstream fix
+      // still belongs in the DMS (Railway description_sync.py rewrites copy
+      // on a reprice); this is the backstop for when that does not fire.
+      description: safeDescription(v.description ?? null, v.retailPrice),
       vdpUrl: buildVdpUrl(v),
       // Defensive — the public endpoint should already filter to retail-
       // ready + sale-pending, but in case it ever returns more we double-check.

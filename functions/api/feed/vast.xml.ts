@@ -77,9 +77,8 @@
  *     field. Guessing an id is how a feed lands under someone else's roof.
  *
  * description
- *     Routed through safeDescription() so a description quoting a stale
- *     price is dropped rather than advertised. ⚠️ The other feeds in this
- *     directory do NOT do this yet — see the note in the reply to Vast.
+ *     Arrives already guarded: fetchInventory() drops a description that
+ *     quotes a price contradicting the real one, for every feed at once.
  */
 
 import {
@@ -91,7 +90,6 @@ import {
   DEALER,
   type FeedVehicle,
 } from "../../_lib/feed";
-import { safeDescription } from "../../../shared/descriptionGuard";
 import {
   engineCylinders,
   engineDisplacement,
@@ -182,8 +180,10 @@ function renderListing(v: FeedVehicle): string {
     .map((p, i) => tag(i === 0 ? "image" : `image${i + 1}`, p.url))
     .join("\n");
 
-  // Drop a description that quotes a price contradicting the real one.
-  const description = safeDescription(v.description ?? null, v.retailPrice);
+  // Already guarded against a stale quoted price by fetchInventory() — ONE
+  // mechanism, not two. A second copy here would be the dead-`FROZEN_STATUSES`
+  // shape: two checks for one rule, and one of them quietly stops matching.
+  const description = v.description ?? null;
 
   return `  <listing>
 ${tag("record_id", stock)}
