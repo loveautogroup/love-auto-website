@@ -22,6 +22,17 @@ const KIND_LABELS: Record<DocumentKind, string> = {
   other: "Other",
 };
 
+// Mirrors ESIGNABLE_KINDS in functions/_lib/signing.ts — the server refuses
+// everything else at mint and at signature time (Diane, 2026-09-02). The
+// refused kinds stay visible but disabled so the reason is on screen, not a
+// 400 after the click. Change one list, change both.
+const NOT_ESIGNABLE: Partial<Record<DocumentKind, string>> = {
+  "odometer-disclosure": "wet ink or ERT/CVR — 49 CFR 580.5",
+  "power-of-attorney": "state secure form, wet ink — 49 CFR 580.13",
+  "title-application": "SOS form VSD-190, ERT/CVR only",
+  other: "name the document kind first",
+};
+
 interface SessionDoc {
   kind: DocumentKind;
   title: string;
@@ -92,7 +103,7 @@ export default function SigningAdmin() {
   }, []);
 
   function addDoc() {
-    setDocs((prev) => [...prev, { kind: "other", title: "" }]);
+    setDocs((prev) => [...prev, { kind: "as-is-disclosure", title: "" }]);
   }
   function removeDoc(i: number) {
     setDocs((prev) => prev.filter((_, idx) => idx !== i));
@@ -291,8 +302,9 @@ export default function SigningAdmin() {
                       className="border border-brand-gray-200 rounded px-2 py-1.5 text-sm bg-white"
                     >
                       {(Object.keys(KIND_LABELS) as DocumentKind[]).map((k) => (
-                        <option key={k} value={k}>
+                        <option key={k} value={k} disabled={k in NOT_ESIGNABLE}>
                           {KIND_LABELS[k]}
+                          {NOT_ESIGNABLE[k] ? ` — not e-signable (${NOT_ESIGNABLE[k]})` : ""}
                         </option>
                       ))}
                     </select>

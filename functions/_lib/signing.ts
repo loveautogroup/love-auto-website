@@ -95,6 +95,52 @@ export interface SigningSession {
   completedUa?: string;
 }
 
+// ── Which documents may be signed on this canvas ─────────────────────────────
+//
+// Diane, 2026-09-02 (review #1): three kinds cannot lawfully be e-signed here
+// and are refused at mint AND at signature time:
+//   odometer-disclosure  49 CFR 580.5 — electronic odometer signatures only
+//                        through a state system NHTSA has approved; Illinois
+//                        status unconfirmed. Wet ink or ERT/CVR until then.
+//   power-of-attorney    49 CFR 580.13 — the odometer POA must be on a
+//                        state-issued secure form. Wet ink, always.
+//   title-application    VSD-190 is a prescribed SOS form (625 ILCS 5/3-104);
+//                        electronic only via ERT/CVR.
+//   other                unbounded; gated until a kind is named.
+// `VALID_KINDS` stays the type's vocabulary; `ESIGNABLE_KINDS` is what the
+// server accepts. Widening this list is a legal decision, not a code one.
+export const ESIGNABLE_KINDS: readonly DocumentKind[] = [
+  "buyers-order",
+  "as-is-disclosure",
+  "arbitration-agreement",
+];
+
+// ── Expiry ──────────────────────────────────────────────────────────────────
+//
+// Review 2026-09-02 #1. The session is minted with `expirationTtl`, but every
+// later `put` from the public endpoints (opened / consented / signed) wrote it
+// back WITHOUT one — and a KV put without an expiration removes the earlier
+// one (measured on the live namespace: a 60 s key rewritten with no TTL was
+// still there at 100 s). So an opened session lived forever and the "expired"
+// link kept accepting signatures. Two rules, both used by every write:
+//   1. `isSessionExpired` — the code checks `expiresAt` itself, never relying
+//      on KV to have deleted the key.
+//   2. `sessionPutOptions` — every write re-passes the absolute `expiration`
+//      so the key dies when the session does. KV refuses an expiration under
+//      60 s away; a session that close to the end is treated as expired.
+
+/** Refuse an expired session before reading or writing it. */
+export function isSessionExpired(session: Pick<SigningSession, "expiresAt">, nowMs = Date.now()): boolean {
+  const exp = Date.parse(session.expiresAt);
+  if (!Number.isFinite(exp)) return true; // no parsable expiry = not trusted
+  return exp - nowMs < 60_000;
+}
+
+/** Options for `SIGNING.put` that keep the key's death tied to `expiresAt`. */
+export function sessionPutOptions(session: Pick<SigningSession, "expiresAt">): { expiration: number } {
+  return { expiration: Math.floor(Date.parse(session.expiresAt) / 1000) };
+}
+
 export interface CreateSessionInput {
   customer: SigningSession["customer"];
   vehicle?: string;
@@ -159,8 +205,10 @@ export function validateCreateSessionInput(
   } else {
     o.documents.forEach((d: unknown, i: number) => {
       const doc = d as Record<string, unknown>;
-      if (!VALID_KINDS.includes(doc.kind as DocumentKind)) {
-        issues.push(`documents[${i}].kind must be one of: ${VALID_KINDS.join(", ")}`);
+      if (!ESIGNABLE_KINDS.includes(doc.kind as DocumentKind)) {
+        issues.push(
+          `documents[${i}].kind "${String(doc.kind)}" cannot be e-signed here; allowed: ${ESIGNABLE_KINDS.join(", ")}`,
+        );
       }
       if (
         typeof doc.title !== "string" ||
@@ -206,8 +254,8 @@ export function validateSignDocumentInput(
   }
   const o = input as Record<string, unknown>;
 
-  if (!VALID_KINDS.includes(o.kind as DocumentKind)) {
-    issues.push("kind is invalid");
+  if (!ESIGNABLE_KINDS.includes(o.kind as DocumentKind)) {
+    issues.push("kind cannot be e-signed here");
   }
   if (
     typeof o.signatureDataUrl !== "string" ||

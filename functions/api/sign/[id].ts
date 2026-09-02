@@ -15,6 +15,8 @@
  */
 
 import {
+  isSessionExpired,
+  sessionPutOptions,
   validateSignDocumentInput,
   type SigningSession,
   type SignedDocument,
@@ -42,8 +44,12 @@ function stripInternal(s: SigningSession) {
 
 async function loadSession(env: Env, id: string): Promise<SigningSession | null> {
   if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
-  const s = await env.SIGNING.get(`session:${id}`, { type: "json" });
-  return (s as SigningSession | null) ?? null;
+  const s = (await env.SIGNING.get(`session:${id}`, { type: "json" })) as SigningSession | null;
+  if (!s) return null;
+  // Review 2026-09-02 #1: check the date ourselves. Until now the public
+  // writes below dropped the key's KV expiry, so "expired" links kept working.
+  if (isSessionExpired(s)) return null;
+  return s;
 }
 
 export const onRequestGet: PagesFunction<Env, "id"> = async ({
@@ -64,7 +70,7 @@ export const onRequestGet: PagesFunction<Env, "id"> = async ({
     session.openedIp = request.headers.get("cf-connecting-ip") ?? undefined;
     session.openedUa = request.headers.get("user-agent") ?? undefined;
     try {
-      await env.SIGNING.put(`session:${id}`, JSON.stringify(session));
+      await env.SIGNING.put(`session:${id}`, JSON.stringify(session), sessionPutOptions(session));
     } catch (err) {
       console.warn("[/api/sign] status update failed (non-fatal):", err);
     }
@@ -92,7 +98,7 @@ export const onRequestPost: PagesFunction<Env, "id"> = async ({
   session.consentedAt = new Date().toISOString();
   session.consentIp = request.headers.get("cf-connecting-ip") ?? undefined;
 
-  await env.SIGNING.put(`session:${id}`, JSON.stringify(session));
+  await env.SIGNING.put(`session:${id}`, JSON.stringify(session), sessionPutOptions(session));
 
   return json(200, { ok: true, session: stripInternal(session) });
 };
@@ -170,7 +176,7 @@ export const onRequestPatch: PagesFunction<Env, "id"> = async ({
     session.completedUa = request.headers.get("user-agent") ?? undefined;
   }
 
-  await env.SIGNING.put(`session:${id}`, JSON.stringify(session));
+  await env.SIGNING.put(`session:${id}`, JSON.stringify(session), sessionPutOptions(session));
 
   return json(200, {
     ok: true,
@@ -182,6 +188,11 @@ export const onRequestPatch: PagesFunction<Env, "id"> = async ({
 function json(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json; charset=utf-8" },
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      // A session carries the customer's name, contact and signature image.
+      "Cache-Control": "no-store, no-cache, must-revalidate, private",
+      "X-Robots-Tag": "noindex, nofollow, noarchive",
+    },
   });
 }
