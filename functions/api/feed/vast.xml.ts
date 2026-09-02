@@ -61,11 +61,19 @@
  *     today, and inferring "Coupe -> 2" is exactly the unfounded-claim
  *     class the feature-pills fix outlawed. Blank beats wrong.
  *
- * standard_features / optional_features / seller_comments
- *     EMPTY. There is no equipment-list data source anywhere in this repo
- *     (a known gap), and synthesizing one from the description is how the
- *     photo overlays ended up advertising a Pioneer stereo on a car that
- *     did not have one.
+ * standard_features / optional_features
+ *     Built by shared/vehicleEquipment.ts from the DMS's equipment columns,
+ *     which carry NHTSA's "Standard" / "Optional" / "Not Available". ONLY the
+ *     first two publish; "Not Available" and null publish nothing, because
+ *     "we do not know" is not a claim we may make. The dealer's own free-text
+ *     features[] list rides in standard_features after the decoded facts.
+ *     Wired 2026-09-02 — before that these shipped empty even on cars whose
+ *     equipment we held, which is how the draft to Vast came to claim we kept
+ *     no equipment list at all.
+ *
+ * seller_comments
+ *     EMPTY. One description per car is enough; a second free-text field is
+ *     a second thing to drift.
  *
  * listing_time / expire_time
  *     NOT EMITTED pending Vast's answer on whether they are required. The
@@ -100,6 +108,7 @@ import {
   resolveDisplacement,
   interiorMaterial,
 } from "../../../shared/engineSpecs";
+import { equipmentLists } from "../../../shared/vehicleEquipment";
 
 /** Dealer phone in the sample feed's own style (800-123-4567). */
 const DEALER_PHONE_FEED = "630-359-3643";
@@ -188,6 +197,10 @@ function renderListing(v: FeedVehicle): string {
   // Already guarded against a stale quoted price by fetchInventory() — ONE
   // mechanism, not two. A second copy here would be the dead-`FROZEN_STATUSES`
   // shape: two checks for one rule, and one of them quietly stops matching.
+  // Equipment we can stand behind: Standard and Optional only, never
+  // "Not Available" and never a null. See shared/vehicleEquipment.ts.
+  const equipment = equipmentLists(v);
+
   const description = v.description ?? null;
 
   return `  <listing>
@@ -234,8 +247,8 @@ ${tag("transmission", v.transmission ?? "")}
 ${tag("vehicle_condition", "Used")}
 ${tag("cpo", "NO")}
     <description>${cdata(description)}</description>
-    <standard_features></standard_features>
-    <optional_features></optional_features>
+    <standard_features>${cdata(equipment.standard.join(", "))}</standard_features>
+    <optional_features>${cdata(equipment.optional.join(", "))}</optional_features>
     <seller_comments></seller_comments>
   </listing>`;
 }

@@ -86,6 +86,27 @@ export interface FeedVehicle {
    *  -> here. A field added in one layer and not the others is invisible. */
   engineCylinders?: number | null;
   engineDisplacement?: string | null;
+  /** Equipment. The nine safety fields carry NHTSA's vocabulary
+   *  ("Standard" / "Optional" / "Not Available"); null means we do not
+   *  know, which is NOT the same claim as "not on this car". The airbag_*
+   *  fields are location lists. shared/vehicleEquipment.ts turns them into
+   *  the two published lists and refuses anything that is not Standard or
+   *  Optional. PARITY CHAIN: Railway public.py -> DMS proxy -> here. */
+  abs?: string | null;
+  esc?: string | null;
+  tractionControl?: string | null;
+  backupCamera?: string | null;
+  blindSpotMonitoring?: string | null;
+  forwardCollisionWarning?: string | null;
+  laneDepartureWarning?: string | null;
+  keylessIgnition?: string | null;
+  adaptiveCruiseControl?: string | null;
+  airbagFront?: string | null;
+  airbagSide?: string | null;
+  airbagCurtain?: string | null;
+  airbagKnee?: string | null;
+  /** The dealer's own free-text equipment list (Railway JSON column). */
+  features?: string[] | null;
   fuelType?: string | null;
   doors?: number | null;
   description?: string | null;

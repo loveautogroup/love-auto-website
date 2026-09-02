@@ -6,6 +6,7 @@ import {
   resolveCylinders,
   resolveDisplacement,
 } from "../shared/engineSpecs";
+import { equipmentLists } from "../shared/vehicleEquipment";
 
 /**
  * Vast / CARFAX Car Listings feed — /api/feed/vast.xml (2026-09-02).
@@ -89,6 +90,60 @@ test.describe("vast feed — engine facts are derived, never guessed", () => {
     expect(interiorMaterial("Gray Cloth")).toBe("Cloth");
     expect(interiorMaterial("Tan")).toBeNull();
     expect(interiorMaterial("Leathernecks")).toBeNull(); // word boundary
+  });
+});
+
+test.describe("vast feed — equipment is a claim, not a checkbox", () => {
+  test("publishes only Standard and Optional, never a guess", () => {
+    const r = equipmentLists({
+      abs: "Standard",
+      backupCamera: "Optional",
+      blindSpotMonitoring: "Not Available",
+      laneDepartureWarning: null,
+      keylessIgnition: "",
+    });
+    expect(r.standard).toEqual(["Anti-lock brakes (ABS)"]);
+    expect(r.optional).toEqual(["Backup camera"]);
+    // 🔴 The three that must publish NOTHING. "Not Available" is a different
+    // claim from null, and neither is ours to advertise.
+    const all = [...r.standard, ...r.optional].join(" ");
+    expect(all).not.toMatch(/blind-spot/i);
+    expect(all).not.toMatch(/lane departure/i);
+    expect(all).not.toMatch(/keyless/i);
+  });
+
+  test("reads #11331's real decoded equipment", () => {
+    // Exactly what the 2026-09-02 VIN decode wrote onto the Mustang.
+    const r = equipmentLists({
+      abs: "Standard", esc: "Standard", tractionControl: "Standard",
+      backupCamera: "Standard", keylessIgnition: "Standard",
+    });
+    expect(r.standard).toHaveLength(5);
+    expect(r.optional).toEqual([]);
+    expect(r.standard).toContain("Electronic stability control");
+  });
+
+  test("airbags are location lists, not tri-state", () => {
+    const r = equipmentLists({
+      airbagFront: "1st Row (Driver and Passenger)",
+      airbagSide: "Not Available",
+      airbagCurtain: null,
+    });
+    expect(r.standard).toEqual(["Front airbags"]);
+  });
+
+  test("carries the dealer's own list, and never says a thing twice", () => {
+    const r = equipmentLists({
+      backupCamera: "Standard",
+      features: ["Backup Camera", "Versatile Hatchback Cargo Space", "  "],
+    });
+    // "Backup Camera" typed by hand and backup_camera=Standard are one claim.
+    expect(r.standard).toEqual(["Backup camera", "Versatile Hatchback Cargo Space"]);
+  });
+
+  test("a vehicle with no equipment data publishes nothing", () => {
+    expect(equipmentLists({})).toEqual({ standard: [], optional: [] });
+    expect(equipmentLists(null)).toEqual({ standard: [], optional: [] });
   });
 });
 
