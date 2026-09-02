@@ -77,6 +77,15 @@ export interface FeedVehicle {
   drivetrain?: string | null;
   transmission?: string | null;
   engine?: string | null;
+  /** Structured engine facts from the vPIC decode, straight through the DMS.
+   *  `engine` is only a RENDERING of these (plain_english_engine), so a feed
+   *  needing a real cylinder count must prefer these and never parse the
+   *  string: stock 11331 reads "2.3L 4V Premium Fuel" and 4V is four VALVES,
+   *  while engineCylinders has held the correct 4 all along.
+   *  PARITY CHAIN: Railway routers/public.py -> DMS public inventory proxy
+   *  -> here. A field added in one layer and not the others is invisible. */
+  engineCylinders?: number | null;
+  engineDisplacement?: string | null;
   fuelType?: string | null;
   doors?: number | null;
   description?: string | null;

@@ -47,9 +47,14 @@
  *     pre-owned program behind these cars. Their sample says YES.
  *
  * cylinders / engine_size
- *     Derived by shared/engineSpecs.ts, which refuses rather than guesses.
- *     The DMS holds one free-text engine string and one live car reads
- *     "2.3L 4V Premium Fuel" — 4V is four VALVES, not four cylinders.
+ *     The DMS's STORED vPIC values first (engine_cylinders /
+ *     engine_displacement, plumbed through 2026-09-02), falling back to
+ *     shared/engineSpecs.ts parsing the free-text string only where the
+ *     column is empty. Both are needed: stock 11331 reads "2.3L 4V Premium
+ *     Fuel" where 4V is four VALVES and only the column is right, and stock
+ *     10976 is the inverse — empty column, "2.5L 4-Cylinder" in the text.
+ *     The parser refuses rather than guesses, so a car with neither ships
+ *     an empty field.
  *
  * doors
  *     Emitted only when the DMS holds it. It is empty on all six live cars
@@ -91,8 +96,8 @@ import {
   type FeedVehicle,
 } from "../../_lib/feed";
 import {
-  engineCylinders,
-  engineDisplacement,
+  resolveCylinders,
+  resolveDisplacement,
   interiorMaterial,
 } from "../../../shared/engineSpecs";
 
@@ -222,8 +227,8 @@ ${tag("exterior_color", v.exteriorColor ?? "")}
 ${tag("interior_color", v.interiorColor ?? "")}
 ${tag("interior_material", interiorMaterial(v.interiorColor) ?? "")}
 ${tag("doors", v.doors ?? "")}
-${tag("cylinders", engineCylinders(v.engine) ?? "")}
-${tag("engine_size", engineDisplacement(v.engine) ?? "")}
+${tag("cylinders", resolveCylinders(v.engineCylinders, v.engine) ?? "")}
+${tag("engine_size", resolveDisplacement(v.engineDisplacement, v.engine) ?? "")}
 ${tag("drive_type", v.drivetrain ?? "")}
 ${tag("transmission", v.transmission ?? "")}
 ${tag("vehicle_condition", "Used")}

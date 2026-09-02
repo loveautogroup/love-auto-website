@@ -113,6 +113,47 @@ export function engineDisplacement(
   return `${litres.toFixed(1)} L`;
 }
 
+/**
+ * Cylinder count for a feed: the DMS's stored vPIC value when it has one,
+ * otherwise the guarded reading of the free-text engine string.
+ *
+ * Order matters. The stored column is the decode's own answer and is right
+ * where the prose is ambiguous — stock 11331 reads "2.3L 4V Premium Fuel"
+ * and stores 4. The derivation is not redundant underneath it: stock 10976
+ * is the inverse, with an EMPTY column and "2.5L 4-Cylinder" in the text.
+ * Neither source covers the lot on its own.
+ *
+ * 0 counts as absent. The Railway schema allows ge=0, and a zero-cylinder
+ * car is a null we would otherwise publish as a number.
+ */
+export function resolveCylinders(
+  stored: number | null | undefined,
+  engine: string | null | undefined
+): number | null {
+  if (
+    typeof stored === "number" &&
+    Number.isInteger(stored) &&
+    stored >= MIN_CYLINDERS &&
+    stored <= MAX_CYLINDERS
+  ) {
+    return stored;
+  }
+  return engineCylinders(engine);
+}
+
+/**
+ * Displacement for a feed, normalized to the "3.7 L" form Vast's sample
+ * uses. Runs the stored value through the same parser rather than trusting
+ * its formatting: Railway writes "3.7L" (no space), and passing it through
+ * both normalizes the spacing and range-checks it in one step.
+ */
+export function resolveDisplacement(
+  stored: string | null | undefined,
+  engine: string | null | undefined
+): string | null {
+  return engineDisplacement(stored) ?? engineDisplacement(engine);
+}
+
 /** Interior materials worth reporting as a separate field. Matched as whole
  *  words against the interior COLOUR string, because that is where the DMS
  *  actually records them today ("Black Leather", "Black Cloth"). */

@@ -3,6 +3,8 @@ import {
   engineCylinders,
   engineDisplacement,
   interiorMaterial,
+  resolveCylinders,
+  resolveDisplacement,
 } from "../shared/engineSpecs";
 
 /**
@@ -59,6 +61,26 @@ test.describe("vast feed — engine facts are derived, never guessed", () => {
     expect(engineDisplacement("V6 3.5 Liter")).toBe("3.5 L");
     expect(engineDisplacement("Electric")).toBeNull();
     expect(engineDisplacement("12.0L")).toBeNull(); // outside 0.6..8.5
+  });
+
+  test("prefers the DMS's stored vPIC value over parsing the string", () => {
+    // #11331: the column is right where the prose is ambiguous.
+    expect(resolveCylinders(4, "2.3L 4V Premium Fuel")).toBe(4);
+    // #10976: the inverse — empty column, unambiguous prose.
+    expect(resolveCylinders(null, "2.5L 4-Cylinder")).toBe(4);
+    // Neither source usable -> nothing. Blank beats wrong.
+    expect(resolveCylinders(null, "2.3L 4V Premium Fuel")).toBeNull();
+    // 0 is absent, not a number to publish (Railway allows ge=0).
+    expect(resolveCylinders(0, "2.3L 4V Premium Fuel")).toBeNull();
+    // Out-of-range stored value falls through to the guarded reading.
+    expect(resolveCylinders(99, "3.7L V6")).toBe(6);
+  });
+
+  test("normalizes the stored displacement to the sample's format", () => {
+    // Railway stores "3.7L"; Vast's sample writes "3.0 L".
+    expect(resolveDisplacement("3.7L", null)).toBe("3.7 L");
+    expect(resolveDisplacement(null, "2.3L 4V Premium Fuel")).toBe("2.3 L");
+    expect(resolveDisplacement(null, "Electric")).toBeNull();
   });
 
   test("interior material comes from the colour string, or not at all", () => {
