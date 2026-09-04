@@ -16,6 +16,10 @@
 
 interface Env {
   LEADS: KVNamespace;
+  /** Same key the leads and credit-app proxies use. Server-side only: a
+   *  NEXT_PUBLIC_* name never inlines into the client bundle on this build
+   *  pipeline, which is why every DMS post goes through a Function. */
+  NEXT_PUBLIC_DMS_INTAKE_KEY?: string;
 }
 
 interface AcquisitionInput {
@@ -136,6 +140,43 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
   await ctx.env.LEADS.put(`acq:${id}`, JSON.stringify(lead), { expirationTtl: ACQ_TTL_SECONDS });
   await Promise.all(
     photos.map((p, n) => ctx.env.LEADS.put(`acqphoto:${id}:${n}`, p, { expirationTtl: ACQ_TTL_SECONDS }))
+  );
+
+  // ── Tell the DMS now, rather than waiting to be noticed ─────────────────
+  // Until 2026-09-04 nothing did. The only thing that ever announced a sell
+  // request was a DMS sweep listing the acq: prefix on a timer, so the alert
+  // was never faster than the poll -- and that poll is the most expensive item
+  // in the Cloudflare KV budget. On 2026-09-03 the account exceeded the free
+  // tier's 1,000 daily LIST operations, every list started returning 429, and
+  // sell-your-car alerts stopped for the rest of the day without a sound.
+  //
+  // 🔴 BEST EFFORT, AND THAT ORDERING IS THE POINT. The request is already
+  // safely in KV above. If the DMS is down, or slow, or the key is wrong, the
+  // customer still gets their 201 and the hourly sweep still catches it. A
+  // notification failure must never cost the lead it was announcing.
+  ctx.waitUntil(
+    (async () => {
+      const key = ctx.env.NEXT_PUBLIC_DMS_INTAKE_KEY ?? "";
+      if (!key) return;
+      try {
+        await fetch("https://dms.loveautogroup.net/api/v1/public/acquisition-leads/notify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-intake-key": key },
+          body: JSON.stringify({
+            // The KV key just written. It IS the dedupe identity shared with
+            // the sweep, so it must be the key name, not the bare id.
+            key: `acq:${id}`,
+            name: lead.name,
+            year: lead.year,
+            make: lead.make,
+            model: lead.model,
+          }),
+          signal: AbortSignal.timeout(5000),
+        });
+      } catch {
+        /* The sweep is the backstop. Never surface this to the customer. */
+      }
+    })()
   );
 
   return new Response(JSON.stringify({ ok: true }), {
