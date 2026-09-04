@@ -85,9 +85,13 @@
  *     the number that matters.
  *
  * dealer_ID
- *     EMPTY pending their answer on which identifier they want. Our CARFAX
- *     account is GF-122181, but that is a CARFAX number and this is Vast's
- *     field. Guessing an id is how a feed lands under someone else's roof.
+ *     "loveautogroup" — ASSIGNED BY VAST, not chosen by us (Sanja Vukmirovic,
+ *     2026-09-04: "we are using the following dealer_ID: loveautogroup").
+ *     It was left empty until they answered, because our CARFAX account is
+ *     GF-122181 and that is a CARFAX number, not Vast's field, and guessing an
+ *     id is how a feed lands under someone else's roof.
+ *     ⚠️ Do not change this without Vast changing it on their side. It is the
+ *     key they match the whole feed on.
  *
  * description
  *     Arrives already guarded: fetchInventory() drops a description that
@@ -218,7 +222,7 @@ ${tag("zip", DEALER.zip)}
 ${tag("country", "United States")}
 ${tag("seller_type", "Dealer")}
 ${tag("dealer_name", DEALER.name)}
-${tag("dealer_ID", "")}
+${tag("dealer_ID", "loveautogroup")}
 ${tag("dealer_email", DEALER.email)}
 ${tag("dealer_phone", DEALER_PHONE_FEED)}
 ${tag("dealer_website", DEALER.website)}
