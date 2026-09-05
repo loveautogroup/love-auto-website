@@ -232,10 +232,14 @@ export async function fetchInventory(): Promise<FeedVehicle[]> {
     .map((v) => ({
       ...v,
       // External platforms get the BRANDED baked hero in slot 0 (badges in
-      // the pixels). The raw original stays in the additional images.
+      // the pixels). The raw original stays in the additional images — ALL
+      // of them. This was `.slice(1)`, which dropped photos[0] (the raw
+      // hero) on the assumption that the bake had replaced it; the bake
+      // lives on its own column, so every feed shipped one photo fewer than
+      // the DMS holds. Staff meeting 2026-09-05, owner: keep the count.
       photos: (
         v.bakedHeroUrl && (v.photos?.length ?? 0) > 0
-          ? [{ url: v.bakedHeroUrl, isPrimary: true }, ...(v.photos ?? []).slice(1)]
+          ? [{ url: v.bakedHeroUrl, isPrimary: true }, ...(v.photos ?? [])]
           : v.bakedHeroUrl
           ? [{ url: v.bakedHeroUrl, isPrimary: true }]
           : v.photos
