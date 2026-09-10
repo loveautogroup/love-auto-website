@@ -40,6 +40,8 @@ export interface SyncedVehicle {
   drivetrain: string;
   transmission: string;
   fuelType: string;
+  /** "Salvage" or "Rebuilt". Empty on a clean title. */
+  titleBrand?: string;
   engine: string;
   exteriorColor: string;
   interiorColor: string;
@@ -135,6 +137,7 @@ export function adaptVehicle(v: SyncedVehicle): Vehicle {
     engine: v.engine,
     bodyStyle: v.bodyStyle,
     fuelType: v.fuelType,
+    titleBrand: v.titleBrand ?? "",
     description: synthesizeDescription(v),
     features: v.features,
     images: v.images,

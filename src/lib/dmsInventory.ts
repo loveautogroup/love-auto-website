@@ -225,6 +225,7 @@ interface DmsVehicle {
   drivetrain?: string | null;
   transmission?: string | null;
   fuelType?: string | null;
+  titleBrand?: string | null;
   engine?: string | null;
   description?: string | null;
   status?: string | null;
@@ -326,6 +327,7 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     drivetrain: v.drivetrain ?? "",
     transmission: v.transmission ?? "",
     fuelType: v.fuelType ?? "",
+    titleBrand: v.titleBrand ?? "",
     engine: v.engine ?? "",
     exteriorColor: v.exteriorColor ?? "",
     interiorColor: v.interiorColor ?? "",
@@ -564,6 +566,7 @@ export function syncedToVehicle(s: SyncedVehicle): Vehicle {
     engine: s.engine,
     bodyStyle: s.bodyStyle,
     fuelType: s.fuelType,
+    titleBrand: s.titleBrand ?? "",
     description: s.description ?? "",
     features: s.features,
     images: s.images,

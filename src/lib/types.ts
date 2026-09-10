@@ -16,6 +16,8 @@ export interface Vehicle {
   engine: string;
   bodyStyle: string;
   fuelType: string;
+  /** "Salvage" or "Rebuilt". Empty on a clean title, which is the norm. */
+  titleBrand?: string;
   description: string;
   features: string[];
   images: string[];

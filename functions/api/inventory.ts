@@ -107,6 +107,8 @@ interface DmsVehicle {
   drivetrain?: string | null;
   transmission?: string | null;
   fuelType?: string | null;
+  /** "Salvage" or "Rebuilt" only. Absent on a clean title. */
+  titleBrand?: string | null;
   engine?: string | null;
   description?: string | null;
   status?: string | null;
@@ -144,6 +146,8 @@ interface SyncedVehicle {
   drivetrain: string;
   transmission: string;
   fuelType: string;
+  /** Shown on the VDP. Empty string on a clean title, which is the norm. */
+  titleBrand: string;
   engine: string;
   exteriorColor: string;
   interiorColor: string;
@@ -232,6 +236,9 @@ function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     drivetrain: v.drivetrain ?? "",
     transmission: v.transmission ?? "",
     fuelType: v.fuelType ?? "",
+    // PARITY CHAIN: Railway public.py -> DMS proxy -> here. A branded title
+    // must be disclosed on the car's own page (owner, 2026-09-09).
+    titleBrand: v.titleBrand ?? "",
     engine: v.engine ?? "",
     exteriorColor: v.exteriorColor ?? "",
     interiorColor: v.interiorColor ?? "",

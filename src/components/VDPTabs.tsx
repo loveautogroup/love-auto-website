@@ -63,6 +63,28 @@ export default function VDPTabs({
       <div className="mt-8" role="tabpanel">
         {activeTab === "Overview" && (
           <div className="space-y-8">
+            {/* 🔴 BRANDED TITLE, DISCLOSED ABOVE EVERYTHING ELSE.
+                Owner, 2026-09-09: "The title status on the vehicles vdp should
+                say rebuilt because ive already changed it in the workspace."
+                He assumed it already did; the field reached the website
+                nowhere at all, so a Rebuilt car was advertised with no
+                disclosure on its own page.
+                Deliberately NOT a row in the spec table — a brand is not a
+                spec, it is the single most important fact about the car, and
+                burying it beside the fuel type is how a disclosure becomes
+                technically-present and practically invisible. */}
+            {vehicle.titleBrand ? (
+              <div className="rounded-xl border-2 border-amber-400 bg-amber-50 p-4">
+                <p className="text-sm font-bold uppercase tracking-wide text-amber-900">
+                  {vehicle.titleBrand} title
+                </p>
+                <p className="mt-1 text-sm text-amber-900/90">
+                  This vehicle carries a {vehicle.titleBrand.toLowerCase()} title. Ask us about
+                  it — we are happy to walk you through the history before you buy.
+                </p>
+              </div>
+            ) : null}
+
             {/* Quick Specs Row */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
