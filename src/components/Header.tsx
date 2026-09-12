@@ -9,6 +9,7 @@ import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import { useLanguage } from "@/context/LanguageContext";
 import { trackOutboundClick } from "@/lib/analytics";
 import { useReviews } from "@/context/ReviewsContext";
+import { useGlobalTextPhone } from "@/data/useMerchandising";
 
 // Maps NAV_LINKS href → translation key so we can look up the right label.
 const NAV_KEY_MAP: Record<string, keyof ReturnType<typeof useLanguage>["t"]["nav"]> = {
@@ -45,6 +46,16 @@ export default function Header() {
   const googleReviews = useReviews();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
+  /* 🔑 THE SAME NUMBER THE DESKTOP BUTTON TEXTS. The owner moved texting to
+     312-925-7520 on 2026-09-05 and it lives in the merchandising config, not
+     in SITE_CONFIG. Hardcoding phoneRaw here would have shipped two different
+     text numbers for the same action — desktop to one, mobile to another —
+     with nothing failing to say so. useGlobalTextPhone already existed. */
+  const globalTextPhone = useGlobalTextPhone();
+  const textPhone =
+    globalTextPhone && /^[0-9]{10,15}$/.test(globalTextPhone)
+      ? globalTextPhone
+      : SITE_CONFIG.phoneRaw;
 
   /**
    * Condensed header once the reader has scrolled past the top.
@@ -215,6 +226,38 @@ export default function Header() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+              />
+            </svg>
+          </a>
+          {/* Text, beside Call, on mobile only.
+              🔴 TEXTING WAS DESKTOP-ONLY UNTIL 2026-09-12. TextUsButton is
+              `hidden lg:flex`, so a phone visitor — which is most of them —
+              had a way to CALL and no way to text at all. Owner asked for a
+              competitor's call/text pill; this is the same capability put
+              where the call button already lives, rather than a third
+              floating control fighting StickyCTA for the same corner.
+              ⚠️ Uses the dealership number, NOT the per-vehicle textPhone
+              override. The header renders on every page and knows nothing
+              about which car you are looking at; TextUsButton owns that
+              resolution on a VDP and still does. */}
+          <a
+            href={`sms:${textPhone}?body=${encodeURIComponent("Hi, I'm interested in a vehicle on your lot.")}`}
+            className="bg-brand-red text-white p-2 rounded-lg"
+            aria-label="Text Love Auto Group"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
               />
             </svg>
           </a>

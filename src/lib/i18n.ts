@@ -14,6 +14,13 @@ export type Locale = "en" | "es";
 
 export const translations = {
   en: {
+    // The red strip above the header. Deliberately a promise plus a number:
+    // on a phone this is the first thing above the fold, and a shopper who
+    // wants to ring the lot should not have to hunt for how.
+    banner: {
+      promise: "Great cars. Fair prices. No dealer fees.",
+      callAria: "Call Love Auto Group at",
+    },
     nav: {
       home: "Home",
       inventory: "Inventory",
@@ -669,6 +676,10 @@ export const translations = {
   },
 
   es: {
+    banner: {
+      promise: "Buenos autos. Precios justos. Sin cargos de concesionario.",
+      callAria: "Llame a Love Auto Group al",
+    },
     nav: {
       home: "Inicio",
       inventory: "Inventario",
