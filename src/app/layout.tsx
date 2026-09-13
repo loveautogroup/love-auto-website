@@ -12,6 +12,7 @@ import { getGoogleReviews } from "@/lib/google-reviews";
 import { fetchGlobalBadgeConfig } from "@/lib/dmsInventory";
 import TextUsButton from "@/components/TextUsButton";
 import StickyCTA from "@/components/StickyCTA";
+import ChatWidget from "@/components/ChatWidget";
 import { LocalBusinessSchema } from "@/components/StructuredData";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { SentryInit } from "@/components/SentryInit";
@@ -122,6 +123,7 @@ export default async function RootLayout({
         <Footer />
         <TextUsButton />
         <StickyCTA />
+        <ChatWidget />
         </LanguageProvider>
         </BadgeConfigProvider>
         </ReviewsProvider>
