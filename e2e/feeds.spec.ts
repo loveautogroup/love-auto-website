@@ -121,3 +121,73 @@ test("the guard is live: a contradicting description would be dropped", () => {
   // A comparison figure is not an asking price and must not be flagged.
   expect(descriptionContradictsPrice("Compare to $30,000 new.", 5999.99)).toBe(false);
 });
+
+test("a sold vehicle's stale price claim is stripped, not shown as fact", () => {
+  // 2026-09-15: a sold car's `price` argument is always 0/null on the wire
+  // (Railway hides it — see routers/public.py). Before this fix, an absent
+  // price short-circuited the guard to "assume fine," so a sold RC 350's
+  // description kept advertising "priced right at $17,999" with nothing
+  // left to check it against.
+  expect(
+    descriptionContradictsPrice("Carefully selected, priced right at $17,999.", 0)
+  ).toBe(true);
+  expect(
+    descriptionContradictsPrice("Carefully selected, priced right at $17,999.", null)
+  ).toBe(true);
+  // A description with no price claim at all is still fine with no price to
+  // check — nothing to contradict.
+  expect(
+    descriptionContradictsPrice("A clean, well-kept SUV ready for a new owner.", 0)
+  ).toBe(false);
+});
+
+/**
+ * Sold vehicles reaching the SITE is intentional as of 2026-09-15 (Jeremiah:
+ * "keep our sold vehicles on the site ... show a history of cars weve
+ * sold") — a car with our own photos never ages off /api/inventory or the
+ * VDP feed the way it used to.
+ *
+ * Reaching an outbound marketplace feed is a DIFFERENT, still-forbidden
+ * thing: advertising a sold car to Google Vehicle Ads, CarGurus, Facebook
+ * Marketplace, AutoTrader, DealerCenter or Vast/CARFAX is both a platform
+ * policy violation (a Sold vehicle is not "in stock") and deceptive
+ * advertising. Every feed already filters on `status`, independent of how
+ * long Railway keeps the car's page up — this proves that holds now that
+ * "on the site" and "in the feed" are no longer the same set.
+ */
+test.describe("sold vehicles never reach an outbound marketplace feed", () => {
+  const FEED_PATHS = [
+    "/api/feed/vast.xml",
+    "/api/feed/cargurus.xml",
+    "/api/feed/autotrader.csv",
+    "/api/feed/facebook.csv",
+    "/api/feed/dealercenter.csv",
+    "/api/feed/google-vehicle-ads.csv",
+    "/api/feed/google-vehicles.csv",
+    "/api/feed/google-vehicle-inventory.csv",
+  ] as const;
+
+  test("no feed contains a VIN the site itself marks sold", async ({ request }) => {
+    const invRes = await request.get("/api/inventory");
+    expect(invRes.ok(), "/api/inventory must respond").toBeTruthy();
+    const inv = (await invRes.json()) as {
+      vehicles?: { vin?: string; status?: string }[];
+    };
+    const soldVins = (inv.vehicles ?? [])
+      .filter((v) => v.status === "sold" && v.vin)
+      .map((v) => v.vin!.toUpperCase());
+    test.skip(
+      soldVins.length === 0,
+      "no sold vehicle is currently carried on the site to check feeds against"
+    );
+
+    for (const path of FEED_PATHS) {
+      const res = await request.get(path);
+      expect(res.ok(), `${path} must respond`).toBeTruthy();
+      const raw = (await res.text()).toUpperCase();
+      for (const vin of soldVins) {
+        expect(raw, `${path} must not advertise sold VIN ${vin}`).not.toContain(vin);
+      }
+    }
+  });
+});

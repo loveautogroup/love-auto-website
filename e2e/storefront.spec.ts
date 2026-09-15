@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { hasOwnPhoto } from "../shared/ownPhoto";
 
 /**
  * Customer-facing storefront checks.
@@ -21,6 +22,7 @@ interface FeedVehicle {
   mileage: number;
   price: number;
   status: string;
+  images?: string[];
 }
 
 async function liveInventory(page: Page): Promise<FeedVehicle[]> {
@@ -115,22 +117,86 @@ test.describe("VDP carries what Google Vehicle Ads requires", () => {
   });
 });
 
-test.describe("sold cars stay off the storefront", () => {
+test.describe("sold cars: history, never a purchase", () => {
   /**
-   * Deliberate product rule (S85): a shopper must never find a car they cannot
-   * buy. Sold vehicles ARE findable in the DMS — that is the internal tool —
-   * but the public grid only shows what is for sale.
+   * Superseded 2026-09-15. The old rule here ("the grid only shows what is
+   * for sale") is half-right and was ALSO wrong on its own terms: it lumped
+   * Sale Pending in with Sold, and a Sale Pending car has always stayed in
+   * the grid (it's still gettable, just deposited). Narrowed that to
+   * genuinely-sold vehicles below.
+   *
+   * The rule now (Jeremiah): a sold car with at least one of our own photos
+   * stays on the site as part of a sold-history tail — never its own
+   * section, always after every available car, always SOLD-marked, never
+   * priced. A sold car with no real photo of ours (or none at all) still
+   * stays off the grid, same as before this feature existed.
    */
-  test("the grid lists only available vehicles", async ({ page }) => {
+  test("a sold vehicle with a real photo appears in the grid, marked sold, with no price", async ({ page }) => {
     const vehicles = await liveInventory(page);
-    const sold = vehicles.filter((v) => !available(v));
-    test.skip(sold.length === 0, "feed currently contains no non-available vehicles");
+    const soldWithPhoto = vehicles.filter(
+      (v) => v.status === "sold" && hasOwnPhoto(v.images)
+    );
+    test.skip(
+      soldWithPhoto.length === 0,
+      "no sold vehicle with our own photo is currently carried on the site"
+    );
 
     await page.goto("/inventory/");
     const body = await page.locator("body").innerText();
-    for (const v of sold.slice(0, 5)) {
-      expect(body, `sold/pending ${v.slug} must not appear on the public grid`).not.toContain(v.vin);
+    const v = soldWithPhoto[0];
+    expect(body, `sold ${v.slug} should still appear in the grid`).toContain(v.vin);
+    // Its price must never render anywhere on the page.
+    if (v.price) {
+      const priceStr = v.price.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
+      expect(body, `${v.slug}'s old price must not render on the grid`).not.toContain(priceStr);
     }
+  });
+
+  test("a sold vehicle with no real photo still stays off the grid", async ({ page }) => {
+    const vehicles = await liveInventory(page);
+    const soldNoPhoto = vehicles.filter(
+      (v) => v.status === "sold" && !hasOwnPhoto(v.images)
+    );
+    test.skip(
+      soldNoPhoto.length === 0,
+      "no photo-less sold vehicle is currently carried on the site"
+    );
+
+    await page.goto("/inventory/");
+    const body = await page.locator("body").innerText();
+    for (const v of soldNoPhoto.slice(0, 5)) {
+      expect(body, `photo-less sold ${v.slug} must not appear on the public grid`).not.toContain(v.vin);
+    }
+  });
+
+  test("a sold vehicle's page shows SOLD and no price, and returns 200", async ({ page }) => {
+    const vehicles = await liveInventory(page);
+    const soldWithPhoto = vehicles.filter(
+      (v) => v.status === "sold" && hasOwnPhoto(v.images)
+    );
+    test.skip(
+      soldWithPhoto.length === 0,
+      "no sold vehicle with our own photo is currently carried on the site"
+    );
+    const v = soldWithPhoto[0];
+
+    const res = await page.goto(`/inventory/${v.slug}/`);
+    expect(res?.status(), `${v.slug} is sold and kept — must be 200, not 410`).toBe(200);
+
+    const body = await page.locator("body").innerText();
+    expect(body.toUpperCase(), "SOLD must be prominent on the page").toContain("SOLD");
+    if (v.price) {
+      const priceStr = v.price.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
+      expect(body, `${v.slug}'s old price must not render on its own VDP`).not.toContain(priceStr);
+    }
+    // No purchase-implying CTA on a car that's gone.
+    expect(body, "no financing CTA on a sold VDP").not.toMatch(/get pre-?approved/i);
   });
 });
 

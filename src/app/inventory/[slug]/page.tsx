@@ -362,28 +362,36 @@ export default async function VehicleDetailPage({
                     </>
                   )}
                 </div>
-                <div className="inline-flex items-center gap-1.5 mt-2 rounded-md border border-green-200 bg-green-50 px-2.5 py-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-3.5 w-3.5 shrink-0 text-green-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span className="text-xs font-semibold text-green-800">
-                    <T path={["vdpChrome", "noDealerFees"]} />
-                  </span>
-                  <span className="text-xs text-green-700">
-                    {" "}<T path={["vdpChrome", "noDealerFeesSuffix"]} />
-                  </span>
+                {/* No dealer fees is a purchase-cost claim — nothing left to
+                    buy, so it never shows once the car is sold. */}
+                {!isSold && (
+                  <div className="inline-flex items-center gap-1.5 mt-2 rounded-md border border-green-200 bg-green-50 px-2.5 py-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-3.5 w-3.5 shrink-0 text-green-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2.5}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-xs font-semibold text-green-800">
+                      <T path={["vdpChrome", "noDealerFees"]} />
+                    </span>
+                    <span className="text-xs text-green-700">
+                      {" "}<T path={["vdpChrome", "noDealerFeesSuffix"]} />
+                    </span>
+                  </div>
+                )}
+              </div>
+              {/* Nationwide shipping invites arranging delivery of a car that's
+                  gone — hidden once sold, same as the delivery card below. */}
+              {!isSold && (
+                <div className="flex items-center gap-2.5 shrink-0 border-t sm:border-t-0 sm:border-l border-brand-gray-200 pt-2.5 sm:pt-0 sm:pl-4">
+                  {shippingBanner}
                 </div>
-              </div>
-              <div className="flex items-center gap-2.5 shrink-0 border-t sm:border-t-0 sm:border-l border-brand-gray-200 pt-2.5 sm:pt-0 sm:pl-4">
-                {shippingBanner}
-              </div>
+              )}
             </div>
           </div>
 
@@ -428,12 +436,23 @@ export default async function VehicleDetailPage({
                         {vehicle.stockNumber ? ` · Stock #${vehicle.stockNumber}` : ""}
                       </p>
                     )}
-                    <p className="text-3xl font-bold text-brand-red mt-3">
-                      <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
-                    </p>
-                    <p className="text-sm text-brand-gray-500 mt-1">
-                      <T path={["card", "est"]} /> <span className="font-semibold">${monthlyPayment}<T path={["card", "perMo"]} /></span>*
-                    </p>
+                    {/* Jeremiah, 2026-09-15: no price and no monthly-payment
+                        estimate once a car is sold — SOLD renders in the
+                        price's own spot rather than just disappearing. */}
+                    {isSold ? (
+                      <p className="text-3xl font-bold text-brand-gray-500 uppercase tracking-wide mt-3">
+                        <T path={["card", "sold"]} />
+                      </p>
+                    ) : (
+                      <>
+                        <p className="text-3xl font-bold text-brand-red mt-3">
+                          <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
+                        </p>
+                        <p className="text-sm text-brand-gray-500 mt-1">
+                          <T path={["card", "est"]} /> <span className="font-semibold">${monthlyPayment}<T path={["card", "perMo"]} /></span>*
+                        </p>
+                      </>
+                    )}
                     <p className="text-sm text-brand-gray-500 mt-1">
                       <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> <T path={["vdpChrome", "miles"]} /> · {vehicle.drivetrain}
                     </p>
@@ -481,21 +500,27 @@ export default async function VehicleDetailPage({
                       </svg>
                       <T path={["vdpChrome", "textUs"]} />
                     </VDPTextUsLink>
-                    {/* Credit application / financing CTA - every VDP */}
-                    <a
-                      href="/financing"
-                      className="flex items-center justify-center gap-2 w-full bg-brand-red hover:bg-brand-red-dark text-white py-3 rounded-xl font-semibold transition-colors"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                      <T path={["ctas", "getPreApproved"]} />
-                    </a>
-                    <VDPInquireButton
-                      vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.trim ? " " + vehicle.trim : ""}`}
-                      vehicleVin={vehicle.vin}
-                      className="w-full"
-                    />
+                    {/* Credit application / financing CTA + "ask about this
+                        car" — both imply this specific car can still be
+                        bought, so neither shows once it's sold. */}
+                    {!isSold && (
+                      <>
+                        <a
+                          href="/financing"
+                          className="flex items-center justify-center gap-2 w-full bg-brand-red hover:bg-brand-red-dark text-white py-3 rounded-xl font-semibold transition-colors"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          <T path={["ctas", "getPreApproved"]} />
+                        </a>
+                        <VDPInquireButton
+                          vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.trim ? " " + vehicle.trim : ""}`}
+                          vehicleVin={vehicle.vin}
+                          className="w-full"
+                        />
+                      </>
+                    )}
                     {/* Test drive request - LEAD ONLY. Captures a preferred
                         day + time window and lands in the normal lead
                         pipeline tagged "website-test-drive". Books nothing;
@@ -522,9 +547,14 @@ export default async function VehicleDetailPage({
                     vehicleStatus={vehicle.status}
                     variant="wide"
                   />
-                  <div className="mt-4">
-                    {deliveryCard}
-                  </div>
+                  {/* Delivery card offers to ship a car that no longer exists
+                      to ship — hidden once sold. CARFAX above stays: it's
+                      history, not a purchase invitation. */}
+                  {!isSold && (
+                    <div className="mt-4">
+                      {deliveryCard}
+                    </div>
+                  )}
                 </div>
 
                 {/* Card 3 — payment calculator */}
@@ -557,14 +587,22 @@ export default async function VehicleDetailPage({
                   {vehicle.stockNumber ? ` · Stock #${vehicle.stockNumber}` : ""}
                 </p>
               )}
-              <div className="flex items-baseline gap-3 mt-2">
-                <p className="text-3xl font-bold text-brand-red">
-                  <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
+              {/* Same isSold branch as the desktop card above — SOLD in the
+                  price's spot, no monthly-payment estimate. */}
+              {isSold ? (
+                <p className="text-3xl font-bold text-brand-gray-500 uppercase tracking-wide mt-2">
+                  <T path={["card", "sold"]} />
                 </p>
-                <p className="text-sm text-brand-gray-500">
-                  <T path={["card", "est"]} /> ${monthlyPayment}<T path={["card", "perMo"]} />*
-                </p>
-              </div>
+              ) : (
+                <div className="flex items-baseline gap-3 mt-2">
+                  <p className="text-3xl font-bold text-brand-red">
+                    <VDPLivePrice vin={vehicle.vin} fallback={formattedPrice} />
+                  </p>
+                  <p className="text-sm text-brand-gray-500">
+                    <T path={["card", "est"]} /> ${monthlyPayment}<T path={["card", "perMo"]} />*
+                  </p>
+                </div>
+              )}
               <p className="text-sm text-brand-gray-500 mt-1">
                 <VDPLiveMileage vin={vehicle.vin} fallback={formattedMileage} /> <T path={["vdpChrome", "miles"]} /> · {vehicle.drivetrain} · {vehicle.exteriorColor}
               </p>
@@ -585,17 +623,22 @@ export default async function VehicleDetailPage({
                 vehicleStatus={vehicle.status}
                 variant="inline"
               />
-              <div className="mt-3">{deliveryCard}</div>
-              {/* Credit application / financing CTA (mobile) - every VDP */}
-              <a
-                href="/financing"
-                className="mt-3 flex items-center justify-center gap-2 w-full bg-brand-red hover:bg-brand-red-dark text-white py-3 rounded-xl font-semibold transition-colors"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <T path={["ctas", "getPreApproved"]} />
-              </a>
+              {/* Delivery card + financing CTA both invite buying this car —
+                  neither belongs once it's sold. */}
+              {!isSold && (
+                <>
+                  <div className="mt-3">{deliveryCard}</div>
+                  <a
+                    href="/financing"
+                    className="mt-3 flex items-center justify-center gap-2 w-full bg-brand-red hover:bg-brand-red-dark text-white py-3 rounded-xl font-semibold transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <T path={["ctas", "getPreApproved"]} />
+                  </a>
+                </>
+              )}
               {/* Test drive request (mobile) - same LEAD-ONLY flow as the
                   desktop CTA card above. */}
               {!isSold && (
@@ -612,13 +655,16 @@ export default async function VehicleDetailPage({
 
             {/* Market price comparison — only renders when Jordan has set
                 a marketEstimate in the merchandising overlay. Client wrapper
-                picks up runtime KV updates without rebuilding. */}
-            <VDPMarketPriceWrap
-              vin={vehicle.vin}
-              daysOnLot={vehicle.daysOnLot}
-              vehicleStatus={vehicle.status}
-              askingPrice={vehicle.price}
-            />
+                picks up runtime KV updates without rebuilding. Nothing to
+                compare once the car's own price is hidden. */}
+            {!isSold && (
+              <VDPMarketPriceWrap
+                vin={vehicle.vin}
+                daysOnLot={vehicle.daysOnLot}
+                vehicleStatus={vehicle.status}
+                askingPrice={vehicle.price}
+              />
+            )}
 
             {/* The car's own feature list (owner, 2026-09-15). It replaced the
                 recon checklist, which read the same on every vehicle. Renders
@@ -718,13 +764,17 @@ export default async function VehicleDetailPage({
             </svg>
             <T path={["vdpChrome", "textUs"]} />
           </VDPTextUsLink>
-          <MobileCalculatorButton
-            vehiclePrice={vehicle.price}
-            vehicleSlug={vehicle.slug}
-            vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
-            vehicleVin={vehicle.vin}
-            vehicleStock={vehicle.stockNumber}
-          />
+          {/* Payment calculator is a financing tool for a car you can buy —
+              hidden once sold; Call + Text keep full-width in its place. */}
+          {!isSold && (
+            <MobileCalculatorButton
+              vehiclePrice={vehicle.price}
+              vehicleSlug={vehicle.slug}
+              vehicleLabel={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+              vehicleVin={vehicle.vin}
+              vehicleStock={vehicle.stockNumber}
+            />
+          )}
         </div>
 
         {/* Similar Vehicles — client component backed by CF KV via useInventory().

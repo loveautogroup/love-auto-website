@@ -14,8 +14,8 @@ interface VDPTabsProps {
   monthlyPayment: number;
 }
 
-const TABS = ["Overview", "Features", "Vehicle History", "Financing"] as const;
-type Tab = (typeof TABS)[number];
+const ALL_TABS = ["Overview", "Features", "Vehicle History", "Financing"] as const;
+type Tab = (typeof ALL_TABS)[number];
 
 export default function VDPTabs({
   vehicle,
@@ -24,6 +24,14 @@ export default function VDPTabs({
   monthlyPayment,
 }: VDPTabsProps) {
   const { t } = useLanguage();
+  // Jeremiah, 2026-09-15: a sold car's price is never republished, and the
+  // Financing tab is nothing BUT a payment calculator + "Get Pre-Approved"
+  // apply link for buying this specific car — both wrong once it's sold, so
+  // the whole tab drops rather than showing a $0/mo calculator.
+  const isSold = vehicle.status === "sold";
+  const TABS: readonly Tab[] = isSold
+    ? ALL_TABS.filter((tab) => tab !== "Financing")
+    : ALL_TABS;
   const [activeTab, setActiveTab] = useState<Tab>("Overview");
 
   const tabLabels: Record<Tab, string> = {
@@ -216,7 +224,7 @@ export default function VDPTabs({
           </section>
         )}
 
-        {activeTab === "Financing" && (
+        {activeTab === "Financing" && !isSold && (
           <section className="space-y-6">
             <div className="bg-brand-gray-50 rounded-xl p-6">
               <h2 className="text-xl font-bold text-brand-gray-900 mb-4">

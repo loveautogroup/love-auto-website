@@ -100,8 +100,10 @@ function isAvailable(status: string | null | undefined): boolean {
  */
 /**
  * Sold specifically — as opposed to archived / wholesale / arbitration return.
- * A sold car in the live feed is inside Railway's recently-sold window and has
- * its own static page; the others never appear in the feed at all.
+ * A sold car in the live feed is either inside Railway's 30-day recently-sold
+ * window, or (2026-09-15) has at least one of our own photos and so is kept
+ * forever as sold-vehicle history — either way it has its own static page,
+ * and the others never appear in the feed at all.
  */
 function isSold(status: string | null | undefined): boolean {
   return (status ?? "").toLowerCase().trim() === "sold";
@@ -578,12 +580,14 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     // than months. Closes the "Not found (404)" fix-failed loop reported in
     // Search Console (Charlotte audit 2026-05-07).
     //
-    // ⚠️ A car that is IN THIS FEED and sold is RECENTLY sold — Railway only
-    // emits sold rows inside its 30-day window — and it has a real static VDP
-    // built for it on purpose (Jeremiah, 2026-08-25). Serving it a Gone page
-    // here would delete the page we just built. Older sales are not in the
-    // feed at all and still 410 via the retired-slugs branch above, which is
-    // the path that does the deindexing.
+    // ⚠️ A car that is IN THIS FEED and sold is meant to be there — either
+    // inside Railway's 30-day recently-sold window (Jeremiah, 2026-08-25) or,
+    // since 2026-09-15, kept forever because it carries one of our own
+    // photos as part of the site's sold-vehicle history — and it has a real
+    // static VDP built for it on purpose either way. Serving it a Gone page
+    // here would delete the page we just built. Sales that fall out of both
+    // rules are not in the feed at all and still 410 via the retired-slugs
+    // branch above, which is the path that does the deindexing.
     const recentlySold = isSold(match.status);
     if ((isGone(match.status) && !recentlySold) || hidden) {
       const html = renderGonePage({

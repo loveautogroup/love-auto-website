@@ -266,6 +266,9 @@ export const translations = {
       perMo: "/mo",
       viewDetails: "View Details →",
       disclaimer: "Based on $1,000 down, 6.99% APR, 60 months",
+      // Sold-vehicle history (2026-09-15) — renders on the card where the
+      // price would otherwise be.
+      sold: "Sold",
     },
     financing: {
       eyebrow: "Financing",
@@ -890,6 +893,7 @@ export const translations = {
       perMo: "/mes",
       viewDetails: "Ver Detalles →",
       disclaimer: "Basado en $1,000 de inicial, 6.99% TAE, 60 meses",
+      sold: "Vendido",
     },
     financing: {
       eyebrow: "Financiamiento",

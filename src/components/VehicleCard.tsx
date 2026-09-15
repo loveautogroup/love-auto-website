@@ -65,6 +65,14 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const { t } = useLanguage();
   const c = t.card;
 
+  // Sold-vehicle history (Jeremiah, 2026-09-15). Only cars with a real photo
+  // of ours ever reach this card in the "sold" state at all (see
+  // shared/ownPhoto.ts + InventoryGrid/page.tsx) — the price is already null
+  // on the wire (Railway hides it), so this is purely presentational: a
+  // clear SOLD mark where the price was, no "$X/mo" estimate, no CarGurus
+  // deal-rating badge (that's already gated on price > 0 below).
+  const isSold = vehicle.status === "sold";
+
   // Runtime hook — re-renders when /api/merchandising resolves so DMS-saved
   // overlays (carfax shield, feature pills, status badge, hidden flag) take
   // effect immediately instead of waiting for a Cloudflare Pages rebuild.
@@ -161,7 +169,11 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   // empty-state SVG instead of the branded placeholder.
   const forcePlaceholder = overlay.useComingSoonPlaceholder === true;
   // "Coming Soon" state — only CARFAX badge shows (Jeremiah, 2026-06-10).
-  const isComingSoon = noPhotosAnywhere || forcePlaceholder;
+  // Never true for a sold card: only vehicles with a real photo of ours
+  // ever reach this component in the "sold" state (see hasOwnPhoto gating
+  // upstream), so "no photos anywhere" cannot legitimately fire here, and a
+  // SOLD car is never "coming soon" regardless.
+  const isComingSoon = !isSold && (noPhotosAnywhere || forcePlaceholder);
 
   const initialHero = (forcePlaceholder || noPhotosAnywhere)
     ? COMING_SOON_PLACEHOLDER
@@ -486,9 +498,20 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         )}
 
         <div className="flex items-baseline justify-between mt-3">
-          <span className="text-xl font-bold text-brand-red">
-            {formattedPrice}
-          </span>
+          {/* Jeremiah, 2026-09-15: a sold car's price never shows again —
+              SOLD renders where the price was. The red top-left StatusPill
+              (kind="sold", see merchandising.ts pickStatusPill) already
+              marks the card; this is the second, unmissable place the same
+              fact belongs — the line a shopper reads for the number. */}
+          {isSold ? (
+            <span className="text-xl font-bold text-brand-gray-500 uppercase tracking-wide">
+              {c.sold}
+            </span>
+          ) : (
+            <span className="text-xl font-bold text-brand-red">
+              {formattedPrice}
+            </span>
+          )}
           <span className="text-sm text-brand-gray-500">
             {formattedMileage} {c.mi}
           </span>
@@ -506,18 +529,22 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           </div>
         )}
 
-        <p className="text-sm text-brand-gray-500 mt-1">
-          {c.est}{" "}
-          <span className="font-semibold text-brand-gray-700">
-            ${monthlyPayment}{c.perMo}
-          </span>
-          <span
-            className="text-xs text-brand-gray-400 ml-1"
-            title={c.disclaimer}
-          >
-            *
-          </span>
-        </p>
+        {/* No monthly-payment estimate on a sold card — there is nothing
+            left to finance. */}
+        {!isSold && (
+          <p className="text-sm text-brand-gray-500 mt-1">
+            {c.est}{" "}
+            <span className="font-semibold text-brand-gray-700">
+              ${monthlyPayment}{c.perMo}
+            </span>
+            <span
+              className="text-xs text-brand-gray-400 ml-1"
+              title={c.disclaimer}
+            >
+              *
+            </span>
+          </p>
+        )}
 
         {/* CarGurus Deal Rating Badge — replaced in-place by the async SDK.
             Renders nothing until hydrated so there is zero layout shift. */}

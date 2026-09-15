@@ -308,18 +308,24 @@ async function fetchDmsOnce(
     const vehicles = json.data
       .filter((v) => v && v.vin && v.year && v.make && v.model)
       .map(adaptDmsVehicle)
-      // Listed (available), Sale Pending, and cars SOLD in the last 30 days.
-      // Coming Soon / In Recon vehicles stay off the public site.
+      // Listed (available), Sale Pending, and cars SOLD in the last 30 days OR
+      // (2026-09-15) with at least one of our own photos, forever. Coming
+      // Soon / In Recon vehicles stay off the public site.
       //
-      // Sold is here so a recently-sold car still gets a real VDP — a link from
+      // Sold is here so a sold car still gets a real VDP — a link from
       // CarGurus, a text or a bookmark should land on the car, not a dead end
-      // (Jeremiah, 2026-08-25). Railway decides the 30-day window; this feed
-      // just carries what it sends.
+      // (Jeremiah, 2026-08-25), and so a car with our own photos keeps a page
+      // as part of the site's sold-car history (Jeremiah, 2026-09-15). Railway
+      // decides who qualifies and for how long; this feed just carries what
+      // it sends.
       //
-      // It does NOT put sold cars in the storefront: InventoryGrid.tsx and
-      // inventory/page.tsx both filter `status !== "sold"`, and sitemap.ts
-      // indexes only available/sale-pending. Those are the display gates and
-      // they are deliberately separate from this one.
+      // It does NOT decide whether a sold car gets a SLOT in the grid:
+      // inventory/page.tsx and InventoryGrid.tsx separately apply
+      // hasOwnPhoto() from shared/ownPhoto.ts to that question, and
+      // sitemap.ts indexes only available/sale-pending regardless (a sold
+      // page is real but never something Google should be pointed at).
+      // Those are the display gates and they are deliberately separate from
+      // this one.
       .filter(
         (v) =>
           v.status === "available" ||

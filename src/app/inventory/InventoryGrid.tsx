@@ -10,6 +10,7 @@ import { sortWithFeaturedFirst } from "@/data/merchandising";
 import { useVisibleVehicles } from "@/data/useMerchandising";
 import { trackInventoryFilter } from "@/lib/analytics";
 import { matchesVehicleSearch } from "@/lib/vehicleSearch";
+import { hasOwnPhoto } from "../../../shared/ownPhoto";
 
 interface InventoryGridProps {
   /**
@@ -38,15 +39,33 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
   // back to the seed, filtered for sold/hidden, so the page is never empty.
   const isLoadingInitial = source === "fallback" && loading;
 
-  const vehicles = isLoadingInitial
-    ? [] // skeleton rendered below
+  const baseVehicles = isLoadingInitial
+    ? []
     : source !== "fallback"
-    ? sortWithFeaturedFirst(
-        visibleLiveVehicles.filter((v) => v.status !== "sold")
-      )
-    : sortWithFeaturedFirst(
-        visibleFallbackVehicles.filter((v) => v.status !== "sold")
-      );
+    ? visibleLiveVehicles
+    : visibleFallbackVehicles;
+
+  const vehicles = sortWithFeaturedFirst(
+    baseVehicles.filter((v) => v.status !== "sold")
+  );
+
+  // Sold-vehicle history tail (Jeremiah, 2026-09-15) — re-derived here
+  // independently of the build-time list in inventory/page.tsx because this
+  // component ignores its `vehicles` prop entirely once useInventory()
+  // hydrates with live or cached data (see baseVehicles above). Same
+  // "our photos only" gate as Railway's _sold_with_own_photos_ids and the
+  // build-time page — shared/ownPhoto.ts keeps the two definitions in
+  // lockstep. Newest sale first.
+  const soldHistoryAll = useMemo(() => {
+    const pool = baseVehicles.filter(
+      (v) => v.status === "sold" && hasOwnPhoto(v.images)
+    );
+    return [...pool].sort((a, b) => {
+      const at = a.soldDate ? Date.parse(a.soldDate) : 0;
+      const bt = b.soldDate ? Date.parse(b.soldDate) : 0;
+      return bt - at;
+    });
+  }, [baseVehicles]);
 
   const filtered = useMemo(() => {
     const make = searchParams.get("make")?.toLowerCase();
@@ -137,6 +156,25 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
     }
   }, [filtered, sortOrder]);
 
+  // A shopper actively narrowing the AVAILABLE catalog (make/price/mileage/
+  // year/free-text) is shopping — mixing in unrelated sold history there
+  // would muddy "did you have a match" against a bucket whose price is
+  // deliberately hidden. The sold tail only shows on the default,
+  // unfiltered view. Sort-order alone (Price: Low to High, etc.) is not a
+  // filter and does not hide it.
+  const hasActiveFilter = [
+    "make",
+    "bodyStyle",
+    "drivetrain",
+    "minPrice",
+    "maxPrice",
+    "maxMileage",
+    "minYear",
+    "maxYear",
+    "q",
+  ].some((key) => Boolean(searchParams.get(key)));
+  const soldHistory = hasActiveFilter ? [] : soldHistoryAll;
+
   if (isLoadingInitial) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6" aria-label="Loading inventory">
@@ -181,6 +219,12 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
         {sorted.map((vehicle) => (
+          <VehicleCard key={vehicle.id} vehicle={vehicle} />
+        ))}
+        {/* Sold-vehicle history — never its own section, just the tail of the
+            same grid, always after every available card. VehicleCard marks
+            each one SOLD and hides its price. */}
+        {soldHistory.map((vehicle) => (
           <VehicleCard key={vehicle.id} vehicle={vehicle} />
         ))}
       </div>

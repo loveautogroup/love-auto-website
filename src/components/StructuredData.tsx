@@ -181,6 +181,15 @@ export function VehicleSchema({ vehicle }: { vehicle: Vehicle }) {
         ? "https://schema.org/SoldOut"
         : "https://schema.org/LimitedAvailability";
 
+  // Jeremiah, 2026-09-15: a sold vehicle's page stays up (a history of what
+  // we've sold), but its price is never republished anywhere, including
+  // here. The cleanest way to say "this is not for sale, and we won't quote
+  // a number for it" in schema.org terms is to omit the Offer entirely
+  // rather than emit one with a fabricated $0 price under SoldOut — Google's
+  // own guidance treats a price of 0 on an Offer as a data error, not as
+  // "no price given".
+  const isSold = vehicle.status === "sold";
+
   // Derive year-only production date in ISO format (Vehicle Listings prefers
   // a date over a string year for productionDate).
   const productionDate = vehicle.year
@@ -251,34 +260,39 @@ export function VehicleSchema({ vehicle }: { vehicle: Vehicle }) {
           ).carfaxSnapshot?.ownerCount,
         }
       : {}),
-    offers: {
-      "@type": "Offer",
-      price: String(vehicle.price),
-      priceCurrency: "USD",
-      itemCondition: "https://schema.org/UsedCondition",
-      availability,
-      url: vdpUrl,
-      // validFrom: when this offer became active. We don't track this
-      // precisely; use today's date so re-renders don't flap. Vercel
-      // rebuild renews this on every deploy.
-      validFrom: new Date().toISOString().slice(0, 10),
-      seller: {
-        "@type": "AutoDealer",
-        "@id": `${SITE_CONFIG.url}/#dealership`,
-        name: SITE_CONFIG.name,
-        url: SITE_CONFIG.url,
-        image: `${SITE_CONFIG.url}/images/storefront.jpg`,
-        telephone: SITE_CONFIG.phone,
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: SITE_CONFIG.address.street,
-          addressLocality: SITE_CONFIG.address.city,
-          addressRegion: SITE_CONFIG.address.state,
-          postalCode: SITE_CONFIG.address.zip,
-          addressCountry: "US",
-        },
-      },
-    },
+    // Omitted entirely for a sold vehicle — see the isSold comment above.
+    ...(isSold
+      ? {}
+      : {
+          offers: {
+            "@type": "Offer",
+            price: String(vehicle.price),
+            priceCurrency: "USD",
+            itemCondition: "https://schema.org/UsedCondition",
+            availability,
+            url: vdpUrl,
+            // validFrom: when this offer became active. We don't track this
+            // precisely; use today's date so re-renders don't flap. Vercel
+            // rebuild renews this on every deploy.
+            validFrom: new Date().toISOString().slice(0, 10),
+            seller: {
+              "@type": "AutoDealer",
+              "@id": `${SITE_CONFIG.url}/#dealership`,
+              name: SITE_CONFIG.name,
+              url: SITE_CONFIG.url,
+              image: `${SITE_CONFIG.url}/images/storefront.jpg`,
+              telephone: SITE_CONFIG.phone,
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: SITE_CONFIG.address.street,
+                addressLocality: SITE_CONFIG.address.city,
+                addressRegion: SITE_CONFIG.address.state,
+                postalCode: SITE_CONFIG.address.zip,
+                addressCountry: "US",
+              },
+            },
+          },
+        }),
     // subjectOf back-references the listing itself; Google uses this to
     // confirm the schema is THIS page's authoritative listing.
     subjectOf: {
