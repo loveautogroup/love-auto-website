@@ -31,7 +31,7 @@ import {
   VDPMarketPriceWrap,
 } from "@/components/VDPMerchandisingWrappers";
 import VDPWalkaround from "@/components/VDPWalkaround";
-import VDPReconHighlights from "@/components/VDPReconHighlights";
+import VDPCarFeatures from "@/components/VDPCarFeatures";
 import { MERCHANDISING, resolveOverlay } from "@/data/merchandising";
 import SimilarVehiclesCarousel from "@/components/SimilarVehiclesCarousel";
 
@@ -620,12 +620,14 @@ export default async function VehicleDetailPage({
               askingPrice={vehicle.price}
             />
 
-            {/* Ivan's recon checklist — builds trust by showing every step
-                of the pre-sale inspection process. Static: same process for
-                every vehicle. */}
-            <div className="mt-4 lg:mt-6">
-              <VDPReconHighlights />
-            </div>
+            {/* The car's own feature list (owner, 2026-09-15). It replaced the
+                recon checklist, which read the same on every vehicle. Renders
+                nothing when the record holds no features. */}
+            {vehicle.features && vehicle.features.length > 0 && (
+              <div className="mt-4 lg:mt-6">
+                <VDPCarFeatures features={vehicle.features} />
+              </div>
+            )}
 
             {/* E1-r (2026-07-21, Jeremiah): AS-IS disclosure panel removed —
                 the asIs flag defaults true for every vehicle, which mislabeled

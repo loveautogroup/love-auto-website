@@ -178,9 +178,6 @@ export const translations = {
     // a different reason: those are real quotes, and translating them would
     // misrepresent what somebody actually said.
     //
-    // The recon checklist heading and subtitle are NOT duplicated here — they
-    // are word-for-word `trust.reconTitle` / `trust.reconSub`, which are
-    // already translated. Only the item list is new.
     vdp: {
       estimatePayment: "Estimate Your Payment",
       downPayment: "Down Payment",
@@ -216,17 +213,9 @@ export const translations = {
       groupDrivetrain: "Drivetrain & Performance",
       groupConvenience: "Convenience",
       groupOther: "Other",
-      reconItems: [
-        "Multi-point mechanical inspection",
-        "Oil & fluids serviced",
-        "Tire tread & pressure verified",
-        "Brakes inspected front & rear",
-        "Battery tested & charged",
-        "All exterior lights confirmed",
-        "A/C & heat tested",
-        "Interior fully detailed & cleaned",
-        "All electronics & features verified",
-      ],
+      // The card that replaced the recon checklist (owner, 2026-09-15).
+      carFeaturesTitle: "Features of This Car",
+      carFeaturesSub: "Equipment on record for this vehicle",
       faqHeading: "Common Questions About This Vehicle",
       // {model}, {miles} and {price} are substituted by VDPFAQ. Every
       // placeholder must survive translation or the sentence loses its fact.
@@ -858,17 +847,8 @@ export const translations = {
       groupDrivetrain: "Tracción y Rendimiento",
       groupConvenience: "Comodidad",
       groupOther: "Otros",
-      reconItems: [
-        "Inspección mecánica de múltiples puntos",
-        "Aceite y fluidos revisados",
-        "Banda de rodadura y presión de llantas verificadas",
-        "Frenos inspeccionados adelante y atrás",
-        "Batería probada y cargada",
-        "Todas las luces exteriores confirmadas",
-        "A/C y calefacción probados",
-        "Interior completamente detallado y limpio",
-        "Todos los sistemas electrónicos y funciones verificados",
-      ],
+      carFeaturesTitle: "Características de Este Auto",
+      carFeaturesSub: "Equipo registrado para este vehículo",
       faqHeading: "Preguntas Frecuentes Sobre Este Vehículo",
       faq: {
         drivetrainQ: "¿Este {model} tiene tracción en las cuatro ruedas?",
