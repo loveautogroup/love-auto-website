@@ -28,7 +28,7 @@ function CarfaxWordmark() {
     <span
       className="inline-flex items-center bg-white border border-[#1A1919] rounded-sm px-1.5 py-0.5"
       role="img"
-      aria-label="Free Carfax report on every vehicle"
+      aria-label="Free Carfax report on vehicles that show the badge"
     >
       <Image
         src="/brand/carfax-logo.svg"

@@ -72,8 +72,8 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "What Buying a Used Subaru From Love Auto Group Looks Like",
         body: [
-          "Every used Subaru on our lot goes through a multi-point mechanical inspection before it's listed. CVT health, head gasket condition (a known wear item on certain model years), AWD coupling fluid, and timing chain tensioner are all checked specifically because they're the items Subaru owners actually need to know about. We share full Carfax reports for free on every vehicle, and we'll talk through any service history flags openly before you sign anything.",
-          "We're a Carfax Advantage Dealer, which means our reporting compliance is verified by Carfax and you can pull a free vehicle history report directly from any Subaru listing on our site.",
+          "Every used Subaru on our lot goes through a multi-point mechanical inspection before it's listed. CVT health, head gasket condition (a known wear item on certain model years), AWD coupling fluid, and timing chain tensioner are all checked specifically because they're the items Subaru owners actually need to know about. We share full Carfax reports for free on vehicles that show the badge, and we'll talk through any service history flags openly before you sign anything.",
+          "We're a Carfax Advantage Dealer, which means our reporting compliance is verified by Carfax and you can pull a free vehicle history report directly from any Subaru listing that shows the badge.",
         ],
       },
       {
@@ -120,7 +120,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "What Inspection Looks Like on a Used Lexus",
         body: [
-          "Lexus vehicles share Toyota's reputation for needing very little non-routine work, but used examples still benefit from a careful pre-sale check. We verify hybrid battery state-of-health on hybrid models (the single most expensive component on a used hybrid Lexus, and the one most worth knowing about), inspect the transmission cooler lines on the RX, check the air-suspension components on the LX and GX, and pull a full Carfax report on every car so you can see service history and accident records yourself.",
+          "Lexus vehicles share Toyota's reputation for needing very little non-routine work, but used examples still benefit from a careful pre-sale check. We verify hybrid battery state-of-health on hybrid models (the single most expensive component on a used hybrid Lexus, and the one most worth knowing about), inspect the transmission cooler lines on the RX, check the air-suspension components on the LX and GX, and pull a full Carfax report on every car — available for you to see service history and accident records yourself on the ones that show the badge.",
           "If a Lexus comes through with anything we wouldn't drive ourselves, it doesn't get listed. The ones we do list are ones we'd recommend to family.",
         ],
       },
@@ -216,7 +216,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Inspection and Reconditioning",
         body: [
-          "Every used Mazda on our lot is inspected for the items that matter on the platform: SkyActiv engine carbon-buildup signs (a known long-term wear pattern on direct-injection turbo engines), AWD transfer case fluid on CX-5 and CX-9 models, infotainment system functionality, and full Carfax history. As a Carfax Advantage Dealer, we provide a free Carfax report on every vehicle and won't list anything we wouldn't drive ourselves.",
+          "Every used Mazda on our lot is inspected for the items that matter on the platform: SkyActiv engine carbon-buildup signs (a known long-term wear pattern on direct-injection turbo engines), AWD transfer case fluid on CX-5 and CX-9 models, infotainment system functionality, and full Carfax history. As a Carfax Advantage Dealer, we provide a free Carfax report on the vehicles that show the badge, and won't list anything we wouldn't drive ourselves.",
         ],
       },
       {
@@ -263,7 +263,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Inspection Standards",
         body: [
-          "Honda's reliability reputation is real but not unconditional. Every used Honda is inspected for the platform-specific items: CVT health and fluid condition (especially on Civic and CR-V), VTC actuator function (Civic L15B7 turbo engines), AC compressor on early Pilot model years, and full transmission service records when available. As a Carfax Advantage Dealer, we provide a free Carfax report on every Honda we list.",
+          "Honda's reliability reputation is real but not unconditional. Every used Honda is inspected for the platform-specific items: CVT health and fluid condition (especially on Civic and CR-V), VTC actuator function (Civic L15B7 turbo engines), AC compressor on early Pilot model years, and full transmission service records when available. As a Carfax Advantage Dealer, we provide a free Carfax report on the Hondas that show the badge.",
         ],
       },
       {
@@ -308,7 +308,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
         heading: "What's on the Lot",
         body: [
           "Our SUV inventory rotates weekly. Compact crossovers (Subaru Forester, Honda CR-V, Mazda CX-5, Toyota RAV4 when we can get them at auction) are the highest-volume segment. Midsize SUVs (Subaru Outback wagon-SUV, Lexus RX, Acura RDX) make up the luxury-leaning side. Three-row family SUVs (Honda Pilot, Acura MDX, occasional Toyota Highlander) move quickly when they hit the lot.",
-          "We're a Carfax Advantage Dealer, so every SUV in our inventory comes with a free Carfax history report you can pull directly from the listing — accident history, service records, ownership chain, the full picture.",
+          "We're a Carfax Advantage Dealer, so SUVs that show the CARFAX badge come with a free Carfax history report you can pull directly from the listing — accident history, service records, ownership chain, the full picture.",
         ],
       },
       {
@@ -362,7 +362,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Inspection and Carfax Standard",
         body: [
-          "Every used sedan in our inventory gets the same treatment as our SUVs: full mechanical inspection, platform-specific wear-item check, and a free Carfax history report. We're a Carfax Advantage Dealer — that report is free from any listing on our site, no email required.",
+          "Every used sedan in our inventory gets the same treatment as our SUVs: full mechanical inspection, platform-specific wear-item check, and a free Carfax history report on the ones that show the badge. We're a Carfax Advantage Dealer — that report is free from any marked listing on our site, no email required.",
         ],
       },
       {

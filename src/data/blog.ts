@@ -96,7 +96,7 @@ export const blogPosts: BlogPost[] = [
       <h2>Our Take</h2>
       <p>A used SUV under $15,000 is one of the best values in the car market right now. Someone else absorbed the depreciation, the vehicles have proven themselves through three to five years of real-world use, and the right makes have another 100,000 miles of service life ahead.</p>
 
-      <p>At Love Auto Group, SUVs make up a big portion of our inventory — we specifically seek out the models above because we know how they hold up. Every one is thoroughly inspected and reconditioned before listing, and we provide a free Carfax report. <a href="/inventory">Browse the current inventory</a> or call us at (630) 359-3643 to ask what's coming in.</p>
+      <p>At Love Auto Group, SUVs make up a big portion of our inventory — we specifically seek out the models above because we know how they hold up. Every one is thoroughly inspected and reconditioned before listing, and a free Carfax report is available on the ones that show the badge. <a href="/inventory">Browse the current inventory</a> or call us at (630) 359-3643 to ask what's coming in.</p>
     `,
   },
   {
@@ -142,7 +142,7 @@ export const blogPosts: BlogPost[] = [
       <p>Even with Lexus reliability, there are things to inspect on a used one:</p>
       <ul>
         <li><strong>Service records.</strong> A Lexus with consistent oil changes and scheduled maintenance is a better buy than one with gaps, even at higher mileage.</li>
-        <li><strong>Carfax or AutoCheck report.</strong> Look for consistent ownership, no salvage titles, and no flood damage. Love Auto Group provides a free Carfax for every vehicle.</li>
+        <li><strong>Carfax or AutoCheck report.</strong> Look for consistent ownership, no salvage titles, and no flood damage. Love Auto Group provides a free Carfax on vehicles that show the badge.</li>
         <li><strong>Transmission feel.</strong> Lexus transmissions are smooth. Any hesitation, slipping, or harsh shifting is a red flag.</li>
         <li><strong>Interior electronics.</strong> Test the touchscreen, the sound system, and every button. These are the expensive things to fix.</li>
         <li><strong>Leather condition.</strong> Check for cracking, especially on the driver's seat. Reupholstery is expensive.</li>

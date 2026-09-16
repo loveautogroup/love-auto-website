@@ -32,7 +32,7 @@ export const translations = {
     },
     header: {
       browseInventory: "Browse Inventory",
-      freeCarfax: "Free Carfax on every vehicle",
+      freeCarfax: "Free CARFAX — look for the badge",
       hours: "Mon 2PM–7PM | Tue–Fri 11AM–7PM | Sat 12PM–7PM",
     },
     footer: {
@@ -229,7 +229,7 @@ export const translations = {
           "Higher-mileage examples like this one are priced to reflect the additional miles. The drivetrain has been inspected and is operating within spec — happy to walk you through the inspection results.",
         carfaxQ: "Can I see a Carfax report on this {model}?",
         carfaxA:
-          "Yes. Love Auto Group is a Carfax Advantage Dealer, which means we provide a free Carfax history report on every vehicle in our inventory. The report shows accident history, service records, ownership chain, and title status. You can pull it directly from the CARFAX badge on this vehicle's photo.",
+          "Yes. Love Auto Group is a Carfax Advantage Dealer, and this vehicle shows the CARFAX badge — that means a free Carfax history report is available on it. The report shows accident history, service records, ownership chain, and title status. You can pull it directly from the badge on this vehicle's photo.",
         priceQ: "What's the price and can I finance this {model}?",
         priceA:
           "This {model} is priced at {price}. We work with multiple lenders including options for buyers with less-than-perfect credit. Our quick estimator on this page shows monthly payments by down payment, term, and credit tier — or stop by and we'll run an actual approval in about 15 minutes.",
@@ -533,7 +533,7 @@ export const translations = {
     },
     vdpTrustStrip: {
       inspected: "Fully Inspected",
-      inspectedSuffix: "Free CARFAX Included",
+      inspectedSuffix: "Free CARFAX on Marked Vehicles",
       specialist: "Family-Owned Independent Dealer",
       specialistSuffix: "Over a Decade in Villa Park",
       noFees: "No Hidden Fees",
@@ -635,7 +635,7 @@ export const translations = {
       aboutHeading: "An Independent Car Dealership in Villa Park, IL",
       aboutP1: "Love Auto Group is a small, family-owned car dealership at 735 N Yale Ave, Unit A in Villa Park \u2014 about 20 miles west of Chicago. We have been here since 2014. No franchise banner, no acre of balloons, no handoff to a finance office. You deal directly with the people who found the car, inspected it, and priced it.",
       aboutP2Lead: "Most of our lot is makes \u2014",
-      aboutP2Tail: ", Lexus, Honda, Acura, Toyota, Mazda \u2014 because they hold up. Every vehicle is inspected before it is listed, and every one comes with a free Carfax report. If a car is not good enough to put our name on, we do not sell it.",
+      aboutP2Tail: ", Lexus, Honda, Acura, Toyota, Mazda \u2014 because they hold up. Every vehicle is inspected before it is listed, and a free Carfax report is available on the ones that show the badge. If a car is not good enough to put our name on, we do not sell it.",
       aboutP3: "The price you see is the price you pay, plus tax, title, and license. No dealer fees. If you are comparing car dealerships in Villa Park or anywhere in DuPage County, come walk the lot \u2014 or start with the pages below.",
       moreAboutUs: "More about us \u2192",
       browseInventory: "Browse the inventory \u2192",
@@ -651,7 +651,7 @@ export const translations = {
       buyingGuides: "Buying Guides",
       guideLexus: "Used Lexus in DuPage County",
       guideSubaru: "Used Subaru Near Chicago",
-      guideCarfax: "Free Carfax on Every Vehicle",
+      guideCarfax: "Free CARFAX Reports",
       guideFinancing: "Used Car Financing, All Credit Welcome",
       faqArrow: "FAQ \u2192",
     },
@@ -673,7 +673,7 @@ export const translations = {
     },
     header: {
       browseInventory: "Ver Inventario",
-      freeCarfax: "Carfax gratis en cada vehículo",
+      freeCarfax: "Carfax gratis — busca la insignia",
       hours:
         "Lun 2PM–7PM | Mar–Vie 11AM–7PM | Sáb 12PM–7PM",
     },
@@ -857,7 +857,7 @@ export const translations = {
           "Los ejemplares con más millas como este tienen un precio que refleja las millas adicionales. El tren motriz fue inspeccionado y funciona dentro de especificación — con gusto le explicamos los resultados de la inspección.",
         carfaxQ: "¿Puedo ver un reporte Carfax de este {model}?",
         carfaxA:
-          "Sí. Love Auto Group es Distribuidor Carfax Advantage, lo que significa que ofrecemos un reporte de historial Carfax gratis en cada vehículo de nuestro inventario. El reporte muestra historial de accidentes, registros de servicio, cadena de propietarios y estado del título. Puede abrirlo directamente desde el distintivo CARFAX en la foto de este vehículo.",
+          "Sí. Love Auto Group es Distribuidor Carfax Advantage, y este vehículo muestra el distintivo CARFAX — eso significa que hay un reporte de historial Carfax gratis disponible para él. El reporte muestra historial de accidentes, registros de servicio, cadena de propietarios y estado del título. Puede abrirlo directamente desde el distintivo en la foto de este vehículo.",
         priceQ: "¿Cuál es el precio y puedo financiar este {model}?",
         priceA:
           "Este {model} tiene un precio de {price}. Trabajamos con varios prestamistas, incluyendo opciones para compradores con crédito imperfecto. Nuestra calculadora rápida en esta página muestra los pagos mensuales según el pago inicial, el plazo y el nivel de crédito — o visítenos y hacemos una aprobación real en unos 15 minutos.",
@@ -1151,7 +1151,7 @@ export const translations = {
     },
     vdpTrustStrip: {
       inspected: "Totalmente Inspeccionado",
-      inspectedSuffix: "Carfax Gratis Incluido",
+      inspectedSuffix: "Carfax Gratis en Vehículos Marcados",
       specialist: "Concesionario Independiente Familiar",
       specialistSuffix: "Más de una Década en Villa Park",
       noFees: "Sin Cuotas Ocultas",
@@ -1253,7 +1253,7 @@ export const translations = {
       aboutHeading: "Un Concesionario Independiente en Villa Park, IL",
       aboutP1: "Love Auto Group es un concesionario peque\u00f1o y familiar en 735 N Yale Ave, Unit A, en Villa Park, a unas 20 millas al oeste de Chicago. Aqu\u00ed llevamos desde 2014. Sin letrero de franquicia, sin un mar de globos y sin que te manden a una oficina de financiamiento. Tratas directamente con las personas que encontraron el auto, lo inspeccionaron y le pusieron el precio.",
       aboutP2Lead: "La mayor parte de nuestro lote:",
-      aboutP2Tail: ", Lexus, Honda, Acura, Toyota y Mazda, porque duran. Cada veh\u00edculo se inspecciona antes de publicarse, y todos incluyen un reporte Carfax gratis. Si un auto no es lo bastante bueno para llevar nuestro nombre, no lo vendemos.",
+      aboutP2Tail: ", Lexus, Honda, Acura, Toyota y Mazda, porque duran. Cada veh\u00edculo se inspecciona antes de publicarse, y los que muestran el distintivo incluyen un reporte Carfax gratis. Si un auto no es lo bastante bueno para llevar nuestro nombre, no lo vendemos.",
       aboutP3: "El precio que ves es el precio que pagas, m\u00e1s impuestos, t\u00edtulo y placas. Sin cargos de concesionario. Si est\u00e1s comparando concesionarios en Villa Park o en cualquier parte del condado de DuPage, ven a recorrer el lote o empieza por las p\u00e1ginas de abajo.",
       moreAboutUs: "M\u00e1s sobre nosotros \u2192",
       browseInventory: "Explora el inventario \u2192",
@@ -1269,7 +1269,7 @@ export const translations = {
       buyingGuides: "Gu\u00edas de Compra",
       guideLexus: "Lexus Usados en el Condado de DuPage",
       guideSubaru: "Subaru Usados Cerca de Chicago",
-      guideCarfax: "Carfax Gratis en Cada Veh\u00edculo",
+      guideCarfax: "Reportes Carfax Gratis",
       guideFinancing: "Financiamiento de Autos Usados, Todo Cr\u00e9dito Bienvenido",
       faqArrow: "Preguntas Frecuentes \u2192",
     },

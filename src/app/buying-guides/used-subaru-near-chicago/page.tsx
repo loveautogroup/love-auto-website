@@ -356,7 +356,7 @@ export default function UsedSubaruNearChicagoPage() {
                 className="block bg-white border border-brand-gray-200 rounded-lg p-4 hover:border-brand-red hover:shadow-md transition-all"
               >
                 <div className="font-semibold text-brand-gray-900">
-                  Free Carfax on Every Vehicle
+                  Free Carfax Reports
                 </div>
                 <div className="text-sm text-brand-gray-500 mt-0.5">
                   Carfax Advantage Dealer

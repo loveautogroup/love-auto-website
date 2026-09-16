@@ -1,0 +1,63 @@
+# Daily proof that the CARFAX badge we show only points at a real, free
+# report — not carfax.com's $49.99 paid order page.
+#
+# 2026-09-16, Jeremiah, live: "We are still advertising carfax with all cars
+# on the website even though some still go to the website that asks
+# customers to pay... We are false advertising a free report, which is
+# wrong!" carfaxVisible() (shared/carfaxVisibility.ts) now fails closed on
+# our own side — the badge only renders once the daily carfax-link-check
+# Routine has confirmed the link works for that VIN. This workflow is the
+# independent re-check: it does not trust that Routine's verdict, it opens
+# the actual link on every currently-badged car, the same click a shopper
+# makes, and fails loud if any of them land on the paid page.
+#
+# Deliberately scoped to e2e/carfax-free.spec.ts only — not the whole
+# Playwright suite (see e2e-storefront.yml for that canary) — because this
+# one hits a THIRD PARTY (carfax.com) and has no reason to run more than
+# once a day.
+
+name: CARFAX free-report check
+
+on:
+  schedule:
+    # 15:00 UTC (10:00 America/Chicago)
+    - cron: "0 15 * * *"
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Target base URL for reading our own inventory/overlay (defaults to production)"
+        required: false
+
+concurrency:
+  group: carfax-free-report-check
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Every badged vehicle's CARFAX link is actually free
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      # Browsers are not in node_modules; fetch just Chromium.
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run the CARFAX free-report spec
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ github.event.inputs.base_url || 'https://www.loveautogroup.net' }}
+        run: npx playwright test e2e/carfax-free.spec.ts
+      - name: Upload report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: carfax-free-report-check
+          path: playwright-report/
+          retention-days: 14

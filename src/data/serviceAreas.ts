@@ -31,11 +31,11 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
     town: "Villa Park",
     title: "Used Cars in Villa Park, IL | Love Auto Group",
     description:
-      "Independent used car dealer in Villa Park IL since 2014. Family-owned independent dealer, free Carfax on every vehicle, 4.7 stars on Google with 125+ reviews. Visit our lot at 735 N Yale Ave.",
+      "Independent used car dealer in Villa Park IL since 2014. Family-owned independent dealer, free Carfax on marked vehicles, 4.7 stars on Google with 125+ reviews. Visit our lot at 735 N Yale Ave.",
     proximity:
       "We're located at 735 N Yale Ave, just north of North Avenue between Yale and Westmore.",
     intro:
-      "Love Auto Group is the family-owned used car dealer in Villa Park, IL. We've operated from 735 N Yale Avenue since 2014, specializing in quality used Lexus, Subaru, Acura, Mazda, Honda, and Toyota at independent-dealer prices. Free Carfax on every vehicle, 4.7 stars on Google with 125+ reviews, and a no-pressure approach to test drives. If you're a Villa Park resident shopping for a used car, you don't need to leave town.",
+      "Love Auto Group is the family-owned used car dealer in Villa Park, IL. We've operated from 735 N Yale Avenue since 2014, specializing in quality used Lexus, Subaru, Acura, Mazda, Honda, and Toyota at independent-dealer prices. Free Carfax on marked vehicles, 4.7 stars on Google with 125+ reviews, and a no-pressure approach to test drives. If you're a Villa Park resident shopping for a used car, you don't need to leave town.",
     sections: [
       {
         heading: "Villa Park's Used Car Dealer",
@@ -48,7 +48,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
         heading: "What We Stock",
         body: [
           "Our inventory rotates, but the through-line is the same: Used Lexus RX, ES, IS, and GX for buyers who want luxury without German-style repair bills. Subaru Outback, Forester, and Crosstrek for AWD winter security in the Chicago suburbs. Acura MDX with SH-AWD for the three-row family-SUV pick that holds its value. Mazda CX-5 and CX-30 for buyers who care about how the car actually drives. Honda Civic, Accord, CR-V, Pilot, and Odyssey for the highest-resale, lowest-headache picks in their segments. We also carry opportunistic non-stock when the right vehicle comes through.",
-          "Most of our inventory sits in the $4,500 to $18,000 range. Every vehicle is hand-picked at auction, fully reconditioned, and listed with a free Carfax history report.",
+          "Most of our inventory sits in the $4,500 to $18,000 range. Every vehicle is hand-picked at auction and fully reconditioned, and a free Carfax history report is available on the ones that show the badge.",
         ],
       },
       {
@@ -65,7 +65,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
     town: "Wheaton",
     title: "Used Car Dealer Near Wheaton, IL | Love Auto Group",
     description:
-      "Used cars for Wheaton, IL buyers. Family-owned independent dealer, free Carfax on every vehicle, 4.7 stars on Google. About 15 minutes east via Roosevelt Road.",
+      "Used cars for Wheaton, IL buyers. Family-owned independent dealer, free Carfax on marked vehicles, 4.7 stars on Google. About 15 minutes east via Roosevelt Road.",
     proximity: "About 15 minutes east via Roosevelt Road or North Avenue.",
     intro:
       "Love Auto Group is the closest family-owned independent dealer to Wheaton, IL, and we've been Carfax Advantage accredited and family owned since 2014. The drive from downtown Wheaton is about 15 minutes east on Roosevelt Road. Most Wheaton buyers find us when they want a used Lexus, Subaru, Acura, Mazda, or Honda but don't want to deal with the volume-driven franchise dealers along the Butterfield Road corridor.",
@@ -81,7 +81,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
         heading: "What We Specialize In",
         body: [
           "Subaru Outback and Forester for Wheaton families who deal with the same Illinois winters we do. Lexus RX, ES, IS, and GX for buyers stepping out of franchise luxury cars and into something that won't depreciate to nothing in three years. Acura MDX with SH-AWD for the three-row family-SUV market. Mazda CX-5 and CX-30 for buyers who actually want to enjoy the drive. Honda Civic, Accord, CR-V, Pilot, and Odyssey for the highest-resale, lowest-headache picks in their segments.",
-          "We're a Carfax Advantage Dealer, so every vehicle ships with a free, full Carfax history report you can pull directly from our website.",
+          "We're a Carfax Advantage Dealer, so vehicles that show the badge ship with a free, full Carfax history report you can pull directly from our website.",
         ],
       },
       {
@@ -113,7 +113,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
         heading: "What We Carry",
         body: [
           "Inventory rotates but the through-line is makes. Subaru Outback, Forester, and Crosstrek for AWD-and-snow buyers. Lexus RX, ES, IS, and GX for luxury without German-style repair bills. Acura MDX, RDX, and TLX for buyers who want Honda reliability with a step up in refinement. Mazda CX-5 and CX-30 for the driver's-car crowd. Honda Civic, Accord, CR-V, Pilot, and Odyssey for the highest-resale picks in their segments.",
-          "Every vehicle includes a free Carfax history report. We're a Carfax Advantage Dealer, which means Carfax has independently verified our reporting compliance.",
+          "A free Carfax history report is available on vehicles that show the badge. We're a Carfax Advantage Dealer, which means Carfax has independently verified our reporting compliance.",
         ],
       },
       {
@@ -129,7 +129,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
     town: "Lisle",
     title: "Used Car Dealer Near Lisle, IL | Love Auto Group",
     description:
-      "Used cars for Lisle, IL buyers. Family-owned independent dealer, free Carfax on every vehicle, in Villa Park since 2014. About 12 minutes north.",
+      "Used cars for Lisle, IL buyers. Family-owned independent dealer, free Carfax on marked vehicles, in Villa Park since 2014. About 12 minutes north.",
     proximity: "About 12 minutes north via Naperville Road and Roosevelt Road.",
     intro:
       "Love Auto Group serves Lisle, IL buyers from our Villa Park lot at 735 N Yale Ave, about 12 minutes north. We carry used vehicles — Lexus, Subaru, Acura, Mazda, Honda, Toyota — and we've been Carfax Advantage accredited and family owned since 2014. Lisle residents shopping for a used car that holds its value regularly make the short drive north.",
@@ -144,7 +144,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "The Carfax Advantage Standard",
         body: [
-          "Every vehicle we list comes with a free Carfax history report. We're a Carfax-verified Advantage Dealer, which is a transparency commitment most independent dealers don't make. Lisle buyers consistently tell us the free Carfax is one of the main reasons they made the drive instead of buying closer to home.",
+          "A free Carfax history report is available on vehicles that show the badge. We're a Carfax-verified Advantage Dealer, which is a transparency commitment most independent dealers don't make. Lisle buyers consistently tell us the free Carfax is one of the main reasons they made the drive instead of buying closer to home.",
         ],
       },
       {
@@ -176,7 +176,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
         heading: "What We Specialize In",
         body: [
           "Subaru Outback, Forester, and Crosstrek for AWD winter security. Lexus RX, ES, IS, and GX for luxury without German-style repair bills. Acura MDX with SH-AWD for the three-row family-SUV market. Mazda CX-5 and CX-30 for the driver's-car crowd. Honda Civic, Accord, CR-V, Pilot, and Odyssey for the highest-resale, lowest-headache picks in their segments.",
-          "Every vehicle includes a free Carfax history report. We're an officially-recognized Carfax Advantage Dealer.",
+          "A free Carfax history report is available on vehicles that show the badge. We're an officially-recognized Carfax Advantage Dealer.",
         ],
       },
       {
@@ -195,7 +195,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       "Quality used cars for Lombard, IL drivers — just minutes from downtown. Family-owned independent dealer, free Carfax, since 2014. Visit our Villa Park lot.",
     proximity: "About 5 minutes east via Roosevelt Road or North Avenue.",
     intro:
-      "Love Auto Group is the closest independent used car dealer to downtown Lombard, and we've been serving Lombard buyers from our Villa Park, IL location since 2014. Our specialty is quality vehicles — Subaru, Lexus, Acura, Mazda, Honda, Toyota — at independent-dealer prices, with free Carfax reports on every vehicle and zero pressure on the test drive.",
+      "Love Auto Group is the closest independent used car dealer to downtown Lombard, and we've been serving Lombard buyers from our Villa Park, IL location since 2014. Our specialty is quality vehicles — Subaru, Lexus, Acura, Mazda, Honda, Toyota — at independent-dealer prices, with free Carfax reports on marked vehicles and zero pressure on the test drive.",
     sections: [
       {
         heading: "Why Lombard Residents Shop With Us",
@@ -208,7 +208,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
         heading: "What We Specialize In",
         body: [
           "If you've been driving cars for years and want to keep the streak going, we're the right shop. Subaru Outback and Forester for the AWD-and-snow market. Lexus RX and ES for buyers who want luxury without the German repair bills. Acura MDX with SH-AWD for the family-with-third-row crowd. Mazda CX-5 and CX-30 for buyers who care about how the car actually drives. Honda Civic, Accord, CR-V, Pilot, and Odyssey for the highest-resale, lowest-headache picks in the segment.",
-          "We're a Carfax Advantage Dealer, which means our reporting is verified and you can pull a free Carfax history report on any vehicle directly from our website.",
+          "We're a Carfax Advantage Dealer, which means our reporting is verified and you can pull a free Carfax history report directly from our website on any vehicle that shows the badge.",
         ],
       },
       {
@@ -239,7 +239,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "The Carfax Advantage Difference",
         body: [
-          "We're an officially-recognized Carfax Advantage Dealer, which means Carfax has independently verified our reporting compliance and Elmhurst buyers can pull a full vehicle history report on every car we list — for free, directly from our website. It's a transparency commitment most independent dealers can't match.",
+          "We're an officially-recognized Carfax Advantage Dealer, which means Carfax has independently verified our reporting compliance, and Elmhurst buyers can pull a full vehicle history report — for free, directly from our website — on any car that shows the badge. It's a transparency commitment most independent dealers can't match.",
         ],
       },
       {
@@ -299,9 +299,9 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
         ],
       },
       {
-        heading: "Free Carfax on Every Vehicle",
+        heading: "Free Carfax Reports",
         body: [
-          "We're a Carfax Advantage Dealer — Carfax-verified reporting compliance, free vehicle history reports on every listing, and complete transparency on title and accident history. That's the kind of trust signal Glen Ellyn buyers consistently tell us they value.",
+          "We're a Carfax Advantage Dealer — Carfax-verified reporting compliance, free vehicle history reports on marked listings, and complete transparency on title and accident history. That's the kind of trust signal Glen Ellyn buyers consistently tell us they value.",
         ],
       },
       {
@@ -332,7 +332,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "The Carfax Advantage Standard",
         body: [
-          "Every vehicle we list comes with a free Carfax history report — accident records, service history, title status, the full picture. We're a Carfax-verified Advantage Dealer, which is a transparency commitment most independent dealers don't make.",
+          "A free Carfax history report is available on vehicles that show the badge — accident records, service history, title status, the full picture. We're a Carfax-verified Advantage Dealer, which is a transparency commitment most independent dealers don't make.",
         ],
       },
       {

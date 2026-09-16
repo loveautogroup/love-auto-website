@@ -40,7 +40,7 @@ const FAQS = [
   {
     question: "What kinds of used cars do you sell?",
     answer:
-      "We carry Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Inventory is typically priced from around $4,500 to $18,000, with most vehicles in the 2013 to 2018 model years and 80,000 to 140,000 mile range. Every vehicle is carefully selected, fully reconditioned, and comes with a free Carfax.",
+      "We carry Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Inventory is typically priced from around $4,500 to $18,000, with most vehicles in the 2013 to 2018 model years and 80,000 to 140,000 mile range. Every vehicle is carefully selected and fully reconditioned, and a free Carfax is available on the ones that show the badge.",
   },
   {
     question: "Are you a family owned dealer?",
@@ -240,10 +240,10 @@ export default function DuPageCountyPage() {
         <p className="text-brand-gray-700 leading-relaxed mb-4">
           Inventory typically prices from around $4,500 to $18,000, with most
           vehicles in the 2013 to 2018 model years and 80,000 to 140,000 mile
-          range. Every vehicle is carefully selected at the buying stage,
-          fully inspected and reconditioned, and comes with a free
-          Carfax. We&apos;re a Carfax Advantage Dealer, which means we share
-          the report before you ask.
+          range. Every vehicle is carefully selected at the buying stage and
+          fully inspected and reconditioned. We&apos;re a Carfax Advantage
+          Dealer, so vehicles that show the CARFAX badge come with a free
+          report you can pull yourself.
         </p>
 
         <h2 className="text-2xl font-bold text-brand-gray-900 mt-12 mb-4">

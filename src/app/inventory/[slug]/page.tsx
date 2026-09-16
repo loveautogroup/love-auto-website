@@ -12,7 +12,6 @@ import VDPPaymentCalculator from "@/components/VDPPaymentCalculator";
 import VDPMarketPrice from "@/components/VDPMarketPrice";
 import MobileCalculatorButton from "@/components/MobileCalculatorButton";
 import VDPFAQ from "@/components/VDPFAQ";
-import ShowCarfaxButton from "@/components/ShowCarfaxButton";
 import VDPReviews from "@/components/VDPReviews";
 import VDPInquireButton from "@/components/VDPInquireButton";
 import VDPTestDriveButton from "@/components/VDPTestDriveButton";

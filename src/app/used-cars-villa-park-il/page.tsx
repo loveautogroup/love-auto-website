@@ -32,7 +32,7 @@ const FAQ_ITEMS = [
   {
     question: "What are the best used car dealerships in Villa Park, Illinois?",
     answer:
-      "Love Auto Group has been serving Villa Park and the surrounding DuPage County area since 2014. We're a CarGurus top-rated dealer with a 4.7-star Google rating and 129 reviews. Every vehicle is carefully inspected before it hits our lot, and a free Carfax report is included on every car.",
+      "Love Auto Group has been serving Villa Park and the surrounding DuPage County area since 2014. We're a CarGurus top-rated dealer with a 4.7-star Google rating and 129 reviews. Every vehicle is carefully inspected before it hits our lot, and a free Carfax report is included on the ones that show the CARFAX badge.",
   },
   {
     question: "What used cars does Love Auto Group have in Villa Park?",
@@ -81,8 +81,8 @@ export default function UsedCarsVillaParkPage() {
           </h1>
           <p className="mt-4 text-lg md:text-xl text-brand-gray-300 max-w-3xl">
             Love Auto Group is Villa Park&apos;s used car specialist — 735 N
-            Yale Ave, one mile from Route 83. makes, a free Carfax
-            report on every car, 4.7 stars on Google.
+            Yale Ave, one mile from Route 83. Free Carfax reports on
+            marked vehicles, 4.7 stars on Google.
           </p>
           <div className="mt-6 flex flex-wrap gap-4">
             <Link
@@ -111,7 +111,7 @@ export default function UsedCarsVillaParkPage() {
             Used Cars For Sale in Villa Park Right Now
           </h2>
           <p className="mt-2 text-brand-gray-500">
-            Every vehicle inspected, lot-ready, and listed with a free Carfax report.
+            Every vehicle inspected and lot-ready, with a free Carfax report on the ones that show the badge.
           </p>
         </div>
         <LivePreviewGrid />
@@ -149,7 +149,7 @@ export default function UsedCarsVillaParkPage() {
           <p className="text-brand-gray-700 leading-relaxed">
             Every used car we put on the lot goes through a full inspection
             before it&apos;s available for sale. Carfax
-            reports are included free on every vehicle. No surprises at the
+            reports are included free on vehicles that show the badge. No surprises at the
             deal desk, no pressure on the lot. That&apos;s why we have over 125
             Google reviews and a 4.7-star rating from Villa Park and DuPage
             County buyers.

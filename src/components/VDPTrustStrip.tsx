@@ -4,17 +4,19 @@
  * Trust strip — displayed on the VDP, homepage, and inventory page.
  *
  * Three credibility pillars for Love Auto Group:
- *   1. Fully Inspected · Free CARFAX Included
+ *   1. Fully Inspected · Free CARFAX on Marked Vehicles
  *   2. Family-Owned Independent Dealer · Over a Decade in Villa Park
  *   3. No Hidden Fees · All Credit Welcome · Same-Day Title & Plates
  *
- * "Free CARFAX Included" is a claim about ONE specific car when this strip
- * sits on a VDP (the only call site with a `vehicle` in context) — same
+ * The CARFAX line is a claim about ONE specific car when this strip sits
+ * on a VDP (the only call site with a `vehicle` in context) — same
  * false-advertising shape as the badge/button/FAQ: a car whose CARFAX link
  * is not confirmed live must not carry it either. Pass `vehicle` from the
  * VDP; homepage and the inventory grid render with no vehicle (there's no
- * single car to be wrong about there) and keep the unconditional line as a
- * statement of the dealership's general practice.
+ * single car to be wrong about there), so the line is worded to hold true
+ * as a general statement of the dealership's practice rather than a claim
+ * about every car's live link (2026-09-16 — see shared/carfaxVisibility.ts;
+ * "Free CARFAX Included" used to render unconditionally here too).
  */
 
 import { useLanguage } from "@/context/LanguageContext";

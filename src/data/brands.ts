@@ -112,7 +112,7 @@ export const BRANDS: BrandContent[] = [
     ],
     relatedLinks: [
       { label: "View buyer FAQ", href: "/faq/" },
-      { label: "Free Carfax on every Honda", href: "/free-carfax-villa-park/" },
+      { label: "Free Carfax Reports", href: "/free-carfax-villa-park/" },
     ],
   },
 
@@ -123,7 +123,7 @@ export const BRANDS: BrandContent[] = [
     displayName: "Subaru",
     metaTitle: "Used Subaru Near Chicago | Villa Park, IL | Love Auto Group",
     metaDescription:
-      "Used Subaru Forester, Outback, Crosstrek, and Legacy near Chicago. Family owned dealer in Villa Park, IL serving the western suburbs and DuPage County. AWD-ready. Free Carfax on every vehicle, no dealer fees. (630) 359-3643.",
+      "Used Subaru Forester, Outback, Crosstrek, and Legacy near Chicago. Family owned dealer in Villa Park, IL serving the western suburbs and DuPage County. AWD-ready. Free Carfax on marked vehicles, no dealer fees. (630) 359-3643.",
     hero:
       "AWD-ready Subarus near Chicago. Family owned, serving Villa Park and the western suburbs since 2014.",
     body: [
@@ -173,7 +173,7 @@ export const BRANDS: BrandContent[] = [
     relatedLinks: [
       { label: "Used cars in DuPage County", href: "/serving/dupage-county-il/" },
       { label: "View buyer FAQ", href: "/faq/" },
-      { label: "Free Carfax on every Subaru", href: "/free-carfax-villa-park/" },
+      { label: "Free Carfax Reports", href: "/free-carfax-villa-park/" },
     ],
   },
 
@@ -191,7 +191,7 @@ export const BRANDS: BrandContent[] = [
       "Looking for a used Lexus in the Chicago suburbs? Love Auto Group is a family owned used Lexus dealer in Villa Park, IL, central to DuPage County and the western suburbs. We've been buying, reconditioning, and selling RX, ES, IS, and GX models here since 2014. Lexus is one of the makes we specialize in, alongside Subaru, Acura, Honda, Toyota, and Mazda.",
       "The Lexus RX is the most reliable mid-size luxury SUV ever built, and the ES is the closest thing to a Toyota Avalon wearing a tailored suit. Both are platforms that hold up well past 200,000 miles when serviced properly. That is why we keep them in regular rotation on our lot.",
       "{{STOCK}} We focus on the 2010 to 2017 model years, where prices have come down from new but the cars still feel current inside. Most are in the 90,000 to 130,000 mile range, which on a Lexus is barely broken in. Buyers come to us from across the Chicago suburbs, including Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, Naperville, and Hinsdale, plus drive-ins from Chicago itself.",
-      "Every used Lexus on our lot has been carefully selected and fully reconditioned before it gets a price tag. We pull a free Carfax on every vehicle and review it before listing. We are a Carfax Advantage Dealer, which means our reports are pulled and reviewed before the car is offered, and we share them with you before you ask.",
+      "Every used Lexus on our lot has been carefully selected and fully reconditioned before it gets a price tag. We pull a free Carfax on every vehicle and review it before listing. We are a Carfax Advantage Dealer, and vehicles that show the CARFAX badge come with that report ready to pull before you ask.",
       "The Lexus models we see most often: the RX 350 (third-generation 2010 to 2015 is the value sweet spot), the ES 350, the IS 250 and IS 300, and the occasional GX 460 for buyers who want a body-on-frame Lexus SUV with real off-road ability. If you are looking for a specific model or trim, call (630) 359-3643 and we will let you know when one lands.",
     ],
     faqs: [
@@ -218,7 +218,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "What should I check before buying a used Lexus?",
         answer:
-          "Service history first. Lexus owners who follow the maintenance schedule produce cars that go 250,000 miles without drama. Owners who skip services produce expensive problems. We pull a Carfax on every Lexus, review the service record before listing; the suspension air struts on GX models specifically get inspected (a known wear point). Carfax Advantage Dealer status means you see the report before you ask.",
+          "Service history first. Lexus owners who follow the maintenance schedule produce cars that go 250,000 miles without drama. Owners who skip services produce expensive problems. We pull a Carfax on every Lexus, review the service record before listing; the suspension air struts on GX models specifically get inspected (a known wear point). Carfax Advantage Dealer status means the report is ready to pull on vehicles that show the badge.",
       },
       {
         question: "Where can I buy a used Lexus in the Chicago suburbs?",
@@ -234,7 +234,7 @@ export const BRANDS: BrandContent[] = [
     relatedLinks: [
       { label: "Used cars in DuPage County", href: "/serving/dupage-county-il/" },
       { label: "View buyer FAQ", href: "/faq/" },
-      { label: "Free Carfax on every Lexus", href: "/free-carfax-villa-park/" },
+      { label: "Free Carfax Reports", href: "/free-carfax-villa-park/" },
     ],
   },
 
@@ -283,7 +283,7 @@ export const BRANDS: BrandContent[] = [
     ],
     relatedLinks: [
       { label: "Soft credit pre-approval", href: "/financing/" },
-      { label: "Free Carfax on every Acura", href: "/free-carfax-villa-park/" },
+      { label: "Free Carfax Reports", href: "/free-carfax-villa-park/" },
     ],
   },
 
@@ -332,7 +332,7 @@ export const BRANDS: BrandContent[] = [
     ],
     relatedLinks: [
       { label: "View buyer FAQ", href: "/faq/" },
-      { label: "Free Carfax on every Mazda", href: "/free-carfax-villa-park/" },
+      { label: "Free Carfax Reports", href: "/free-carfax-villa-park/" },
     ],
   },
 
@@ -386,7 +386,7 @@ export const BRANDS: BrandContent[] = [
     ],
     relatedLinks: [
       { label: "View buyer FAQ", href: "/faq/" },
-      { label: "Free Carfax on every Toyota", href: "/free-carfax-villa-park/" },
+      { label: "Free Carfax Reports", href: "/free-carfax-villa-park/" },
     ],
   },
 ];
