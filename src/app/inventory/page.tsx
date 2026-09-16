@@ -6,7 +6,6 @@ import InventoryGrid from "./InventoryGrid";
 import VehicleAlertSignup from "@/components/VehicleAlertSignup";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
 import InventoryHero from "./InventoryHero";
-import RecentlyReducedRail from "./RecentlyReducedRail";
 import { ItemListSchema } from "@/components/StructuredData";
 
 export const metadata: Metadata = {
@@ -56,20 +55,6 @@ export default function InventoryPage() {
   // page shows. Price/CTA gating for the sold ones happens in VehicleCard.
   const vehicles = [...available, ...sold];
 
-  // E2: price drops from the last 14 days (DMS pricing-history flag),
-  // surfaced as a rail before the main grid. Sanity guard: when MORE THAN
-  // HALF the lot is flagged (a pricing-history backfill artifact — 8 of 9
-  // cars were flagged on 2026-07-17), a "deals" rail is meaningless noise
-  // that just duplicates the grid, so it hides itself until the data is
-  // discriminating again. Measured against `available`, not `vehicles` —
-  // the sold-history tail added 2026-09-15 is never price-reduced (its price
-  // is hidden) and would only dilute the ratio, masking a real backfill glut.
-  const reducedAll = available.filter(
-    (v) => v.recentlyReduced && v.status === "available"
-  );
-  const recentlyReduced =
-    reducedAll.length * 2 <= available.length ? reducedAll.slice(0, 8) : [];
-
   return (
     <>
       {/* E6: listing-hub structured data — crawlers get every live VDP. */}
@@ -80,11 +65,15 @@ export default function InventoryPage() {
 
       <InventoryHero />
 
+      {/* Owner, 2026-09-15: "lets remove the recently reduced section on the
+          website." The E2 price-drop rail that sat here is gone, and
+          RecentlyReducedRail.tsx with it. The recentlyReduced flag still
+          arrives from the DMS and still drives the card / hero price-drop
+          pill; only the rail was removed. */}
+
       <div className="max-w-7xl mx-auto px-4 pt-4">
         <VDPTrustStrip />
       </div>
-
-      <RecentlyReducedRail vehicles={recentlyReduced} />
 
       {/* Owner, 2026-08-12: the filter sidebar came out. With a lot this size
           a shopper can see everything at once, so a seven-control filter panel
