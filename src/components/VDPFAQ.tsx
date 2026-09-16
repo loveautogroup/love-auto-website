@@ -5,6 +5,7 @@ import type { Translations } from "@/lib/i18n";
 import { useLanguage } from "@/context/LanguageContext";
 import { Vehicle } from "@/lib/types";
 import { FAQSchema } from "@/components/StructuredData";
+import { useResolveOverlay } from "@/data/useMerchandising";
 
 /**
  * Per-vehicle FAQ block — renders 4-6 vehicle-specific Q/A pairs derived
@@ -42,7 +43,12 @@ function fill(tpl: string, vars: Record<string, string>): string {
   );
 }
 
-function generateFAQs(vehicle: Vehicle, f: FaqCopy, locale: string) {
+function generateFAQs(
+  vehicle: Vehicle,
+  f: FaqCopy,
+  locale: string,
+  carfaxOk: boolean
+) {
   const model = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
   const nf = new Intl.NumberFormat(locale === "es" ? "es-US" : "en-US");
   const miles = nf.format(vehicle.mileage);
@@ -94,7 +100,17 @@ function generateFAQs(vehicle: Vehicle, f: FaqCopy, locale: string) {
     answer: `${fill(f.mileageIntro, V)} ${mileageTail}`,
   });
 
-  faqs.push({ question: fill(f.carfaxQ, V), answer: fill(f.carfaxA, V) });
+  // Claims "we provide a free Carfax history report... pull it directly
+  // from the CARFAX badge on this vehicle's photo" — untrue, and worse in
+  // FAQSchema than on the page itself: this feeds Google's rich-result
+  // accordion and AI answers, which never see whether a badge actually
+  // rendered. Gated on the SAME rule as the badge/button
+  // (shared/carfaxVisibility.ts) so a car whose CARFAX isn't confirmed
+  // live can't have this claim surface anywhere, including in a search
+  // result the shopper reads before ever landing on the page.
+  if (carfaxOk) {
+    faqs.push({ question: fill(f.carfaxQ, V), answer: fill(f.carfaxA, V) });
+  }
   // Price + financing FAQs are purchase questions about a car that is no
   // longer for sale — Jeremiah, 2026-09-15, hides the price everywhere else
   // on a sold VDP, and asking "what's the price and can I finance this"
@@ -115,7 +131,18 @@ function generateFAQs(vehicle: Vehicle, f: FaqCopy, locale: string) {
 
 export default function VDPFAQ({ vehicle }: VDPFAQProps) {
   const { t, locale } = useLanguage();
-  const faqs = generateFAQs(vehicle, t.vdp.faq, locale);
+  // Same runtime overlay every other CARFAX consumer on the VDP reads
+  // (VDPCarfaxButton, PhotoGallery). Initial render (pre-hydration / no
+  // JS) matches the fail-closed default — carfaxOk starts false, same as
+  // the badge and button — and re-renders once /api/merchandising
+  // resolves.
+  const overlay = useResolveOverlay(
+    vehicle.vin,
+    vehicle.daysOnLot,
+    vehicle.status,
+    vehicle.recentlyReduced ?? false
+  );
+  const faqs = generateFAQs(vehicle, t.vdp.faq, locale, overlay.carfax === true);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (

@@ -27,6 +27,7 @@ import {
   type StatusBadgeKind,
   type VehicleOverlay,
 } from "./merchandising";
+import { carfaxVisible } from "../../shared/carfaxVisibility";
 
 // Module-level cache — survives between hook calls but is fresh on a full
 // page reload, which is what we want (DMS edits propagate within ~60s
@@ -112,18 +113,11 @@ export function useResolveOverlay(
   void recentlyReduced;
   const effectiveStatus = pickStatusPill(vehicleStatus, override.status, daysOnLot);
 
-  // CARFAX needs BOTH answers to be yes, from two different owners:
-  //   carfax         — "do we want to advertise CARFAX on this car?" (dealer)
-  //   carfaxLinkLive — "does the link actually serve a free report?" (Routine)
-  // Either one explicitly false hides the badge and the button.
-  //
-  // Both default ON when absent. That is deliberate: a missing verdict must
-  // not blank the badge across the whole lot if the Routine stops running.
-  // The car that actually needs protecting is a NEWLY listed one, which has
-  // not reached CARFAX's Hot Listings index yet — and the DMS writes
-  // carfaxLinkLive:false at the moment a car goes Listed, so those start
-  // hidden and are switched on once the Routine sees a real report.
-  const carfax = override.carfax !== false && override.carfaxLinkLive !== false;
+  // CARFAX needs BOTH answers to be yes, from two different owners — see
+  // shared/carfaxVisibility.ts for the rule and why it FAILS CLOSED (an
+  // absent verdict must never show a badge that links to CARFAX's $49.99
+  // paid order page as if it were the free report).
+  const carfax = carfaxVisible(override);
 
   return { ...override, carfax, effectiveStatus };
 }

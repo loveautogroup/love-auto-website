@@ -15,6 +15,7 @@
  */
 
 import type { StatusKind } from "../../shared/statusKinds";
+import { carfaxVisible } from "../../shared/carfaxVisibility";
 
 /**
  * Derived from shared/statusKinds.ts so this union and the edge validator
@@ -409,12 +410,12 @@ export function resolveOverlay(
   void recentlyReduced;
   const effectiveStatus = pickStatusPill(vehicleStatus, override.status, daysOnLot);
 
-  // Default-on for the Carfax shield/button: every Love Auto vehicle is
-  // sold with a free Carfax, so it should appear on every VDP unless
-  // Jordan explicitly opts a vehicle OUT in the merchandising panel
-  // (e.g. while waiting for a fresh report). The DMS panel writes
-  // `carfax: false` to opt out and omits the field to keep the default.
-  const carfax = override.carfax !== false;
+  // Same rule as the client-side runtime hook (useMerchandising.ts) — see
+  // shared/carfaxVisibility.ts. Requires an explicit `carfaxLinkLive: true`
+  // (never default-on) so a car with no verdict yet, or a stale one built
+  // before this VIN existed, never bakes a CARFAX badge or button that
+  // links to CARFAX's paid order page.
+  const carfax = carfaxVisible(override);
 
   return { ...override, carfax, effectiveStatus };
 }
