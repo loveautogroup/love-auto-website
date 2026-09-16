@@ -68,8 +68,8 @@ export default function InventoryPage() {
       {/* Owner, 2026-09-15: "lets remove the recently reduced section on the
           website." The E2 price-drop rail that sat here is gone, and
           RecentlyReducedRail.tsx with it. The recentlyReduced flag still
-          arrives from the DMS and still drives the card / hero price-drop
-          pill; only the rail was removed. */}
+          arrives from the DMS but now drives nothing: the price-drop and
+          price-reduced pills came off too on his next word. */}
 
       <div className="max-w-7xl mx-auto px-4 pt-4">
         <VDPTrustStrip />

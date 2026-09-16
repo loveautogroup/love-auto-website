@@ -105,9 +105,10 @@ export function useResolveOverlay(
   // hero after the server copy alone was fixed.
   //
   // NOTE: the auto "price-reduced" flag (fired off the DMS public feed's
-  // recentlyReduced signal) was removed per Jeremiah 2026-05-09. The
-  // `recentlyReduced` arg + the `price-reduced` StatusPill variant are kept
-  // intact so the merchandising admin can still set it manually if desired.
+  // recentlyReduced signal) was removed per Jeremiah 2026-05-09, and the
+  // hand-set Price Drop / Price Reduced pills on 2026-09-15. The
+  // `recentlyReduced` arg stays because the DMS still sends the flag;
+  // nothing renders from it.
   void recentlyReduced;
   const effectiveStatus = pickStatusPill(vehicleStatus, override.status, daysOnLot);
 

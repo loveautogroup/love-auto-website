@@ -293,7 +293,6 @@ export const MERCHANDISING: MerchandisingConfig = {
     // 2010 Acura MDX Sport — high mileage, sold as-is, no warranty
     "2HNYD2H63AH509874": {
       carfax: true,
-      status: "price-reduced",
       featurePills: [
         "Super Handling\nAWD",
         "Third-Row\nSeats",
@@ -340,7 +339,6 @@ export const MERCHANDISING: MerchandisingConfig = {
     // 2008 Saab 9-3 2.0T Convertible — niche, sold as-is
     "YS3FB79Y886005860": {
       carfax: true,
-      status: "price-drop",
       featurePills: [
         "Power\nConvertible",
         "Turbo\nPerformance",
@@ -403,10 +401,11 @@ export function resolveOverlay(
   const override = MERCHANDISING.overlays[vin] ?? {};
 
   // Priority: coming-soon > manual status > sale-pending > just-arrived.
-  // NOTE: the auto "price-reduced" flag was removed per Jeremiah 2026-05-09.
-  // The `recentlyReduced` arg + the `price-reduced` StatusPill variant are
-  // kept intact so the merchandising admin can still pick it manually if
-  // desired — only the auto-flip from the DMS feed is suppressed.
+  // NOTE: the auto "price-reduced" flag was removed per Jeremiah 2026-05-09,
+  // and on 2026-09-15 he removed the hand-set Price Drop / Price Reduced
+  // pills as well, so neither can be shown by any route. The
+  // `recentlyReduced` arg stays on the signature because the DMS still sends
+  // the flag; nothing renders from it.
   void recentlyReduced;
   const effectiveStatus = pickStatusPill(vehicleStatus, override.status, daysOnLot);
 

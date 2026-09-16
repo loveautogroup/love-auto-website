@@ -17,8 +17,9 @@
 
 export const STATUS_KINDS = [
   "just-arrived",
-  "price-reduced",
-  "price-drop",
+  // Owner, 2026-09-15: "remove the price drop tag as well." The automatic
+  // one went in May 2026; these were the two a person could still set by
+  // hand. A car that still carries one in KV renders no pill.
   "staff-pick",
   "low-mileage",
   "sale-pending",

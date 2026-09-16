@@ -42,8 +42,6 @@ interface EditableConfig {
 const STATUS_OPTIONS: { value: StatusBadgeKind | ""; label: string }[] = [
   { value: "", label: "— Auto —" },
   { value: "just-arrived", label: "Just Arrived" },
-  { value: "price-reduced", label: "Price Reduced" },
-  { value: "price-drop", label: "Price Drop" },
   { value: "staff-pick", label: "Staff Pick" },
   { value: "low-mileage", label: "Low Mileage" },
   { value: "sale-pending", label: "Sale Pending" },
