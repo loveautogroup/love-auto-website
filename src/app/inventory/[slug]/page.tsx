@@ -308,8 +308,17 @@ export default async function VehicleDetailPage({
       {/* pb-32 on mobile gives clearance for the fixed Call/Text/Calc bar
           (~76px tall). lg+ drops back to pb-16 since the sticky bar is hidden. */}
       <article className="max-w-7xl mx-auto px-4 pb-32 lg:pb-16">
-        {/* Trust strip — quick brand signal above the gallery */}
-        <VDPTrustStrip />
+        {/* Trust strip — quick brand signal above the gallery. Vehicle
+            context gates "Free CARFAX Included" on this specific car's
+            overlay (shared/carfaxVisibility.ts) — see VDPTrustStrip.tsx. */}
+        <VDPTrustStrip
+          vehicle={{
+            vin: vehicle.vin,
+            daysOnLot: vehicle.daysOnLot,
+            status: vehicle.status,
+            recentlyReduced: vehicle.recentlyReduced ?? false,
+          }}
+        />
 
         <div className="flex flex-col gap-8">
           {/* Above-the-fold summary (compact). Google vehicle-ads review

@@ -7,12 +7,39 @@
  *   1. Fully Inspected · Free CARFAX Included
  *   2. Family-Owned Independent Dealer · Over a Decade in Villa Park
  *   3. No Hidden Fees · All Credit Welcome · Same-Day Title & Plates
+ *
+ * "Free CARFAX Included" is a claim about ONE specific car when this strip
+ * sits on a VDP (the only call site with a `vehicle` in context) — same
+ * false-advertising shape as the badge/button/FAQ: a car whose CARFAX link
+ * is not confirmed live must not carry it either. Pass `vehicle` from the
+ * VDP; homepage and the inventory grid render with no vehicle (there's no
+ * single car to be wrong about there) and keep the unconditional line as a
+ * statement of the dealership's general practice.
  */
 
 import { useLanguage } from "@/context/LanguageContext";
+import { useResolveOverlay } from "@/data/useMerchandising";
 
-export default function VDPTrustStrip() {
+interface VDPTrustStripProps {
+  vehicle?: {
+    vin: string;
+    daysOnLot: number;
+    status: "available" | "sale-pending" | "sold" | "coming-soon";
+    recentlyReduced?: boolean;
+  };
+}
+
+export default function VDPTrustStrip({ vehicle }: VDPTrustStripProps = {}) {
   const { t } = useLanguage();
+  // Hooks can't be called conditionally — always call it, feed it an inert
+  // VIN when there's no vehicle, and ignore the result in that case.
+  const overlay = useResolveOverlay(
+    vehicle?.vin ?? "",
+    vehicle?.daysOnLot ?? 0,
+    vehicle?.status ?? "available",
+    vehicle?.recentlyReduced ?? false
+  );
+  const carfaxOk = !vehicle || overlay.carfax === true;
   return (
     <section
       aria-label="Love Auto Group trust pillars"
@@ -29,7 +56,9 @@ export default function VDPTrustStrip() {
             <Shield />
             <span>
               <strong className="font-bold">{t.vdpTrustStrip.inspected}</strong>
-              <span className="hidden md:inline text-white/80"> · {t.vdpTrustStrip.inspectedSuffix}</span>
+              {carfaxOk && (
+                <span className="hidden md:inline text-white/80"> · {t.vdpTrustStrip.inspectedSuffix}</span>
+              )}
             </span>
           </span>
 
