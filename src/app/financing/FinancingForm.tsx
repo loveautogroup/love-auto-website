@@ -75,6 +75,9 @@ interface FormValues extends ApplicantFields {
   vehicleInterest: string;
   desiredMonthlyPayment: string;
   desiredDownPayment: string;
+  // The loan amount they are asking for. Owner, 2026-09-17: the document
+  // banks receive must carry price, mileage and the desired loan amount.
+  requestedLoanAmount: string;
   hasTradeIn: boolean;
   tradeInDetails: string;
   // Co-buyer
@@ -134,6 +137,7 @@ const INITIAL: FormValues = {
   vehicleInterest: "",
   desiredMonthlyPayment: "",
   desiredDownPayment: "",
+  requestedLoanAmount: "",
   hasTradeIn: false,
   tradeInDetails: "",
   hasCoBuyer: false,
@@ -301,6 +305,7 @@ export default function FinancingForm() {
         desiredMonthlyPayment:
           values.desiredMonthlyPayment === "" ? undefined : values.desiredMonthlyPayment,
         downPayment: values.desiredDownPayment || undefined,
+        requestedLoanAmount: values.requestedLoanAmount || undefined,
       },
       tradeIn: values.hasTradeIn
         ? { model: values.tradeInDetails || "yes" }
@@ -843,6 +848,20 @@ export default function FinancingForm() {
               className={fieldClass}
               value={values.desiredDownPayment}
               onChange={(e) => update("desiredDownPayment", e.target.value)}
+            />
+          </label>
+          <label className="block">
+            <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+              {t.creditApp.loanAmount}
+            </span>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              placeholder="$"
+              className={fieldClass}
+              value={values.requestedLoanAmount}
+              onChange={(e) => update("requestedLoanAmount", e.target.value)}
             />
           </label>
         </div>
