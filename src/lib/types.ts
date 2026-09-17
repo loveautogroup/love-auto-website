@@ -23,6 +23,11 @@ export interface Vehicle {
   images: string[];
   /** Branded hero with baked badges — og:image / social preview only. */
   bakedHeroUrl?: string | null;
+  /** The DMS workspace's per-vehicle "Website URL" overlay switch, resolved
+   *  against the dealer defaults. Read by VehicleCard and PhotoGallery through
+   *  shared/urlBadgeVisibility.ts. Absent = shown. PARITY CHAIN:
+   *  routers/public.py -> DMS proxy -> functions/api/inventory.ts -> here. */
+  websiteBadgeEnabled?: boolean;
   status: "available" | "sale-pending" | "sold" | "coming-soon";
   /** ISO date the car sold. Present only on recently-sold rows — Railway emits
    *  sold cars for 30 days so their VDP keeps working. PARITY CHAIN:

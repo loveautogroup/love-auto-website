@@ -30,6 +30,8 @@ export interface SyncedVehicle {
   vin: string;
   /** Branded baked hero for social/og use; display hero stays raw. */
   bakedHeroUrl?: string | null;
+  /** Per-vehicle "Website URL" overlay toggle; absent = shown. */
+  websiteBadgeEnabled?: boolean;
   stockNumber?: string;
   slug: string;
   year: number;
@@ -146,6 +148,7 @@ export function adaptVehicle(v: SyncedVehicle): Vehicle {
     daysOnLot: v.daysOnLot,
     recentlyReduced: Boolean(v.recentlyReduced),
     bakedHeroUrl: v.bakedHeroUrl ?? null,
+    websiteBadgeEnabled: v.websiteBadgeEnabled !== false,
     asIs: v.asIs ?? true,
     knownIssues: v.knownIssues ?? null,
   };

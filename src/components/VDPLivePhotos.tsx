@@ -48,10 +48,17 @@ export default function VDPLivePhotos({
   // also the SSR/no-JS path — the HTML emitted at build time uses
   // seedImages directly.
   let images = seedImages;
+  // The build-time `vehicle` carries the "Website URL" toggle as it stood at
+  // the last site build; a toggle flipped in the DMS does not trigger a
+  // rebuild, so read the live value the same way the images are read.
+  let liveVehicle = vehicle;
   if (source !== "fallback") {
     const live = vehicles.find((v) => v.vin === vin);
     if (live && Array.isArray(live.images) && live.images.length > 0) {
       images = live.images;
+    }
+    if (live && typeof live.websiteBadgeEnabled === "boolean") {
+      liveVehicle = { ...vehicle, websiteBadgeEnabled: live.websiteBadgeEnabled };
     }
   }
 
@@ -66,7 +73,7 @@ export default function VDPLivePhotos({
     <PhotoGallery
       images={images ?? []}
       alt={alt}
-      vehicle={vehicle}
+      vehicle={liveVehicle}
       badgeConfig={badgeConfig}
     />
   );

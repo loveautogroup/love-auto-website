@@ -23,6 +23,7 @@ import {
 } from "./badges";
 import { useReviews } from "@/context/ReviewsContext";
 import { useBadgeConfig } from "@/context/BadgeConfigContext";
+import { urlBadgeVisible } from "../../shared/urlBadgeVisibility";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -206,6 +207,13 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     !cardHasBakedHero &&
     badgeConfig.carfax_badge_enabled !== false &&
     overlay.carfax !== false;
+  const showUrlBadge = urlBadgeVisible({
+    hasBakedHero: cardHasBakedHero,
+    hasRealPhotos: !isComingSoon,
+    forcePlaceholder: false,
+    globalEnabled: badgeConfig?.website_badge_enabled,
+    vehicleEnabled: vehicle.websiteBadgeEnabled,
+  });
   // Track the specific URL that 404'd so we can prevent retrying it while
   // still allowing a *different* (live) URL to replace it. A boolean latch
   // would block the upgrade from a failed seed path to a working R2/DC URL.
@@ -426,9 +434,14 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
               phoneRaw={SITE_CONFIG.phoneRaw}
               compact
             />
-            <div className="scale-[0.72] origin-bottom-left">
-              <UrlBadge compact />
-            </div>
+            {/* Honours the DMS "Website URL" toggle (per vehicle, then the
+                global default) since 2026-09-17 — same rule as the VDP hero,
+                shared/urlBadgeVisibility.ts. */}
+            {showUrlBadge && (
+              <div className="scale-[0.72] origin-bottom-left">
+                <UrlBadge compact />
+              </div>
+            )}
           </div>
         )}
 

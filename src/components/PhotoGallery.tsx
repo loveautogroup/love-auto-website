@@ -9,6 +9,7 @@ import { useResolveOverlay } from "@/data/useMerchandising";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import { useReviews } from "@/context/ReviewsContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { urlBadgeVisible } from "../../shared/urlBadgeVisibility";
 import {
   CarfaxBadge,
   CarfaxPillStack,
@@ -261,8 +262,17 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
     (overlay?.showGoogleReviewsBadge !== false);
   const showPhoneBadge = !hasBakedHero && !isComingSoon && badgeConfig?.phone_badge_enabled !== false;
   // URL badge mirrors the phone gating — bottom-center, same Montserrat
-  // treatment, baked into the hero pixels when the hero is baked.
-  const showUrlBadge = !hasBakedHero && hasRealPhotos && !forcePlaceholder;
+  // treatment, baked into the hero pixels when the hero is baked — and,
+  // since 2026-09-17, honours the DMS "Website URL" toggle (per vehicle,
+  // then the global default). It was the one badge here that read no
+  // config at all. Rule lives in shared/urlBadgeVisibility.ts.
+  const showUrlBadge = urlBadgeVisible({
+    hasBakedHero,
+    hasRealPhotos,
+    forcePlaceholder,
+    globalEnabled: badgeConfig?.website_badge_enabled,
+    vehicleEnabled: vehicle?.websiteBadgeEnabled,
+  });
   // ALSO honours the per-vehicle opt-out, not just the global flag. The badge
   // links straight to carfax.com/.../Report.cfx?vin=..., which renders an OFFER
   // / purchase page rather than a report when the VIN is not in our CARFAX

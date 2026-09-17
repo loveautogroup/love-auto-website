@@ -47,6 +47,11 @@ export interface GlobalBadgeConfig {
   phone_badge_position: "bottom-right" | "bottom-left" | "top-right" | "top-left";
   carfax_badge_enabled: boolean;
   carfax_badge_position: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+  /** Site-wide fallback for the URL badge; the per-vehicle value rides on
+   *  each vehicle as websiteBadgeEnabled. Optional: older Railway builds
+   *  omit it, which reads as shown. */
+  website_badge_enabled?: boolean;
+  website_url?: string;
   margin_pct: number;
 }
 
@@ -69,6 +74,8 @@ export const BADGE_CONFIG_FALLBACK: GlobalBadgeConfig = {
   phone_badge_position: "bottom-left",
   carfax_badge_enabled: true,
   carfax_badge_position: "top-left",
+  website_badge_enabled: true,
+  website_url: "loveautogroup.net",
   margin_pct: 2.2,
 };
 
@@ -247,6 +254,8 @@ interface DmsVehicle {
    *  og:image only on the website. Hero display always uses photos[0]
    *  (raw) + interactive HTML badge overlays. */
   bakedHeroUrl?: string | null;
+  /** Resolved per-vehicle "Website URL" overlay toggle (2026-09-17). */
+  websiteBadgeEnabled?: boolean | null;
   /** V2 photo pipeline media shape — optional, absent on older responses. */
   media?: {
     hero_url?: string | null;
@@ -350,6 +359,7 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     recentlyReduced: Boolean(v.recently_reduced),
     // Phase 2 photo pipeline — null in Phase 1 (VDPWalkaround renders nothing).
     bakedHeroUrl: rewritePhotoHost(v.bakedHeroUrl) ?? null,
+    websiteBadgeEnabled: v.websiteBadgeEnabled !== false,
     walkaroundUrl: v.media?.walkaround_url ?? null,
     walkaroundPosterUrl: v.media?.walkaround_poster_url ?? null,
     // AS-IS / legal disclosure fields (Diane, 2026-05-12)
@@ -578,5 +588,6 @@ export function syncedToVehicle(s: SyncedVehicle): Vehicle {
     asIs: s.asIs ?? true,
     knownIssues: s.knownIssues ?? null,
     bakedHeroUrl: s.bakedHeroUrl ?? null,
+    websiteBadgeEnabled: s.websiteBadgeEnabled !== false,
   };
 }
