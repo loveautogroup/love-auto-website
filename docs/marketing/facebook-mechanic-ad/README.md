@@ -1,7 +1,7 @@
-# Facebook Marketplace ad — Basic Mechanic Work
+# Facebook Marketplace ad — Basic Mechanic Work (independent, no branding)
 
 - `ad-1080x1350.png` — the finished ad image (4:5, Marketplace / feed friendly).
-- `ad.html` — editable source. Change prices, services, or the address in
+- `ad.html` — editable source. Replace the phone number and location placeholders, change prices, and
   the HTML and re-render.
 - `listing-copy.md` — title, description, and tags for the Marketplace form.
 - `fonts/` — Anton and Montserrat (Google Fonts, OFL) so the render does

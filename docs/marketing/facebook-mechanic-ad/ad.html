@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Basic Mechanic Work — Facebook Marketplace ad</title>
+<title>Basic Mechanic Work — Marketplace ad</title>
 <style>
   @font-face { font-family: 'Anton'; font-weight: 400; src: url(fonts/Anton-Regular.ttf) format('truetype'); }
   @font-face { font-family: 'Montserrat'; font-weight: 600; src: url(fonts/Montserrat-600.ttf) format('truetype'); }
@@ -12,35 +12,35 @@
 </style>
 <style>
   :root {
-    --red: #dc2626;
-    --red-dark: #b91c1c;
+    --red: #f5b700;
+    --red-dark: #d99c00;
     --ink: #0a0a0a;
     --white: #ffffff;
     --gray: #d1d5db;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: var(--ink); }
+  html, body { background: #0a1024; }
   body { width: 1080px; height: 1350px; overflow: hidden; font-family: 'Montserrat', 'Arial', sans-serif; color: var(--white); }
 
   .ad {
     position: relative; width: 1080px; height: 1350px;
     background:
-      radial-gradient(900px 500px at 50% -10%, rgba(220,38,38,0.35), transparent 70%),
-      linear-gradient(180deg, #141414 0%, #0a0a0a 55%, #000 100%);
+      radial-gradient(900px 500px at 50% -10%, rgba(37,64,140,0.55), transparent 70%),
+      linear-gradient(180deg, #101a33 0%, #0a1024 55%, #05081a 100%);
     display: flex; flex-direction: column; align-items: center;
-    padding: 44px 60px 0;
+    padding: 56px 60px 0;
   }
   /* subtle diagonal hazard stripe top */
   .stripe { position: absolute; left: 0; right: 0; top: 0; height: 18px;
     background: repeating-linear-gradient(135deg, var(--red) 0 28px, #000 28px 56px); }
 
-  .logo { width: 300px; height: auto; margin-top: 10px; }
+  .wrench { font-size: 96px; line-height: 1; margin-top: 18px; }
 
   .hook {
     margin-top: 14px; text-align: center; line-height: 0.98;
     font-family: 'Anton', 'Impact', 'Arial Black', sans-serif;
-    font-size: 80px; letter-spacing: 1px; text-transform: uppercase;
-    text-shadow: 0 4px 0 rgba(0,0,0,0.6);
+    font-size: 76px; letter-spacing: 1px; text-transform: uppercase;
+    text-shadow: 0 4px 0 rgba(0,0,0,0.5);
   }
   .hook span { color: var(--red); }
   .sub { margin-top: 12px; font-size: 26px; font-weight: 700; color: var(--gray); letter-spacing: 3px; text-transform: uppercase; }
@@ -69,32 +69,20 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     clip-path: polygon(0 26px, 100% 0, 100% 100%, 0 100%);
   }
+  .call { color: #0a1024; }
   .call .label { font-size: 26px; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; }
   .call .phone { font-family: 'Anton', 'Impact', sans-serif; font-size: 108px; line-height: 1; letter-spacing: 2px; margin-top: 6px;
-    text-shadow: 0 6px 0 rgba(0,0,0,0.35); }
+    text-shadow: none; }
 </style>
 </head>
 <body>
 <div class="ad">
   <div class="stripe"></div>
 
-  <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 100">
-    <defs>
-      <linearGradient id="accent-line" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#dc2626" stop-opacity="0"/>
-        <stop offset="30%" stop-color="#dc2626" stop-opacity="1"/>
-        <stop offset="70%" stop-color="#dc2626" stop-opacity="1"/>
-        <stop offset="100%" stop-color="#dc2626" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <text x="140" y="43" text-anchor="middle" font-family="'Montserrat', 'Arial Black', sans-serif" font-weight="900" font-size="42" fill="#dc2626" letter-spacing="6">LOVE</text>
-    <rect x="70" y="51" width="140" height="2.5" rx="1.25" fill="url(#accent-line)"/>
-    <text x="140" y="69" text-anchor="middle" font-family="'Montserrat', 'Arial Black', sans-serif" font-weight="600" font-size="14" fill="#ffffff" letter-spacing="10">AUTO GROUP</text>
-    <text x="140" y="87" text-anchor="middle" font-family="'Montserrat', 'Arial Black', sans-serif" font-weight="600" font-size="10" fill="#d1d5db" letter-spacing="5">SINCE 2014</text>
-  </svg>
+  <div class="wrench">🔧</div>
 
-  <div class="hook">Need basic<br><span>mechanic work?</span></div>
-  <div class="sub">Honest labor pricing · Villa Park, IL</div>
+  <div class="hook">In need of basic<br><span>mechanic work?</span></div>
+  <div class="sub">Labor only · You bring the parts</div>
 
   <div class="prices">
     <div class="row">
@@ -121,13 +109,13 @@
   </div>
 
   <div class="loc">
-    <b>735 N Yale Ave, Villa Park, IL 60181</b><br>
-    20 min from Chicago · Mon–Sat
+    <b>Located near YOUR LANDMARK</b><br>
+    YOUR NEIGHBORHOOD, IL ZIP
   </div>
 
   <div class="call">
     <div class="label">Call or text</div>
-    <div class="phone">(630) 359-3643</div>
+    <div class="phone">000-000-0000</div>
   </div>
 </div>
 </body>
