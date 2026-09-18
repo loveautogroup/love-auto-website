@@ -5,7 +5,7 @@ Paste these into the Marketplace "Create new listing" form. Upload
 
 ## Title (max 100 characters)
 
-Basic Mechanic Work – Brakes $100+, Oil Change $50, Tune-Up $90 – Villa Park / Elmhurst
+Basic Mechanic Work – Brakes $100+, Oil Change $50, Tune-Up $100 – Villa Park / Elmhurst
 
 ## Category
 
@@ -23,7 +23,7 @@ In need of basic mechanic work? Labor-only pricing, you bring the parts.
 • Brakes, all 4 wheels – small car: $100 (with rotors $150)
 • Brakes, all 4 wheels – truck / large SUV: $120 (with rotors $180)
 • Oil change (you supply oil & filter): $50
-• Complete tune-up (plugs, filters & inspection): $90
+• Complete tune-up (plugs, filters & inspection): $100
 • Suspension work (struts, shocks, control arms & more): ask for a quote
 
 ✅ Free estimates
@@ -43,5 +43,5 @@ Villa Park, Elmhurst, Lombard, Addison, DuPage
 ## Short version (for a Facebook post or story)
 
 In need of basic mechanic work? Brakes from $100, oil change $50, tune-up
-$90, suspension work too. Free estimates, bring your own parts. Villa Park / Elmhurst area. Call or
+$100, suspension work too. Free estimates, bring your own parts. Villa Park / Elmhurst area. Call or
 text 312-925-7520.
