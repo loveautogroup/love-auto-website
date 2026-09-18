@@ -1,12 +1,11 @@
 # Facebook Marketplace listing — Basic Mechanic Work
 
 Paste these into the Marketplace "Create new listing" form. Upload
-`ad-1080x1350.png` as the photo. Replace the ALL-CAPS placeholders
-(YOUR NUMBER, YOUR LANDMARK, YOUR NEIGHBORHOOD) before posting.
+`ad-1080x1350.png` as the photo. 
 
 ## Title (max 100 characters)
 
-Basic Mechanic Work – Brakes $100+, Oil Change $40, Tune-Up $90 – Bring Your Own Parts
+Basic Mechanic Work – Brakes $100+, Oil Change $40, Tune-Up $90 – Villa Park / Elmhurst
 
 ## Category
 
@@ -30,18 +29,18 @@ In need of basic mechanic work? Labor-only pricing, you bring the parts.
 ✅ Must bring your own parts
 ✅ Cash or Zelle
 
-📍 Located near YOUR LANDMARK, YOUR NEIGHBORHOOD ZIP
+📍 Villa Park / Elmhurst area, DuPage County
 
-📞 Call or text YOUR NUMBER. Send your year, make, model and the problem
+📞 Call or text 312-925-7520. Send your year, make, model and the problem
 and I will let you know what it will run.
 
 ## Tags
 
 mechanic, brakes, oil change, tune up, auto repair, mobile mechanic,
-YOUR NEIGHBORHOOD, Chicago
+Villa Park, Elmhurst, Lombard, Addison, DuPage
 
 ## Short version (for a Facebook post or story)
 
 In need of basic mechanic work? Brakes from $100, oil change $40, tune-up
-$90. Free estimates, bring your own parts. Near YOUR LANDMARK. Call or
-text YOUR NUMBER.
+$90. Free estimates, bring your own parts. Villa Park / Elmhurst area. Call or
+text 312-925-7520.
