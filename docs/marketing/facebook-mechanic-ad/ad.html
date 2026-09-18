@@ -28,13 +28,13 @@
       radial-gradient(900px 500px at 50% -10%, rgba(37,64,140,0.55), transparent 70%),
       linear-gradient(180deg, #101a33 0%, #0a1024 55%, #05081a 100%);
     display: flex; flex-direction: column; align-items: center;
-    padding: 56px 60px 0;
+    padding: 40px 60px 0;
   }
   /* subtle diagonal hazard stripe top */
   .stripe { position: absolute; left: 0; right: 0; top: 0; height: 18px;
     background: repeating-linear-gradient(135deg, var(--red) 0 28px, #000 28px 56px); }
 
-  .wrench { font-size: 96px; line-height: 1; margin-top: 18px; }
+  .wrench { font-size: 72px; line-height: 1; margin-top: 4px; }
 
   .hook {
     margin-top: 14px; text-align: center; line-height: 0.98;
@@ -45,22 +45,23 @@
   .hook span { color: var(--red); }
   .sub { margin-top: 12px; font-size: 26px; font-weight: 700; color: var(--gray); letter-spacing: 3px; text-transform: uppercase; }
 
-  .prices { width: 100%; margin-top: 28px; }
+  .prices { width: 100%; margin-top: 20px; }
   .row {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 13px 22px; border-bottom: 2px solid rgba(255,255,255,0.12);
+    padding: 10px 22px; border-bottom: 2px solid rgba(255,255,255,0.12);
   }
   .row:first-child { border-top: 2px solid rgba(255,255,255,0.12); }
   .svc { font-size: 36px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
   .svc small { display: block; font-size: 22px; font-weight: 600; color: var(--gray); text-transform: none; letter-spacing: 0; margin-top: 2px; }
   .price { font-family: 'Anton', 'Impact', sans-serif; font-size: 56px; color: var(--red); white-space: nowrap; }
+  .price.ask { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 30px; text-transform: uppercase; letter-spacing: 1px; }
   .price b { font-weight: normal; color: var(--white); font-size: 26px; font-family: 'Montserrat', sans-serif; margin: 0 6px; }
 
-  .pills { display: flex; gap: 18px; margin-top: 26px; }
+  .pills { display: flex; gap: 18px; margin-top: 20px; }
   .pill { border: 3px solid var(--red); border-radius: 999px; padding: 10px 28px; font-size: 26px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
   .pill.solid { background: var(--red); }
 
-  .loc { margin-top: 24px; text-align: center; font-size: 27px; font-weight: 600; color: var(--gray); line-height: 1.35; }
+  .loc { margin-top: 18px; text-align: center; font-size: 27px; font-weight: 600; color: var(--gray); line-height: 1.35; }
   .loc b { color: var(--white); font-weight: 800; }
 
   .call {
@@ -87,7 +88,7 @@
   <div class="prices">
     <div class="row">
       <div class="svc">Brakes, all 4 wheels<small>Cars &amp; small SUVs</small></div>
-      <div class="price">$100<b>/</b>$140 <b>w/ rotors</b></div>
+      <div class="price">$100<b>/</b>$150 <b>w/ rotors</b></div>
     </div>
     <div class="row">
       <div class="svc">Brakes, all 4 wheels<small>Trucks &amp; large SUVs</small></div>
@@ -100,6 +101,10 @@
     <div class="row">
       <div class="svc">Complete tune-up<small>Plugs, filters &amp; inspection</small></div>
       <div class="price">$90</div>
+    </div>
+    <div class="row">
+      <div class="svc">Suspension work<small>Struts, shocks, control arms &amp; more</small></div>
+      <div class="price ask">Ask for a quote</div>
     </div>
   </div>
 
