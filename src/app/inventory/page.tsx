@@ -4,6 +4,7 @@ import { sortWithFeaturedFirst } from "@/data/merchandising";
 import { hasOwnPhoto } from "../../../shared/ownPhoto";
 import InventoryGrid from "./InventoryGrid";
 import VehicleAlertSignup from "@/components/VehicleAlertSignup";
+import WaitlistCta from "@/components/WaitlistCta";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
 import InventoryHero from "./InventoryHero";
 import { ItemListSchema } from "@/components/StructuredData";
@@ -91,6 +92,9 @@ export default function InventoryPage() {
       <section className="max-w-3xl mx-auto px-4 pb-12">
         <div className="bg-white border border-brand-gray-200 rounded-xl p-6">
           <VehicleAlertSignup />
+          {/* 2026-09-21: the fuller ask — make, body style, budget, year range —
+              lands on the DMS waitlist and gets matched against every arrival. */}
+          <WaitlistCta />
         </div>
       </section>
     </>

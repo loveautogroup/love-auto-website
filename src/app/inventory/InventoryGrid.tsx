@@ -241,6 +241,9 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
             </a>{" "}
             {g.noResultsSource}
           </p>
+          <a href="/waitlist/" className="mt-5 inline-block bg-brand-red hover:bg-brand-red-dark text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors">
+            {t.alerts.waitlistCtaLink}
+          </a>
         </div>
       )}
     </>
