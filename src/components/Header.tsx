@@ -7,7 +7,7 @@ import Image from "next/image";
 import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import { useLanguage } from "@/context/LanguageContext";
-import { trackOutboundClick } from "@/lib/analytics";
+import { trackOutboundClick, trackPhoneClick, trackTextClick } from "@/lib/analytics";
 import { useReviews } from "@/context/ReviewsContext";
 import { useGlobalTextPhone } from "@/data/useMerchandising";
 
@@ -131,6 +131,7 @@ export default function Header() {
             <span className="text-brand-gray-300">{t.header.hours}</span>
             <a
               href={`tel:${SITE_CONFIG.phoneRaw}`}
+              onClick={() => trackPhoneClick("header_credibility_strip")}
               className="text-brand-red-light hover:text-white font-semibold"
             >
               {SITE_CONFIG.phone}
@@ -195,6 +196,7 @@ export default function Header() {
         <div className="hidden lg:flex items-center gap-3">
           <a
             href={`tel:${SITE_CONFIG.phoneRaw}`}
+            onClick={() => trackPhoneClick("header_desktop")}
             className="text-brand-red-light hover:text-white font-semibold text-sm"
           >
             {SITE_CONFIG.phone}
@@ -211,6 +213,7 @@ export default function Header() {
         <div className="flex lg:hidden items-center gap-3">
           <a
             href={`tel:${SITE_CONFIG.phoneRaw}`}
+            onClick={() => trackPhoneClick("header_mobile")}
             className="bg-brand-green text-white p-2 rounded-lg"
             aria-label="Call Love Auto Group"
           >
@@ -242,6 +245,7 @@ export default function Header() {
               resolution on a VDP and still does. */}
           <a
             href={`sms:${textPhone}?body=${encodeURIComponent("Hi, I'm interested in a vehicle on your lot.")}`}
+            onClick={() => trackTextClick("header_mobile")}
             className="bg-brand-red text-white p-2 rounded-lg"
             aria-label="Text Love Auto Group"
           >

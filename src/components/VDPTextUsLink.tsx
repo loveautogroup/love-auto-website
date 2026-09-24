@@ -21,6 +21,7 @@
  */
 
 import { useEffect, useState } from "react";
+import { trackTextClick } from "@/lib/analytics";
 
 interface Props {
   /** VIN of the vehicle currently being viewed. Used to look up overlay. */
@@ -33,6 +34,8 @@ interface Props {
   className?: string;
   /** Optional aria-label, e.g. "Text us". */
   ariaLabel?: string;
+  /** GA4 click_location for the click_text event, e.g. "vdp_sidebar". */
+  location: string;
   /** SVG + label children. */
   children: React.ReactNode;
 }
@@ -53,6 +56,7 @@ export default function VDPTextUsLink({
   bodyText,
   className,
   ariaLabel,
+  location,
   children,
 }: Props) {
   const [phone, setPhone] = useState(defaultPhone);
@@ -91,6 +95,13 @@ export default function VDPTextUsLink({
       href={buildHref(phone, bodyText)}
       className={className}
       aria-label={ariaLabel}
+      onClick={() => {
+        try {
+          trackTextClick(location);
+        } catch {
+          /* analytics is never load-bearing */
+        }
+      }}
     >
       {children}
     </a>

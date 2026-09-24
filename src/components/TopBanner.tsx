@@ -2,6 +2,7 @@
 
 import { SITE_CONFIG } from "@/lib/constants";
 import { useLanguage } from "@/context/LanguageContext";
+import { trackPhoneClick } from "@/lib/analytics";
 
 /**
  * The red strip above the header: a one-line promise and a tap-to-call number.
@@ -28,6 +29,7 @@ export default function TopBanner() {
       <p className="text-sm font-semibold leading-snug">{t.banner.promise}</p>
       <a
         href={`tel:${SITE_CONFIG.phoneRaw}`}
+        onClick={() => trackPhoneClick("top_banner")}
         className="mt-0.5 inline-flex items-center gap-2 text-lg font-bold tracking-tight hover:underline focus-visible:underline"
         aria-label={`${t.banner.callAria} ${SITE_CONFIG.phone}`}
       >

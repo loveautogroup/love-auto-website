@@ -15,6 +15,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { consentHashesFor, CONSENT_LANGUAGE, splitAroundPhrase } from "@/lib/consent-language";
+import { trackPhoneClick } from "@/lib/analytics";
 
 const CONSENT_VERSION = "prequalify-2026-07" as const;
 import { useLanguage } from "@/context/LanguageContext";
@@ -167,7 +168,11 @@ export default function QuickPreQualifyForm() {
         <h3 className="text-xl font-bold text-brand-gray-900 mb-2">{t.prequalify.successHeading}</h3>
         <p className="text-brand-gray-600 max-w-md mx-auto">
           {t.prequalify.successBodyPre}
-          <a href="tel:6303593643" className="text-brand-red font-semibold hover:underline">
+          <a
+            href="tel:6303593643"
+            onClick={() => trackPhoneClick("quick_prequalify_success")}
+            className="text-brand-red font-semibold hover:underline"
+          >
             (630) 359-3643
           </a>
           {t.prequalify.successBodyMid}

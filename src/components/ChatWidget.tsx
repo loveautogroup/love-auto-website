@@ -31,6 +31,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { SITE_CONFIG } from "@/lib/constants";
+import { trackPhoneClick } from "@/lib/analytics";
 
 type Author = "buyer" | "franky" | "owner";
 interface Turn {
@@ -282,7 +283,11 @@ export default function ChatWidget() {
             {waitingOnPerson && !sending && (
               <p className="rounded-xl bg-white px-3 py-2 text-xs text-gray-600 shadow-sm">
                 Thanks! We&apos;ll answer you right here shortly. In a hurry? Call{" "}
-                <a className="font-semibold text-brand-red" href={`tel:${SITE_CONFIG.phoneRaw}`}>
+                <a
+                  className="font-semibold text-brand-red"
+                  href={`tel:${SITE_CONFIG.phoneRaw}`}
+                  onClick={() => trackPhoneClick("chat_widget")}
+                >
                   {SITE_CONFIG.phone}
                 </a>
                 .

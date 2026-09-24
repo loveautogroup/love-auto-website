@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { MakeLandingContent } from "@/data/makeLandings";
 import MakeLandingInventory from "@/components/MakeLandingInventory";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 import { BreadcrumbSchema, ItemListSchema } from "@/components/StructuredData";
 import { sampleInventory } from "@/data/inventory";
 import SiteBreadcrumb from "@/components/SiteBreadcrumb";
@@ -135,7 +136,8 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
             >
               <T path={["makeLandingChrome", "browseFullInventory"]} />
             </Link>
-            <a
+            <TrackedPhoneLink
+              location="make_landing_cta"
               href="tel:6303593643"
               className="inline-flex items-center border-2 border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-xl font-semibold"
             >
@@ -143,7 +145,7 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
                 path={["makeLandingChrome", "callPhone"]}
                 replace={{ "{phone}": "(630) 359-3643" }}
               />
-            </a>
+            </TrackedPhoneLink>
           </div>
         </section>
       </article>

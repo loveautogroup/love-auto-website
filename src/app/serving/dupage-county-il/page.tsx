@@ -7,6 +7,7 @@ import {
   FAQSchema,
 } from "@/components/StructuredData";
 import { SITE_CONFIG } from "@/lib/constants";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 
 /**
  * DuPage County hub page — /serving/dupage-county-il/
@@ -207,12 +208,13 @@ export default function DuPageCountyPage() {
             >
               Browse Inventory
             </Link>
-            <a
+            <TrackedPhoneLink
+              location="serving_dupage_county_hero"
               href={`tel:${SITE_CONFIG.phoneRaw}`}
               className="inline-flex items-center justify-center border-2 border-white/30 hover:bg-white/10 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
             >
               Call {SITE_CONFIG.phone}
-            </a>
+            </TrackedPhoneLink>
           </div>
         </div>
       </section>
@@ -357,12 +359,13 @@ export default function DuPageCountyPage() {
             Sat 12-7. Closed Sunday.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a
+            <TrackedPhoneLink
+              location="serving_dupage_county_cta"
               href={`tel:${SITE_CONFIG.phoneRaw}`}
               className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-lg text-base font-semibold transition-colors"
             >
               Call {SITE_CONFIG.phone}
-            </a>
+            </TrackedPhoneLink>
             <Link
               href="/contact"
               className="inline-flex items-center justify-center border-2 border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-lg text-base font-semibold transition-colors"

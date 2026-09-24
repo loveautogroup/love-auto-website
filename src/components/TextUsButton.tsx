@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { SITE_CONFIG } from "@/lib/constants";
 import { useMerchandising } from "@/data/useMerchandising";
+import { trackTextClick } from "@/lib/analytics";
 
 /**
  * Floating "Text Us" CTA — desktop-only.
@@ -74,6 +75,7 @@ export default function TextUsButton() {
   return (
     <a
       href={buildHref(phone, body)}
+      onClick={() => trackTextClick("text_us_button")}
       className="hidden lg:flex fixed bottom-6 right-6 z-40 items-center gap-2 bg-brand-green hover:bg-green-600 text-white pl-4 pr-5 py-3 rounded-full shadow-lg hover:shadow-xl transition-all group"
       aria-label="Text us"
     >

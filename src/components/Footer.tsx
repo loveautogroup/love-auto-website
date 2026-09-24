@@ -5,7 +5,7 @@ import Image from "next/image";
 import { SITE_CONFIG, NAV_LINKS } from "@/lib/constants";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import { useLanguage } from "@/context/LanguageContext";
-import { trackOutboundClick } from "@/lib/analytics";
+import { trackOutboundClick, trackPhoneClick } from "@/lib/analytics";
 import { useReviews } from "@/context/ReviewsContext";
 
 // Maps NAV_LINKS href → translation key
@@ -122,6 +122,7 @@ export default function Footer() {
               <li>
                 <a
                   href={`tel:${SITE_CONFIG.phoneRaw}`}
+                  onClick={() => trackPhoneClick("footer")}
                   className="flex items-center gap-2 text-brand-gold hover:text-brand-gold-light font-semibold transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

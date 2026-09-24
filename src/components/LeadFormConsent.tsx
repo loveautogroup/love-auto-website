@@ -12,6 +12,7 @@
 // the Spanish copy too.
 
 import { useLanguage } from "@/context/LanguageContext";
+import { trackPhoneClick } from "@/lib/analytics";
 
 export function LeadFormConsent() {
   const { t } = useLanguage();
@@ -21,7 +22,11 @@ export function LeadFormConsent() {
   return (
     <p className="text-xs text-gray-600 leading-relaxed mb-3 max-w-md">
       {parts[0]}
-      <a href="tel:+16303593643" className="underline">
+      <a
+        href="tel:+16303593643"
+        onClick={() => trackPhoneClick("lead_form_consent")}
+        className="underline"
+      >
         {phone}
       </a>
       {parts[1]}

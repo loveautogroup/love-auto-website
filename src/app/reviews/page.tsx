@@ -21,6 +21,7 @@ import Link from "next/link";
 import VDPReviews from "@/components/VDPReviews";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 import { SITE_CONFIG } from "@/lib/constants";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 import { getGoogleReviews } from "@/lib/google-reviews";
 
 /**
@@ -115,12 +116,13 @@ export default function ReviewsPage() {
           <p className="mt-6 text-sm text-brand-gray-500">
             {SITE_CONFIG.address.street}, {SITE_CONFIG.address.city}, IL{" "}
             {SITE_CONFIG.address.zip} ·{" "}
-            <a
+            <TrackedPhoneLink
+              location="reviews_page"
               href={`tel:${SITE_CONFIG.phone.replace(/\D/g, "")}`}
               className="text-brand-red hover:underline"
             >
               {SITE_CONFIG.phone}
-            </a>
+            </TrackedPhoneLink>
           </p>
         </div>
       </section>

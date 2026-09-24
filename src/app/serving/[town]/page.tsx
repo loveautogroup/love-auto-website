@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SERVICE_AREAS } from "@/data/serviceAreas";
 import LivePreviewGrid from "@/components/LivePreviewGrid";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 import SiteBreadcrumb from "@/components/SiteBreadcrumb";
 import { BreadcrumbSchema } from "@/components/StructuredData";
 
@@ -140,12 +141,13 @@ export default async function ServiceAreaPage({
             735 N Yale Ave, Unit A, Villa Park, IL 60181 — {content.proximity.toLowerCase()}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <a
+            <TrackedPhoneLink
+              location="serving_town_cta"
               href="tel:6303593643"
               className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-xl font-semibold"
             >
               Call (630) 359-3643
-            </a>
+            </TrackedPhoneLink>
             <Link
               href="/contact"
               className="inline-flex items-center border-2 border-brand-gray-300 hover:bg-brand-gray-100 text-brand-gray-900 px-6 py-3 rounded-xl font-semibold"

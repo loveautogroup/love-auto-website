@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import LivePreviewGrid from "@/components/LivePreviewGrid";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 import { BreadcrumbSchema, FAQSchema } from "@/components/StructuredData";
 import SiteBreadcrumb from "@/components/SiteBreadcrumb";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -91,12 +92,13 @@ export default function UsedCarsVillaParkPage() {
             >
               Browse Inventory
             </Link>
-            <a
+            <TrackedPhoneLink
+              location="used_cars_villa_park_hero"
               href="tel:+16303593643"
               className="inline-flex items-center border border-white text-white hover:bg-white hover:text-brand-navy px-6 py-3 rounded-xl font-semibold"
             >
               Call (630) 359-3643
-            </a>
+            </TrackedPhoneLink>
           </div>
         </div>
       </section>
@@ -196,12 +198,13 @@ export default function UsedCarsVillaParkPage() {
               {SITE_CONFIG.address.zip}
             </p>
             <p className="text-brand-gray-700 mb-4">
-              <a
+              <TrackedPhoneLink
+                location="used_cars_villa_park_address"
                 href={`tel:${SITE_CONFIG.phoneRaw}`}
                 className="text-brand-red hover:underline font-semibold"
               >
                 {SITE_CONFIG.phone}
-              </a>{" "}
+              </TrackedPhoneLink>{" "}
               — call or text
             </p>
             <h3 className="font-semibold text-brand-gray-900 mb-2">Hours</h3>

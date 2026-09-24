@@ -6,6 +6,7 @@
  */
 import { useLanguage } from "@/context/LanguageContext";
 import { SITE_CONFIG } from "@/lib/constants";
+import { trackPhoneClick } from "@/lib/analytics";
 
 export default function WaitlistIntro({ sidebar = false }: { sidebar?: boolean }) {
   const { t } = useLanguage();
@@ -28,7 +29,11 @@ export default function WaitlistIntro({ sidebar = false }: { sidebar?: boolean }
         <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
           <h3 className="font-bold text-brand-gray-900 mb-2">{w.callTitle}</h3>
           <p className="text-sm text-brand-gray-600 mb-3">{w.callBody}</p>
-          <a href={`tel:${SITE_CONFIG.phoneRaw}`} className="inline-flex items-center gap-2 text-brand-red hover:text-brand-red-dark font-semibold">
+          <a
+            href={`tel:${SITE_CONFIG.phoneRaw}`}
+            onClick={() => trackPhoneClick("waitlist_sidebar")}
+            className="inline-flex items-center gap-2 text-brand-red hover:text-brand-red-dark font-semibold"
+          >
             {SITE_CONFIG.phone}
           </a>
         </div>

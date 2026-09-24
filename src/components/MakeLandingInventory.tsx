@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useInventory } from "@/lib/useInventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
 import { useVisibleVehicles } from "@/data/useMerchandising";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 import VehicleCard from "@/components/VehicleCard";
 
 interface MakeLandingInventoryProps {
@@ -89,12 +90,13 @@ export default function MakeLandingInventory({
               full inventory
             </Link>{" "}
             or call{" "}
-            <a
+            <TrackedPhoneLink
+              location="make_landing_inventory_empty"
               href="tel:6303593643"
               className="text-brand-red hover:underline font-semibold"
             >
               (630) 359-3643
-            </a>{" "}
+            </TrackedPhoneLink>{" "}
             to ask about upcoming arrivals.
           </p>
         </div>

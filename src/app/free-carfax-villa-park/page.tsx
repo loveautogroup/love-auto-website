@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import LivePreviewGrid from "@/components/LivePreviewGrid";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 import { BreadcrumbSchema } from "@/components/StructuredData";
 import SiteBreadcrumb from "@/components/SiteBreadcrumb";
 
@@ -75,7 +76,7 @@ export default function FreeCarfaxLanding() {
           Open a vehicle listing that shows the CARFAX badge. Click the <strong>CARFAX FREE REPORT</strong> button in the top-left of the photo. The report opens in a new tab. That's it — no signup, no email gate, no upsell.
         </p>
         <p className="text-brand-gray-700 leading-relaxed mb-8">
-          If you want a Carfax report on a vehicle you've seen on another site or at another dealer, give us a call at <a href="tel:6303593643" className="text-brand-red hover:underline font-semibold">(630) 359-3643</a> with the VIN and we'll pull the report for you over the phone.
+          If you want a Carfax report on a vehicle you've seen on another site or at another dealer, give us a call at <TrackedPhoneLink location="free_carfax_villa_park" href="tel:6303593643" className="text-brand-red hover:underline font-semibold">(630) 359-3643</TrackedPhoneLink> with the VIN and we'll pull the report for you over the phone.
         </p>
 
         <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">Why This Matters Buying Used in Villa Park</h2>

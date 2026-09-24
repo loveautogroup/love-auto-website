@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BRANDS } from "@/data/brands";
 import { fetchDmsInventory } from "@/lib/dmsInventory";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 import {
   applyStockToken,
   computeBrandStock,
@@ -239,7 +240,8 @@ export default async function BrandPage({
             />
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <a
+            <TrackedPhoneLink
+              location="brand_detail_cta"
               href="tel:6303593643"
               className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-xl font-semibold"
             >
@@ -247,7 +249,7 @@ export default async function BrandPage({
                 path={["brandsChrome", "callPhone"]}
                 replace={{ "{phone}": "(630) 359-3643" }}
               />
-            </a>
+            </TrackedPhoneLink>
             <Link
               href="/inventory"
               className="inline-flex items-center border-2 border-brand-gray-300 hover:bg-brand-gray-100 text-brand-gray-900 px-6 py-3 rounded-xl font-semibold"

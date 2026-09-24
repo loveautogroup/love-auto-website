@@ -20,7 +20,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { trackFormSubmit, trackLeadFinancing } from "@/lib/analytics";
+import { trackFormSubmit, trackLeadFinancing, trackPhoneClick } from "@/lib/analytics";
 import { consentHashesFor, CONSENT_LANGUAGE, splitAroundPhrase } from "@/lib/consent-language";
 import { useLanguage } from "@/context/LanguageContext";
 import VehiclePicker from "./VehiclePicker";
@@ -377,6 +377,7 @@ export default function FinancingForm() {
           {t.creditApp.successBodyPre}
           <a
             href="tel:6303593643"
+            onClick={() => trackPhoneClick("financing_form_success")}
             className="text-brand-red font-semibold hover:underline"
           >
             (630) 359-3643

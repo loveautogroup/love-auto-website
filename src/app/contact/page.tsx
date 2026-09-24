@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/constants";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 import ContactForm from "./ContactForm";
 import ContactHero from "./ContactHero";
 
@@ -43,12 +44,13 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-brand-gray-900">Phone</h3>
-                  <a
+                  <TrackedPhoneLink
+                    location="contact_page"
                     href={`tel:${SITE_CONFIG.phoneRaw}`}
                     className="text-brand-red hover:text-brand-red-dark text-lg font-medium"
                   >
                     {SITE_CONFIG.phone}
-                  </a>
+                  </TrackedPhoneLink>
                   <p className="text-sm text-brand-gray-500 mt-0.5">
                     Call or text during business hours
                   </p>

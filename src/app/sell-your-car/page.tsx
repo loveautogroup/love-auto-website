@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/constants";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 import TradeInForm from "./TradeInForm";
 import SellHero from "./SellHero";
 
@@ -63,12 +64,13 @@ export default function SellYourCarPage() {
               <p className="text-sm text-brand-gray-600 mb-3">
                 We&apos;re happy to discuss your vehicle over the phone.
               </p>
-              <a
+              <TrackedPhoneLink
+                location="sell_your_car"
                 href={`tel:${SITE_CONFIG.phoneRaw}`}
                 className="inline-flex items-center gap-2 text-brand-red hover:text-brand-red-dark font-semibold"
               >
                 {SITE_CONFIG.phone}
-              </a>
+              </TrackedPhoneLink>
             </div>
           </div>
         </div>

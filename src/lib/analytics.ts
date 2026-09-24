@@ -120,6 +120,11 @@ export function trackPhoneClick(location: string) {
   sendEvent('click_phone', { click_location: location });
 }
 
+/** Text/SMS link click — pass location like 'header', 'vdp_sidebar', 'text_us_button' */
+export function trackTextClick(location: string) {
+  sendEvent('click_text', { click_location: location });
+}
+
 /** Get directions click */
 export function trackDirectionsClick() {
   sendEvent('click_directions');

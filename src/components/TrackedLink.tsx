@@ -1,6 +1,6 @@
 'use client';
 
-import { trackPhoneClick, trackDirectionsClick } from '@/lib/analytics';
+import { trackPhoneClick, trackDirectionsClick, trackTextClick } from '@/lib/analytics';
 
 /**
  * Drop-in <a> replacement that fires a GA4 event on click.
@@ -25,6 +25,35 @@ export function TrackedPhoneLink({
       className={className}
       aria-label={ariaLabel}
       onClick={() => trackPhoneClick(location)}
+    >
+      {children}
+    </a>
+  );
+}
+
+/**
+ * Drop-in <a> replacement for sms: links that fires a GA4 click_text event.
+ * Use in server components where you can't add onClick inline.
+ */
+export function TrackedTextLink({
+  location,
+  href,
+  className,
+  children,
+  'aria-label': ariaLabel,
+}: {
+  location: string;
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+  'aria-label'?: string;
+}) {
+  return (
+    <a
+      href={href}
+      className={className}
+      aria-label={ariaLabel}
+      onClick={() => trackTextClick(location)}
     >
       {children}
     </a>

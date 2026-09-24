@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BRANDS } from "@/data/brands";
 import { BreadcrumbSchema } from "@/components/StructuredData";
 import SiteBreadcrumb from "@/components/SiteBreadcrumb";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 
 /**
  * Brands index — /brands/
@@ -157,12 +158,13 @@ export default function BrandsIndexPage() {
             735 N Yale Ave, Unit A, Villa Park, IL 60181.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <a
+            <TrackedPhoneLink
+              location="brands_cta"
               href="tel:6303593643"
               className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-xl font-semibold"
             >
               Call (630) 359-3643
-            </a>
+            </TrackedPhoneLink>
             <Link
               href="/inventory"
               className="inline-flex items-center border-2 border-brand-gray-300 hover:bg-brand-gray-100 text-brand-gray-900 px-6 py-3 rounded-xl font-semibold"

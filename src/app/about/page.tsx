@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 import AboutHero from "./AboutHero";
 
 export const metadata: Metadata = {
@@ -121,12 +122,13 @@ export default function AboutPage() {
             >
               Browse Inventory
             </Link>
-            <a
+            <TrackedPhoneLink
+              location="about_cta"
               href={`tel:${SITE_CONFIG.phoneRaw}`}
               className="inline-flex items-center justify-center border-2 border-white/30 hover:bg-white/10 text-white px-8 py-3 rounded-xl font-semibold transition-colors"
             >
               Call {SITE_CONFIG.phone}
-            </a>
+            </TrackedPhoneLink>
           </div>
         </div>
       </section>

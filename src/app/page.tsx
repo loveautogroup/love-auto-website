@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import T from "@/components/T";
 import { SITE_CONFIG } from "@/lib/constants";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 import HomeFeaturedGrid, { HomeOnTheLot } from "@/components/HomeFeaturedGrid";
 import HomepageReviewWall from "@/components/HomepageReviewWall";
 import PaymentCalculator from "@/components/PaymentCalculator";
@@ -181,7 +182,8 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
-              <a
+              <TrackedPhoneLink
+                location="home_hero"
                 href={`tel:${SITE_CONFIG.phoneRaw}`}
                 className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm"
               >
@@ -189,7 +191,7 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z" />
                 </svg>
                 <T path={["homePage", "orCall"]} replace={{ "{phone}": SITE_CONFIG.phone }} />
-              </a>
+              </TrackedPhoneLink>
             </div>
 
             {/* Trust chips */}
@@ -231,7 +233,8 @@ export default function HomePage() {
                 <T path={["homePage", "shipBody"]} />
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
-                <a
+                <TrackedPhoneLink
+                  location="home_delivery"
                   href={`tel:${SITE_CONFIG.phoneRaw}`}
                   className="inline-flex items-center justify-center gap-2 bg-brand-red text-white font-bold px-6 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm"
                   aria-label={`Call ${SITE_CONFIG.phone} to ask about delivery`}
@@ -240,7 +243,7 @@ export default function HomePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   <T path={["homePage", "shipCall"]} replace={{ "{phone}": SITE_CONFIG.phone }} />
-                </a>
+                </TrackedPhoneLink>
                 <Link
                   href="/contact"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/20 transition-colors text-sm border border-white/20"
@@ -339,12 +342,13 @@ export default function HomePage() {
                   />
                 </svg>
                 <div>
-                  <a
+                  <TrackedPhoneLink
+                    location="home_footer_card"
                     href={`tel:${SITE_CONFIG.phoneRaw}`}
                     className="font-semibold text-brand-red hover:text-brand-red-dark"
                   >
                     {SITE_CONFIG.phone}
-                  </a>
+                  </TrackedPhoneLink>
                   <p className="text-sm text-brand-gray-500">
                     <T path={["homePage", "callOrText"]} />
                   </p>

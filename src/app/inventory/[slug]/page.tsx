@@ -5,6 +5,7 @@ import { resolveVehicle, vehicleStaticParams } from "@/lib/vdpRoute";
 import { VehicleSchema, BreadcrumbSchema } from "@/components/StructuredData";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import { SITE_CONFIG } from "@/lib/constants";
+import { TrackedPhoneLink } from "@/components/TrackedLink";
 import VDPLivePhotos from "@/components/VDPLivePhotos";
 import VDPTabs from "@/components/VDPTabs";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
@@ -200,12 +201,13 @@ export default async function VehicleDetailPage({
                     <p className="text-xs text-white/70 mt-1 leading-snug">
                       <T path={["delivery", "body"]} />
                     </p>
-                    <a
+                    <TrackedPhoneLink
+                      location="vdp_delivery_card"
                       href={`tel:${SITE_CONFIG.phoneRaw}`}
                       className="inline-block mt-2 text-xs font-semibold text-brand-red bg-white rounded-full px-3 py-1 hover:bg-brand-red hover:text-white transition-colors"
                     >
                       {SITE_CONFIG.phone} <T path={["delivery", "ctaSuffix"]} />
-                    </a>
+                    </TrackedPhoneLink>
                   </div>
                 </div>
   );
@@ -477,7 +479,8 @@ export default async function VehicleDetailPage({
                   <VDPLiveStatus vin={vehicle.vin} fallback={vehicle.status} />
 
                   <div className="space-y-3">
-                    <a
+                    <TrackedPhoneLink
+                      location="vdp_sidebar"
                       href={`tel:${SITE_CONFIG.phoneRaw}`}
                       className="flex items-center justify-center gap-2 w-full bg-brand-green hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition-colors"
                     >
@@ -496,11 +499,12 @@ export default async function VehicleDetailPage({
                         />
                       </svg>
                       <T path={["vdpChrome", "call"]} /> {SITE_CONFIG.phone}
-                    </a>
+                    </TrackedPhoneLink>
                     <VDPTextUsLink
                       vin={vehicle.vin}
                       defaultPhone={textPhoneDefault}
                       bodyText={textBodyRaw}
+                      location="vdp_sidebar"
                       className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors"
                     >
                       <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
@@ -739,7 +743,8 @@ export default async function VehicleDetailPage({
 
         {/* Mobile sticky CTA bar — Call + Text + Calculate */}
         <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-white border-t border-brand-gray-200 p-3 flex gap-2 z-40">
-          <a
+          <TrackedPhoneLink
+            location="vdp_sticky_bottom"
             href={`tel:${SITE_CONFIG.phoneRaw}`}
             className="flex-1 flex items-center justify-center gap-1.5 bg-brand-green text-white py-3 rounded-xl font-semibold text-sm"
             aria-label="Call us"
@@ -759,11 +764,12 @@ export default async function VehicleDetailPage({
               />
             </svg>
             <T path={["vdpChrome", "call"]} />
-          </a>
+          </TrackedPhoneLink>
           <VDPTextUsLink
             vin={vehicle.vin}
             defaultPhone={textPhoneDefault}
             bodyText={textBodyRaw}
+            location="vdp_sticky_bottom"
             className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 text-white py-3 rounded-xl font-semibold text-sm"
             ariaLabel="Text us"
           >
