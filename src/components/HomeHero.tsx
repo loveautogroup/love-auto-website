@@ -40,11 +40,12 @@ export default function HomeHero() {
   };
 
   return (
-    <section className="relative bg-brand-navy text-white overflow-hidden lg:aspect-video">
+    <section className="relative bg-brand-navy text-white overflow-hidden lg:h-[min(56.25vw,62vh)] lg:min-h-[520px]">
       {/* Video plays BEHIND the headline at every width (owner,
-          2026-09-27). From lg up the hero is exactly 16:9, the video's own
-          shape, so object-cover crops nothing ("can't view many of the
-          pics"). Below lg the text needs more height than a 16:9 strip,
+          2026-09-27). From lg up the hero is 16:9 but capped at 62% of the
+          screen height (owner: 16:9 at full width was "way too big" on
+          desktop), so on wide screens a little of the top and bottom is
+          trimmed. Below lg the text needs more height than a 16:9 strip,
           so the video covers a taller box and trims the sides; center
           position keeps the people in frame. */}
       <video
