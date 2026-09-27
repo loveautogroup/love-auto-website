@@ -43,7 +43,7 @@ export interface PromoVideoProps {
   mode: "click" | "auto-in-view";
   ariaLabel: string;
   /** {video} value sent with the GA4 video_play event. */
-  analyticsVideo: "happy_customers" | "happy_customers_short" | "review_collage";
+  analyticsVideo: "happy_customers" | "happy_customers_short";
   /** {location} value sent with the GA4 video_play event. */
   analyticsLocation: string;
   /** Anchor id on the wrapping container, e.g. for a "watch on /reviews" deep link. */

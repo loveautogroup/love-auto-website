@@ -5,7 +5,6 @@ import { SITE_CONFIG } from "@/lib/constants";
 import { TrackedPhoneLink } from "@/components/TrackedLink";
 import HomeFeaturedGrid, { HomeOnTheLot } from "@/components/HomeFeaturedGrid";
 import HomepageReviewWall from "@/components/HomepageReviewWall";
-import PromoVideo from "@/components/PromoVideo";
 import PaymentCalculator from "@/components/PaymentCalculator";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
@@ -422,22 +421,6 @@ export default function HomePage() {
           placement used by competitors. */}
       <HomepageReviewWall />
 
-      {/* Review collage — a looping montage of real 5-star Google reviews,
-          the same style as the review wall near the end of the full video.
-          Muted, plays only while on screen, no audio. Quotes are verbatim. */}
-      <section className="bg-[#0a0a0a] py-14" aria-label="Customer reviews video">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <PromoVideo
-            src="/videos/review-collage-loop.mp4"
-            posterSrc="/videos/review-collage-poster.jpg"
-            mode="auto-in-view"
-            ariaLabel="A looping collage of five-star Google reviews from Love Auto Group customers"
-            analyticsVideo="review_collage"
-            analyticsLocation="homepage_bottom"
-            className="rounded-none"
-          />
-        </div>
-      </section>
 
       {/* "Car dealership" relevance block — SEO plan 2026-07-20, Phase 1.
           The pos-20.9 "love car dealership" query needs the literal phrase
