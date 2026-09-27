@@ -15,6 +15,7 @@ const NAV_KEY_MAP: Record<string, string> = {
   "/financing": "financing",
   "/sell-your-car": "sellYourCar",
   "/about": "about",
+  "/reviews": "reviews",
   "/faq": "faq",
   "/contact": "contact",
 };

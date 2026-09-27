@@ -57,6 +57,7 @@ export const NAV_LINKS = [
   { label: "Financing", href: "/financing" },
   { label: "Sell Your Car", href: "/sell-your-car" },
   { label: "About", href: "/about" },
+  { label: "Reviews", href: "/reviews" },
   // Blog removed Apr 2026 — content lives at src/data/blog.ts and the
   // /blog routes are deleted. Restore by re-adding routes and putting
   //   { label: "Blog", href: "/blog" }
