@@ -28,6 +28,7 @@ import {
   type VehicleOverlay,
 } from "./merchandising";
 import { carfaxVisible } from "../../shared/carfaxVisibility";
+import { DEV_READ_API_BASE } from "@/lib/devApiBase";
 
 // Module-level cache — survives between hook calls but is fresh on a full
 // page reload, which is what we want (DMS edits propagate within ~60s
@@ -42,7 +43,7 @@ let inflight: Promise<MerchandisingConfig | null> | null = null;
 function fetchMerchandising(): Promise<MerchandisingConfig | null> {
   if (cache) return Promise.resolve(cache);
   if (inflight) return inflight;
-  inflight = fetch("/api/merchandising")
+  inflight = fetch(`${DEV_READ_API_BASE}/api/merchandising`)
     .then((res) => {
       // 204 = KV empty, use baked default
       if (res.status === 204) return null;

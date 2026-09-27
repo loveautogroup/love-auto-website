@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "website-redesign",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "dev", "--port", "3224"],
+      "port": 3224
+    }
+  ]
+}

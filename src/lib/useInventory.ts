@@ -35,6 +35,7 @@ import { useEffect, useState } from "react";
 import type { Vehicle } from "@/lib/types";
 import { sampleInventory } from "@/data/inventory";
 import { adaptSnapshot, type InventorySnapshot } from "@/lib/inventoryAdapter";
+import { DEV_READ_API_BASE } from "@/lib/devApiBase";
 
 const CACHE_KEY = "inventory:cache:v1";
 const CACHE_MAX_AGE_MS = 60_000; // mirror /api/inventory s-maxage
@@ -96,7 +97,7 @@ export function useInventory(): InventoryState {
     }
 
     // Step 2: no fresh cache -- fetch live inventory.
-    fetch("/api/inventory")
+    fetch(`${DEV_READ_API_BASE}/api/inventory`)
       .then(async (res) => {
         if (cancelled) return;
         if (res.status === 204) {

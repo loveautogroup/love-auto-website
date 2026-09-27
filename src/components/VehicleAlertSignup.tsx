@@ -65,7 +65,7 @@ export default function VehicleAlertSignup({ defaultMake = "" }: { defaultMake?:
 
   if (state === "done") {
     return (
-      <div className="rounded-lg bg-brand-gray-50 border border-brand-gray-200 p-4 text-sm text-brand-gray-700">
+      <div className="bg-ink-100 border border-ink-200 p-4 text-sm text-brand-gray-700">
         <p className="font-semibold text-brand-gray-900 mb-1">{a.title}</p>
         <p>{a.success}</p>
       </div>
@@ -82,7 +82,7 @@ export default function VehicleAlertSignup({ defaultMake = "" }: { defaultMake?:
         aria-label={t.alerts.makeLabel}
         value={make}
         onChange={(e) => setMake(e.target.value)}
-        className="w-full border border-brand-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-red"
+        className="w-full border border-ink-200 px-3 py-2.5 bg-white text-sm focus:outline-none focus:border-brand-red"
       >
         <option value="">{a.anyMake}</option>
         {MAKES.map((m) => (
@@ -98,7 +98,7 @@ export default function VehicleAlertSignup({ defaultMake = "" }: { defaultMake?:
         onChange={(e) => setEmail(e.target.value)}
         placeholder={a.emailPlaceholder}
         aria-label={a.emailPlaceholder}
-        className="w-full border border-brand-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red"
+        className="w-full border border-ink-200 px-3 py-2.5 text-sm focus:outline-none focus:border-brand-red"
       />
       {/* Honeypot — visually hidden, bots fill it, server rejects. */}
       <input
@@ -113,7 +113,7 @@ export default function VehicleAlertSignup({ defaultMake = "" }: { defaultMake?:
       <button
         type="submit"
         disabled={state === "sending"}
-        className="w-full bg-brand-red hover:bg-brand-red-dark disabled:opacity-60 text-white py-2.5 rounded-lg text-sm font-semibold transition-colors"
+        className="w-full bg-brand-red hover:bg-brand-red-dark disabled:opacity-60 text-white py-3 text-[12.5px] font-bold uppercase tracking-[0.06em] transition-colors"
       >
         {state === "sending" ? a.sending : a.button}
       </button>

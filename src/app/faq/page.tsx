@@ -17,7 +17,7 @@ const faqs = [
   {
     question: "Do you offer financing?",
     answer:
-      "We work with multiple lenders to help you find financing that fits your budget, including options for buyers with less-than-perfect credit. You can get pre-approved right on our website with no impact to your credit score.",
+      "We work with multiple lenders to help you find financing that fits your budget, including options for buyers with less-than-perfect credit. You can apply for financing right on our website with no impact to your credit score.",
   },
   {
     question: "Can I trade in my current vehicle?",

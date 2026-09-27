@@ -90,7 +90,7 @@ export default function InventoryPage() {
           not a filter, so it outlives the panel — kept here where it reads as a
           closing ask after the shopper has been through the grid. */}
       <section className="max-w-3xl mx-auto px-4 pb-12">
-        <div className="bg-white border border-brand-gray-200 rounded-xl p-6">
+        <div className="bg-white border border-ink-200 p-6">
           <VehicleAlertSignup />
           {/* 2026-09-21: the fuller ask — make, body style, budget, year range —
               lands on the DMS waitlist and gets matched against every arrival. */}

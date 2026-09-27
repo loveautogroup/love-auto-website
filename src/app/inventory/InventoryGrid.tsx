@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, Suspense } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { Vehicle } from "@/lib/types";
 import { useLanguage } from "@/context/LanguageContext";
@@ -175,13 +176,35 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
   ].some((key) => Boolean(searchParams.get(key)));
   const soldHistory = hasActiveFilter ? [] : soldHistoryAll;
 
+  // Flat underline quick-filter tabs (mockup: rounded pill chips -> a thin
+  // horizontal tab bar). Same URL-param scheme HomeHero's quick links already
+  // use, so a shared bookmark or the homepage tap-through both land here
+  // correctly filtered. "All" clears every param this row controls.
+  const QUICK_FILTERS: { key: string; label: string; params: Record<string, string> }[] = [
+    { key: "all", label: "All", params: {} },
+    { key: "under10", label: "Under $10K", params: { maxPrice: "10000" } },
+    { key: "awd", label: "AWD / 4WD", params: { drivetrain: "AWD" } },
+    { key: "suvs", label: "SUVs", params: { bodyStyle: "suv" } },
+    { key: "sedans", label: "Sedans", params: { bodyStyle: "sedan" } },
+  ];
+  const activeQuickFilter = (() => {
+    for (const qf of QUICK_FILTERS) {
+      if (qf.key === "all") continue;
+      const matches = Object.entries(qf.params).every(
+        ([k, v]) => searchParams.get(k) === v
+      );
+      if (matches) return qf.key;
+    }
+    return "all";
+  })();
+
   if (isLoadingInitial) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6" aria-label="Loading inventory">
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="rounded-2xl bg-brand-gray-100 animate-pulse overflow-hidden"
+            className="bg-brand-gray-100 animate-pulse overflow-hidden"
             style={{ height: 380 }}
           />
         ))}
@@ -191,6 +214,30 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
 
   return (
     <>
+      <div className="flex gap-0 overflow-x-auto border-b border-ink-200 mb-5">
+        {QUICK_FILTERS.map((qf) => {
+          const href =
+            Object.keys(qf.params).length === 0
+              ? "/inventory"
+              : `/inventory?${new URLSearchParams(qf.params).toString()}`;
+          const isActive = activeQuickFilter === qf.key;
+          return (
+            <Link
+              key={qf.key}
+              href={href}
+              onClick={() => trackInventoryFilter({ quickFilter: qf.key })}
+              className={`whitespace-nowrap px-4 py-3 text-[12px] font-bold uppercase tracking-[0.07em] border-b-2 transition-colors ${
+                isActive
+                  ? "border-brand-red text-brand-gray-900"
+                  : "border-transparent text-brand-gray-500 hover:text-brand-gray-900 hover:border-brand-gray-300"
+              }`}
+            >
+              {qf.label}
+            </Link>
+          );
+        })}
+      </div>
+
       <div className="flex items-center justify-between mb-6">
         <p className="text-brand-gray-500 text-sm">
           {g.showing}{" "}
@@ -201,7 +248,7 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
           )}
         </p>
         <select
-          className="text-sm border border-brand-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-red"
+          className="text-[12px] font-semibold uppercase tracking-[0.04em] border border-ink-200 px-3 py-2 bg-white focus:outline-none focus:border-brand-red"
           aria-label="Sort vehicles"
           value={sortOrder}
           onChange={(e) => {
@@ -241,7 +288,7 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
             </a>{" "}
             {g.noResultsSource}
           </p>
-          <a href="/waitlist/" className="mt-5 inline-block bg-brand-red hover:bg-brand-red-dark text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors">
+          <a href="/waitlist/" className="mt-5 inline-block bg-brand-red hover:bg-brand-red-dark text-white px-5 py-3 text-[12.5px] font-bold uppercase tracking-[0.07em] transition-colors">
             {t.alerts.waitlistCtaLink}
           </a>
         </div>

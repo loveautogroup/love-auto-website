@@ -70,7 +70,7 @@ export default function HomePage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center p-6">
-              <div className="w-16 h-16 bg-brand-red/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-14 h-14 bg-brand-red/10 flex items-center justify-center mx-auto mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-8 h-8 text-brand-red"
@@ -94,7 +94,7 @@ export default function HomePage() {
               </p>
             </div>
             <div className="text-center p-6">
-              <div className="w-16 h-16 bg-brand-red/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-14 h-14 bg-brand-red/10 flex items-center justify-center mx-auto mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-8 h-8 text-brand-red"
@@ -118,7 +118,7 @@ export default function HomePage() {
               </p>
             </div>
             <div className="text-center p-6">
-              <div className="w-16 h-16 bg-brand-red/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-14 h-14 bg-brand-red/10 flex items-center justify-center mx-auto mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-8 h-8 text-brand-red"
@@ -178,7 +178,7 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/sell-your-car"
-                className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-sm"
+                className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white font-bold uppercase tracking-[0.06em] px-8 py-3.5 transition-colors text-[12.5px]"
               >
                 <T path={["homePage", "sellCta"]} />
                 <svg
@@ -247,7 +247,7 @@ export default function HomePage() {
                 <TrackedPhoneLink
                   location="home_delivery"
                   href={`tel:${SITE_CONFIG.phoneRaw}`}
-                  className="inline-flex items-center justify-center gap-2 bg-brand-red text-white font-bold px-6 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm"
+                  className="inline-flex items-center justify-center gap-2 bg-brand-red text-white font-bold uppercase tracking-[0.06em] px-6 py-3.5 hover:bg-red-700 transition-colors text-[12px]"
                   aria-label={`Call ${SITE_CONFIG.phone} to ask about delivery`}
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true">
@@ -257,7 +257,7 @@ export default function HomePage() {
                 </TrackedPhoneLink>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center gap-2 bg-white/10 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/20 transition-colors text-sm border border-white/20"
+                  className="inline-flex items-center justify-center gap-2 bg-transparent text-white font-bold uppercase tracking-[0.06em] px-6 py-3.5 hover:bg-white/10 transition-colors text-[12px] border border-white/35"
                 >
                   <T path={["homePage", "shipCta"]} />
                 </Link>
@@ -287,7 +287,7 @@ export default function HomePage() {
                   body: "shipDoorBody",
                 },
               ].map(({ icon, title, body }) => (
-                <div key={title} className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div key={title} className="bg-white/5 border border-white/10 p-4">
                   <svg className="w-5 h-5 text-brand-red mb-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
                   </svg>
@@ -368,7 +368,7 @@ export default function HomePage() {
             </div>
 
             {/* Hours table */}
-            <div className="mt-6 bg-white rounded-xl border border-brand-gray-200 p-5">
+            <div className="mt-6 bg-white border border-ink-200 p-5">
               <h3 className="font-semibold text-brand-gray-900 mb-3">
                 <T path={["homePage", "businessHours"]} />
               </h3>
@@ -388,7 +388,7 @@ export default function HomePage() {
           </div>
 
           {/* Map */}
-          <div className="rounded-2xl overflow-hidden border border-brand-gray-200">
+          <div className="overflow-hidden border border-ink-200">
             <iframe
               title={`Map of ${SITE_CONFIG.name} at ${SITE_CONFIG.address.full}`}
               src={`https://www.google.com/maps?q=${encodeURIComponent(SITE_CONFIG.address.full)}&output=embed`}

@@ -22,6 +22,7 @@
 
 import { useEffect, useState } from "react";
 import { trackTextClick } from "@/lib/analytics";
+import { DEV_READ_API_BASE } from "@/lib/devApiBase";
 
 interface Props {
   /** VIN of the vehicle currently being viewed. Used to look up overlay. */
@@ -63,7 +64,7 @@ export default function VDPTextUsLink({
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/merchandising")
+    fetch(`${DEV_READ_API_BASE}/api/merchandising`)
       .then((res) => {
         // 204 means KV is empty — keep the baked default.
         if (res.status === 204) return null;
