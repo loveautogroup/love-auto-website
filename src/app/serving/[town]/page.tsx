@@ -115,7 +115,7 @@ export default async function ServiceAreaPage({
             Vehicles On the Lot Today
           </h2>
           <p className="mt-2 text-brand-gray-500">
-            Hand-picked inventory, inspected and ready for {content.town} drivers.
+            Hand-picked inventory, ready for {content.town} drivers.
           </p>
         </div>
 

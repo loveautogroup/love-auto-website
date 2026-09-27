@@ -44,7 +44,7 @@ export async function generateMetadata({
   const title = withTrim.length <= 60 ? withTrim : withoutTrim;
 
   const formattedMileage = new Intl.NumberFormat("es-US").format(vehicle.mileage);
-  const description = `${[base, vehicle.trim].filter(Boolean).join(" ")} en venta en Villa Park, IL. ${formattedMileage} millas, ${vehicle.drivetrain}. Seleccionado con cuidado y completamente reacondicionado en Love Auto Group.`;
+  const description = `${[base, vehicle.trim].filter(Boolean).join(" ")} en venta en Villa Park, IL. ${formattedMileage} millas, ${vehicle.drivetrain}. Seleccionado con cuidado en Love Auto Group.`;
 
   const url = `https://www.loveautogroup.net/es/inventory/${slug}/`;
   const englishUrl = `https://www.loveautogroup.net/inventory/${slug}/`;

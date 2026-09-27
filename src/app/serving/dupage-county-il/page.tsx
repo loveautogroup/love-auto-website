@@ -41,7 +41,7 @@ const FAQS = [
   {
     question: "What kinds of used cars do you sell?",
     answer:
-      "We carry Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Inventory is typically priced from around $4,500 to $18,000, with most vehicles in the 2013 to 2018 model years and 80,000 to 140,000 mile range. Every vehicle is carefully selected and fully reconditioned, and a free Carfax is available on the ones that show the badge.",
+      "We carry Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Inventory is typically priced from around $4,500 to $18,000, with most vehicles in the 2013 to 2018 model years and 80,000 to 140,000 mile range. Every vehicle is carefully selected, and a free Carfax is available on the ones that show the badge.",
   },
   {
     question: "Are you a family owned dealer?",
@@ -228,8 +228,8 @@ export default function DuPageCountyPage() {
           Love Auto Group is a family owned used car dealer at 735 N Yale Ave in
           Villa Park, IL, central to all of DuPage County and the western
           Chicago suburbs. We&apos;re a small specialist team, not a corporate
-          franchise group. Every deal gets personal attention and every vehicle
-          is thoroughly inspected and reconditioned before it goes on the lot.
+          franchise group. Every deal gets personal attention, and every
+          vehicle is carefully selected before it goes on the lot.
         </p>
         <p className="text-brand-gray-700 leading-relaxed mb-4">
           Our focus is the makes we know, the cars built to run past 200,000
@@ -242,10 +242,9 @@ export default function DuPageCountyPage() {
         <p className="text-brand-gray-700 leading-relaxed mb-4">
           Inventory typically prices from around $4,500 to $18,000, with most
           vehicles in the 2013 to 2018 model years and 80,000 to 140,000 mile
-          range. Every vehicle is carefully selected at the buying stage and
-          fully inspected and reconditioned. We&apos;re a Carfax Advantage
-          Dealer, so vehicles that show the CARFAX badge come with a free
-          report you can pull yourself.
+          range. Every vehicle is carefully selected at the buying stage.
+          We&apos;re a Carfax Advantage Dealer, so vehicles that show the
+          CARFAX badge come with a free report you can pull yourself.
         </p>
 
         <h2 className="text-2xl font-bold text-brand-gray-900 mt-12 mb-4">

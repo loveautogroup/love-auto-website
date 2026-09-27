@@ -80,7 +80,7 @@ export async function generateMetadata({
   const title = withTrim.length <= 60 ? withTrim : withoutTrim;
 
   const formattedMileage = new Intl.NumberFormat().format(vehicle.mileage);
-  const description = `${[base, vehicle.trim].filter(Boolean).join(" ")} for sale in Villa Park, IL. ${formattedMileage} miles, ${vehicle.drivetrain}. Carefully selected and fully reconditioned at Love Auto Group.`;
+  const description = `${[base, vehicle.trim].filter(Boolean).join(" ")} for sale in Villa Park, IL. ${formattedMileage} miles, ${vehicle.drivetrain}. Carefully selected at Love Auto Group.`;
 
   const url = `https://www.loveautogroup.net/inventory/${slug}/`;
   // Hero photo for social-share preview reflects Jordan's manifest, so

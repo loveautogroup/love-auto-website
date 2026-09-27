@@ -32,7 +32,9 @@ export const STATUS_KINDS = [
   "great-deal",
   "below-market",
   "managers-special",
-  "reconditioned",
+  // "reconditioned" removed (owner, 2026-09-26: erase the inspected/
+  // reconditioned jargon site-wide). A car that still carries it in KV
+  // renders no pill, same as the price-drop tags removed 2026-09-15.
   "off-lease",
   "trade-in",
   "new-arrival",

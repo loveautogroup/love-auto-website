@@ -50,7 +50,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     make: "Subaru",
     title: "Used Subaru for Sale in Villa Park, IL | Love Auto Group",
     description:
-      "Quality used Subaru sedans, SUVs, and crossovers in Villa Park, IL. Inspected, reconditioned, free Carfax. Family owned since 2014, serving DuPage County.",
+      "Quality used Subaru sedans, SUVs, and crossovers in Villa Park, IL. Free Carfax, no dealer fees. Family owned since 2014, serving DuPage County.",
     hero:
       "Symmetrical AWD, legendary reliability, and Chicago-winter-ready performance — every used Subaru on our lot.",
     intro:
@@ -72,7 +72,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "What Buying a Used Subaru From Love Auto Group Looks Like",
         body: [
-          "Every used Subaru on our lot goes through a multi-point mechanical inspection before it's listed. CVT health, head gasket condition (a known wear item on certain model years), AWD coupling fluid, and timing chain tensioner are all checked specifically because they're the items Subaru owners actually need to know about. We share full Carfax reports for free on vehicles that show the badge, and we'll talk through any service history flags openly before you sign anything.",
+          "CVT health, head gasket condition (a known wear item on certain model years), AWD coupling fluid, and timing chain tensioner are all things Subaru owners actually need to know about, and we're glad to walk through them with you before you buy. We share full Carfax reports for free on vehicles that show the badge, and we'll talk through any service history flags openly before you sign anything.",
           "We're a Carfax Advantage Dealer, which means our reporting compliance is verified by Carfax and you can pull a free vehicle history report directly from any Subaru listing that shows the badge.",
         ],
       },
@@ -98,7 +98,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     make: "Lexus",
     title: "Used Lexus for Sale in Villa Park, IL | Love Auto Group",
     description:
-      "Used Lexus sedans, SUVs, and coupes in Villa Park, IL. Inspected, reconditioned, free Carfax. Family-owned independent dealers serving DuPage County since 2014.",
+      "Used Lexus sedans, SUVs, and coupes in Villa Park, IL. Free Carfax, no dealer fees. Family-owned independent dealers serving DuPage County since 2014.",
     hero:
       "Toyota reliability with the materials and refinement of a German luxury car — at half the depreciation curve.",
     intro:
@@ -118,10 +118,10 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
         ],
       },
       {
-        heading: "What Inspection Looks Like on a Used Lexus",
+        heading: "What to Know Before You Buy a Used Lexus",
         body: [
-          "Lexus vehicles share Toyota's reputation for needing very little non-routine work, but used examples still benefit from a careful pre-sale check. We verify hybrid battery state-of-health on hybrid models (the single most expensive component on a used hybrid Lexus, and the one most worth knowing about), inspect the transmission cooler lines on the RX, check the air-suspension components on the LX and GX, and pull a full Carfax report on every car — available for you to see service history and accident records yourself on the ones that show the badge.",
-          "If a Lexus comes through with anything we wouldn't drive ourselves, it doesn't get listed. The ones we do list are ones we'd recommend to family.",
+          "Lexus vehicles share Toyota's reputation for needing very little non-routine work, but used examples are still worth knowing about before you buy. Hybrid battery state-of-health matters most on hybrid models (the single most expensive component on a used hybrid Lexus, and the one most worth asking about), the transmission cooler lines are worth checking on the RX, and the air-suspension components are the item to watch on the LX and GX. We pull a full Carfax report on every car, available for you to see service history and accident records yourself on the ones that show the badge.",
+          "The ones we list are ones we'd recommend to family.",
         ],
       },
       {
@@ -214,9 +214,9 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
         ],
       },
       {
-        heading: "Inspection and Reconditioning",
+        heading: "What to Know on a Used Mazda",
         body: [
-          "Every used Mazda on our lot is inspected for the items that matter on the platform: SkyActiv engine carbon-buildup signs (a known long-term wear pattern on direct-injection turbo engines), AWD transfer case fluid on CX-5 and CX-9 models, infotainment system functionality, and full Carfax history. As a Carfax Advantage Dealer, we provide a free Carfax report on the vehicles that show the badge, and won't list anything we wouldn't drive ourselves.",
+          "The items that matter on the platform: SkyActiv engine carbon-buildup signs (a known long-term wear pattern on direct-injection turbo engines), AWD transfer case fluid on CX-5 and CX-9 models, infotainment system functionality, and full Carfax history. As a Carfax Advantage Dealer, we provide a free Carfax report on the vehicles that show the badge.",
         ],
       },
       {
@@ -261,9 +261,9 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
         ],
       },
       {
-        heading: "Inspection Standards",
+        heading: "What to Know on a Used Honda",
         body: [
-          "Honda's reliability reputation is real but not unconditional. Every used Honda is inspected for the platform-specific items: CVT health and fluid condition (especially on Civic and CR-V), VTC actuator function (Civic L15B7 turbo engines), AC compressor on early Pilot model years, and full transmission service records when available. As a Carfax Advantage Dealer, we provide a free Carfax report on the Hondas that show the badge.",
+          "Honda's reliability reputation is real but not unconditional. The platform-specific items worth knowing: CVT health and fluid condition (especially on Civic and CR-V), VTC actuator function (Civic L15B7 turbo engines), AC compressor on early Pilot model years, and full transmission service records when available. As a Carfax Advantage Dealer, we provide a free Carfax report on the Hondas that show the badge.",
         ],
       },
       {
@@ -312,9 +312,9 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
         ],
       },
       {
-        heading: "The Inspection Standard",
+        heading: "What to Know on a Used SUV",
         body: [
-          "SUVs work harder than sedans, especially in the Chicago suburbs. Every used SUV is inspected for the items that matter on the platform — AWD coupling fluid condition, brake pad and rotor condition (heavier vehicles wear them faster), suspension components, third-row seat operation where applicable, and full electronic system function. If anything fails the inspection, the vehicle doesn't get listed.",
+          "SUVs work harder than sedans, especially in the Chicago suburbs. The items that matter on the platform are worth asking about: AWD coupling fluid condition, brake pad and rotor condition (heavier vehicles wear them faster), suspension components, third-row seat operation where applicable, and full electronic system function. We're happy to talk through them with you.",
         ],
       },
       {
@@ -360,9 +360,9 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
         ],
       },
       {
-        heading: "Inspection and Carfax Standard",
+        heading: "Carfax Standard",
         body: [
-          "Every used sedan in our inventory gets the same treatment as our SUVs: full mechanical inspection, platform-specific wear-item check, and a free Carfax history report on the ones that show the badge. We're a Carfax Advantage Dealer — that report is free from any marked listing on our site, no email required.",
+          "Every used sedan in our inventory comes with a free Carfax history report on the ones that show the badge. We're a Carfax Advantage Dealer, so that report is free from any marked listing on our site, no email required.",
         ],
       },
       {

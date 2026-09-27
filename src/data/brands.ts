@@ -80,7 +80,7 @@ export const BRANDS: BrandContent[] = [
     body: [
       "Honda built its reputation on drivetrains that simply do not quit. The CR-V routinely runs past 200,000 miles. The Pilot is a three-row family vehicle that holds resale value better than almost anything in its segment. The Accord and Civic both age past 150,000 miles with nothing more than routine service. That is why we keep used Hondas in steady rotation on our lot.",
       "{{STOCK}} We focus on 2013 to 2017 model years with 80,000 to 140,000 miles. The drivetrains in this generation are well past their teething period, prices have come down significantly, and the cars still feel current inside.",
-      "Every used Honda on our lot has been carefully selected and fully reconditioned before it is listed. On the CR-V and the Pilot we look at the variable cylinder management on the V6 (a known wear point), the CVT behavior on later CR-V models, and the all-wheel drive engagement. We pull a free Carfax on every vehicle and review it for documented oil services and any open recalls.",
+      "Every used Honda on our lot has been carefully selected before it is listed. On the CR-V and the Pilot we look at the variable cylinder management on the V6 (a known wear point), the CVT behavior on later CR-V models, and the all-wheel drive engagement. We pull a free Carfax on every vehicle and review it for documented oil services and any open recalls.",
       "The Honda models we see most often: the CR-V (the bestselling compact SUV in America for a reason), the Pilot (three-row family vehicle), the Accord (mid-size sedan that sets the segment standard), and the Civic in either sedan or coupe form.",
     ],
     faqs: [
@@ -92,7 +92,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "What is the most reliable used Honda SUV?",
         answer:
-          "The CR-V is the safest pick. The 2013 to 2017 generation with the 2.4L four-cylinder is the value sweet spot, well past the early-life issues and still current inside. The Pilot is excellent too, but the V6 with variable cylinder management needs documented oil services. Both get inspected during recon, and only the ones that pass get priced.",
+          "The CR-V is the safest pick. The 2013 to 2017 generation with the 2.4L four-cylinder is the value sweet spot, well past the early-life issues and still current inside. The Pilot is excellent too, but the V6 with variable cylinder management needs documented oil services. Ask to see the record before you buy.",
       },
       {
         question: "Should I worry about CVT transmissions in used Hondas?",
@@ -102,7 +102,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "Is a used Honda Pilot a good family vehicle?",
         answer:
-          "Yes, and it is one of the most underrated three-row buys on the used market. The Pilot has a roomier third row than most competitors, the AWD system is genuinely capable in Chicago winters, and resale value is excellent. The honest watch-out is the V6 oil consumption on early variable cylinder management models, which is why every Pilot gets inspected during recon.",
+          "Yes, and it is one of the most underrated three-row buys on the used market. The Pilot has a roomier third row than most competitors, the AWD system is genuinely capable in Chicago winters, and resale value is excellent. The honest watch-out is the V6 oil consumption on early variable cylinder management models. Ask to see the oil-change history before you buy.",
       },
       {
         question: "How much should I expect to pay for a good used Honda Civic?",
@@ -127,10 +127,10 @@ export const BRANDS: BrandContent[] = [
     hero:
       "AWD-ready Subarus near Chicago. Family owned, serving Villa Park and the western suburbs since 2014.",
     body: [
-      "Looking for a used Subaru near Chicago? You're in the right place. Love Auto Group is a family owned used Subaru dealer in Villa Park, IL, twenty minutes west of downtown Chicago and central to the western suburbs and DuPage County. We've been buying, reconditioning, and selling Foresters, Outbacks, and Crosstreks here since 2014, and Subaru is one of the makes we know best.",
+      "Looking for a used Subaru near Chicago? You're in the right place. Love Auto Group is a family owned used Subaru dealer in Villa Park, IL, twenty minutes west of downtown Chicago and central to the western suburbs and DuPage County. We've been buying and selling Foresters, Outbacks, and Crosstreks here since 2014, and Subaru is one of the makes we know best.",
       "A Subaru built after 2014 will run past 250,000 miles when properly maintained. That is not a marketing claim. That is what every long-term reliability study and what we see at the buying stage shows us. Foresters, Outbacks, and Crosstreks from the second-generation 2014 to 2017 era are the value sweet spot in the used Subaru market, and they are exactly what we keep in rotation on our lot in Villa Park.",
       "{{STOCK}} Symmetrical all-wheel drive, eight inches of ground clearance on the Forester, and the kind of all-season capability that handles a Chicago suburbs winter without drama. Buyers come to us from across DuPage County, including Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, and Naperville, plus the broader western suburbs.",
-      "Every used Subaru on our lot has been carefully selected and fully reconditioned before it is listed for sale. The head gasket area, the CVT transmission behavior, and the all-wheel drive engagement all get specific attention during the pre-listing inspection. We also pull a free Carfax on every vehicle, looking for documented CVT fluid services, head gasket history, and consistent oil change records.",
+      "Every used Subaru on our lot has been carefully selected before it is listed for sale. The head gasket area, the CVT transmission behavior, and the all-wheel drive engagement are all things we know to look for on this platform. We also pull a free Carfax on every vehicle, looking for documented CVT fluid services, head gasket history, and consistent oil change records.",
       "The Subaru models we see most often: the Forester (the workhorse), the Outback (more interior space, smoother on the highway), the Crosstrek (lighter, smaller, easier on fuel), and the occasional Legacy sedan for buyers who do not need the wagon body.",
     ],
     faqs: [
@@ -142,7 +142,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "Are Subaru head gasket problems still an issue?",
         answer:
-          "Not on the cars we sell. The head gasket failures Subaru is famous for were on the 2.5L EJ25 engine through about 2011. Foresters, Outbacks, and Crosstreks from 2014 forward use the FB25 engine, which redesigned the gasket and head architecture. We still check gasket area and coolant condition on every Subaru during recon, but it is not the worry it used to be.",
+          "Not on the cars we sell. The head gasket failures Subaru is famous for were on the 2.5L EJ25 engine through about 2011. Foresters, Outbacks, and Crosstreks from 2014 forward use the FB25 engine, which redesigned the gasket and head architecture. We still check gasket area and coolant condition on every Subaru, but it is not the worry it used to be.",
       },
       {
         question: "How long does a used Subaru Forester last?",
@@ -188,10 +188,10 @@ export const BRANDS: BrandContent[] = [
     hero:
       "Used Lexus in the Chicago suburbs. Family owned, serving Villa Park and DuPage County since 2014.",
     body: [
-      "Looking for a used Lexus in the Chicago suburbs? Love Auto Group is a family owned used Lexus dealer in Villa Park, IL, central to DuPage County and the western suburbs. We've been buying, reconditioning, and selling RX, ES, IS, and GX models here since 2014. Lexus is one of the makes we specialize in, alongside Subaru, Acura, Honda, Toyota, and Mazda.",
+      "Looking for a used Lexus in the Chicago suburbs? Love Auto Group is a family owned used Lexus dealer in Villa Park, IL, central to DuPage County and the western suburbs. We've been buying and selling RX, ES, IS, and GX models here since 2014. Lexus is one of the makes we specialize in, alongside Subaru, Acura, Honda, Toyota, and Mazda.",
       "The Lexus RX is the most reliable mid-size luxury SUV ever built, and the ES is the closest thing to a Toyota Avalon wearing a tailored suit. Both are platforms that hold up well past 200,000 miles when serviced properly. That is why we keep them in regular rotation on our lot.",
       "{{STOCK}} We focus on the 2010 to 2017 model years, where prices have come down from new but the cars still feel current inside. Most are in the 90,000 to 130,000 mile range, which on a Lexus is barely broken in. Buyers come to us from across the Chicago suburbs, including Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, Naperville, and Hinsdale, plus drive-ins from Chicago itself.",
-      "Every used Lexus on our lot has been carefully selected and fully reconditioned before it gets a price tag. We pull a free Carfax on every vehicle and review it before listing. We are a Carfax Advantage Dealer, and vehicles that show the CARFAX badge come with that report ready to pull before you ask.",
+      "Every used Lexus on our lot has been carefully selected before it gets a price tag. We pull a free Carfax on every vehicle and review it before listing. We are a Carfax Advantage Dealer, and vehicles that show the CARFAX badge come with that report ready to pull before you ask.",
       "The Lexus models we see most often: the RX 350 (third-generation 2010 to 2015 is the value sweet spot), the ES 350, the IS 250 and IS 300, and the occasional GX 460 for buyers who want a body-on-frame Lexus SUV with real off-road ability. If you are looking for a specific model or trim, call (630) 359-3643 and we will let you know when one lands.",
     ],
     faqs: [
@@ -218,7 +218,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "What should I check before buying a used Lexus?",
         answer:
-          "Service history first. Lexus owners who follow the maintenance schedule produce cars that go 250,000 miles without drama. Owners who skip services produce expensive problems. We pull a Carfax on every Lexus, review the service record before listing; the suspension air struts on GX models specifically get inspected (a known wear point). Carfax Advantage Dealer status means the report is ready to pull on vehicles that show the badge.",
+          "Service history first. Lexus owners who follow the maintenance schedule produce cars that go 250,000 miles without drama. Owners who skip services produce expensive problems. We pull a Carfax on every Lexus, review the service record before listing; the suspension air struts on GX models are a known wear point worth checking. Carfax Advantage Dealer status means the report is ready to pull on vehicles that show the badge.",
       },
       {
         question: "Where can I buy a used Lexus in the Chicago suburbs?",
@@ -251,7 +251,7 @@ export const BRANDS: BrandContent[] = [
     body: [
       "Acura is what happens when Honda engineers a luxury vehicle. Same drivetrains, same long-haul reliability, and a price that drops sharply in the used market. The MDX in particular is one of the most underrated three-row vehicles on the road today, and the SH-AWD system is a genuine all-weather asset for a Chicago winter.",
       "{{STOCK}} We focus on the 2010 to 2015 model years with reasonable miles. The drivetrains in this generation are well past the point where any major issues would have surfaced, and the prices have come down enough that the value math is hard to argue with.",
-      "Every used Acura on our lot has been carefully selected and fully reconditioned before it is listed. On the V6 models we look specifically at the timing belt service history (due around 105,000 miles), the transmission fluid record, and the variable cylinder management performance. A documented timing belt service is the single biggest factor in whether an Acura is going to give the next owner trouble-free miles.",
+      "Every used Acura on our lot has been carefully selected before it is listed. On the V6 models we look specifically at the timing belt service history (due around 105,000 miles), the transmission fluid record, and the variable cylinder management performance. A documented timing belt service is the single biggest factor in whether an Acura is going to give the next owner trouble-free miles.",
       "The Acura models we see most often: the MDX (three-row workhorse with SH-AWD), the TL (luxury sedan with sharp handling), the RDX (compact SUV with the turbocharged four-cylinder in later years), and the occasional TSX for buyers who want a manual transmission option.",
     ],
     faqs: [
@@ -300,7 +300,7 @@ export const BRANDS: BrandContent[] = [
     body: [
       "Mazda is the driver's pick on the used market. The interiors are a step above the segment, the steering and ride balance are notably sharper than competitors, and Mazda's reliability has caught up with Honda and Toyota in the post-2014 generations. The CX-5 in particular is one of the better-aging compact SUVs you can buy used in this price range.",
       "{{STOCK}} We focus on 2014 to 2018 model years with 80,000 to 130,000 miles. Skyactiv engines have proven reliable, the available all-wheel drive on the CX-5 and CX-9 is responsive, and the cabin feels current even on five-year-old examples.",
-      "Every used Mazda on our lot has been carefully selected and fully reconditioned before it is listed. On the CX-5 specifically, the rear differential and the propeller shaft get inspected on all-wheel drive models, since Mazda specified service intervals that not every prior owner followed. We pull a free Carfax on every vehicle and confirm fluid services in the documented history before pricing.",
+      "Every used Mazda on our lot has been carefully selected before it is listed. On the CX-5 specifically, the rear differential and the propeller shaft get checked on all-wheel drive models, since Mazda specified service intervals that not every prior owner followed. We pull a free Carfax on every vehicle and confirm fluid services in the documented history before pricing.",
       "The Mazda models we see most often: the CX-5 (the value play in the compact SUV segment), the Mazda3 (compact car with luxury-segment driving feel), the Mazda6 (mid-size sedan), and the occasional CX-9 for buyers who need three rows.",
     ],
     faqs: [
@@ -327,7 +327,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "What should I check before buying a used CX-5?",
         answer:
-          "On AWD models, check the rear differential fluid and the propeller shaft for noise, since Mazda specified service intervals that not every prior owner followed. Also check the touchscreen for the 2014 to 2017 Mazda Connect system, which can develop bugs. Both get inspected during recon, and we pull a free Carfax to confirm fluid services in the documented history before pricing.",
+          "On AWD models, check the rear differential fluid and the propeller shaft for noise, since Mazda specified service intervals that not every prior owner followed. Also check the touchscreen for the 2014 to 2017 Mazda Connect system, which can develop bugs. We pull a free Carfax to confirm fluid services in the documented history before pricing.",
       },
     ],
     relatedLinks: [
@@ -349,7 +349,7 @@ export const BRANDS: BrandContent[] = [
     body: [
       "Toyota does not make the flashiest car in any segment, and that is exactly the point. The Camry, Corolla, RAV4, and Highlander are built to start every morning, run for fifteen years, and hand over to the next owner without drama. Used Toyotas hold their value because the cars actually run, and that is why they are a steady part of our inventory mix.",
       "{{STOCK}} We focus on 2014 to 2018 model years with 80,000 to 140,000 miles. The 2.5L 2AR-FE four-cylinder in the Camry and the RAV4, the 3.5L 2GR-FKS V6 in the Highlander, and the legendary 1GR-FE V6 in the Tacoma are all engines that routinely run past 250,000 miles when serviced correctly.",
-      "Every used Toyota on our lot has been carefully selected and fully reconditioned before it is listed. We pull a free Carfax on every vehicle and review service history before pricing. On RAV4s with AWD, the rear differential and the coupling fluid get checked. On Highlanders, the V6 water pump gets a close look (a known wear point around 100,000 miles). On Tacomas, the frame gets inspected for rust history, since older trucks had a frame recall and pricing varies based on whether the truck was inspected, replaced, or untouched.",
+      "Every used Toyota on our lot has been carefully selected before it is listed. We pull a free Carfax on every vehicle and review service history before pricing. On RAV4s with AWD, the rear differential and the coupling fluid get checked. On Highlanders, the V6 water pump gets a close look (a known wear point around 100,000 miles). On Tacomas, the frame condition is worth checking for rust history, since older trucks had a frame recall and pricing varies based on whether the truck was inspected, replaced, or untouched under that recall.",
       "The Toyota models we see most often: the Camry (the volume reliability play), the Corolla (the entry-level commuter that refuses to die), the RAV4 (compact SUV with class-leading resale), the Highlander (three-row family hauler that competes with the Pilot and Pathfinder), and the occasional Tacoma (the mid-size truck with the strongest resale value of anything we sell). We also see Sienna, Prius, and the GR86 for the buyer who wants a Toyota that turns better than it accelerates.",
     ],
     faqs: [
@@ -366,7 +366,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "Should I worry about Toyota Highlander timing chain or belt?",
         answer:
-          "The 2008-and-newer Highlander uses a timing chain, not a belt, which means no scheduled replacement in normal use. The watch-out is the V6 water pump, which can start weeping around 100,000 to 120,000 miles. That is a $400 to $700 job at an independent shop. We check every Highlander for water pump seepage during recon.",
+          "The 2008-and-newer Highlander uses a timing chain, not a belt, which means no scheduled replacement in normal use. The watch-out is the V6 water pump, which can start weeping around 100,000 to 120,000 miles. That is a $400 to $700 job at an independent shop. We check every Highlander for water pump seepage before pricing it.",
       },
       {
         question: "Is a used Toyota RAV4 better than a CR-V or Forester?",

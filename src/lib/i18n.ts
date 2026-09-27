@@ -41,7 +41,7 @@ export const translations = {
       businessHours: "Business Hours",
       contactUs: "Contact Us",
       about:
-        "Family-owned independent dealer in Villa Park, IL — 20 miles from Chicago. Since 2014. Every vehicle inspected and fully reconditioned before it leaves our lot.",
+        "Family-owned independent dealer in Villa Park, IL, 20 miles from Chicago. Since 2014. Carefully selected inventory, no dealer fees, free CARFAX on marked vehicles.",
       rights: "All rights reserved.",
       privacy: "Privacy Policy",
       terms: "Terms",
@@ -51,7 +51,7 @@ export const translations = {
       headline: "Find Your Next Ride",
       headlineSub: "at Love Auto Group",
       subtext:
-        "Family-owned independent dealer — Lexus, Subaru, Acura, Mazda, Honda. Inspected, reconditioned, and ready to drive. Villa Park, IL — 20 miles from Chicago.",
+        "Family-owned independent dealer: Lexus, Subaru, Acura, Mazda, Honda. Carefully selected and ready to drive. Villa Park, IL, 20 miles from Chicago.",
       cta: "Browse Inventory",
       ctaFinancing: "Get Pre-Approved",
       pills: {
@@ -86,12 +86,12 @@ export const translations = {
       ctaPhone: "Or call us",
     },
     trust: {
-      reconTitle: "Love Auto Recon Checklist",
-      reconSub: "Every car inspected & reconditioned before it leaves our lot",
+      reconTitle: "Love Auto Group",
+      reconSub: "Carefully selected inventory, no dealer fees",
     },
     inventory: {
       heading: "Our Inventory",
-      subheading: "Every vehicle inspected and reconditioned. Ready to drive home today.",
+      subheading: "Carefully selected inventory. Ready to drive home today.",
     },
     testDrive: {
       cta: "Schedule a Test Drive",
@@ -270,7 +270,7 @@ export const translations = {
         mileageTypical:
           "That's typical for the model year and well within the useful service life of this vehicle.",
         mileageHigh:
-          "Higher-mileage examples like this one are priced to reflect the additional miles. The drivetrain has been inspected and is operating within spec — happy to walk you through the inspection results.",
+          "Higher-mileage examples like this one are priced to reflect the additional miles. We can pull the service history from the Carfax report and talk through it with you.",
         carfaxQ: "Can I see a Carfax report on this {model}?",
         carfaxA:
           "Yes. Love Auto Group is a Carfax Advantage Dealer, and this vehicle shows the CARFAX badge — that means a free Carfax history report is available on it. The report shows accident history, service records, ownership chain, and title status. You can pull it directly from the badge on this vehicle's photo.",
@@ -556,13 +556,13 @@ export const translations = {
       fuelType: "Fuel Type",
       stockNumber: "Stock #",
       commitmentHeading: "Our Commitment",
-      commitmentBody: "This vehicle has been fully inspected and reconditioned before going on the lot. We stand behind what we sell. If you have questions about this vehicle's history or condition, just ask.",
-      inspectedTitle: "Thoroughly Inspected",
-      inspectedSub: "Multi-point inspection completed",
-      reconditionedTitle: "Fully Reconditioned",
-      reconditionedSub: "Serviced and road-ready",
+      commitmentBody: "If you have questions about this vehicle's history or condition, just ask.",
+      inspectedTitle: "Free CARFAX Report",
+      inspectedSub: "Accident & service history available",
+      reconditionedTitle: "No Dealer Fees",
+      reconditionedSub: "Just tax, title & license",
       cleanTitleTitle: "Clean Title",
-      cleanTitleSub: "No accidents, clean history",
+      cleanTitleSub: "Title status from our records",
       vin: "VIN",
       financingHeading: "Estimated Monthly Payment",
       perMonth: "/month",
@@ -577,7 +577,7 @@ export const translations = {
       mi: "mi",
     },
     vdpTrustStrip: {
-      inspected: "Fully Inspected",
+      inspected: "Carefully Selected",
       inspectedSuffix: "Free CARFAX on Marked Vehicles",
       specialist: "Family-Owned Independent Dealer",
       specialistSuffix: "Over a Decade in Villa Park",
@@ -641,8 +641,8 @@ export const translations = {
     },
     homePage: {
       whyHeading: "Why Love Auto Group?",
-      inspectedTitle: "Every Vehicle Inspected",
-      inspectedBody: "Every vehicle is thoroughly inspected and reconditioned before it hits the lot. No surprises, just quality you can trust.",
+      inspectedTitle: "Free CARFAX Reports",
+      inspectedBody: "Every vehicle that shows the CARFAX badge comes with a free history report: accident history, service records, and title status, ready before you ask.",
       pricingTitle: "Transparent Pricing",
       pricingBody: "Our prices are competitive and clearly listed. No hidden fees, no pressure tactics. Just deals that respect your time and budget.",
       familyTitle: "Family Owned Since 2014",
@@ -680,9 +680,9 @@ export const translations = {
       happyCustomersHeading: "Our happy customers",
       watchFullVideo: "Watch the full video \u2192",
       aboutHeading: "An Independent Car Dealership in Villa Park, IL",
-      aboutP1: "Love Auto Group is a small, family-owned car dealership at 735 N Yale Ave, Unit A in Villa Park \u2014 about 20 miles west of Chicago. We have been here since 2014. No franchise banner, no acre of balloons, no handoff to a finance office. You deal directly with the people who found the car, inspected it, and priced it.",
+      aboutP1: "Love Auto Group is a small, family-owned car dealership at 735 N Yale Ave, Unit A in Villa Park \u2014 about 20 miles west of Chicago. We have been here since 2014. No franchise banner, no acre of balloons, no handoff to a finance office. You deal directly with the people who found the car and priced it.",
       aboutP2Lead: "Most of our lot is makes \u2014",
-      aboutP2Tail: ", Lexus, Honda, Acura, Toyota, Mazda \u2014 because they hold up. Every vehicle is inspected before it is listed, and a free Carfax report is available on the ones that show the badge. If a car is not good enough to put our name on, we do not sell it.",
+      aboutP2Tail: ", Lexus, Honda, Acura, Toyota, Mazda \u2014 because they hold up. A free Carfax report is available on every vehicle that shows the badge. If a car is not good enough to put our name on, we do not sell it.",
       aboutP3: "The price you see is the price you pay, plus tax, title, and license. No dealer fees. If you are comparing car dealerships in Villa Park or anywhere in DuPage County, come walk the lot \u2014 or start with the pages below.",
       moreAboutUs: "More about us \u2192",
       browseInventory: "Browse the inventory \u2192",
@@ -730,7 +730,7 @@ export const translations = {
       businessHours: "Horario",
       contactUs: "Contáctenos",
       about:
-        "Concesionario independiente familiar en Villa Park, IL — a 20 millas de Chicago. Negocio familiar desde 2014. Cada vehículo inspeccionado y reacondicionado antes de salir de nuestro lote.",
+        "Concesionario independiente familiar en Villa Park, IL, a 20 millas de Chicago. Negocio familiar desde 2014. Inventario cuidadosamente seleccionado, sin cargos de concesionario, Carfax gratis en vehículos marcados.",
       rights: "Todos los derechos reservados.",
       areasServed: "Áreas Que Atendemos",
       privacy: "Política de Privacidad",
@@ -740,7 +740,7 @@ export const translations = {
       headline: "Encuentra Tu Próximo Auto",
       headlineSub: "en Love Auto Group",
       subtext:
-        "Concesionario independiente familiar — Lexus, Subaru, Acura, Mazda, Honda. Inspeccionados, reacondicionados y listos para manejar. Villa Park, IL — a 20 millas de Chicago.",
+        "Concesionario independiente familiar: Lexus, Subaru, Acura, Mazda, Honda. Cuidadosamente seleccionados y listos para manejar. Villa Park, IL, a 20 millas de Chicago.",
       cta: "Ver Inventario",
       ctaFinancing: "Pre-Aprobación",
       pills: {
@@ -775,13 +775,12 @@ export const translations = {
       ctaPhone: "O llámenos",
     },
     trust: {
-      reconTitle: "Lista de Revisión de Love Auto",
-      reconSub:
-        "Cada auto es inspeccionado y reacondicionado antes de salir de nuestro lote",
+      reconTitle: "Love Auto Group",
+      reconSub: "Inventario cuidadosamente seleccionado, sin cargos de concesionario",
     },
     inventory: {
       heading: "Nuestro Inventario",
-      subheading: "Cada vehículo inspeccionado y reacondicionado. Listo para llevar hoy.",
+      subheading: "Inventario cuidadosamente seleccionado. Listo para llevar hoy.",
     },
     testDrive: {
       cta: "Agendar una Prueba de Manejo",
@@ -944,7 +943,7 @@ export const translations = {
         mileageTypical:
           "Eso es típico para el año del modelo y está dentro de la vida útil de servicio de este vehículo.",
         mileageHigh:
-          "Los ejemplares con más millas como este tienen un precio que refleja las millas adicionales. El tren motriz fue inspeccionado y funciona dentro de especificación — con gusto le explicamos los resultados de la inspección.",
+          "Los ejemplares con más millas como este tienen un precio que refleja las millas adicionales. Podemos sacar el historial de servicio del reporte Carfax y explicárselo con gusto.",
         carfaxQ: "¿Puedo ver un reporte Carfax de este {model}?",
         carfaxA:
           "Sí. Love Auto Group es Distribuidor Carfax Advantage, y este vehículo muestra el distintivo CARFAX — eso significa que hay un reporte de historial Carfax gratis disponible para él. El reporte muestra historial de accidentes, registros de servicio, cadena de propietarios y estado del título. Puede abrirlo directamente desde el distintivo en la foto de este vehículo.",
@@ -1220,13 +1219,13 @@ export const translations = {
       fuelType: "Tipo de Combustible",
       stockNumber: "Inventario #",
       commitmentHeading: "Nuestro Compromiso",
-      commitmentBody: "Este vehículo fue completamente inspeccionado y reacondicionado antes de salir al lote. Respaldamos lo que vendemos. Si tienes preguntas sobre el historial o la condición de este vehículo, solo pregunta.",
-      inspectedTitle: "Minuciosamente Inspeccionado",
-      inspectedSub: "Inspección de múltiples puntos completada",
-      reconditionedTitle: "Completamente Reacondicionado",
-      reconditionedSub: "Revisado y listo para manejar",
+      commitmentBody: "Si tienes preguntas sobre el historial o la condición de este vehículo, solo pregunta.",
+      inspectedTitle: "Reporte Carfax Gratis",
+      inspectedSub: "Historial de accidentes y servicio disponible",
+      reconditionedTitle: "Sin Cargos de Concesionario",
+      reconditionedSub: "Solo impuestos, título y placas",
       cleanTitleTitle: "Título Limpio",
-      cleanTitleSub: "Sin accidentes, historial limpio",
+      cleanTitleSub: "Estado del título según nuestros registros",
       vin: "VIN",
       financingHeading: "Pago Mensual Estimado",
       perMonth: "/mes",
@@ -1241,7 +1240,7 @@ export const translations = {
       mi: "mi",
     },
     vdpTrustStrip: {
-      inspected: "Totalmente Inspeccionado",
+      inspected: "Cuidadosamente Seleccionado",
       inspectedSuffix: "Carfax Gratis en Vehículos Marcados",
       specialist: "Concesionario Independiente Familiar",
       specialistSuffix: "Más de una Década en Villa Park",
@@ -1305,8 +1304,8 @@ export const translations = {
     },
     homePage: {
       whyHeading: "\u00bfPor qu\u00e9 Love Auto Group?",
-      inspectedTitle: "Cada Veh\u00edculo Inspeccionado",
-      inspectedBody: "Cada veh\u00edculo se inspecciona y reacondiciona a fondo antes de llegar al lote. Sin sorpresas, solo calidad en la que puedes confiar.",
+      inspectedTitle: "Reportes CARFAX Gratis",
+      inspectedBody: "Cada veh\u00edculo que muestra el distintivo CARFAX incluye un reporte de historial gratis: historial de accidentes, registros de servicio y estado del t\u00edtulo, listo antes de que preguntes.",
       pricingTitle: "Precios Transparentes",
       pricingBody: "Nuestros precios son justos y claros. Sin cargos escondidos, sin presi\u00f3n de venta. Solo ofertas que respetan tu tiempo y tu dinero.",
       familyTitle: "Negocio Familiar Desde 2014",
@@ -1344,9 +1343,9 @@ export const translations = {
       happyCustomersHeading: "Nuestros clientes felices",
       watchFullVideo: "Ver el video completo \u2192",
       aboutHeading: "Un Concesionario Independiente en Villa Park, IL",
-      aboutP1: "Love Auto Group es un concesionario peque\u00f1o y familiar en 735 N Yale Ave, Unit A, en Villa Park, a unas 20 millas al oeste de Chicago. Aqu\u00ed llevamos desde 2014. Sin letrero de franquicia, sin un mar de globos y sin que te manden a una oficina de financiamiento. Tratas directamente con las personas que encontraron el auto, lo inspeccionaron y le pusieron el precio.",
+      aboutP1: "Love Auto Group es un concesionario peque\u00f1o y familiar en 735 N Yale Ave, Unit A, en Villa Park, a unas 20 millas al oeste de Chicago. Aqu\u00ed llevamos desde 2014. Sin letrero de franquicia, sin un mar de globos y sin que te manden a una oficina de financiamiento. Tratas directamente con las personas que encontraron el auto y le pusieron el precio.",
       aboutP2Lead: "La mayor parte de nuestro lote:",
-      aboutP2Tail: ", Lexus, Honda, Acura, Toyota y Mazda, porque duran. Cada veh\u00edculo se inspecciona antes de publicarse, y los que muestran el distintivo incluyen un reporte Carfax gratis. Si un auto no es lo bastante bueno para llevar nuestro nombre, no lo vendemos.",
+      aboutP2Tail: ", Lexus, Honda, Acura, Toyota y Mazda, porque duran. Los que muestran el distintivo incluyen un reporte Carfax gratis. Si un auto no es lo bastante bueno para llevar nuestro nombre, no lo vendemos.",
       aboutP3: "El precio que ves es el precio que pagas, m\u00e1s impuestos, t\u00edtulo y placas. Sin cargos de concesionario. Si est\u00e1s comparando concesionarios en Villa Park o en cualquier parte del condado de DuPage, ven a recorrer el lote o empieza por las p\u00e1ginas de abajo.",
       moreAboutUs: "M\u00e1s sobre nosotros \u2192",
       browseInventory: "Explora el inventario \u2192",

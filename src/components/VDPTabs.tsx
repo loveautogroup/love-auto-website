@@ -188,7 +188,12 @@ export default function VDPTabs({
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* Clean Title card is a title-status claim, so it only renders
+                when the DMS feed's titleBrand is empty (a branded title, e.g.
+                Rebuilt/Salvage, sets titleBrand. See the amber disclosure
+                above). Grid adapts to 2 or 3 columns so a branded-title car
+                never shows an empty slot (owner, 2026-09-26). */}
+            <div className={`grid grid-cols-1 gap-4 ${vehicle.titleBrand ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>
               <div className="bg-brand-gray-50 rounded-xl p-5 text-center">
                 <div className="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center mx-auto mb-3">
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -207,15 +212,17 @@ export default function VDPTabs({
                 <h3 className="font-bold text-brand-gray-900 text-sm">{t.vdpTabs.reconditionedTitle}</h3>
                 <p className="text-xs text-brand-gray-500 mt-1">{t.vdpTabs.reconditionedSub}</p>
               </div>
-              <div className="bg-brand-gray-50 rounded-xl p-5 text-center">
-                <div className="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
+              {!vehicle.titleBrand && (
+                <div className="bg-brand-gray-50 rounded-xl p-5 text-center">
+                  <div className="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <h3 className="font-bold text-brand-gray-900 text-sm">{t.vdpTabs.cleanTitleTitle}</h3>
+                  <p className="text-xs text-brand-gray-500 mt-1">{t.vdpTabs.cleanTitleSub}</p>
                 </div>
-                <h3 className="font-bold text-brand-gray-900 text-sm">{t.vdpTabs.cleanTitleTitle}</h3>
-                <p className="text-xs text-brand-gray-500 mt-1">{t.vdpTabs.cleanTitleSub}</p>
-              </div>
+              )}
             </div>
 
             <p className="text-xs text-brand-gray-400">

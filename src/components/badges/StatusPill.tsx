@@ -36,7 +36,6 @@ const VARIANTS: Record<
   "great-deal": { label: "Great Deal", className: "bg-[#059669] text-white" },
   "below-market": { label: "Below Market", className: "bg-[#0EA5E9] text-white" },
   "managers-special": { label: "Manager's Special", className: "bg-[#7C3AED] text-white" },
-  "reconditioned": { label: "Reconditioned", className: "bg-[#0891B2] text-white" },
   "off-lease": { label: "Off-Lease", className: "bg-[#65A30D] text-white" },
   "trade-in": { label: "Trade-In", className: "bg-[#A16207] text-white" },
   "new-arrival": { label: "New Arrival", className: "bg-[#1B3A5C] text-white" },

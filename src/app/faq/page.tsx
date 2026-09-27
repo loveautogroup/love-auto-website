@@ -4,7 +4,7 @@ import { FAQHero, FAQCta } from "./FAQHero";
 export const metadata: Metadata = {
   title: "Used Car FAQ, Financing and Trade-Ins | Love Auto Group",
   description:
-    "Questions about financing, trade-ins, warranties, and our inspection process at Love Auto Group in Villa Park, IL. Get the answers before you visit.",
+    "Questions about financing, trade-ins, and warranties at Love Auto Group in Villa Park, IL. Get the answers before you visit.",
   alternates: { canonical: "https://www.loveautogroup.net/faq/" },
 };
 
@@ -13,11 +13,6 @@ const faqs = [
     question: "What types of vehicles does Love Auto Group sell?",
     answer:
       "We're a family-owned independent dealer, including Lexus, Subaru, Acura, and Mazda. We also carry other reliable makes when they meet our standards. Every vehicle on our lot is in the $4,500 to $18,000 price range.",
-  },
-  {
-    question: "Are your vehicles inspected before sale?",
-    answer:
-      "Yes. Every vehicle we sell is thoroughly inspected and fully reconditioned before it goes on the lot. If something needs fixing, it gets fixed right. We don't cut corners.",
   },
   {
     question: "Do you offer financing?",
@@ -72,7 +67,7 @@ const faqs = [
   {
     question: "Why does Love Auto Group specialize in vehicles?",
     answer:
-      "makes (Lexus, Subaru, Acura, Mazda) consistently rank highest in reliability and hold their value best over time. Over a decade of buying and reconditioning these specific brands, we've learned exactly what to look for and what to avoid on each model. That expertise lets us price competitively and stand behind every vehicle with confidence.",
+      "makes (Lexus, Subaru, Acura, Mazda) consistently rank highest in reliability and hold their value best over time. Over a decade of buying and selling these specific brands, we've learned exactly what to look for and what to avoid on each model. That expertise lets us price competitively and stand behind every vehicle with confidence.",
   },
   {
     question: "Do you have AWD cars for Illinois winters?",
@@ -97,7 +92,7 @@ const faqs = [
   {
     question: "Do you sell vehicles with high mileage?",
     answer:
-      "Yes, and we think it's a smart way to buy. A well-maintained vehicle at 150,000 to 200,000 miles often has another 100,000 miles of service life ahead. Every high-mileage vehicle is carefully inspected, and any issues are addressed before listing. The value is better than low-mileage alternatives for most buyers.",
+      "Yes, and we think it's a smart way to buy. A well-maintained vehicle at 150,000 to 200,000 miles often has another 100,000 miles of service life ahead. We can pull the Carfax so you can see the service history before you decide. The value is better than low-mileage alternatives for most buyers.",
   },
   {
     question: "Do you work with buyers who have bankruptcy or repossession on their credit?",

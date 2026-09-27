@@ -4,7 +4,7 @@
  * Trust strip — displayed on the VDP, homepage, and inventory page.
  *
  * Three credibility pillars for Love Auto Group:
- *   1. Fully Inspected · Free CARFAX on Marked Vehicles
+ *   1. Carefully Selected · Free CARFAX on Marked Vehicles
  *   2. Family-Owned Independent Dealer · Over a Decade in Villa Park
  *   3. No Hidden Fees · All Credit Welcome · Same-Day Title & Plates
  *

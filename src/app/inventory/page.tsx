@@ -12,7 +12,7 @@ import { ItemListSchema } from "@/components/StructuredData";
 export const metadata: Metadata = {
   title: "Browse Our Full Used Car Inventory | Love Auto Group",
   description:
-    "Browse our Villa Park, IL inventory of quality used cars from $4,500 to $18,000. Lexus, Subaru, Acura, Mazda. Fully reconditioned and ready to drive.",
+    "Browse our Villa Park, IL inventory of quality used cars from $4,500 to $18,000. Lexus, Subaru, Acura, Mazda. No dealer fees, free CARFAX on marked vehicles.",
   // hreflang must be reciprocal or search engines ignore it — /es/inventory/
   // points back here. See src/lib/localeRoutes.ts.
   alternates: {

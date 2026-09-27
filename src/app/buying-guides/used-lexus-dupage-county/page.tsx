@@ -33,7 +33,7 @@ const FAQS = [
   {
     question: "Independent used Lexus dealer vs. franchise Lexus store: which is right for me?",
     answer:
-      "Franchise Lexus stores carry L/Certified Pre-Owned inventory: typically Lexus vehicles six years old or newer with under 70,000 miles, a 161-point inspection, and a manufacturer-backed warranty extension. If you want a 2022 RX 350 with factory backing, that path makes sense. Independent specialists like Love Auto Group focus on a different price point. We buy 2010 to 2017 RX, ES, IS, and GX models, recondition them before listing, and price them well below CPO. Same Toyota-derived drivetrains the franchise stores recondition, lower overhead, lower price. The trade-off is no Lexus factory warranty, smaller inventory, and an older average model year.",
+      "Franchise Lexus stores carry L/Certified Pre-Owned inventory: typically Lexus vehicles six years old or newer with under 70,000 miles, a 161-point inspection, and a manufacturer-backed warranty extension. If you want a 2022 RX 350 with factory backing, that path makes sense. Independent specialists like Love Auto Group focus on a different price point. We buy 2010 to 2017 RX, ES, IS, and GX models and price them well below CPO. Same Toyota-derived drivetrains the franchise stores recondition, lower overhead, lower price. The trade-off is no Lexus factory warranty, smaller inventory, and an older average model year.",
   },
   {
     question: "Are used Lexus parts more expensive than Toyota parts?",
@@ -63,7 +63,7 @@ const FAQS = [
   {
     question: "What should I check before buying a used Lexus?",
     answer:
-      "Service history first. Lexus owners who follow the maintenance schedule produce cars that go 250,000 miles without major issues. Owners who skip services produce expensive problems. We pull a Carfax on every Lexus and review the service record before listing. Specific items covered in the inspection: oil consumption history (especially on RX 350 and ES 350 above 100,000 miles), suspension air struts on GX 460 (a known wear point that costs $1,500+ if it fails), transmission fluid color, and any documented timing chain or VVT-i sensor work. Carfax Advantage Dealer status means we share the report before you ask.",
+      "Service history first. Lexus owners who follow the maintenance schedule produce cars that go 250,000 miles without major issues. Owners who skip services produce expensive problems. We pull a Carfax on every Lexus and review the service record before listing. Specific items covered in that review: oil consumption history (especially on RX 350 and ES 350 above 100,000 miles), suspension air struts on GX 460 (a known wear point that costs $1,500+ if it fails), transmission fluid color, and any documented timing chain or VVT-i sensor work. Carfax Advantage Dealer status means we share the report before you ask.",
   },
 ];
 
@@ -142,21 +142,21 @@ export default function UsedLexusDuPageCountyPage() {
           <p>
             Independent specialists like us focus on a different price
             point. We buy 2010 to 2017 RX, ES, IS, and GX models at the
-            value sweet spot, recondition them before listing, and price them
-            well below franchise CPO. The drivetrains in this generation
-            are essentially the same Toyota-derived powertrains the
-            franchise stores recondition. The difference is we do not
-            carry franchise overhead, so the price drops significantly.
-            The trade-off is no Lexus factory warranty (we offer
-            third-party service contracts as a separate line item), a
-            smaller inventory, and an older average model year.
+            value sweet spot and price them well below franchise CPO. The
+            drivetrains in this generation are essentially the same
+            Toyota-derived powertrains the franchise stores recondition.
+            The difference is we do not carry franchise overhead, so the
+            price drops significantly. The trade-off is no Lexus factory
+            warranty (we offer third-party service contracts as a separate
+            line item), a smaller inventory, and an older average model
+            year.
           </p>
 
           <p>
             Love Auto Group is family owned, has operated in Villa Park
-            since 2014, and is a family-owned independent dealer. Lexus is one
-            of the makes we know best. Every vehicle is personally inspected
-            and reconditioned before it goes on the lot.
+            since 2014, and is a family-owned independent dealer. Lexus is
+            one of the makes we know best, and a free Carfax report is
+            available on every vehicle that shows the badge.
           </p>
 
           <h2>The Value Sweet Spot: 2010 to 2017 Lexus</h2>
@@ -229,18 +229,17 @@ export default function UsedLexusDuPageCountyPage() {
             they hold value strongly. Price range $18,000 to $25,000+.
           </p>
 
-          <h2>What Gets Inspected on Every Used Lexus</h2>
+          <h2>What to Look for on a Used Lexus</h2>
 
           <ul>
             <li>
               Oil consumption history. RX 350 and ES 350 above 100,000
               miles can develop oil consumption from worn piston rings.
-              The dipstick gets checked at receipt and again before listing
+              Check the oil level and ask about top-off history
             </li>
             <li>
               Suspension air struts on GX 460 (a known wear point that
-              costs $1,500+ to replace). We swap to OEM coil conversion
-              kits when air strut wear is documented
+              costs $1,500+ to replace)
             </li>
             <li>Transmission fluid color and shift quality</li>
             <li>VVT-i oil line condition (a 2GR-FE recall item)</li>

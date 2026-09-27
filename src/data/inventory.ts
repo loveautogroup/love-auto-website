@@ -48,7 +48,7 @@ const HANDWRITTEN_FALLBACK: Vehicle[] = [
     bodyStyle: "Coupe",
     fuelType: "Gasoline",
     description:
-      "The smart Mustang. 310 turbocharged horsepower from the 2.3L EcoBoost, real Mustang presence, and the kind of fuel economy that doesn't punish you for enjoying the drive. This is the Premium trim: heated and cooled leather seats, SYNC 3 with the 8-inch touchscreen, push-button start, dual-zone climate, and HID headlamps. 89,085 miles on the clock, carefully selected and fully reconditioned. $13,999. Test drive available today at our Villa Park lot. Call or text (630) 359-3643.",
+      "The smart Mustang. 310 turbocharged horsepower from the 2.3L EcoBoost, real Mustang presence, and the kind of fuel economy that doesn't punish you for enjoying the drive. This is the Premium trim: heated and cooled leather seats, SYNC 3 with the 8-inch touchscreen, push-button start, dual-zone climate, and HID headlamps. 89,085 miles on the clock, carefully selected. $13,999. Test drive available today at our Villa Park lot. Call or text (630) 359-3643.",
     features: [
       "EcoBoost 2.3L Turbo (310 HP)",
       "Leather Heated & Cooled Seats",
@@ -85,7 +85,7 @@ const HANDWRITTEN_FALLBACK: Vehicle[] = [
     bodyStyle: "SUV",
     fuelType: "Gasoline",
     description:
-      "A three-row luxury SUV for under $5,000 is rare. One that still drives this well at 213,000 miles is rarer. The MDX Sport is built on the same platform as the Honda Pilot but with Acura's Super Handling AWD, the high-output 3.7L VTEC V6, leather interior, moonroof, and the kind of reliability the brand is known for. Thoroughly inspected and fully reconditioned. $4,499, priced at the value end but built to the same standard as everything else on the lot. Call or text (630) 359-3643 to see it at 735 N Yale Ave, Villa Park.",
+      "A three-row luxury SUV for under $5,000 is rare. One that still drives this well at 213,000 miles is rarer. The MDX Sport is built on the same platform as the Honda Pilot but with Acura's Super Handling AWD, the high-output 3.7L VTEC V6, leather interior, moonroof, and the kind of reliability the brand is known for. $4,499, priced at the value end but built to the same standard as everything else on the lot. Call or text (630) 359-3643 to see it at 735 N Yale Ave, Villa Park.",
     features: [
       "Super Handling All-Wheel Drive (SH-AWD)",
       "3.7L VTEC V6",
@@ -121,7 +121,7 @@ const HANDWRITTEN_FALLBACK: Vehicle[] = [
     bodyStyle: "SUV",
     fuelType: "Gasoline",
     description:
-      "A well-equipped compact SUV under $5,000. The SLT-1 trim is the Terrain with the good stuff: heated leather seats, Pioneer premium audio, remote start, touchscreen infotainment, backup camera, and a comfortable ride that takes daily commutes and weekend errands with ease. 151,419 miles, thoroughly inspected and fully reconditioned. $4,999. Stop by 735 N Yale Ave or call (630) 359-3643 to set up a test drive.",
+      "A well-equipped compact SUV under $5,000. The SLT-1 trim is the Terrain with the good stuff: heated leather seats, Pioneer premium audio, remote start, touchscreen infotainment, backup camera, and a comfortable ride that takes daily commutes and weekend errands with ease. 151,419 miles. $4,999. Stop by 735 N Yale Ave or call (630) 359-3643 to set up a test drive.",
     features: [
       "Leather Heated Seats",
       "Touchscreen Infotainment",
@@ -156,7 +156,7 @@ const HANDWRITTEN_FALLBACK: Vehicle[] = [
     bodyStyle: "Sedan",
     fuelType: "Gasoline",
     description:
-      "Efficient, reliable, and under $4,000. The Accent SE delivers 36 highway MPG from its 1.6L engine, keeping fuel costs low for commuters and first-time buyers. Power windows, keyless entry, air conditioning, and a full complement of airbags and stability control. 157,597 miles, thoroughly inspected and fully reconditioned. A solid, no-nonsense daily driver that won't stretch your budget. $3,999. Call or text (630) 359-3643.",
+      "Efficient, reliable, and under $4,000. The Accent SE delivers 36 highway MPG from its 1.6L engine, keeping fuel costs low for commuters and first-time buyers. Power windows, keyless entry, air conditioning, and a full complement of airbags and stability control. 157,597 miles. A solid, no-nonsense daily driver that won't stretch your budget. $3,999. Call or text (630) 359-3643.",
     features: [
       "1.6L Engine (137 HP)",
       "26 City / 36 Highway MPG",
@@ -192,7 +192,7 @@ const HANDWRITTEN_FALLBACK: Vehicle[] = [
     bodyStyle: "Coupe",
     fuelType: "Gasoline",
     description:
-      "A Lexus RC 350 is a head-turner that backs up the looks with 306 horsepower and Lexus build quality. This one finished in black over rich brown leather, the Premium Package with blind-spot monitor, navigation, moonroof, and the kind of fit and finish that makes every drive feel like something. 135,116 miles on a 3.5L V6 that's proven to run well past 250,000 with care. CarGurus rates this listing a Great Deal. Carefully selected, fully reconditioned, and ready at our Villa Park lot. $17,999. Call or text (630) 359-3643 to test drive.",
+      "A Lexus RC 350 is a head-turner that backs up the looks with 306 horsepower and Lexus build quality. This one finished in black over rich brown leather, the Premium Package with blind-spot monitor, navigation, moonroof, and the kind of fit and finish that makes every drive feel like something. 135,116 miles on a 3.5L V6 that's proven to run well past 250,000 with care. CarGurus rates this listing a Great Deal. Carefully selected and ready at our Villa Park lot. $17,999. Call or text (630) 359-3643 to test drive.",
     features: [
       "3.5L V6 (306 HP)",
       "Premium Package",
@@ -229,7 +229,7 @@ const HANDWRITTEN_FALLBACK: Vehicle[] = [
     bodyStyle: "SUV",
     fuelType: "Gasoline",
     description:
-      "A Subaru Forester Premium with symmetrical all-wheel drive, panoramic moonroof, heated seats, and the Boxer engine that put Subaru on the map for Illinois winters. The Premium trim adds the All-Weather Package, roof rails, and the X-Mode traction system for snow and dirt. 189,346 miles on a drivetrain proven to run well past 250,000 with care. Carefully selected and fully reconditioned. $5,799.99. Call or text (630) 359-3643 to test drive at 735 N Yale Ave, Villa Park.",
+      "A Subaru Forester Premium with symmetrical all-wheel drive, panoramic moonroof, heated seats, and the Boxer engine that put Subaru on the map for Illinois winters. The Premium trim adds the All-Weather Package, roof rails, and the X-Mode traction system for snow and dirt. 189,346 miles on a drivetrain proven to run well past 250,000 with care. Carefully selected. $5,799.99. Call or text (630) 359-3643 to test drive at 735 N Yale Ave, Villa Park.",
     features: [
       "Symmetrical All-Wheel Drive",
       "Panoramic Power Moonroof",

@@ -177,7 +177,7 @@ function synthesizeDescription(v: SyncedVehicle): string {
     parts.push(`${v.exteriorColor} exterior, ${v.interiorColor} interior.`);
   }
   parts.push(
-    "Inspected, reconditioned, and ready to drive home from 735 N Yale Ave, Villa Park. Call or text (630) 359-3643 to set up a test drive."
+    "Carefully selected and ready to drive home from 735 N Yale Ave, Villa Park. Call or text (630) 359-3643 to set up a test drive."
   );
   return parts.join(" ");
 }

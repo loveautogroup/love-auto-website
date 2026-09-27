@@ -33,7 +33,7 @@ const FAQS = [
   {
     question: "What is the difference between buying a used Subaru from an independent dealer vs. a franchise Subaru store?",
     answer:
-      "Franchise Subaru stores carry Certified Pre-Owned (CPO) inventory with a 152-point inspection and a manufacturer-backed warranty, which is the right call if you want a current-generation Forester or Outback with factory backing. Independent dealers like Love Auto Group focus on a different value point. We buy 2014 to 2018 Foresters, Outbacks, and Crosstreks at the value sweet spot, recondition them before listing, sell them at lower price points than franchise CPO, and back the deal with a full inspection and a free Carfax. Same drivetrains, lower overhead, lower price.",
+      "Franchise Subaru stores carry Certified Pre-Owned (CPO) inventory with a 152-point inspection and a manufacturer-backed warranty, which is the right call if you want a current-generation Forester or Outback with factory backing. Independent dealers like Love Auto Group focus on a different value point. We buy 2014 to 2018 Foresters, Outbacks, and Crosstreks at the value sweet spot, sell them at lower price points than franchise CPO, and back the deal with a free Carfax. Same drivetrains, lower overhead, lower price.",
   },
   {
     question: "What years of used Subaru are the value sweet spot?",
@@ -48,7 +48,7 @@ const FAQS = [
   {
     question: "Should I worry about Subaru head gasket failures?",
     answer:
-      "Not on the cars we sell. Head gasket failures are real but they were specific to the EJ25 four-cylinder used through about 2011. Foresters, Outbacks, and Crosstreks from 2014 forward use the FB25 engine, which redesigned the gasket and head architecture. We still check gasket area and coolant condition on every Subaru during our pre-listing inspection because no engine is bulletproof, but it is no longer the worry it used to be.",
+      "Not on the cars we sell. Head gasket failures are real but they were specific to the EJ25 four-cylinder used through about 2011. Foresters, Outbacks, and Crosstreks from 2014 forward use the FB25 engine, which redesigned the gasket and head architecture. It is no longer the worry it used to be, but ask to see the Carfax and service history if you want peace of mind on gasket area and coolant condition.",
   },
   {
     question: "Forester or Outback: which is the better used buy?",
@@ -150,21 +150,21 @@ export default function UsedSubaruNearChicagoPage() {
           <p>
             Independent specialists like us focus on a different price
             point. We buy second-generation 2014 to 2018 Foresters,
-            Outbacks, and Crosstreks at the value sweet spot, recondition
-            them before listing, and price them well below CPO. The
-            drivetrains in this generation are essentially the same as
-            the ones the franchise stores recondition. The difference is
-            we do not carry franchise overhead, so the price drops by
-            several thousand dollars. The trade-off is no Subaru factory
-            warranty (we offer aftermarket service contracts as a
-            separate line item) and a smaller inventory.
+            Outbacks, and Crosstreks at the value sweet spot and price
+            them well below CPO. The drivetrains in this generation are
+            essentially the same as the ones the franchise stores
+            recondition. The difference is we do not carry franchise
+            overhead, so the price drops by several thousand dollars. The
+            trade-off is no Subaru factory warranty (we offer aftermarket
+            service contracts as a separate line item) and a smaller
+            inventory.
           </p>
 
           <p>
             Love Auto Group is family owned, has operated in Villa Park
-            since 2014, and is a family-owned independent dealer. Subaru is one
-            of the makes we know best. Every vehicle is personally inspected
-            and reconditioned before it goes on the lot.
+            since 2014, and is a family-owned independent dealer. Subaru
+            is one of the makes we know best, and a free Carfax report is
+            available on every vehicle that shows the badge.
           </p>
 
           <h2>The Value Sweet Spot: 2014 to 2018 Subarus</h2>
@@ -232,12 +232,12 @@ export default function UsedSubaruNearChicagoPage() {
             price.
           </p>
 
-          <h2>What Gets Inspected on Every Used Subaru</h2>
+          <h2>What to Look for on a Used Subaru</h2>
 
           <ul>
             <li>
               Head gasket area and coolant condition (less of a concern
-              on FB25 engines than the older EJ25, but it gets checked anyway)
+              on FB25 engines than the older EJ25, but worth checking anyway)
             </li>
             <li>
               CVT transmission fluid color and condition. CVT fluid that

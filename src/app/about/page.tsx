@@ -8,7 +8,7 @@ import AboutHero from "./AboutHero";
 export const metadata: Metadata = {
   title: "About Love Auto Group, Family Owned in Villa Park IL",
   description:
-    "Family-owned independent dealer in Villa Park, IL since 2014. Every vehicle carefully selected, fully reconditioned, and inspected.",
+    "Family-owned independent dealer in Villa Park, IL since 2014. Every vehicle carefully selected, no dealer fees, free CARFAX on marked vehicles.",
   alternates: { canonical: "https://www.loveautogroup.net/about/" },
 };
 
@@ -32,8 +32,8 @@ export default function AboutPage() {
           <p className="text-brand-gray-700 leading-relaxed mb-6">
             We&apos;re not a big corporate dealer group with hundreds of cars and
             faceless sales floors. We&apos;re a small team that knows every
-            vehicle on the lot inside and out because we personally source,
-            inspect, and recondition each one before it gets a price tag.
+            vehicle on the lot inside and out because we personally source
+            each one before it gets a price tag.
           </p>
           <p className="text-brand-gray-700 leading-relaxed mb-6">
             Our focus is on vehicles like Lexus,{" "}
@@ -65,12 +65,12 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
               <h3 className="font-bold text-brand-gray-900 mb-2">
-                Fully Reconditioned
+                Free CARFAX Reports
               </h3>
               <p className="text-brand-gray-600 text-sm leading-relaxed">
-                Every vehicle is thoroughly inspected and reconditioned before
-                it goes on the lot. We don&apos;t cut corners. If something
-                needs fixing, it gets fixed right.
+                Every vehicle that shows the CARFAX badge comes with a free
+                history report: accident history, service records, and
+                title status, ready before you ask.
               </p>
             </div>
             <div className="bg-white rounded-xl border border-brand-gray-200 p-6">

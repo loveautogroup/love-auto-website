@@ -48,7 +48,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
         heading: "What We Stock",
         body: [
           "Our inventory rotates, but the through-line is the same: Used Lexus RX, ES, IS, and GX for buyers who want luxury without German-style repair bills. Subaru Outback, Forester, and Crosstrek for AWD winter security in the Chicago suburbs. Acura MDX with SH-AWD for the three-row family-SUV pick that holds its value. Mazda CX-5 and CX-30 for buyers who care about how the car actually drives. Honda Civic, Accord, CR-V, Pilot, and Odyssey for the highest-resale, lowest-headache picks in their segments. We also carry opportunistic non-stock when the right vehicle comes through.",
-          "Most of our inventory sits in the $4,500 to $18,000 range. Every vehicle is hand-picked at auction and fully reconditioned, and a free Carfax history report is available on the ones that show the badge.",
+          "Most of our inventory sits in the $4,500 to $18,000 range. Every vehicle is hand-picked at auction, and a free Carfax history report is available on the ones that show the badge.",
         ],
       },
       {
@@ -200,7 +200,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Why Lombard Residents Shop With Us",
         body: [
-          "Lombard is one of the largest residential markets in DuPage County, and most franchise dealers in the area carry whatever the manufacturer ships them. We do the opposite — we hand-pick our inventory at auction, focus on the makes our customers actually trust long-term, and turn over a full Carfax inspection on every vehicle before it gets listed. The result is a smaller lot than a franchise dealer, but a higher hit-rate on cars worth driving home.",
+          "Lombard is one of the largest residential markets in DuPage County, and most franchise dealers in the area carry whatever the manufacturer ships them. We do the opposite: we hand-pick our inventory at auction, focus on the makes our customers actually trust long-term, and pull a full Carfax report on every vehicle before it gets listed. The result is a smaller lot than a franchise dealer, but a higher hit-rate on cars worth driving home.",
           "Our Villa Park location is a 5-10 minute drive from any neighborhood in Lombard — straight east on Roosevelt Road or North Avenue, just past Yale. Easy in, easy out, no Saturday traffic on Butterfield Road.",
         ],
       },
@@ -232,7 +232,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Why the Trip From Elmhurst Is Worth It",
         body: [
-          "Elmhurst is well-served by franchise dealers, but if you're shopping used vehicles specifically — Lexus, Acura, Subaru, Mazda, Honda, Toyota — you're often better off with an independent dealer who specializes in those brands rather than carrying whatever the manufacturer's used-car program offloads. We hand-pick our inventory at auction, inspect every vehicle for the make-specific items that matter, and pull a full Carfax history before any car gets listed.",
+          "Elmhurst is well-served by franchise dealers, but if you're shopping used vehicles specifically (Lexus, Acura, Subaru, Mazda, Honda, Toyota), you're often better off with an independent dealer who specializes in those brands rather than carrying whatever the manufacturer's used-car program offloads. We hand-pick our inventory at auction, know the make-specific items that matter on each platform, and pull a full Carfax history before any car gets listed.",
           "The drive is straightforward — west on North Avenue (Route 64) from anywhere in Elmhurst, past Villa Park's downtown, and we're on the right at 735 N Yale Ave. About 8 minutes from downtown Elmhurst on a typical afternoon.",
         ],
       },
@@ -294,7 +294,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "What Makes the Drive Worth It",
         body: [
-          "Glen Ellyn doesn't have a major independent used-car presence inside town, and the franchise dealers in the area mostly carry whatever the manufacturer's used-car program ships them. We're different — we hand-pick our inventory at auction, focus on makes specifically, and pull a full Carfax inspection on every vehicle before it gets listed.",
+          "Glen Ellyn doesn't have a major independent used-car presence inside town, and the franchise dealers in the area mostly carry whatever the manufacturer's used-car program ships them. We're different: we hand-pick our inventory at auction, focus on makes specifically, and pull a full Carfax report on every vehicle before it gets listed.",
           "For Glen Ellyn buyers shopping AWD vehicles for the next Chicago winter, we usually have the deepest selection of clean Subaru Outbacks and Foresters in the immediate Western Suburbs. For luxury buyers, we keep Lexus RX and Acura MDX in regular rotation.",
         ],
       },
