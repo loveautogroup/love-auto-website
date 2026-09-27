@@ -35,17 +35,12 @@ async function main() {
   const ANSI_RED = "\x1b[31m";
   const ANSI_RESET = "\x1b[0m";
 
-  if (!RAILWAY_KEY) {
-    console.warn(
-      `${ANSI_YELLOW}[fetch-google-reviews] RAILWAY_API_KEY not set — writing fallback values.${ANSI_RESET}`
-    );
-    writeOutput(FALLBACK, "fallback (no API key)");
-    return;
-  }
-
+  // The public summary needs no key. The keyed route was used before, and
+  // RAILWAY_API_KEY was never set on Cloudflare Pages, so every build wrote
+  // the hand-set fallback count (127) instead of the live one.
   try {
-    const res = await fetch(`${RAILWAY_BASE}/api/v1/reputation/summary`, {
-      headers: { "X-API-Key": RAILWAY_KEY },
+    const res = await fetch(`${RAILWAY_BASE}/api/v1/public/reputation/summary`, {
+      headers: RAILWAY_KEY ? { "X-API-Key": RAILWAY_KEY } : {},
       signal: AbortSignal.timeout(10_000),
     });
 
