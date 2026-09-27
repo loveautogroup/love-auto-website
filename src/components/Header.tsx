@@ -150,10 +150,10 @@ export default function Header() {
         className={`md:hidden bg-ink-950 px-4 flex items-center justify-between gap-2 text-[11px] border-b border-white/[.14] transition-all duration-200 ${condensed ? "" : "py-1.5"} ${stripCollapse}`}
         aria-hidden={condensed}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 min-w-0">
           <CarfaxWordmark />
           <span className="text-ink-400">·</span>
-          <span className="text-ink-300 font-semibold uppercase tracking-[0.06em]">{t.header.freeCarfax}</span>
+          <span className="text-ink-300 font-semibold uppercase tracking-[0.06em] truncate">{t.header.freeCarfax}</span>
         </div>
         <LanguageSwitcher />
       </div>
@@ -166,14 +166,14 @@ export default function Header() {
         aria-label="Main navigation"
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center group shrink-0">
+        <Link href="/" className="flex items-center group min-w-0 shrink">
           <Image
             src="/images/logo-primary-v2.svg"
             alt="Love Auto Group — Since 2014"
             width={440}
             height={160}
             className={`w-auto object-contain transition-all duration-200 ${
-              condensed ? "h-12 md:h-14" : "h-24 md:h-[104px]"
+              condensed ? "h-11 md:h-14" : "h-16 sm:h-20 md:h-[104px]"
             }`}
             priority
           />

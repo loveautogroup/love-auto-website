@@ -33,7 +33,7 @@ export const translations = {
     },
     header: {
       browseInventory: "Browse Inventory",
-      freeCarfax: "Free CARFAX — look for the badge",
+      freeCarfax: "Free CARFAX on marked cars",
       hours: "Mon 2PM–7PM | Tue–Fri 11AM–7PM | Sat 12PM–7PM",
     },
     footer: {
@@ -721,7 +721,7 @@ export const translations = {
     },
     header: {
       browseInventory: "Ver Inventario",
-      freeCarfax: "Carfax gratis — busca la insignia",
+      freeCarfax: "Carfax gratis en autos marcados",
       hours:
         "Lun 2PM–7PM | Mar–Vie 11AM–7PM | Sáb 12PM–7PM",
     },

@@ -40,29 +40,36 @@ export default function HomeHero() {
   };
 
   return (
-    <section className="relative bg-brand-navy text-white overflow-hidden">
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        controls
-        preload="metadata"
-        poster="/videos/happy-customers-loop-poster.jpg"
-        aria-label="Love Auto Group customers and their cars"
-        onPlay={handlePlay}
-        className="absolute inset-0 w-full h-full object-cover opacity-[.55]"
-      >
-        <source src="/videos/happy-customers-loop.mp4" type="video/mp4" />
-      </video>
-      {/* Bottom-anchored scrim — legible type at the bottom where the
-          headline sits, fading to near-transparent at the top so the video
-          itself still reads. */}
-      <div
-        className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] from-8% via-[#0a0a0a]/55 via-48% to-[#0a0a0a]/25"
-        aria-hidden="true"
-      />
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-10 sm:pt-20 sm:pb-12 min-h-[440px] sm:min-h-[560px] flex flex-col justify-end">
+    <section className="relative bg-brand-navy text-white">
+      {/* Full 16:9 frame, never cropped (owner, 2026-09-27: "the video is
+          too tall and cant view many of the pics"). The box has the same
+          shape as the video, so object-cover crops nothing. On phones and
+          tablets the text sits below the video; from lg up it overlays the
+          bottom, clear of the player controls. */}
+      <div className="relative w-full aspect-video">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          controls
+          preload="metadata"
+          poster="/videos/happy-customers-loop-poster.jpg"
+          aria-label="Love Auto Group customers and their cars"
+          onPlay={handlePlay}
+          className="absolute inset-0 w-full h-full object-contain bg-black lg:opacity-[.85]"
+        >
+          <source src="/videos/happy-customers-loop.mp4" type="video/mp4" />
+        </video>
+        {/* Scrim only behind the headline (bottom-left), so the rest of
+            the video stays bright. Large screens only; below lg the text
+            is not over the video. */}
+        <div
+          className="hidden lg:block absolute inset-0 pointer-events-none bg-gradient-to-tr from-[#0a0a0a]/90 from-10% via-[#0a0a0a]/35 via-45% to-transparent to-70%"
+          aria-hidden="true"
+        />
+      </div>
+      <div className="relative lg:absolute lg:inset-x-0 lg:bottom-0 max-w-7xl mx-auto px-4 sm:px-6 py-8 lg:pt-0 lg:pb-20">
         <div className="max-w-2xl border-l-2 sm:border-l-[3px] border-brand-red pl-4 sm:pl-6">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red-light">
             Villa Park, Illinois &middot; Family Owned Since 2014
