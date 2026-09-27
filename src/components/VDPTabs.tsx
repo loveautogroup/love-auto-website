@@ -6,6 +6,7 @@ import { Vehicle } from "@/lib/types";
 import { SITE_CONFIG } from "@/lib/constants";
 import VDPFeaturesGrouped from "./VDPFeaturesGrouped";
 import { useLanguage } from "@/context/LanguageContext";
+import { useResolveOverlay } from "@/data/useMerchandising";
 
 interface VDPTabsProps {
   vehicle: Vehicle;
@@ -33,6 +34,21 @@ export default function VDPTabs({
     ? ALL_TABS.filter((tab) => tab !== "Financing")
     : ALL_TABS;
   const [activeTab, setActiveTab] = useState<Tab>("Overview");
+  // The "Free CARFAX Report" card is a claim that this car's link serves a
+  // free report, so it follows the same fail-closed rule as the CARFAX badge
+  // and button (shared/carfaxVisibility.ts): hidden until carfaxLinkLive is
+  // explicitly true. Owner, 2026-09-16: advertising a paid page as free is
+  // false advertising.
+  const overlay = useResolveOverlay(
+    vehicle.vin,
+    vehicle.daysOnLot,
+    vehicle.status,
+    vehicle.recentlyReduced ?? false
+  );
+  const carfaxOk = overlay.carfax === true;
+  const commitmentCards = 1 + (carfaxOk ? 1 : 0) + (vehicle.titleBrand ? 0 : 1);
+  const commitmentCols =
+    commitmentCards === 3 ? "sm:grid-cols-3" : commitmentCards === 2 ? "sm:grid-cols-2" : "sm:grid-cols-1";
 
   const tabLabels: Record<Tab, string> = {
     Overview: t.vdpTabs.tabOverview,
@@ -175,9 +191,11 @@ export default function VDPTabs({
             {/* Clean Title card is a title-status claim, so it only renders
                 when the DMS feed's titleBrand is empty (a branded title, e.g.
                 Rebuilt/Salvage, sets titleBrand. See the amber disclosure
-                above). Grid adapts to 2 or 3 columns so a branded-title car
-                never shows an empty slot (owner, 2026-09-26). */}
-            <div className={`grid grid-cols-1 gap-4 ${vehicle.titleBrand ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>
+                above). Grid adapts to 1-3 columns so a hidden card never
+                leaves an empty slot (owner, 2026-09-26). The CARFAX card is
+                gated the same way as the CARFAX badge (see carfaxOk above). */}
+            <div className={`grid grid-cols-1 gap-4 ${commitmentCols}`}>
+              {carfaxOk && (
               <div className="bg-ink-100 p-5 text-center">
                 <div className="w-11 h-11 bg-brand-green/10 flex items-center justify-center mx-auto mb-3">
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -187,6 +205,7 @@ export default function VDPTabs({
                 <h3 className="font-bold text-brand-gray-900 text-sm">{t.vdpTabs.inspectedTitle}</h3>
                 <p className="text-xs text-brand-gray-500 mt-1">{t.vdpTabs.inspectedSub}</p>
               </div>
+              )}
               <div className="bg-ink-100 p-5 text-center">
                 <div className="w-11 h-11 bg-brand-green/10 flex items-center justify-center mx-auto mb-3">
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
