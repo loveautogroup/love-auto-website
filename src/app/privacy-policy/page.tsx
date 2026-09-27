@@ -11,10 +11,13 @@ export const metadata: Metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <>
-      <section className="bg-brand-navy text-white py-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold">Privacy Policy</h1>
-          <p className="mt-4 text-lg text-brand-gray-300">
+      <section className="bg-brand-navy text-white py-14 md:py-20 border-b border-white/[.14]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+          <h1 className="font-heading font-extrabold leading-[0.98] text-[clamp(2rem,5vw,3.25rem)]">
+            Privacy Policy
+          </h1>
+          <span className="mt-4 inline-block w-12 h-[3px] bg-brand-red" aria-hidden="true" />
+          <p className="mt-5 text-base sm:text-lg text-ink-300">
             Last updated: April 17, 2026
           </p>
         </div>
