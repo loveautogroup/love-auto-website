@@ -33,7 +33,7 @@ export default function HomeHero() {
   const handlePlay = () => {
     if (firedPlayEvent.current) return;
     firedPlayEvent.current = true;
-    sendEvent("video_play", { video: "happy_customers_loop", location: "homepage_hero" });
+    sendEvent("video_play", { video: "happy_customers", location: "homepage_hero" });
   };
 
   return (
@@ -44,7 +44,8 @@ export default function HomeHero() {
           cropped it, which cut off the cars. Now it keeps its own 16:9 shape:
           full width on top on phones, and on desktop it sits against the
           right edge at the hero's height, fading into black under the
-          headline. */}
+          headline. Owner, 2026-09-27: use the full-length video here, not
+          the 23-second loop. */}
       <div className="relative w-full aspect-video lg:absolute lg:inset-y-0 lg:right-0 lg:w-auto lg:h-full lg:max-w-[64%]">
         <video
           autoPlay
@@ -53,12 +54,12 @@ export default function HomeHero() {
           playsInline
           controls
           preload="metadata"
-          poster="/videos/happy-customers-loop-poster.jpg"
+          poster="/videos/happy-customers-poster.jpg"
           aria-label="Love Auto Group customers and their cars"
           onPlay={handlePlay}
           className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src="/videos/happy-customers-loop.mp4" type="video/mp4" />
+          <source src="/videos/happy-customers.mp4" type="video/mp4" />
         </video>
         {/* Fade into the black band: from the bottom on phones (text sits
             below), from the left on desktop (text sits beside). */}
