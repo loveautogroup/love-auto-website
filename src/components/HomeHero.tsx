@@ -36,7 +36,7 @@ export default function HomeHero() {
   const handlePlay = () => {
     if (firedPlayEvent.current) return;
     firedPlayEvent.current = true;
-    sendEvent("video_play", { video: "happy_customers_short", location: "homepage_hero" });
+    sendEvent("video_play", { video: "happy_customers_loop", location: "homepage_hero" });
   };
 
   return (
@@ -48,12 +48,12 @@ export default function HomeHero() {
         playsInline
         controls
         preload="metadata"
-        poster="/videos/happy-customers-short-poster.jpg"
+        poster="/videos/happy-customers-loop-poster.jpg"
         aria-label="Love Auto Group customers and their cars"
         onPlay={handlePlay}
         className="absolute inset-0 w-full h-full object-cover opacity-[.55]"
       >
-        <source src="/videos/happy-customers-short.mp4" type="video/mp4" />
+        <source src="/videos/happy-customers-loop.mp4" type="video/mp4" />
       </video>
       {/* Bottom-anchored scrim — legible type at the bottom where the
           headline sits, fading to near-transparent at the top so the video

@@ -11,20 +11,14 @@
  *
  * The heading is translated via <T> like the rest of the homepage, so it
  * reads correctly on both / and /es/ (same component tree, different
- * LanguageContext locale — see src/app/es/page.tsx). The "Enter as strangers,
- * leave as friends" line is the literal sign above the owner's office door
- * and stays in English everywhere; on the Spanish render an additional
- * translated line is shown beneath it rather than replacing it.
+ * LanguageContext locale, see src/app/es/page.tsx).
  */
 
 import Link from "next/link";
 import T from "@/components/T";
 import PromoVideo from "@/components/PromoVideo";
-import { useLanguage } from "@/context/LanguageContext";
 
 export default function HomeHappyCustomers() {
-  const { locale } = useLanguage();
-
   return (
     <section className="bg-white py-16" aria-labelledby="happy-customers-heading">
       <div className="max-w-4xl mx-auto px-4 text-center">
@@ -34,14 +28,6 @@ export default function HomeHappyCustomers() {
         >
           <T path={["homePage", "happyCustomersHeading"]} />
         </h2>
-        <p className="italic text-brand-gray-500">
-          &ldquo;Enter as strangers, leave as friends.&rdquo;
-        </p>
-        {locale === "es" && (
-          <p className="italic text-brand-gray-500">
-            &ldquo;Entran como desconocidos, salen como amigos.&rdquo;
-          </p>
-        )}
         <div className="mt-6 max-w-2xl mx-auto">
           <PromoVideo
             src="/videos/happy-customers-short.mp4"

@@ -10,7 +10,6 @@ import PaymentCalculator from "@/components/PaymentCalculator";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
 import HomeHero from "@/components/HomeHero";
-import DoorSignQuoteBand from "@/components/DoorSignQuoteBand";
 import HomeStatBand from "@/components/HomeStatBand";
 import { SERVICE_AREAS } from "@/data/serviceAreas";
 import { BRANDS } from "@/data/brands";
@@ -50,9 +49,6 @@ export default function HomePage() {
       <div className="pt-4">
         <VDPTrustStrip />
       </div>
-
-      {/* Editorial pull-quote — the sign above the owner's door */}
-      <DoorSignQuoteBand />
 
       {/* Featured Vehicles — self-hides when nothing is featured in KV */}
       <HomeFeaturedGrid />

@@ -91,12 +91,9 @@ export default function ReviewsPage() {
       />
       <section className="bg-brand-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-brand-gray-900 mb-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-brand-gray-900 mb-6">
             Our happy customers
           </h2>
-          <p className="italic text-brand-gray-500 mb-6">
-            &ldquo;Enter as strangers, leave as friends.&rdquo;
-          </p>
           <PromoVideo
             id="happy-customers-video"
             src="/videos/happy-customers.mp4"
