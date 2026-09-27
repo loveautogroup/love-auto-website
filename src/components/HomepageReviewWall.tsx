@@ -85,7 +85,7 @@ export default async function HomepageReviewWall() {
           </div>
           <h2
             id="reviews-wall-heading"
-            className="text-3xl md:text-4xl font-bold text-white"
+            className="font-heading font-extrabold text-3xl md:text-4xl text-white"
           >
             {data.rating.toFixed(1)} Stars
           </h2>
@@ -100,7 +100,7 @@ export default async function HomepageReviewWall() {
           {reviews.map((review, i) => (
               <article
                 key={i}
-                className="bg-white/8 border border-white/10 rounded-2xl p-5 flex flex-col gap-3"
+                className="bg-white/[.06] border border-white/[.14] hover:border-brand-red transition-colors p-5 flex flex-col gap-3"
               >
                 {/* Author + stars */}
                 <div className="flex items-start justify-between gap-3">
@@ -147,7 +147,7 @@ export default async function HomepageReviewWall() {
             href={reviewUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-white hover:bg-brand-gray-100 text-brand-navy font-bold px-6 py-3 rounded-xl transition-colors text-sm"
+            className="inline-flex items-center gap-2.5 bg-white hover:bg-brand-gray-100 text-brand-navy px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
           >
             <GoogleLogo />
             Read all {data.reviewCount}+ reviews on Google
@@ -157,7 +157,7 @@ export default async function HomepageReviewWall() {
           </a>
 
           {/* Leave a Review — Shapo-style widget card */}
-          <div className="bg-white rounded-2xl shadow-xl px-5 py-4 flex flex-col items-center gap-2 min-w-[220px]">
+          <div className="bg-white border border-ink-200 px-5 py-4 flex flex-col items-center gap-2 min-w-[220px]">
             {/* Header */}
             <div className="flex items-center gap-1.5">
               <GoogleLogo />
@@ -209,7 +209,7 @@ export default async function HomepageReviewWall() {
               href={SITE_CONFIG.reviews.google.writeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-1 w-full inline-flex items-center justify-center gap-1.5 bg-[#1A73E8] hover:bg-[#1557B0] text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors"
+              className="mt-1 w-full inline-flex items-center justify-center gap-1.5 bg-[#1A73E8] hover:bg-[#1557B0] text-white text-[12px] font-bold uppercase tracking-[0.06em] px-4 py-2.5 transition-colors"
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white flex-shrink-0" aria-hidden="true">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
