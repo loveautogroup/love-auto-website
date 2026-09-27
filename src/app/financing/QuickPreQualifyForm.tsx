@@ -160,12 +160,12 @@ export default function QuickPreQualifyForm() {
 
   const disabled = state.kind === "submitting";
   const fieldClass =
-    "w-full border border-brand-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red disabled:bg-brand-gray-50";
+    "w-full border border-ink-200 px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red disabled:bg-ink-100";
 
   if (state.kind === "success") {
     return (
-      <div className="bg-brand-green/10 border border-brand-green/20 rounded-xl p-8 text-center">
-        <h3 className="text-xl font-bold text-brand-gray-900 mb-2">{t.prequalify.successHeading}</h3>
+      <div className="bg-brand-green/10 border border-brand-green/20 border-l-[3px] border-l-brand-green p-8 text-center">
+        <h3 className="font-heading font-extrabold text-xl text-brand-gray-900 mb-2">{t.prequalify.successHeading}</h3>
         <p className="text-brand-gray-600 max-w-md mx-auto">
           {t.prequalify.successBodyPre}
           <a
@@ -186,16 +186,16 @@ export default function QuickPreQualifyForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="bg-white border border-brand-gray-200 rounded-xl p-6 sm:p-8 space-y-5">
+    <form onSubmit={onSubmit} className="bg-white border border-ink-200 p-6 sm:p-8 space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-brand-gray-900">{t.prequalify.heading}</h2>
+        <h2 className="font-heading font-extrabold text-xl text-brand-gray-900">{t.prequalify.heading}</h2>
         <p className="text-sm text-brand-gray-500 mt-1">
           {t.prequalify.subtext}
         </p>
       </div>
 
       {state.kind === "error" && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
+        <div className="bg-red-50 border border-red-200 border-l-[3px] border-l-red-600 p-4 text-sm text-red-700">
           <p className="font-semibold mb-1">{t.prequalify.fixFollowing}</p>
           <ul className="list-disc ml-5 space-y-0.5">
             {state.messages.map((m, i) => (
@@ -294,7 +294,7 @@ export default function QuickPreQualifyForm() {
         </label>
       </div>
 
-      <fieldset className="space-y-3 border-t border-brand-gray-200 pt-4" disabled={disabled}>
+      <fieldset className="space-y-3 border-t border-ink-200 pt-4" disabled={disabled}>
         <label className="flex items-start gap-2 text-xs text-brand-gray-700 leading-relaxed">
           <input type="checkbox" required checked={values.tcpaConsent}
             onChange={(e) => update("tcpaConsent", e.target.checked)} className="w-4 h-4 mt-0.5 shrink-0" />
@@ -327,7 +327,7 @@ export default function QuickPreQualifyForm() {
       </fieldset>
 
       <button type="submit" disabled={disabled}
-        className="w-full bg-brand-red hover:bg-brand-red-dark disabled:bg-brand-gray-400 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-semibold transition-colors">
+        className="w-full bg-brand-red hover:bg-brand-red-dark disabled:bg-brand-gray-400 disabled:cursor-not-allowed text-white py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors">
         {disabled ? t.prequalify.submitting : t.prequalify.submit}
       </button>
     </form>

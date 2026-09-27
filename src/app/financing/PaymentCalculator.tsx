@@ -58,12 +58,12 @@ export default function PaymentCalculator() {
 
   return (
     <section
-      className="bg-white rounded-2xl border border-brand-gray-200 p-6 md:p-8 shadow-sm"
+      className="bg-white border border-ink-200 p-6 md:p-8"
       aria-labelledby="calc-heading"
     >
       <h2
         id="calc-heading"
-        className="text-2xl font-bold text-brand-gray-900 mb-1"
+        className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-1"
       >
         {t.calculator.heading}
       </h2>
@@ -84,7 +84,7 @@ export default function PaymentCalculator() {
                 step={100}
                 value={price}
                 onChange={(e) => setPrice(Number(e.target.value) || 0)}
-                className="w-full pl-7 pr-3 py-2 border border-brand-gray-200 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent outline-none"
+                className="w-full pl-7 pr-3 py-2 border border-ink-200 focus:ring-1 focus:ring-brand-red focus:border-brand-red outline-none"
               />
             </div>
           </Field>
@@ -100,7 +100,7 @@ export default function PaymentCalculator() {
                 step={100}
                 value={down}
                 onChange={(e) => setDown(Number(e.target.value) || 0)}
-                className="w-full pl-7 pr-3 py-2 border border-brand-gray-200 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent outline-none"
+                className="w-full pl-7 pr-3 py-2 border border-ink-200 focus:ring-1 focus:ring-brand-red focus:border-brand-red outline-none"
               />
             </div>
           </Field>
@@ -110,7 +110,7 @@ export default function PaymentCalculator() {
               id="calc-term"
               value={months}
               onChange={(e) => setMonths(Number(e.target.value))}
-              className="w-full px-3 py-2 border border-brand-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-brand-red focus:border-transparent outline-none"
+              className="w-full px-3 py-2 border border-ink-200 bg-white focus:ring-1 focus:ring-brand-red focus:border-brand-red outline-none"
             >
               <option value={24}>{t.calculator.months24}</option>
               <option value={36}>{t.calculator.months36}</option>
@@ -132,7 +132,7 @@ export default function PaymentCalculator() {
                 step={0.1}
                 value={apr}
                 onChange={(e) => setApr(Number(e.target.value) || 0)}
-                className="w-full pl-3 pr-8 py-2 border border-brand-gray-200 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent outline-none"
+                className="w-full pl-3 pr-8 py-2 border border-ink-200 focus:ring-1 focus:ring-brand-red focus:border-brand-red outline-none"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-gray-500">%</span>
             </div>
@@ -142,16 +142,16 @@ export default function PaymentCalculator() {
           </Field>
         </div>
 
-        <div className="bg-brand-navy text-white rounded-xl p-6 flex flex-col justify-center">
-          <p className="text-sm text-brand-gray-300 uppercase tracking-wide font-semibold">
+        <div className="bg-brand-navy text-white p-6 flex flex-col justify-center border-t-2 border-brand-red">
+          <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-ink-300">
             {t.calculator.estimatedMonthly}
           </p>
-          <p className="mt-1 text-5xl font-bold tabular-nums">
+          <p className="mt-1 font-heading font-extrabold text-5xl tabular-nums">
             {monthly !== null ? money(monthly) : "—"}
           </p>
-          <p className="mt-1 text-xs text-brand-gray-300">{t.calculator.perMonth}</p>
+          <p className="mt-1 text-xs text-ink-300">{t.calculator.perMonth}</p>
 
-          <div className="mt-6 pt-6 border-t border-white/10 text-sm space-y-2 text-brand-gray-300">
+          <div className="mt-6 pt-6 border-t border-white/[.14] text-sm space-y-2 text-ink-300">
             <div className="flex justify-between">
               <span>{t.calculator.amountFinanced}</span>
               <span className="tabular-nums text-white">
@@ -172,7 +172,7 @@ export default function PaymentCalculator() {
 
           <a
             href="#apply"
-            className="mt-6 inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white font-semibold px-5 py-3 rounded-lg transition-colors"
+            className="mt-6 inline-flex items-center justify-center gap-2.5 bg-brand-red hover:bg-brand-red-dark text-white px-5 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
           >
             {t.calculator.getRealRate}
           </a>
@@ -199,7 +199,7 @@ function Field({
     <div>
       <label
         htmlFor={id}
-        className="block text-sm font-semibold text-brand-gray-700 mb-1"
+        className="block text-sm font-medium text-brand-gray-900 mb-1"
       >
         {label}
       </label>

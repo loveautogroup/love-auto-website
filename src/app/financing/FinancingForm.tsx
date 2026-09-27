@@ -355,7 +355,7 @@ export default function FinancingForm() {
 
   if (state.kind === "success") {
     return (
-      <div className="bg-brand-green/10 border border-brand-green/20 rounded-xl p-8 text-center">
+      <div className="bg-brand-green/10 border border-brand-green/20 border-l-[3px] border-l-brand-green p-8 text-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="w-12 h-12 text-brand-green mx-auto mb-4"
@@ -370,7 +370,7 @@ export default function FinancingForm() {
             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
-        <h3 className="text-xl font-bold text-brand-gray-900 mb-2">
+        <h3 className="font-heading font-extrabold text-xl text-brand-gray-900 mb-2">
           {t.creditApp.successHeading}
         </h3>
         <p className="text-brand-gray-600 max-w-md mx-auto">
@@ -394,7 +394,7 @@ export default function FinancingForm() {
 
   const disabled = state.kind === "submitting";
   const fieldClass =
-    "w-full border border-brand-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red disabled:bg-brand-gray-50";
+    "w-full border border-ink-200 px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red disabled:bg-ink-100";
 
   return (
     // Found in the website audit: `noValidate` was set here with no
@@ -409,10 +409,10 @@ export default function FinancingForm() {
     // same way with no noValidate.
     <form
       onSubmit={onSubmit}
-      className="bg-white rounded-xl border border-brand-gray-200 p-6 space-y-6"
+      className="bg-white border border-ink-200 p-6 sm:p-8 space-y-6"
     >
       <div>
-        <h2 className="text-xl font-bold text-brand-gray-900">
+        <h2 className="font-heading font-extrabold text-xl text-brand-gray-900">
           {t.creditApp.heading}
         </h2>
         <p className="text-sm text-brand-gray-500 mt-1">
@@ -423,7 +423,7 @@ export default function FinancingForm() {
       </div>
 
       {state.kind === "error" && (
-        <div className="bg-brand-red/10 border border-brand-red/20 rounded-lg p-4 text-sm text-brand-red">
+        <div className="bg-brand-red/10 border border-brand-red/20 border-l-[3px] border-l-brand-red p-4 text-sm text-brand-red">
           <p className="font-semibold mb-1">{t.creditApp.fixFollowing}</p>
           <ul className="list-disc list-inside space-y-0.5">
             {state.messages.map((m, i) => (
@@ -639,7 +639,7 @@ export default function FinancingForm() {
         </label>
 
         {/* Driver's License (optional — saves a follow-up call when submitting to lender) */}
-        <div className="pt-4 border-t border-brand-gray-100">
+        <div className="pt-4 border-t border-ink-200">
           <p className="text-xs uppercase tracking-wide text-brand-gray-500 font-semibold mb-3">
             {t.creditApp.dlSection}
           </p>
@@ -919,7 +919,7 @@ export default function FinancingForm() {
         </label>
 
         {values.hasCoBuyer && (
-          <div className="space-y-4 rounded-lg border border-brand-gray-200 bg-brand-gray-50 p-5">
+          <div className="space-y-4 border border-ink-200 bg-ink-100 p-5">
             <p className="text-xs uppercase tracking-wide text-brand-gray-600 font-semibold">
               {t.creditApp.coBuyerInfo}
             </p>
@@ -1066,7 +1066,7 @@ export default function FinancingForm() {
                 />
               </label>
             </div>
-            <p className="text-xs text-brand-gray-500 pt-2 border-t border-brand-gray-200">
+            <p className="text-xs text-brand-gray-500 pt-2 border-t border-ink-200">
               {t.creditApp.coBuyerDlNote}
             </p>
           </div>
@@ -1090,7 +1090,7 @@ export default function FinancingForm() {
 
       {/* ─── Consents ─── */}
       <fieldset
-        className="space-y-3 border-t border-brand-gray-200 pt-5"
+        className="space-y-3 border-t border-ink-200 pt-5"
         disabled={disabled}
       >
         <legend className="text-sm font-bold text-brand-gray-900 mb-2 uppercase tracking-wide">
@@ -1156,7 +1156,7 @@ export default function FinancingForm() {
             {CONSENT_LANGUAGE[CONSENT_VERSION].fcra_credit_auth}
           </span>
         </label>
-        <p className="text-xs text-brand-gray-500 leading-relaxed pt-2 border-t border-brand-gray-100">
+        <p className="text-xs text-brand-gray-500 leading-relaxed pt-2 border-t border-ink-200">
           <span className="font-semibold">Equal Credit Opportunity Act:</span>{" "}
           The Federal Equal Credit Opportunity Act prohibits creditors from
           discriminating against credit applicants on the basis of race, color,
@@ -1171,7 +1171,7 @@ export default function FinancingForm() {
       <button
         type="submit"
         disabled={disabled}
-        className="w-full bg-brand-red hover:bg-brand-red-dark disabled:bg-brand-gray-400 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-semibold transition-colors"
+        className="w-full bg-brand-red hover:bg-brand-red-dark disabled:bg-brand-gray-400 disabled:cursor-not-allowed text-white py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
       >
         {disabled ? t.creditApp.submitting : t.creditApp.submitDefault}
       </button>

@@ -25,15 +25,19 @@ export default function ApplySection() {
   }, []);
 
   const tabClass = (active: boolean) =>
-    `flex-1 py-3 rounded-lg text-sm font-semibold transition-colors ${
+    `flex-1 sm:flex-none px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.07em] border-b-2 transition-colors ${
       active
-        ? "bg-brand-red text-white"
-        : "bg-white text-brand-gray-700 border border-brand-gray-200 hover:border-brand-red"
+        ? "border-brand-red text-brand-red"
+        : "border-transparent text-brand-gray-500 hover:text-brand-gray-900 hover:border-brand-gray-300"
     }`;
 
   return (
     <div>
-      <div className="flex gap-3 mb-6" role="tablist" aria-label="Application type">
+      <div
+        className="flex gap-0 mb-8 border-b border-ink-200"
+        role="tablist"
+        aria-label="Application type"
+      >
         <button type="button" role="tab" aria-selected={tab === "full"}
           className={tabClass(tab === "full")} onClick={() => setTab("full")}>
           Full Credit Application

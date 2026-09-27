@@ -35,15 +35,15 @@ export default function PaymentCalculator() {
   }).format(estimatedPrice);
 
   return (
-    <section className="bg-brand-gray-50 py-16" aria-labelledby="calc-heading">
+    <section className="bg-ink-100 py-16" aria-labelledby="calc-heading">
       <div className="max-w-5xl mx-auto px-4">
-        <div className="bg-white rounded-2xl border border-brand-gray-200 shadow-sm overflow-hidden">
+        <div className="bg-white border border-ink-200 overflow-hidden">
           <div className="md:grid md:grid-cols-[1fr_300px]">
             {/* Calculator inputs */}
             <div className="p-6 md:p-8">
               <h2
                 id="calc-heading"
-                className="text-2xl font-bold text-brand-gray-900 mb-1"
+                className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-1"
               >
                 See cars that fit your budget
               </h2>
@@ -73,7 +73,7 @@ export default function PaymentCalculator() {
                     step={25}
                     value={monthlyBudget}
                     onChange={(e) => setMonthlyBudget(Number(e.target.value))}
-                    className="w-full h-2 bg-brand-gray-200 rounded-lg appearance-none cursor-pointer accent-brand-red"
+                    className="w-full h-1.5 bg-brand-gray-200 appearance-none cursor-pointer accent-brand-red"
                   />
                   <div className="flex justify-between text-xs text-brand-gray-400 mt-1">
                     <span>$100</span>
@@ -93,7 +93,7 @@ export default function PaymentCalculator() {
                     id="credit-score"
                     value={creditTier}
                     onChange={(e) => setCreditTier(Number(e.target.value))}
-                    className="w-full border border-brand-gray-200 rounded-lg px-3 py-2.5 text-brand-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent"
+                    className="w-full border border-ink-200 px-3 py-2.5 text-brand-gray-900 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red"
                   >
                     {CREDIT_TIERS.map((tier, i) => (
                       <option key={tier.label} value={i}>
@@ -116,7 +116,7 @@ export default function PaymentCalculator() {
                       id="down-payment"
                       value={downPayment}
                       onChange={(e) => setDownPayment(Number(e.target.value))}
-                      className="w-full border border-brand-gray-200 rounded-lg px-3 py-2.5 text-brand-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent"
+                      className="w-full border border-ink-200 px-3 py-2.5 text-brand-gray-900 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red"
                     >
                       <option value={0}>$0</option>
                       <option value={500}>$500</option>
@@ -137,7 +137,7 @@ export default function PaymentCalculator() {
                       id="term-length"
                       value={termMonths}
                       onChange={(e) => setTermMonths(Number(e.target.value))}
-                      className="w-full border border-brand-gray-200 rounded-lg px-3 py-2.5 text-brand-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent"
+                      className="w-full border border-ink-200 px-3 py-2.5 text-brand-gray-900 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red"
                     >
                       {TERMS.map((t) => (
                         <option key={t} value={t}>
@@ -151,23 +151,23 @@ export default function PaymentCalculator() {
             </div>
 
             {/* Result panel */}
-            <div className="bg-brand-navy text-white p-6 md:p-8 flex flex-col items-center justify-center text-center">
-              <p className="text-sm text-brand-gray-300 mb-1">
+            <div className="bg-brand-navy text-white p-6 md:p-8 flex flex-col items-center justify-center text-center border-t-2 md:border-t-0 md:border-l-2 border-brand-red">
+              <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-ink-300 mb-1">
                 Est. vehicle price
               </p>
-              <p className="text-4xl md:text-5xl font-bold mb-2">
+              <p className="font-heading font-extrabold text-4xl md:text-5xl mb-2">
                 {formattedPrice}
               </p>
-              <p className="text-xs text-brand-gray-400 mb-6">
+              <p className="text-xs text-ink-400 mb-6">
                 at {(CREDIT_TIERS[creditTier].apr * 100).toFixed(2)}% APR
               </p>
               <Link
                 href={`/inventory?maxPrice=${estimatedPrice}`}
-                className="w-full bg-brand-red hover:bg-brand-red-dark text-white py-3 rounded-xl font-bold transition-colors text-center block"
+                className="w-full bg-brand-red hover:bg-brand-red-dark text-white py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors text-center block"
               >
                 Browse Vehicles
               </Link>
-              <p className="text-xs text-brand-gray-400 mt-4">
+              <p className="text-xs text-ink-400 mt-4">
                 Estimate only. Does not include tax, title, or fees. Subject to
                 credit approval.
               </p>
