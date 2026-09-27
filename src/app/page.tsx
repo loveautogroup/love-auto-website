@@ -10,6 +10,8 @@ import PaymentCalculator from "@/components/PaymentCalculator";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
 import HomeHero from "@/components/HomeHero";
+import DoorSignQuoteBand from "@/components/DoorSignQuoteBand";
+import HomeStatBand from "@/components/HomeStatBand";
 import { SERVICE_AREAS } from "@/data/serviceAreas";
 import { BRANDS } from "@/data/brands";
 
@@ -45,12 +47,20 @@ export default function HomePage() {
       <HomeHero />
 
       {/* Trust ticker — 3 credibility pillars, visible on every page */}
-      <div className="max-w-7xl mx-auto px-4 pt-4">
+      <div className="pt-4">
         <VDPTrustStrip />
       </div>
 
+      {/* Editorial pull-quote — the sign above the owner's door */}
+      <DoorSignQuoteBand />
+
       {/* Featured Vehicles — self-hides when nothing is featured in KV */}
       <HomeFeaturedGrid />
+
+      {/* Four real numbers, no icons — the "data band" beat from Bob's
+          concept. Sits right after the lot so the claims are backed by
+          what the shopper just scrolled past. */}
+      <HomeStatBand />
 
       {/* Trust Pillars */}
       <section className="bg-white py-16" aria-labelledby="why-heading">

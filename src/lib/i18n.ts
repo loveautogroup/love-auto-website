@@ -48,12 +48,12 @@ export const translations = {
       areasServed: "Areas We Serve",
     },
     hero: {
-      headline: "Find Your Next Ride",
-      headlineSub: "at Love Auto Group",
+      headline: "Great cars. Fair prices.",
+      headlineSub: "No dealer fees.",
       subtext:
-        "Family-owned independent dealer: Lexus, Subaru, Acura, Mazda, Honda. Carefully selected and ready to drive. Villa Park, IL, 20 miles from Chicago.",
+        "Family owned and independent since 2014. Carefully selected cars, and we ship anywhere in the U.S.",
       cta: "Browse Inventory",
-      ctaFinancing: "Get Pre-Approved",
+      ctaFinancing: "Apply for Financing",
       pills: {
         under10: "Under $10K",
         under15: "Under $15K",
@@ -66,7 +66,7 @@ export const translations = {
     },
     ctas: {
       viewDetails: "View Details →",
-      getPreApproved: "Get Pre-Approved",
+      getPreApproved: "Apply for Financing",
       getCashOffer: "Get a Cash Offer",
       viewInventory: "View Inventory",
       contact: "Contact Us",
@@ -298,7 +298,7 @@ export const translations = {
       mi: "mi",
       est: "Est.",
       perMo: "/mo",
-      viewDetails: "View Details →",
+      viewDetails: "View Details",
       disclaimer: "Based on $1,000 down, 6.99% APR, 60 months",
       // Sold-vehicle history (2026-09-15) — renders on the card where the
       // price would otherwise be.
@@ -572,7 +572,7 @@ export const translations = {
       term: "Term",
       months: "months",
       financeDisclaimer: "*Estimated payment for illustration only. Actual terms depend on credit approval. Does not include tax, title, or fees.",
-      getPreApprovedNow: "Get Pre-Approved Now",
+      getPreApprovedNow: "Apply for Financing Now",
       quickEasyNote: "Quick, easy, and won't affect your credit. We work with multiple lenders.",
       mi: "mi",
     },
@@ -737,12 +737,12 @@ export const translations = {
       terms: "Términos",
     },
     hero: {
-      headline: "Encuentra Tu Próximo Auto",
-      headlineSub: "en Love Auto Group",
+      headline: "Autos excelentes. Precios justos.",
+      headlineSub: "Sin cargos de concesionario.",
       subtext:
-        "Concesionario independiente familiar: Lexus, Subaru, Acura, Mazda, Honda. Cuidadosamente seleccionados y listos para manejar. Villa Park, IL, a 20 millas de Chicago.",
+        "Familiar e independiente desde 2014. Autos cuidadosamente seleccionados, y enviamos a cualquier parte de EE. UU.",
       cta: "Ver Inventario",
-      ctaFinancing: "Pre-Aprobación",
+      ctaFinancing: "Solicitar Financiamiento",
       pills: {
         under10: "Menos de $10K",
         under15: "Menos de $15K",
@@ -755,7 +755,7 @@ export const translations = {
     },
     ctas: {
       viewDetails: "Ver Detalles →",
-      getPreApproved: "Pre-Aprobación",
+      getPreApproved: "Solicitar Financiamiento",
       getCashOffer: "Obtener Oferta",
       viewInventory: "Ver Inventario",
       contact: "Contáctenos",
@@ -963,7 +963,7 @@ export const translations = {
       mi: "mi",
       est: "Est.",
       perMo: "/mes",
-      viewDetails: "Ver Detalles →",
+      viewDetails: "Ver Detalles",
       disclaimer: "Basado en $1,000 de inicial, 6.99% TAE, 60 meses",
       sold: "Vendido",
     },
@@ -1235,7 +1235,7 @@ export const translations = {
       term: "Plazo",
       months: "meses",
       financeDisclaimer: "*Pago estimado solo para fines ilustrativos. Los términos reales dependen de la aprobación de crédito. No incluye impuestos, título ni cuotas.",
-      getPreApprovedNow: "Obtener Pre-Aprobación Ahora",
+      getPreApprovedNow: "Solicitar Financiamiento Ahora",
       quickEasyNote: "Rápido, fácil, y no afecta tu crédito. Trabajamos con múltiples prestamistas.",
       mi: "mi",
     },

@@ -118,7 +118,7 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
         <button
           onClick={onClose}
           aria-label={t.gallery.close}
-          className="text-white/80 hover:text-white p-2 -mr-2 rounded-full transition-colors"
+          className="text-white/80 hover:text-white p-2 -mr-2 transition-colors"
         >
           <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
             <path d="M18.3 5.71a1 1 0 00-1.41 0L12 10.59 7.11 5.7A1 1 0 005.7 7.11L10.59 12 5.7 16.89a1 1 0 001.41 1.41L12 13.41l4.89 4.89a1 1 0 001.41-1.41L13.41 12l4.89-4.89a1 1 0 000-1.4z" />
@@ -173,7 +173,7 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
             <button
               key={i}
               onClick={() => setIdx(i)}
-              className={`relative flex-shrink-0 w-14 h-14 rounded-md overflow-hidden border-2 transition-all ${
+              className={`relative flex-shrink-0 w-14 h-14 overflow-hidden border-2 transition-all ${
                 i === idx
                   ? "border-brand-red"
                   : "border-transparent opacity-50 hover:opacity-80"
@@ -321,7 +321,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") openLightbox(selectedIndex);
             }}
-            className={`@container relative aspect-[3/2] bg-brand-gray-100 rounded-xl overflow-hidden ${
+            className={`@container relative aspect-[3/2] bg-brand-gray-100 overflow-hidden ${
               hasRealPhotos && !forcePlaceholder && isMobile ? "cursor-pointer" : ""
             }`}
           >
@@ -611,7 +611,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
             {/* Expand icon — mobile only, non-first photos (first photo has badge overlay) */}
             {hasRealPhotos && !forcePlaceholder && !showBadges && (
               <div className="absolute bottom-3 right-3 z-10 pointer-events-none md:hidden">
-                <div className="bg-black/60 text-white rounded-full p-1.5">
+                <div className="bg-black/60 text-white p-1.5">
                   <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                     <path d="M3 3h7v2H5v5H3V3zm11 0h7v7h-2V5h-5V3zM3 14h2v5h5v2H3v-7zm16 5h-5v2h7v-7h-2v5z" />
                   </svg>
@@ -621,7 +621,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
 
             {/* Photo counter — shown when no badge overlay */}
             {!showBadges && !showMinimalBadges && (
-              <span className="absolute bottom-3 left-3 bg-black/70 text-white text-xs font-medium px-2.5 py-1 rounded-full inline-flex items-center gap-1">
+              <span className="absolute bottom-3 left-3 bg-black/70 text-white text-xs font-medium px-2.5 py-1 inline-flex items-center gap-1">
                 <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current">
                   <path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
                   <circle cx="12" cy="13" r="3" />
@@ -652,9 +652,9 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                   }
                   setSelectedIndex(i);
                 }}
-                className={`relative flex-shrink-0 w-[150px] aspect-[4/3] bg-brand-gray-100 rounded-lg overflow-hidden border-2 transition-all ${
+                className={`relative flex-shrink-0 w-[150px] aspect-[4/3] bg-brand-gray-100 overflow-hidden border-2 transition-all ${
                   selectedIndex === i
-                    ? "border-brand-red ring-1 ring-brand-red"
+                    ? "border-brand-red"
                     : "border-transparent hover:border-brand-gray-300"
                 }`}
                 aria-label={

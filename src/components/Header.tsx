@@ -27,7 +27,7 @@ const NAV_KEY_MAP: Record<string, keyof ReturnType<typeof useLanguage>["t"]["nav
 function CarfaxWordmark() {
   return (
     <span
-      className="inline-flex items-center bg-white border border-[#1A1919] rounded-sm px-1.5 py-0.5"
+      className="inline-flex items-center bg-white border border-[#1A1919] px-1.5 py-0.5"
       role="img"
       aria-label="Free Carfax report on vehicles that show the badge"
     >
@@ -94,18 +94,19 @@ export default function Header() {
     : "max-h-24 opacity-100";
 
   return (
-    <header className="bg-brand-navy text-white sticky top-0 z-50">
-      {/* Top bar — phone + hours + lang toggle */}
+    <header className="bg-brand-navy text-white sticky top-0 z-50 border-b border-white/[.14]">
+      {/* Top bar — address, hours, reviews, phone, language. Hairline
+          verticals instead of a bg pill, uppercase micro-label sizing. */}
       <div
-        className={`bg-brand-gray-900 text-sm px-4 hidden md:block transition-all duration-200 ${condensed ? "" : "py-1.5"} ${stripCollapse}`}
+        className={`bg-ink-950 text-[12.5px] px-4 hidden md:block transition-all duration-200 border-b border-white/[.14] ${condensed ? "" : "py-2"} ${stripCollapse}`}
         aria-hidden={condensed}
       >
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <span className="text-brand-gray-300">
+            <span className="text-ink-400">
               735 N Yale Ave, Unit A, Villa Park, IL 60181
             </span>
-            <span className="text-brand-gray-700" aria-hidden="true">|</span>
+            <span className="w-px h-3.5 bg-white/[.14]" aria-hidden="true" />
             <CarfaxAdvantageBadge size="xs" />
           </div>
           <div className="flex items-center gap-4">
@@ -117,7 +118,7 @@ export default function Header() {
               onClick={() =>
                 trackOutboundClick(SITE_CONFIG.reviews.google.readUrl, "google_reviews_header")
               }
-              className="flex items-center gap-1.5 text-brand-gray-200 hover:text-white transition-colors"
+              className="flex items-center gap-1.5 text-ink-300 hover:text-white transition-colors"
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4" xmlns="http://www.w3.org/2000/svg">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -125,15 +126,17 @@ export default function Header() {
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
               </svg>
-              <span className="text-yellow-400 text-xs leading-none">★★★★★</span>
+              <span className="text-yellow-400 text-xs leading-none tracking-[1px]">★★★★★</span>
               <span className="font-semibold text-white">{googleReviews.rating}</span>
-              <span className="text-brand-gray-400">({googleReviews.reviewCount} reviews)</span>
+              <span className="text-ink-400">({googleReviews.reviewCount} reviews)</span>
             </a>
-            <span className="text-brand-gray-300">{t.header.hours}</span>
+            <span className="w-px h-3.5 bg-white/[.14]" aria-hidden="true" />
+            <span className="text-ink-300 uppercase text-[11px] tracking-[0.08em] font-semibold">{t.header.hours}</span>
+            <span className="w-px h-3.5 bg-white/[.14]" aria-hidden="true" />
             <a
               href={`tel:${SITE_CONFIG.phoneRaw}`}
               onClick={() => trackPhoneClick("header_credibility_strip")}
-              className="text-brand-red-light hover:text-white font-semibold"
+              className="text-brand-red-light hover:text-white font-bold tracking-[0.02em]"
             >
               {SITE_CONFIG.phone}
             </a>
@@ -144,40 +147,41 @@ export default function Header() {
 
       {/* Mobile-only credibility strip */}
       <div
-        className={`md:hidden bg-brand-gray-900 px-4 flex items-center justify-between gap-2 text-[11px] transition-all duration-200 ${condensed ? "" : "py-1.5"} ${stripCollapse}`}
+        className={`md:hidden bg-ink-950 px-4 flex items-center justify-between gap-2 text-[11px] border-b border-white/[.14] transition-all duration-200 ${condensed ? "" : "py-1.5"} ${stripCollapse}`}
         aria-hidden={condensed}
       >
         <div className="flex items-center gap-2">
           <CarfaxWordmark />
-          <span className="text-brand-gray-400">·</span>
-          <span className="text-brand-gray-300 font-medium">{t.header.freeCarfax}</span>
+          <span className="text-ink-400">·</span>
+          <span className="text-ink-300 font-semibold uppercase tracking-[0.06em]">{t.header.freeCarfax}</span>
         </div>
         <LanguageSwitcher />
       </div>
 
       {/* Main nav */}
       <nav
-        className={`max-w-7xl mx-auto px-4 flex items-center justify-between transition-all duration-200 ${
-          condensed ? "py-1.5" : "py-3"
+        className={`max-w-7xl mx-auto px-4 flex items-center justify-between gap-4 transition-all duration-200 ${
+          condensed ? "py-2" : "py-3"
         }`}
         aria-label="Main navigation"
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center group">
+        <Link href="/" className="flex items-center group shrink-0">
           <Image
             src="/images/logo-primary-v2.svg"
             alt="Love Auto Group — Since 2014"
             width={440}
             height={160}
             className={`w-auto object-contain transition-all duration-200 ${
-              condensed ? "h-14 md:h-16" : "h-28 md:h-32"
+              condensed ? "h-12 md:h-14" : "h-24 md:h-[104px]"
             }`}
             priority
           />
         </Link>
 
-        {/* Desktop nav links */}
-        <div className="hidden lg:flex items-center gap-1">
+        {/* Desktop nav links — uppercase, tracked, 2px underline that turns
+            red on hover/active. No background pill on hover. */}
+        <div className="hidden lg:flex items-center gap-0.5">
           {NAV_LINKS.map((link) => {
             const key = NAV_KEY_MAP[link.href];
             const label = key ? t.nav[key] : link.label;
@@ -185,7 +189,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-2 xl:px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap text-brand-gray-200 hover:text-white hover:bg-white/10 transition-colors"
+                className="px-2.5 xl:px-3.5 py-2 text-[12.5px] font-semibold uppercase tracking-[0.07em] whitespace-nowrap text-white/70 border-b-2 border-transparent hover:text-white hover:border-brand-red transition-colors"
               >
                 {label}
               </Link>
@@ -194,28 +198,31 @@ export default function Header() {
         </div>
 
         {/* CTA + Phone (desktop) */}
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-4 shrink-0">
           <a
             href={`tel:${SITE_CONFIG.phoneRaw}`}
             onClick={() => trackPhoneClick("header_desktop")}
-            className="text-brand-red-light hover:text-white font-semibold text-sm whitespace-nowrap"
+            className="text-brand-red-light hover:text-white font-bold text-[13px] tracking-[0.02em] whitespace-nowrap"
           >
             {SITE_CONFIG.phone}
           </a>
           <Link
             href="/inventory"
-            className="bg-brand-red hover:bg-brand-red-dark text-white px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-colors"
+            className="group inline-flex items-center gap-2 bg-brand-red hover:bg-brand-red-dark text-white px-5 py-2.5 text-[12.5px] font-bold uppercase tracking-[0.08em] whitespace-nowrap transition-colors"
           >
             {t.header.browseInventory}
+            <svg className="w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
           </Link>
         </div>
 
-        {/* Mobile: phone + hamburger */}
-        <div className="flex lg:hidden items-center gap-3">
+        {/* Mobile: phone + text + hamburger — flat squares, no rounded pills */}
+        <div className="flex lg:hidden items-center gap-2 shrink-0">
           <a
             href={`tel:${SITE_CONFIG.phoneRaw}`}
             onClick={() => trackPhoneClick("header_mobile")}
-            className="bg-brand-green text-white p-2 rounded-lg"
+            className="bg-brand-green text-white p-2.5"
             aria-label="Call Love Auto Group"
           >
             <svg
@@ -247,7 +254,7 @@ export default function Header() {
           <a
             href={`sms:${textPhone}?body=${encodeURIComponent("Hi, I'm interested in a vehicle on your lot.")}`}
             onClick={() => trackTextClick("header_mobile")}
-            className="bg-brand-red text-white p-2 rounded-lg"
+            className="bg-brand-red text-white p-2.5"
             aria-label="Text Love Auto Group"
           >
             <svg
@@ -268,16 +275,16 @@ export default function Header() {
           </a>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg hover:bg-white/10"
+            className="p-2.5 border border-white/30 hover:border-white text-white transition-colors"
             aria-expanded={mobileMenuOpen}
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? (
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
@@ -287,8 +294,8 @@ export default function Header() {
 
       {/* Mobile menu dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-brand-navy border-t border-white/10 pb-4">
-          <div className="px-4 pt-2 space-y-1">
+        <div className="lg:hidden bg-brand-navy border-t border-white/[.14] pb-5">
+          <div className="px-4 pt-1">
             {NAV_LINKS.map((link) => {
               const key = NAV_KEY_MAP[link.href];
               const label = key ? t.nav[key] : link.label;
@@ -297,25 +304,34 @@ export default function Header() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2.5 rounded-md text-base font-medium text-brand-gray-200 hover:text-white hover:bg-white/10"
+                  className="block py-3 text-[15px] font-semibold uppercase tracking-[0.04em] whitespace-nowrap text-white/75 hover:text-white border-b border-white/[.14]"
                 >
                   {label}
                 </Link>
               );
             })}
           </div>
-          <div className="px-4 mt-3">
+          <div className="px-4 mt-4 flex gap-2.5">
             <Link
               href="/inventory"
               onClick={() => setMobileMenuOpen(false)}
-              className="block w-full text-center bg-brand-red hover:bg-brand-red-dark text-white px-4 py-3 rounded-lg font-semibold transition-colors"
+              className="flex-1 text-center bg-brand-red hover:bg-brand-red-dark text-white px-4 py-3 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
             >
               {t.header.browseInventory}
             </Link>
+            <a
+              href={`tel:${SITE_CONFIG.phoneRaw}`}
+              onClick={() => {
+                trackPhoneClick("header_mobile_menu");
+                setMobileMenuOpen(false);
+              }}
+              className="flex-1 text-center border border-white/35 hover:border-white text-white px-4 py-3 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
+            >
+              Call
+            </a>
           </div>
         </div>
       )}
     </header>
   );
 }
- 

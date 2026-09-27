@@ -25,7 +25,7 @@ export default function VDPCarFeatures({ features }: { features: string[] }) {
 
   return (
     <section
-      className="bg-white rounded-xl border border-brand-gray-200 p-5"
+      className="bg-white border border-ink-200 p-5"
       aria-labelledby="car-features-heading"
     >
       <div className="mb-4">

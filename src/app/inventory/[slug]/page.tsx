@@ -190,8 +190,8 @@ export default async function VehicleDetailPage({
 
   // Nationwide-delivery card (black box) — shown under the CARFAX button.
   const deliveryCard = (
-                <div className="bg-brand-navy rounded-xl p-5 flex items-start gap-3">
-                  <div className="shrink-0 mt-0.5 w-9 h-9 rounded-full bg-white/10 flex items-center justify-center">
+                <div className="bg-brand-navy border-t-2 border-brand-red p-5 flex items-start gap-3">
+                  <div className="shrink-0 mt-0.5 w-9 h-9 bg-white/10 flex items-center justify-center">
                     <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
                     </svg>
@@ -204,7 +204,7 @@ export default async function VehicleDetailPage({
                     <TrackedPhoneLink
                       location="vdp_delivery_card"
                       href={`tel:${SITE_CONFIG.phoneRaw}`}
-                      className="inline-block mt-2 text-xs font-semibold text-brand-red bg-white rounded-full px-3 py-1 hover:bg-brand-red hover:text-white transition-colors"
+                      className="inline-block mt-2 text-xs font-bold uppercase tracking-[0.06em] text-brand-red bg-white px-3 py-1.5 hover:bg-brand-red hover:text-white transition-colors"
                     >
                       {SITE_CONFIG.phone} <T path={["delivery", "ctaSuffix"]} />
                     </TrackedPhoneLink>
@@ -282,7 +282,7 @@ export default async function VehicleDetailPage({
             </p>
             <a
               href="/inventory/"
-              className="mt-6 inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-bold uppercase tracking-wide text-[#dc2626] transition-colors hover:bg-white/90 sm:text-base"
+              className="mt-6 inline-flex items-center gap-2 bg-white px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] text-[#dc2626] transition-colors hover:bg-white/90"
             >
               See what we have now
               <svg
@@ -326,7 +326,7 @@ export default async function VehicleDetailPage({
               needs name/price/VIN/mileage/availability visible on load; IL law
               needs the doc + e-filing fees itemized. Left = vehicle + price +
               fees; right = nationwide shipping. Internet Price === feed price. */}
-          <div className="bg-white rounded-xl border border-brand-gray-200 px-4 py-3">
+          <div className="bg-white border-y-2 border-brand-red px-4 py-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               {/* Left — vehicle, price, fees */}
               <div className="min-w-0">
@@ -375,7 +375,7 @@ export default async function VehicleDetailPage({
                 {/* No dealer fees is a purchase-cost claim — nothing left to
                     buy, so it never shows once the car is sold. */}
                 {!isSold && (
-                  <div className="inline-flex items-center gap-1.5 mt-2 rounded-md border border-green-200 bg-green-50 px-2.5 py-1">
+                  <div className="inline-flex items-center gap-1.5 mt-2 border border-green-200 bg-green-50 px-2.5 py-1">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-3.5 w-3.5 shrink-0 text-green-600"
@@ -434,7 +434,7 @@ export default async function VehicleDetailPage({
                 cover that case. */}
             <div className="hidden lg:block mt-6 mb-8">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl border border-brand-gray-200 p-6 space-y-5">
+                <div className="bg-white border border-ink-200 p-6 space-y-5">
                   <div>
                     <h1 className="text-xl font-bold text-brand-gray-900">
                       {vehicle.year} {vehicle.make} {vehicle.model}
@@ -479,39 +479,45 @@ export default async function VehicleDetailPage({
                   <VDPLiveStatus vin={vehicle.vin} fallback={vehicle.status} />
 
                   <div className="space-y-3">
-                    <TrackedPhoneLink
-                      location="vdp_sidebar"
-                      href={`tel:${SITE_CONFIG.phoneRaw}`}
-                      className="flex items-center justify-center gap-2 w-full bg-brand-green hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition-colors"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-5 h-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
+                    {/* Call / Text — two flat rectangular buttons side by
+                        side, per the redesign spec (was two full-width
+                        stacked rounded pills). */}
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <TrackedPhoneLink
+                        location="vdp_sidebar"
+                        href={`tel:${SITE_CONFIG.phoneRaw}`}
+                        className="flex items-center justify-center gap-2 bg-brand-green hover:bg-green-700 text-white py-3.5 text-[12px] font-bold uppercase tracking-[0.06em] transition-colors"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                        />
-                      </svg>
-                      <T path={["vdpChrome", "call"]} /> {SITE_CONFIG.phone}
-                    </TrackedPhoneLink>
-                    <VDPTextUsLink
-                      vin={vehicle.vin}
-                      defaultPhone={textPhoneDefault}
-                      bodyText={textBodyRaw}
-                      location="vdp_sidebar"
-                      className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors"
-                    >
-                      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
-                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
-                      </svg>
-                      <T path={["vdpChrome", "textUs"]} />
-                    </VDPTextUsLink>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-4 h-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                          />
+                        </svg>
+                        <T path={["vdpChrome", "call"]} />
+                      </TrackedPhoneLink>
+                      <VDPTextUsLink
+                        vin={vehicle.vin}
+                        defaultPhone={textPhoneDefault}
+                        bodyText={textBodyRaw}
+                        location="vdp_sidebar"
+                        className="flex items-center justify-center gap-2 bg-brand-red hover:bg-brand-red-dark text-white py-3.5 text-[12px] font-bold uppercase tracking-[0.06em] transition-colors"
+                      >
+                        <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true">
+                          <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
+                        </svg>
+                        <T path={["vdpChrome", "textUs"]} />
+                      </VDPTextUsLink>
+                    </div>
+                    <p className="text-center text-xs text-brand-gray-500 -mt-1.5">{SITE_CONFIG.phone}</p>
                     {/* Credit application / financing CTA + "ask about this
                         car" — both imply this specific car can still be
                         bought, so neither shows once it's sold. */}
@@ -519,9 +525,9 @@ export default async function VehicleDetailPage({
                       <>
                         <a
                           href="/financing"
-                          className="flex items-center justify-center gap-2 w-full bg-brand-red hover:bg-brand-red-dark text-white py-3 rounded-xl font-semibold transition-colors"
+                          className="flex items-center justify-center gap-2 w-full border border-brand-gray-900 hover:bg-brand-gray-900 hover:text-white text-brand-gray-900 py-3.5 text-[12px] font-bold uppercase tracking-[0.06em] transition-colors"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                           </svg>
                           <T path={["ctas", "getPreApproved"]} />
@@ -552,7 +558,7 @@ export default async function VehicleDetailPage({
                 </div>
 
                 {/* Card 2 — Carfax shield CTA */}
-                <div className="bg-white rounded-xl border border-brand-gray-200 p-6 flex flex-col justify-center">
+                <div className="bg-white border border-ink-200 p-6 flex flex-col justify-center">
                   <VDPCarfaxButton
                     vin={vehicle.vin}
                     daysOnLot={vehicle.daysOnLot}
@@ -570,7 +576,7 @@ export default async function VehicleDetailPage({
                 </div>
 
                 {/* Card 3 — payment calculator */}
-                <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
+                <div className="bg-white border border-ink-200 p-6">
                   {!isSold && (
                   <VDPPaymentCalculator
                     vehiclePrice={vehicle.price}
@@ -642,7 +648,7 @@ export default async function VehicleDetailPage({
                   <div className="mt-3">{deliveryCard}</div>
                   <a
                     href="/financing"
-                    className="mt-3 flex items-center justify-center gap-2 w-full bg-brand-red hover:bg-brand-red-dark text-white py-3 rounded-xl font-semibold transition-colors"
+                    className="mt-3 flex items-center justify-center gap-2 w-full bg-brand-red hover:bg-brand-red-dark text-white py-3.5 text-[12px] font-bold uppercase tracking-[0.06em] transition-colors"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -693,7 +699,7 @@ export default async function VehicleDetailPage({
                 in the signing documents for the actual sale. Known-issues
                 transparency kept below as a neutral condition note. */}
             {vehicle.knownIssues && vehicle.knownIssues.trim() !== "" && (
-              <div className="mt-4 lg:mt-6 rounded-xl border border-brand-gray-200 bg-brand-gray-50 px-4 py-3 sm:px-5 sm:py-4">
+              <div className="mt-4 lg:mt-6 border border-ink-200 bg-ink-100 px-4 py-3 sm:px-5 sm:py-4">
                 <h2 className="text-sm font-semibold text-brand-gray-900">
                   <T path={["vdpChrome", "conditionNotes"]} />
                 </h2>
@@ -746,7 +752,7 @@ export default async function VehicleDetailPage({
           <TrackedPhoneLink
             location="vdp_sticky_bottom"
             href={`tel:${SITE_CONFIG.phoneRaw}`}
-            className="flex-1 flex items-center justify-center gap-1.5 bg-brand-green text-white py-3 rounded-xl font-semibold text-sm"
+            className="flex-1 flex items-center justify-center gap-1.5 bg-brand-green text-white py-3.5 text-[12px] font-bold uppercase tracking-[0.05em]"
             aria-label="Call us"
           >
             <svg
@@ -770,7 +776,7 @@ export default async function VehicleDetailPage({
             defaultPhone={textPhoneDefault}
             bodyText={textBodyRaw}
             location="vdp_sticky_bottom"
-            className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 text-white py-3 rounded-xl font-semibold text-sm"
+            className="flex-1 flex items-center justify-center gap-1.5 bg-brand-red text-white py-3.5 text-[12px] font-bold uppercase tracking-[0.05em]"
             ariaLabel="Text us"
           >
             <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true">

@@ -124,7 +124,7 @@ export default function VDPMarketPrice({
 
   return (
     <section
-      className="bg-white rounded-xl border border-brand-gray-200 p-5"
+      className="bg-white border border-ink-200 p-5"
       aria-labelledby="market-price-heading"
     >
       <div className="flex items-center justify-between gap-3 mb-4">

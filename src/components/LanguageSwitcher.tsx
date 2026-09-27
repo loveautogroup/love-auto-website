@@ -87,7 +87,7 @@ export default function LanguageSwitcher() {
         aria-label={
           onSpanish ? "Cambiar idioma" : "Change language"
         }
-        className="flex items-center gap-1.5 rounded-full border border-white/30 px-3 py-1 text-sm font-semibold text-white transition-colors hover:border-white/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-red"
+        className="flex items-center gap-1.5 border border-white/30 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:border-white/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-red"
       >
         <svg
           className="h-3.5 w-3.5 shrink-0 opacity-70"
@@ -127,7 +127,7 @@ export default function LanguageSwitcher() {
         role="menu"
         hidden={!open}
         aria-label={onSpanish ? "Idiomas" : "Languages"}
-        className="absolute right-0 z-50 mt-1.5 w-44 overflow-hidden rounded-xl border border-white/15 bg-[#0a0a0a] shadow-xl"
+        className="absolute right-0 z-50 mt-1.5 w-44 overflow-hidden border border-white/15 bg-[#0a0a0a] shadow-xl"
       >
           {LANGUAGES.map((lang) => {
             const active = lang.code === current.code;

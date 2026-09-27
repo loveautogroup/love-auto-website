@@ -149,7 +149,7 @@ export default function VDPFAQ({ vehicle }: VDPFAQProps) {
     <>
       <FAQSchema items={faqs} />
       <section
-        className="bg-white border border-brand-gray-200 rounded-xl p-6 md:p-8"
+        className="bg-white border border-ink-200 p-6 md:p-8"
         aria-labelledby="vdp-faq-heading"
       >
         <h2

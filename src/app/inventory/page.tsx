@@ -72,7 +72,7 @@ export default function InventoryPage() {
           arrives from the DMS but now drives nothing: the price-drop and
           price-reduced pills came off too on his next word. */}
 
-      <div className="max-w-7xl mx-auto px-4 pt-4">
+      <div className="pt-4">
         <VDPTrustStrip />
       </div>
 

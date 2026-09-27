@@ -53,7 +53,7 @@ export default function VDPTabs({
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`whitespace-nowrap px-5 py-3.5 text-sm font-semibold border-b-2 transition-colors ${
+              className={`whitespace-nowrap px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.07em] border-b-2 transition-colors ${
                 activeTab === tab
                   ? "border-brand-red text-brand-red"
                   : "border-transparent text-brand-gray-500 hover:text-brand-gray-900 hover:border-brand-gray-300"
@@ -82,7 +82,7 @@ export default function VDPTabs({
                 burying it beside the fuel type is how a disclosure becomes
                 technically-present and practically invisible. */}
             {vehicle.titleBrand ? (
-              <div className="rounded-xl border-2 border-amber-400 bg-amber-50 p-4">
+              <div className="border-2 border-amber-400 bg-amber-50 p-4">
                 <p className="text-sm font-bold uppercase tracking-wide text-amber-900">
                   {vehicle.titleBrand} title
                 </p>
@@ -92,26 +92,6 @@ export default function VDPTabs({
                 </p>
               </div>
             ) : null}
-
-            {/* Quick Specs Row */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {[
-                { icon: "⚡", label: t.vdpTabs.engine, value: vehicle.engine },
-                { icon: "⚙️", label: t.vdpTabs.transmission, value: vehicle.transmission },
-                { icon: "🔄", label: t.vdpTabs.drivetrain, value: vehicle.drivetrain },
-                { icon: "⛽", label: t.vdpTabs.fuel, value: vehicle.fuelType },
-              ].map((spec) => (
-                <div key={spec.label} className="bg-brand-gray-50 rounded-xl p-4 text-center">
-                  <span className="text-2xl">{spec.icon}</span>
-                  <p className="text-xs text-brand-gray-500 uppercase tracking-wider mt-1">
-                    {spec.label}
-                  </p>
-                  <p className="font-semibold text-brand-gray-900 text-sm mt-0.5">
-                    {spec.value}
-                  </p>
-                </div>
-              ))}
-            </div>
 
             {/* Description — only render when there is real copy, so a
                 vehicle with no description never shows an empty heading. */}
@@ -126,12 +106,13 @@ export default function VDPTabs({
               </section>
             ) : null}
 
-            {/* Full Specs Grid */}
+            {/* Full spec sheet -- a real two-column hairline table (was a
+                grid of shadowed pill cards; redesign 2026-09). */}
             <section>
-              <h2 className="text-xl font-bold text-brand-gray-900 mb-3">
+              <h2 className="font-heading font-bold text-brand-gray-900 text-xl mb-4">
                 {t.vdpTabs.specsHeading}
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <dl className="grid grid-cols-1 sm:grid-cols-2 border-t border-ink-200">
                 {[
                   { label: t.vdpTabs.mileage, value: `${formattedMileage} ${t.vdpTabs.mi}` },
                   { label: t.vdpTabs.exterior, value: vehicle.exteriorColor },
@@ -143,16 +124,19 @@ export default function VDPTabs({
                   { label: t.vdpTabs.fuelType, value: vehicle.fuelType },
                   { label: t.vdpTabs.stockNumber, value: vehicle.stockNumber },
                 ].map((spec) => (
-                  <div key={spec.label} className="bg-brand-gray-50 rounded-lg p-3">
-                    <p className="text-xs text-brand-gray-500 uppercase tracking-wider">
+                  <div
+                    key={spec.label}
+                    className="flex items-baseline justify-between gap-4 border-b border-ink-200 py-3 sm:odd:border-r sm:odd:pr-4 sm:even:pl-4"
+                  >
+                    <dt className="text-[11px] font-bold uppercase tracking-[0.1em] text-brand-gray-500">
                       {spec.label}
-                    </p>
-                    <p className="font-semibold text-brand-gray-900 mt-0.5">
+                    </dt>
+                    <dd className="font-semibold text-brand-gray-900 text-right tabular-nums">
                       {spec.value}
-                    </p>
+                    </dd>
                   </div>
                 ))}
-              </div>
+              </dl>
             </section>
           </div>
         )}
@@ -165,7 +149,7 @@ export default function VDPTabs({
 
         {activeTab === "Vehicle History" && (
           <section className="space-y-6">
-            <div className="bg-brand-green/5 border border-brand-green/20 rounded-xl p-6">
+            <div className="bg-brand-green/5 border-l-[3px] border-brand-green p-6">
               <h2 className="text-lg font-bold text-brand-gray-900 mb-2 flex items-center gap-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -194,8 +178,8 @@ export default function VDPTabs({
                 above). Grid adapts to 2 or 3 columns so a branded-title car
                 never shows an empty slot (owner, 2026-09-26). */}
             <div className={`grid grid-cols-1 gap-4 ${vehicle.titleBrand ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>
-              <div className="bg-brand-gray-50 rounded-xl p-5 text-center">
-                <div className="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center mx-auto mb-3">
+              <div className="bg-ink-100 p-5 text-center">
+                <div className="w-11 h-11 bg-brand-green/10 flex items-center justify-center mx-auto mb-3">
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -203,8 +187,8 @@ export default function VDPTabs({
                 <h3 className="font-bold text-brand-gray-900 text-sm">{t.vdpTabs.inspectedTitle}</h3>
                 <p className="text-xs text-brand-gray-500 mt-1">{t.vdpTabs.inspectedSub}</p>
               </div>
-              <div className="bg-brand-gray-50 rounded-xl p-5 text-center">
-                <div className="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center mx-auto mb-3">
+              <div className="bg-ink-100 p-5 text-center">
+                <div className="w-11 h-11 bg-brand-green/10 flex items-center justify-center mx-auto mb-3">
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                   </svg>
@@ -213,8 +197,8 @@ export default function VDPTabs({
                 <p className="text-xs text-brand-gray-500 mt-1">{t.vdpTabs.reconditionedSub}</p>
               </div>
               {!vehicle.titleBrand && (
-                <div className="bg-brand-gray-50 rounded-xl p-5 text-center">
-                  <div className="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                <div className="bg-ink-100 p-5 text-center">
+                  <div className="w-11 h-11 bg-brand-green/10 flex items-center justify-center mx-auto mb-3">
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
@@ -233,7 +217,7 @@ export default function VDPTabs({
 
         {activeTab === "Financing" && !isSold && (
           <section className="space-y-6">
-            <div className="bg-brand-gray-50 rounded-xl p-6">
+            <div className="bg-ink-100 p-6">
               <h2 className="text-xl font-bold text-brand-gray-900 mb-4">
                 {t.vdpTabs.financingHeading}
               </h2>
@@ -272,7 +256,7 @@ export default function VDPTabs({
               // file had one, even though every applicant had clicked through
               // from a specific car's page.
               href={`/financing?vehicle=${encodeURIComponent(`${vehicle.year} ${vehicle.make} ${vehicle.model}`)}&vin=${encodeURIComponent(vehicle.vin ?? "")}&stock=${encodeURIComponent(vehicle.stockNumber ?? "")}&price=${vehicle.price ?? ""}`}
-              className="flex items-center justify-center w-full bg-brand-red hover:bg-brand-red-dark text-white py-4 rounded-xl font-bold text-lg transition-colors"
+              className="flex items-center justify-center w-full bg-brand-red hover:bg-brand-red-dark text-white py-4 text-[13px] font-bold uppercase tracking-[0.07em] transition-colors"
             >
               {t.vdpTabs.getPreApprovedNow}
             </Link>

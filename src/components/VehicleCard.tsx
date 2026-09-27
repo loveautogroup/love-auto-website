@@ -256,8 +256,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     <article
       className="
         group relative
-        bg-white rounded-xl border border-brand-gray-200 overflow-hidden
-        hover:shadow-lg hover:border-brand-red/30 transition-all duration-200
+        bg-white overflow-hidden
       "
     >
       {/* Photo + full overlay (compact-scaled) */}
@@ -493,49 +492,76 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         )}
       </div>
 
-      {/* Info area */}
-      <div className="p-4">
-        <h3 className="font-bold text-brand-gray-900 group-hover:text-brand-red transition-colors">
-          <Link
-            href={`/inventory/${vehicle.slug}`}
-            className="before:absolute before:inset-0 before:z-[2] before:content-['']"
-          >
-            {vehicle.year} {vehicle.make} {vehicle.model}
-          </Link>
-        </h3>
-        <p className="text-sm text-brand-gray-500 mt-0.5">{vehicle.trim}</p>
-        {vehicle.vin && (
-          <p className="text-xs text-brand-gray-400 mt-0.5 font-mono tracking-wide">
-            {c.vin}: {vehicle.vin}
-          </p>
-        )}
-
-        <div className="flex items-baseline justify-between mt-3">
+      {/* Info area — "spec row": title + price on one line, a hairline,
+          then a meta row (mileage / drivetrain / features) in micro-label
+          uppercase, VIN in a small tabular treatment, "View details" as a
+          text link with a sliding arrow. Card drops the shadow/radius; a
+          red 2px left rule appears on hover instead. */}
+      <div className="pt-4 pb-1 border-l-0 group-hover:border-l-[3px] border-brand-red pl-0 group-hover:pl-3.5 transition-[padding,border-color] duration-150">
+        <div className="flex items-baseline justify-between gap-3">
+          <h3 className="font-heading font-bold text-brand-gray-900 text-[1.02rem] leading-tight group-hover:text-brand-red transition-colors">
+            <Link
+              href={`/inventory/${vehicle.slug}`}
+              className="before:absolute before:inset-0 before:z-[2] before:content-['']"
+            >
+              {vehicle.year} {vehicle.make} {vehicle.model}
+            </Link>
+          </h3>
           {/* Jeremiah, 2026-09-15: a sold car's price never shows again —
               SOLD renders where the price was. The red top-left StatusPill
               (kind="sold", see merchandising.ts pickStatusPill) already
               marks the card; this is the second, unmissable place the same
               fact belongs — the line a shopper reads for the number. */}
           {isSold ? (
-            <span className="text-xl font-bold text-brand-gray-500 uppercase tracking-wide">
+            <span className="text-lg font-heading font-extrabold text-brand-gray-400 uppercase tracking-wide whitespace-nowrap">
               {c.sold}
             </span>
           ) : (
-            <span className="text-xl font-bold text-brand-red">
+            <span className="text-lg font-heading font-extrabold text-brand-red whitespace-nowrap">
               {formattedPrice}
             </span>
           )}
-          <span className="text-sm text-brand-gray-500">
+        </div>
+        <p className="text-sm text-brand-gray-500 mt-0.5">{vehicle.trim}</p>
+
+        <hr className="border-t border-ink-200 my-3" />
+
+        <div className="flex flex-wrap gap-x-3.5 gap-y-1">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-brand-gray-500">
             {formattedMileage} {c.mi}
           </span>
+          {vehicle.drivetrain !== "FWD" && (
+            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-brand-gray-500">
+              {vehicle.drivetrain}
+            </span>
+          )}
+          {vehicle.features.slice(0, 2).map((feature) => (
+            <span
+              key={feature}
+              className="text-[11px] font-semibold uppercase tracking-[0.08em] text-brand-gray-500"
+            >
+              {feature.length > 20 ? feature.slice(0, 18) + "..." : feature}
+            </span>
+          ))}
         </div>
+
+        {vehicle.vin && (
+          <div className="mt-2 flex items-baseline gap-1.5">
+            <span className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-brand-gray-400">
+              {c.vin}
+            </span>
+            <span className="text-[11px] font-mono tabular-nums tracking-[0.03em] text-brand-gray-400">
+              {vehicle.vin}
+            </span>
+          </div>
+        )}
 
         {/* E1-r (2026-07-21, Jeremiah): AS-IS chip removed — the blanket
             default-true flag was labeling vehicles as-is that are not.
             As-is terms are handled at signing, not in listing chrome. */}
         {isComingSoon && (
           <div className="flex items-center gap-1.5 mt-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-red flex-shrink-0" aria-hidden="true" />
+            <span className="w-1.5 h-1.5 bg-brand-red flex-shrink-0" aria-hidden="true" />
             <span className="text-xs text-brand-red font-medium tracking-[0.04em]">
               Photos coming soon
             </span>
@@ -545,7 +571,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         {/* No monthly-payment estimate on a sold card — there is nothing
             left to finance. */}
         {!isSold && (
-          <p className="text-sm text-brand-gray-500 mt-1">
+          <p className="text-sm text-brand-gray-500 mt-2">
             {c.est}{" "}
             <span className="font-semibold text-brand-gray-700">
               ${monthlyPayment}{c.perMo}
@@ -570,25 +596,11 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           />
         )}
 
-        {/* Spec chips — drivetrain + first 2 features */}
-        <div className="flex flex-wrap gap-1.5 mt-3">
-          {vehicle.drivetrain !== "FWD" && (
-            <span className="text-xs bg-brand-gray-100 text-brand-gray-700 px-2 py-0.5 rounded-full">
-              {vehicle.drivetrain}
-            </span>
-          )}
-          {vehicle.features.slice(0, 2).map((feature) => (
-            <span
-              key={feature}
-              className="text-xs bg-brand-gray-100 text-brand-gray-700 px-2 py-0.5 rounded-full"
-            >
-              {feature.length > 20 ? feature.slice(0, 18) + "..." : feature}
-            </span>
-          ))}
-        </div>
-
-        <div className="mt-3 text-sm text-brand-red font-semibold group-hover:underline">
+        <div className="mt-3 inline-flex items-center gap-2 text-[12.5px] font-bold uppercase tracking-[0.08em] text-brand-red border-b border-current pb-0.5">
           {c.viewDetails}
+          <svg className="w-3 h-3 transition-transform duration-150 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
         </div>
       </div>
     </article>

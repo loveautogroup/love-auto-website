@@ -42,7 +42,7 @@ export default function VDPTestDriveButton({
         type="button"
         onClick={() => setOpen(true)}
         className={
-          "rounded-lg border-2 border-brand-gray-300 bg-white text-brand-gray-900 font-semibold px-5 py-3 hover:border-brand-red hover:text-brand-red transition-colors flex items-center justify-center gap-2 " +
+          "border border-brand-gray-300 bg-white text-brand-gray-900 font-bold uppercase tracking-[0.06em] text-[12px] px-5 py-3.5 hover:border-brand-red hover:text-brand-red transition-colors flex items-center justify-center gap-2 " +
           className
         }
       >

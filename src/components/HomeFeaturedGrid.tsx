@@ -38,30 +38,32 @@ export default function HomeFeaturedGrid() {
   if (featuredVehicles.length === 0) return null;
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-16" aria-labelledby="featured-heading">
-      <div className="text-center mb-10">
-        <h2 id="featured-heading" className="text-3xl font-bold text-brand-gray-900">
-          Featured Vehicles
-        </h2>
-        <p className="mt-2 text-brand-gray-500">
-          Hand-picked from our inventory, ready to drive
-        </p>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {featuredVehicles.map((vehicle) => (
-          <VehicleCard key={vehicle.id} vehicle={vehicle} />
-        ))}
-      </div>
-      <div className="text-center mt-10">
-        <Link
-          href="/inventory"
-          className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3 rounded-xl font-semibold transition-colors"
-        >
-          View All Inventory
-          <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </Link>
+    <section className="bg-ink-100 py-14 sm:py-20" aria-labelledby="featured-heading">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink-200 pb-6 mb-10">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red mb-3">
+              Current Inventory
+            </p>
+            <h2 id="featured-heading" className="font-heading font-extrabold text-brand-gray-900 text-[clamp(1.65rem,3.2vw,2.5rem)] leading-[1.04]">
+              On the lot now
+            </h2>
+          </div>
+          <Link
+            href="/inventory"
+            className="group inline-flex items-center gap-2 text-[12.5px] font-bold uppercase tracking-[0.09em] text-brand-gray-900 border-b border-current pb-0.5"
+          >
+            View all inventory
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-7 gap-y-10">
+          {featuredVehicles.map((vehicle) => (
+            <VehicleCard key={vehicle.id} vehicle={vehicle} />
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -153,7 +155,7 @@ export function HomeOnTheLot() {
         type="button"
         aria-label="Previous vehicles"
         onClick={() => scrollByPage(-1)}
-        className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-white text-brand-gray-900 shadow-lg ring-1 ring-black/5 hover:bg-brand-gray-100 transition-colors"
+        className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 bg-white text-brand-gray-900 hover:bg-brand-gray-100 transition-colors"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -163,7 +165,7 @@ export function HomeOnTheLot() {
         type="button"
         aria-label="Next vehicles"
         onClick={() => scrollByPage(1)}
-        className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-white text-brand-gray-900 shadow-lg ring-1 ring-black/5 hover:bg-brand-gray-100 transition-colors"
+        className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 bg-white text-brand-gray-900 hover:bg-brand-gray-100 transition-colors"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -198,7 +200,7 @@ export function HomeOnTheLot() {
           <Link
             key={`${v.id}-${i}`}
             href={`/inventory/${v.slug}`}
-            className="w-[260px] sm:w-[280px] min-w-[260px] sm:min-w-[280px] bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-xl overflow-hidden transition-all snap-start shrink-0 group"
+            className="w-[260px] sm:w-[280px] min-w-[260px] sm:min-w-[280px] bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-red overflow-hidden transition-all snap-start shrink-0 group"
           >
             <div className="aspect-[4/3] bg-brand-gray-700/50 relative overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -214,7 +216,7 @@ export function HomeOnTheLot() {
                 }}
               />
               {v.daysOnLot > 0 && v.daysOnLot <= 7 && (
-                <span className="absolute top-2 left-2 bg-brand-green text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                <span className="absolute top-0 left-0 bg-brand-navy text-white text-[10px] font-bold uppercase tracking-[0.08em] px-2.5 py-1">
                   Just Arrived
                 </span>
               )}

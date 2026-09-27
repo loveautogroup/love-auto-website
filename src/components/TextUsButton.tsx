@@ -72,16 +72,21 @@ export default function TextUsButton() {
     phone = config.textPhone;
   }
 
+  // Redesign 2026-09: the ONE flat corner action (Bob's editorial concept)
+  // — everything that used to compete for this corner (the chat bubble, the
+  // "Get a quote" pill) moved into the footer CTA band. Flush to the
+  // viewport edge, square, black fill, a 2px red top rule as the only
+  // accent — no shadow, no radius, no hover-grow.
   return (
     <a
       href={buildHref(phone, body)}
       onClick={() => trackTextClick("text_us_button")}
-      className="hidden lg:flex fixed bottom-6 right-6 z-40 items-center gap-2 bg-brand-green hover:bg-green-600 text-white pl-4 pr-5 py-3 rounded-full shadow-lg hover:shadow-xl transition-all group"
+      className="hidden lg:flex fixed bottom-9 right-0 z-40 items-center gap-2.5 bg-brand-navy hover:bg-ink-900 text-white border-t-2 border-brand-red pl-4 pr-5 py-3.5 transition-colors"
       aria-label="Text us"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="w-6 h-6"
+        className="w-4 h-4"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -93,7 +98,7 @@ export default function TextUsButton() {
           d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
         />
       </svg>
-      <span className="font-semibold text-sm">Text Us</span>
+      <span className="font-bold text-[12px] uppercase tracking-[0.09em]">Text Us</span>
     </a>
   );
 }

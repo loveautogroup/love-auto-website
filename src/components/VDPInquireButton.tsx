@@ -27,7 +27,7 @@ export default function VDPInquireButton({
       <button
         onClick={() => setOpen(true)}
         className={
-          "rounded-lg bg-brand-navy text-white font-semibold px-5 py-3 hover:opacity-90 transition-opacity flex items-center justify-center gap-2 " +
+          "bg-brand-navy text-white font-bold uppercase tracking-[0.06em] text-[12px] px-5 py-3.5 hover:opacity-90 transition-opacity flex items-center justify-center gap-2 " +
           className
         }
       >

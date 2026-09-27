@@ -1,12 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { SITE_CONFIG, NAV_LINKS } from "@/lib/constants";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
+import InquiryModal from "@/components/InquiryModal";
 import { useLanguage } from "@/context/LanguageContext";
-import { trackOutboundClick, trackPhoneClick } from "@/lib/analytics";
+import { trackOutboundClick, trackPhoneClick, trackTextClick } from "@/lib/analytics";
 import { useReviews } from "@/context/ReviewsContext";
+import { useChatWidget } from "@/context/ChatWidgetContext";
+import { useGlobalTextPhone } from "@/data/useMerchandising";
 
 // Maps NAV_LINKS href → translation key
 const NAV_KEY_MAP: Record<string, string> = {
@@ -42,9 +46,76 @@ export default function Footer() {
   const googleReviews = useReviews();
   const currentYear = new Date().getFullYear();
   const { t } = useLanguage();
+  const { open: chatOpen, setOpen: setChatOpen, unread } = useChatWidget();
+  const [quoteOpen, setQuoteOpen] = useState(false);
+  const globalTextPhone = useGlobalTextPhone();
+  const textPhone =
+    globalTextPhone && /^[0-9]{10,15}$/.test(globalTextPhone)
+      ? globalTextPhone
+      : SITE_CONFIG.phoneRaw;
 
   return (
     <footer className="bg-brand-navy text-white" role="contentinfo">
+      {/*
+        Redesign 2026-09 — the CTA band. "Get a quote" and "Chat with us"
+        used to be floating pills fighting Text Us for the same corner on
+        every page; both moved here, in the page flow, per Bob's concept
+        ("Floating corner widgets: collapsed to ONE flat square action").
+        Chat still opens the SAME ChatWidget panel (state now lives in
+        ChatWidgetContext) — nothing about the chat itself changed, only
+        where its switch lives.
+      */}
+      <div className="border-b border-white/[.14]">
+        <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-5">
+          <div>
+            <p className="font-heading font-extrabold text-lg sm:text-xl leading-tight">
+              Have a question about a car, or want a quote?
+            </p>
+            <p className="text-ink-300 text-sm mt-1">
+              We answer in the chat window, or by phone at{" "}
+              <a
+                href={`tel:${SITE_CONFIG.phoneRaw}`}
+                onClick={() => trackPhoneClick("footer_cta_band")}
+                className="text-brand-red-light hover:text-white font-semibold"
+              >
+                {SITE_CONFIG.phone}
+              </a>
+              .
+            </p>
+          </div>
+          <div className="flex gap-2.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => setChatOpen(!chatOpen)}
+              className="relative inline-flex items-center gap-2 border border-white/35 hover:border-white text-white px-5 py-3 text-[12px] font-bold uppercase tracking-[0.07em] transition-colors"
+            >
+              Chat with us
+              {unread && !chatOpen && (
+                <span
+                  className="absolute -right-1 -top-1 h-2.5 w-2.5 bg-brand-red border-2 border-brand-navy"
+                  aria-label="Unread reply"
+                />
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setQuoteOpen(true)}
+              className="inline-flex items-center gap-2 bg-brand-red hover:bg-brand-red-dark text-white px-5 py-3 text-[12px] font-bold uppercase tracking-[0.07em] transition-colors"
+            >
+              Get a quote
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <InquiryModal
+        open={quoteOpen}
+        onClose={() => setQuoteOpen(false)}
+        source="website-footer-cta"
+        title="Get a quote"
+        subtitle="We'll reach out within an hour during business hours."
+      />
+
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Column 1: About */}
@@ -58,7 +129,7 @@ export default function Footer() {
                 className="h-14 w-auto object-contain"
               />
             </div>
-            <p className="text-brand-gray-300 text-sm leading-relaxed">
+            <p className="text-ink-300 text-sm leading-relaxed">
               {t.footer.about}
             </p>
 
@@ -70,7 +141,7 @@ export default function Footer() {
 
           {/* Column 2: Quick Links */}
           <div>
-            <h3 className="font-semibold text-sm uppercase tracking-wider text-brand-gray-300 mb-4">
+            <h3 className="font-bold text-[11px] uppercase tracking-[0.12em] text-white mb-4">
               {t.footer.quickLinks}
             </h3>
             <ul className="space-y-2">
@@ -81,7 +152,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-brand-gray-200 hover:text-white text-sm transition-colors"
+                      className="text-ink-300 hover:text-white text-[13.5px] transition-colors"
                     >
                       {label}
                     </Link>
@@ -93,18 +164,18 @@ export default function Footer() {
 
           {/* Column 3: Hours */}
           <div>
-            <h3 className="font-semibold text-sm uppercase tracking-wider text-brand-gray-300 mb-4">
+            <h3 className="font-bold text-[11px] uppercase tracking-[0.12em] text-white mb-4">
               {t.footer.businessHours}
             </h3>
-            <ul className="space-y-1.5 text-sm">
+            <ul className="space-y-1.5 text-[13.5px] border-t border-white/[.14] pt-3">
               {SITE_CONFIG.hours.map((h) => (
-                <li key={h.day} className="flex justify-between">
-                  <span className="text-brand-gray-300">{h.day}</span>
+                <li key={h.day} className="flex justify-between border-b border-white/[.08] pb-1.5">
+                  <span className="text-ink-300">{h.day}</span>
                   <span
                     className={
                       h.hours === "Closed"
-                        ? "text-brand-red"
-                        : "text-brand-gray-200"
+                        ? "text-brand-red font-semibold"
+                        : "text-ink-200 font-semibold tabular-nums"
                     }
                   >
                     {h.hours}
@@ -116,15 +187,15 @@ export default function Footer() {
 
           {/* Column 4: Contact */}
           <div>
-            <h3 className="font-semibold text-sm uppercase tracking-wider text-brand-gray-300 mb-4">
+            <h3 className="font-bold text-[11px] uppercase tracking-[0.12em] text-white mb-4">
               {t.footer.contactUs}
             </h3>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-3 text-[13.5px]">
               <li>
                 <a
                   href={`tel:${SITE_CONFIG.phoneRaw}`}
                   onClick={() => trackPhoneClick("footer")}
-                  className="flex items-center gap-2 text-brand-gold hover:text-brand-gold-light font-semibold transition-colors"
+                  className="flex items-center gap-2 text-brand-red-light hover:text-white font-bold transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -132,7 +203,19 @@ export default function Footer() {
                   {SITE_CONFIG.phone}
                 </a>
               </li>
-              <li className="flex items-start gap-2 text-brand-gray-200">
+              <li>
+                <a
+                  href={`sms:${textPhone}?body=${encodeURIComponent("Hi, I'm interested in a vehicle on your lot.")}`}
+                  onClick={() => trackTextClick("footer")}
+                  className="flex items-center gap-2 text-ink-300 hover:text-white font-semibold transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                  Text us
+                </a>
+              </li>
+              <li className="flex items-start gap-2 text-ink-300">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -147,7 +230,7 @@ export default function Footer() {
               <li>
                 <a
                   href={`mailto:${SITE_CONFIG.email}`}
-                  className="flex items-center gap-2 text-brand-gray-200 hover:text-white transition-colors"
+                  className="flex items-center gap-2 text-ink-300 hover:text-white transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -163,7 +246,7 @@ export default function Footer() {
                   onClick={() =>
                     trackOutboundClick(SITE_CONFIG.reviews.google.readUrl, "google_reviews_footer")
                   }
-                  className="flex items-center gap-2 text-brand-gray-200 hover:text-white transition-colors mt-4 pt-4 border-t border-white/10"
+                  className="flex items-center gap-2 text-ink-300 hover:text-white transition-colors mt-4 pt-4 border-t border-white/[.14]"
                 >
                   <svg viewBox="0 0 24 24" width={16} height={16} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -172,7 +255,7 @@ export default function Footer() {
                     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                   </svg>
                   <span className="flex items-center gap-1">
-                    <span className="text-yellow-400 text-xs">★★★★★</span>
+                    <span className="text-yellow-400 text-xs tracking-[1px]">★★★★★</span>
                     <span className="text-xs">
                       {googleReviews.rating} ({googleReviews.reviewCount} reviews)
                     </span>
@@ -193,16 +276,16 @@ export default function Footer() {
           the strongest internal crawl signal available without new content.
           Keep these links crawlable <Link>s — do not swap for a JS dropdown.
         */}
-        <div className="mt-10 pt-6 border-t border-white/10">
-          <h3 className="font-semibold text-sm uppercase tracking-wider text-brand-gray-300 mb-3">
+        <div className="mt-10 pt-6 border-t border-white/[.14]">
+          <h3 className="font-bold text-[11px] uppercase tracking-[0.12em] text-white mb-3">
             {t.footer.areasServed}
           </h3>
-          <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+          <ul className="flex flex-wrap gap-x-4 gap-y-2 text-[13.5px]">
             {FOOTER_AREA_LINKS.map((area) => (
               <li key={area.href}>
                 <Link
                   href={area.href}
-                  className="text-brand-gray-200 hover:text-white transition-colors"
+                  className="text-ink-300 hover:text-white transition-colors"
                 >
                   {area.label}
                 </Link>
@@ -212,15 +295,15 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-brand-gray-500">
+        <div className="mt-8 pt-6 border-t border-white/[.14] flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-ink-400">
           <p>
             &copy; {currentYear} {SITE_CONFIG.name}. {t.footer.rights}
           </p>
           <div className="flex gap-4">
-            <Link href="/privacy-policy" className="hover:text-brand-gray-300">
+            <Link href="/privacy-policy" className="hover:text-ink-200">
               {t.footer.privacy}
             </Link>
-            <Link href="/terms" className="hover:text-brand-gray-300">
+            <Link href="/terms" className="hover:text-ink-200">
               {t.footer.terms}
             </Link>
           </div>

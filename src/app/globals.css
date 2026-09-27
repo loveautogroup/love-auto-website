@@ -24,9 +24,31 @@
   --color-brand-gray-900: #0f172a;
   --color-brand-green: #16a34a;
 
+  /*
+   * Redesign 2026-09 (Bob's "modern automotive editorial" concept) — additive
+   * tokens for the square-corner, hairline-rule chrome. Deliberately a
+   * SEPARATE scale from --color-brand-gray-*: that scale is a cool slate
+   * used across every existing page, and repointing its values would have
+   * shifted pages outside this redesign's scope. `ink` only appears in
+   * components rebuilt for the redesign (Header, Footer, hero, spec-row
+   * cards, VDP chrome).
+   */
+  --color-ink-950: #050505;
+  --color-ink-900: #121212;
+  --color-ink-800: #1c1c1c;
+  --color-ink-500: #6b6b6b;
+  --color-ink-400: #8a8a8a;
+  --color-ink-300: #b3b3b3;
+  --color-ink-200: #e4e4e4;
+  --color-ink-100: #f2f2f2;
+
   /* Typography */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* Was Inter (unused anywhere as `font-heading` before the redesign — see
+     git blame). Now the display face for h1-h3 / spec-row titles / the
+     quote-band pull quote, per Bob's two-face pairing (Montserrat display,
+     Inter body). */
+  --font-heading: var(--font-montserrat), "Montserrat", ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Skip to main content link for accessibility */

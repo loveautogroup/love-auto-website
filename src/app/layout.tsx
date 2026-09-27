@@ -11,8 +11,8 @@ import { BadgeConfigProvider } from "@/context/BadgeConfigContext";
 import { getGoogleReviews } from "@/lib/google-reviews";
 import { fetchGlobalBadgeConfig } from "@/lib/dmsInventory";
 import TextUsButton from "@/components/TextUsButton";
-import StickyCTA from "@/components/StickyCTA";
 import ChatWidget from "@/components/ChatWidget";
+import { ChatWidgetProvider } from "@/context/ChatWidgetContext";
 import { LocalBusinessSchema } from "@/components/StructuredData";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { SentryInit } from "@/components/SentryInit";
@@ -21,9 +21,12 @@ const inter = Inter({ subsets: ["latin"], display: "swap" });
 // Montserrat powers the wordmark logo + the hero phone/URL badges so the
 // HTML overlay renders the SAME font the bake compositor uses (real
 // Montserrat, not the old Arial Black fallback). Exposed as a CSS var.
+// Redesign 2026-09: 700/800 added for display headlines (h1/h2/h3, spec-row
+// vehicle titles, the quote-band pull quote). 600/900 are load-bearing for
+// the existing badge components (DealerCluster, PhoneCTA, UrlBadge) — kept.
 const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["600", "900"],
+  weight: ["600", "700", "800", "900"],
   display: "swap",
   variable: "--font-montserrat",
 });
@@ -113,6 +116,7 @@ export default async function RootLayout({
         <ReviewsProvider value={googleReviews}>
         <BadgeConfigProvider value={badgeConfig}>
         <LanguageProvider>
+        <ChatWidgetProvider>
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
@@ -121,9 +125,14 @@ export default async function RootLayout({
         <Header />
         <main id="main-content">{children}</main>
         <Footer />
+        {/* Redesign 2026-09: the corner is ONE flat action now (Text Us).
+            "Get a quote" and "Chat with us" moved into the footer CTA band —
+            see Footer.tsx. ChatWidget still mounts globally (its polling
+            logic must run regardless of scroll position); it renders nothing
+            of its own when closed. */}
         <TextUsButton />
-        <StickyCTA />
         <ChatWidget />
+        </ChatWidgetProvider>
         </LanguageProvider>
         </BadgeConfigProvider>
         </ReviewsProvider>

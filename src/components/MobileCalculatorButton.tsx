@@ -56,7 +56,7 @@ export default function MobileCalculatorButton({
         onClick={() => setOpen(true)}
         className="
           flex items-center justify-center gap-1.5
-          flex-1 bg-brand-red text-white py-3 rounded-xl font-semibold
+          flex-1 bg-brand-navy text-white py-3.5 text-[12px] font-bold uppercase tracking-[0.05em]
         "
         aria-haspopup="dialog"
         aria-expanded={open}

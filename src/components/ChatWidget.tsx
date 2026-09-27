@@ -32,6 +32,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { SITE_CONFIG } from "@/lib/constants";
 import { trackPhoneClick } from "@/lib/analytics";
+import { useChatWidget } from "@/context/ChatWidgetContext";
 
 type Author = "buyer" | "franky" | "owner";
 interface Turn {
@@ -81,13 +82,23 @@ function pageVehicle(pathname: string | null): string | undefined {
 
 export default function ChatWidget() {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  // Redesign 2026-09: open/unread now live in ChatWidgetContext so the
+  // footer's "Chat with us" link can open this same panel — the panel used
+  // to own its own floating launcher button; that button is gone, collapsed
+  // into the site's ONE flat corner action (Text Us) per Bob's concept.
+  // Everything below this — session, polling, send — is untouched.
+  const { open, setOpen, setUnread } = useChatWidget();
+  // Opening the panel (from the footer's "Chat with us" link, or a
+  // republish) always clears the unread dot — mirrors the old floating
+  // launcher's onClick, which cleared it the moment it was pressed.
+  useEffect(() => {
+    if (open) setUnread(false);
+  }, [open, setUnread]);
   const [turns, setTurns] = useState<Turn[]>([]);
   const [local, setLocal] = useState<LocalTurn[]>([]);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
   const [waitingOnPerson, setWaitingOnPerson] = useState(false);
-  const [unread, setUnread] = useState(false);
   const [honeypot, setHoneypot] = useState("");
 
   const sessionRef = useRef<string | null>(null);
@@ -124,7 +135,7 @@ export default function ChatWidget() {
     } catch {
       /* offline: the next tick tries again */
     }
-  }, []);
+  }, [setUnread]);
 
   // Pick up a chat this visitor already started, so a page change or a reload
   // does not throw the conversation away.
@@ -209,6 +220,7 @@ export default function ChatWidget() {
   };
 
   if (HIDDEN_PATHS.some((p) => pathname?.startsWith(p))) return null;
+  if (!open) return null;
 
   const shown: { key: string; author: Author; body: string }[] = [
     ...turns.map((t) => ({ key: `t-${t.id}`, author: t.author, body: t.body })),
@@ -217,33 +229,13 @@ export default function ChatWidget() {
 
   return (
     <>
-      {!open && (
-        <button
-          type="button"
-          onClick={() => {
-            setOpen(true);
-            setUnread(false);
-            lastActivityRef.current = Date.now();
-            if (sessionRef.current) void poll();
-          }}
-          className="fixed bottom-20 left-4 z-40 flex items-center gap-2 rounded-full bg-brand-navy px-4 py-3 text-white shadow-xl transition-all hover:bg-black sm:bottom-6 sm:left-6"
-          aria-label="Chat with us"
-        >
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.3 48.3 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.4 48.4 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-          </svg>
-          <span className="text-sm font-semibold">Chat</span>
-          {unread && <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-white bg-brand-red" aria-label="New reply" />}
-        </button>
-      )}
-
       {open && (
         <div
           role="dialog"
           aria-label="Chat with Love Auto Group"
-          className="fixed inset-x-2 bottom-2 z-50 flex max-h-[80vh] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl sm:inset-x-auto sm:bottom-6 sm:left-6 sm:w-[360px]"
+          className="fixed inset-x-2 bottom-2 z-50 flex max-h-[80vh] flex-col overflow-hidden border border-gray-200 bg-white shadow-2xl sm:inset-x-auto sm:bottom-6 sm:left-6 sm:w-[360px]"
         >
-          <div className="flex items-center justify-between bg-brand-navy px-4 py-3 text-white">
+          <div className="flex items-center justify-between bg-brand-navy px-4 py-3 text-white border-t-2 border-brand-red">
             <div>
               <p className="text-sm font-bold">Love Auto Group</p>
               <p className="text-xs text-gray-300">Ask about a car, a price, or a visit</p>

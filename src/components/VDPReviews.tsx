@@ -65,7 +65,7 @@ function ReviewCard({ review }: { review: GoogleReviewSnippet }) {
     .toUpperCase();
 
   return (
-    <article className="bg-white border border-brand-gray-200 rounded-xl p-5 flex flex-col h-full">
+    <article className="bg-white border border-ink-200 p-5 flex flex-col h-full">
       <div className="flex items-center gap-3 mb-3">
         <div
           className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0"
@@ -97,7 +97,7 @@ export default async function VDPReviews() {
   const display = reviews.slice(0, 3);
 
   return (
-    <section className="bg-brand-gray-50 rounded-xl p-6 md:p-8" aria-labelledby="vdp-reviews-heading">
+    <section className="bg-ink-100 p-6 md:p-8" aria-labelledby="vdp-reviews-heading">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
           <h2 id="vdp-reviews-heading" className="text-2xl font-bold text-brand-gray-900">
