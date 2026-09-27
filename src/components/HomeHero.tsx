@@ -40,36 +40,34 @@ export default function HomeHero() {
   };
 
   return (
-    <section className="relative bg-brand-navy text-white">
-      {/* Full 16:9 frame, never cropped (owner, 2026-09-27: "the video is
-          too tall and cant view many of the pics"). The box has the same
-          shape as the video, so object-cover crops nothing. On phones and
-          tablets the text sits below the video; from lg up it overlays the
-          bottom, clear of the player controls. */}
-      <div className="relative w-full aspect-video">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          controls
-          preload="metadata"
-          poster="/videos/happy-customers-loop-poster.jpg"
-          aria-label="Love Auto Group customers and their cars"
-          onPlay={handlePlay}
-          className="absolute inset-0 w-full h-full object-contain bg-black lg:opacity-[.85]"
-        >
-          <source src="/videos/happy-customers-loop.mp4" type="video/mp4" />
-        </video>
-        {/* Scrim only behind the headline (bottom-left), so the rest of
-            the video stays bright. Large screens only; below lg the text
-            is not over the video. */}
-        <div
-          className="hidden lg:block absolute inset-0 pointer-events-none bg-gradient-to-tr from-[#0a0a0a]/90 from-10% via-[#0a0a0a]/35 via-45% to-transparent to-70%"
-          aria-hidden="true"
-        />
-      </div>
-      <div className="relative lg:absolute lg:inset-x-0 lg:bottom-0 max-w-7xl mx-auto px-4 sm:px-6 py-8 lg:pt-0 lg:pb-20">
+    <section className="relative bg-brand-navy text-white overflow-hidden lg:aspect-video">
+      {/* Video plays BEHIND the headline at every width (owner,
+          2026-09-27). From lg up the hero is exactly 16:9, the video's own
+          shape, so object-cover crops nothing ("can't view many of the
+          pics"). Below lg the text needs more height than a 16:9 strip,
+          so the video covers a taller box and trims the sides; center
+          position keeps the people in frame. */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        controls
+        preload="metadata"
+        poster="/videos/happy-customers-loop-poster.jpg"
+        aria-label="Love Auto Group customers and their cars"
+        onPlay={handlePlay}
+        className="absolute inset-0 w-full h-full object-cover object-center opacity-[.8]"
+      >
+        <source src="/videos/happy-customers-loop.mp4" type="video/mp4" />
+      </video>
+      {/* Scrim: strongest at the bottom-left where the headline sits, clear
+          toward the top-right so the video still reads. */}
+      <div
+        className="absolute inset-0 pointer-events-none bg-gradient-to-t lg:bg-gradient-to-tr from-[#0a0a0a]/90 from-10% via-[#0a0a0a]/40 via-50% to-transparent to-80%"
+        aria-hidden="true"
+      />
+      <div className="relative lg:h-full min-h-[560px] lg:min-h-0 max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-16 lg:pt-0 lg:pb-20 flex flex-col justify-end">
         <div className="max-w-2xl border-l-2 sm:border-l-[3px] border-brand-red pl-4 sm:pl-6">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red-light">
             Villa Park, Illinois &middot; Family Owned Since 2014

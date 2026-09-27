@@ -103,10 +103,10 @@ export default function Header() {
       >
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <span className="text-ink-400">
+            <span className="hidden xl:inline text-ink-400 whitespace-nowrap">
               735 N Yale Ave, Unit A, Villa Park, IL 60181
             </span>
-            <span className="w-px h-3.5 bg-white/[.14]" aria-hidden="true" />
+            <span className="hidden xl:inline-block w-px h-3.5 bg-white/[.14]" aria-hidden="true" />
             <CarfaxAdvantageBadge size="xs" />
           </div>
           <div className="flex items-center gap-4">
@@ -128,10 +128,10 @@ export default function Header() {
               </svg>
               <span className="text-yellow-400 text-xs leading-none tracking-[1px]">★★★★★</span>
               <span className="font-semibold text-white">{googleReviews.rating}</span>
-              <span className="text-ink-400">({googleReviews.reviewCount} reviews)</span>
+              <span className="text-ink-400 whitespace-nowrap">({googleReviews.reviewCount} reviews)</span>
             </a>
             <span className="w-px h-3.5 bg-white/[.14]" aria-hidden="true" />
-            <span className="text-ink-300 uppercase text-[11px] tracking-[0.08em] font-semibold">{t.header.hours}</span>
+            <span className="text-ink-300 uppercase text-[11px] tracking-[0.08em] font-semibold whitespace-nowrap">{t.header.hours}</span>
             <span className="w-px h-3.5 bg-white/[.14]" aria-hidden="true" />
             <a
               href={`tel:${SITE_CONFIG.phoneRaw}`}
@@ -166,14 +166,14 @@ export default function Header() {
         aria-label="Main navigation"
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center group min-w-0 shrink">
+        <Link href="/" className="flex items-center group min-w-0 shrink xl:shrink-0">
           <Image
             src="/images/logo-primary-v2.svg"
             alt="Love Auto Group — Since 2014"
             width={440}
             height={160}
             className={`w-auto object-contain transition-all duration-200 ${
-              condensed ? "h-11 md:h-14" : "h-16 sm:h-20 md:h-[104px]"
+              condensed ? "h-11 md:h-14" : "h-16 sm:h-20 2xl:h-[104px]"
             }`}
             priority
           />
@@ -181,7 +181,7 @@ export default function Header() {
 
         {/* Desktop nav links — uppercase, tracked, 2px underline that turns
             red on hover/active. No background pill on hover. */}
-        <div className="hidden lg:flex items-center gap-0.5">
+        <div className="hidden xl:flex items-center gap-0.5">
           {NAV_LINKS.map((link) => {
             const key = NAV_KEY_MAP[link.href];
             const label = key ? t.nav[key] : link.label;
@@ -189,7 +189,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-2.5 xl:px-3.5 py-2 text-[12.5px] font-semibold uppercase tracking-[0.07em] whitespace-nowrap text-white/70 border-b-2 border-transparent hover:text-white hover:border-brand-red transition-colors"
+                className="px-2 2xl:px-3.5 py-2 text-[12px] 2xl:text-[12.5px] font-semibold uppercase tracking-[0.05em] 2xl:tracking-[0.07em] whitespace-nowrap text-white/70 border-b-2 border-transparent hover:text-white hover:border-brand-red transition-colors"
               >
                 {label}
               </Link>
@@ -198,11 +198,11 @@ export default function Header() {
         </div>
 
         {/* CTA + Phone (desktop) */}
-        <div className="hidden lg:flex items-center gap-4 shrink-0">
+        <div className="hidden xl:flex items-center gap-4 shrink-0">
           <a
             href={`tel:${SITE_CONFIG.phoneRaw}`}
             onClick={() => trackPhoneClick("header_desktop")}
-            className="text-brand-red-light hover:text-white font-bold text-[13px] tracking-[0.02em] whitespace-nowrap"
+            className="hidden 2xl:inline text-brand-red-light hover:text-white font-bold text-[13px] tracking-[0.02em] whitespace-nowrap"
           >
             {SITE_CONFIG.phone}
           </a>
@@ -218,7 +218,7 @@ export default function Header() {
         </div>
 
         {/* Mobile: phone + text + hamburger — flat squares, no rounded pills */}
-        <div className="flex lg:hidden items-center gap-2 shrink-0">
+        <div className="flex xl:hidden items-center gap-2 shrink-0">
           <a
             href={`tel:${SITE_CONFIG.phoneRaw}`}
             onClick={() => trackPhoneClick("header_mobile")}
@@ -294,7 +294,7 @@ export default function Header() {
 
       {/* Mobile menu dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-brand-navy border-t border-white/[.14] pb-5">
+        <div className="xl:hidden bg-brand-navy border-t border-white/[.14] pb-5">
           <div className="px-4 pt-1">
             {NAV_LINKS.map((link) => {
               const key = NAV_KEY_MAP[link.href];
