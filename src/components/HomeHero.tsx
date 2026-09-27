@@ -54,12 +54,12 @@ export default function HomeHero() {
           playsInline
           controls
           preload="metadata"
-          poster="/videos/happy-customers-poster.jpg"
+          poster="/videos/happy-customers-v2-poster.jpg"
           aria-label="Love Auto Group customers and their cars"
           onPlay={handlePlay}
           className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src="/videos/happy-customers.mp4" type="video/mp4" />
+          <source src="/videos/happy-customers-v2.mp4" type="video/mp4" />
         </video>
         {/* Fade into the black band: from the bottom on phones (text sits
             below), from the left on desktop (text sits beside). */}

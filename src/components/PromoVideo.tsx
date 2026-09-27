@@ -36,7 +36,7 @@ import { useEffect, useRef, useState } from "react";
 import { sendEvent } from "@/lib/analytics";
 
 export interface PromoVideoProps {
-  /** Path under /public, e.g. "/videos/happy-customers.mp4" */
+  /** Path under /public, e.g. "/videos/happy-customers-v2.mp4" */
   src: string;
   /** Poster JPG shown before playback starts. */
   posterSrc: string;

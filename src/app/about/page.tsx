@@ -112,8 +112,8 @@ export default function AboutPage() {
             Our happy customers
           </h2>
           <PromoVideo
-            src="/videos/happy-customers.mp4"
-            posterSrc="/videos/happy-customers-poster.jpg"
+            src="/videos/happy-customers-v2.mp4"
+            posterSrc="/videos/happy-customers-v2-poster.jpg"
             mode="click"
             ariaLabel="Love Auto Group customers sharing their experience"
             analyticsVideo="happy_customers"

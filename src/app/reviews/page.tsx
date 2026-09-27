@@ -84,8 +84,8 @@ export default function ReviewsPage() {
       <VideoObjectSchema
         name="Love Auto Group happy customers"
         description="Love Auto Group customers in Villa Park, IL share their experience buying a used car."
-        thumbnailUrl={`${SITE_CONFIG.url}/videos/happy-customers-poster.jpg`}
-        contentUrl={`${SITE_CONFIG.url}/videos/happy-customers.mp4`}
+        thumbnailUrl={`${SITE_CONFIG.url}/videos/happy-customers-v2-poster.jpg`}
+        contentUrl={`${SITE_CONFIG.url}/videos/happy-customers-v2.mp4`}
         uploadDate="2026-09-26"
         duration="PT1M47S"
       />
@@ -96,8 +96,8 @@ export default function ReviewsPage() {
           </h2>
           <PromoVideo
             id="happy-customers-video"
-            src="/videos/happy-customers.mp4"
-            posterSrc="/videos/happy-customers-poster.jpg"
+            src="/videos/happy-customers-v2.mp4"
+            posterSrc="/videos/happy-customers-v2-poster.jpg"
             mode="click"
             ariaLabel="Love Auto Group customers sharing their experience"
             analyticsVideo="happy_customers"
