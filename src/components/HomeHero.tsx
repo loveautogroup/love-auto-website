@@ -37,36 +37,37 @@ export default function HomeHero() {
   };
 
   return (
-    <section className="relative bg-brand-navy text-white overflow-hidden lg:min-h-[min(56.25vw,36vh)]">
-      {/* Video plays BEHIND the headline at every width (owner,
-          2026-09-27). From lg up the hero is 16:9 but capped at 36% of the
-          screen height (owner: 16:9 at full width was "way too big" on
-          desktop), so on wide screens the top and bottom are trimmed. The crop is
-          anchored near the top (object-position 15%) so customers' faces
-          stay in frame (owner: "cutting off customers heads"). Below lg the text needs more height than a 16:9 strip,
-          so the video covers a taller box and trims the sides; center
-          position keeps the people in frame. */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        controls
-        preload="metadata"
-        poster="/videos/happy-customers-loop-poster.jpg"
-        aria-label="Love Auto Group customers and their cars"
-        onPlay={handlePlay}
-        className="absolute inset-0 w-full h-full object-cover object-[center_15%] opacity-[.8]"
-      >
-        <source src="/videos/happy-customers-loop.mp4" type="video/mp4" />
-      </video>
-      {/* Scrim: strongest at the bottom-left where the headline sits, clear
-          toward the top-right so the video still reads. */}
-      <div
-        className="absolute inset-0 pointer-events-none bg-gradient-to-t lg:bg-gradient-to-tr from-[#0a0a0a]/90 from-10% via-[#0a0a0a]/40 via-50% to-transparent to-80%"
-        aria-hidden="true"
-      />
-      <div className="relative lg:min-h-[inherit] min-h-[560px] max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-16 lg:pt-14 lg:pb-12 flex flex-col justify-end">
+    <section className="relative bg-[#0a0a0a] text-white overflow-hidden lg:min-h-[min(56.25vw,40vh)]">
+      {/* The WHOLE video frame shows at every width (owner, 2026-09-27:
+          "zoom the homepage video out ... cant view the cars that were
+          purchased"). Earlier versions stretched it behind the headline and
+          cropped it, which cut off the cars. Now it keeps its own 16:9 shape:
+          full width on top on phones, and on desktop it sits against the
+          right edge at the hero's height, fading into black under the
+          headline. */}
+      <div className="relative w-full aspect-video lg:absolute lg:inset-y-0 lg:right-0 lg:w-auto lg:h-full lg:max-w-[64%]">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          controls
+          preload="metadata"
+          poster="/videos/happy-customers-loop-poster.jpg"
+          aria-label="Love Auto Group customers and their cars"
+          onPlay={handlePlay}
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/videos/happy-customers-loop.mp4" type="video/mp4" />
+        </video>
+        {/* Fade into the black band: from the bottom on phones (text sits
+            below), from the left on desktop (text sits beside). */}
+        <div
+          className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0a0a0a] from-0% via-transparent via-25% to-transparent lg:bg-gradient-to-r lg:from-[#0a0a0a] lg:via-transparent lg:via-30%"
+          aria-hidden="true"
+        />
+      </div>
+      <div className="relative lg:min-h-[inherit] max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-12 lg:pt-14 lg:pb-12 flex flex-col justify-end">
         <div className="max-w-2xl border-l-2 sm:border-l-[3px] border-brand-red pl-4 sm:pl-6">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red-light">
             Villa Park, Illinois &middot; Family Owned Since 2014
