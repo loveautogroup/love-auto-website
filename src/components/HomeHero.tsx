@@ -10,11 +10,8 @@
  * concept's core rule. The headline becomes the dealership's own required
  * tagline instead of generic filler copy.
  *
- * This is a SEPARATE instance of the clip from HomeHappyCustomers below on
- * the page — that one is a deliberate click-through to the full video on
- * /reviews with its own heading and review lockup. This one is pure ambient
- * background; the two don't compete because they serve different jobs, and
- * neither is hidden from a viewer who scrolls past the other.
+ * This is the only video on the homepage (owner removed the lower "Our
+ * happy customers" section, 2026-09-27). The full video lives on /reviews.
  *
  * Native `controls` stays on, same accessibility rule PromoVideo enforces
  * elsewhere on the site: a silent looping video always needs a reachable

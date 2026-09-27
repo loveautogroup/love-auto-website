@@ -5,7 +5,6 @@ import { SITE_CONFIG } from "@/lib/constants";
 import { TrackedPhoneLink } from "@/components/TrackedLink";
 import HomeFeaturedGrid, { HomeOnTheLot } from "@/components/HomeFeaturedGrid";
 import HomepageReviewWall from "@/components/HomepageReviewWall";
-import HomeHappyCustomers from "@/components/HomeHappyCustomers";
 import PaymentCalculator from "@/components/PaymentCalculator";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
@@ -416,11 +415,6 @@ export default function HomePage() {
           <HomeOnTheLot />
         </div>
       </section>
-
-      {/* "Our happy customers" — silent, looping short cut that plays only
-          while scrolled into view, below the inventory carousel and above
-          the text review wall. Links out to the full video on /reviews/. */}
-      <HomeHappyCustomers />
 
       {/* Review wall — social proof before the SEO hub. Positioned at the
           bottom of the page so it closes strong, distinct from mid-page
