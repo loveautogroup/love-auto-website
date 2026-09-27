@@ -40,9 +40,9 @@ export default function HomeHero() {
   };
 
   return (
-    <section className="relative bg-brand-navy text-white overflow-hidden lg:h-[min(56.25vw,62vh)] lg:min-h-[520px]">
+    <section className="relative bg-brand-navy text-white overflow-hidden lg:h-[min(56.25vw,46vh)] lg:min-h-[400px]">
       {/* Video plays BEHIND the headline at every width (owner,
-          2026-09-27). From lg up the hero is 16:9 but capped at 62% of the
+          2026-09-27). From lg up the hero is 16:9 but capped at 46% of the
           screen height (owner: 16:9 at full width was "way too big" on
           desktop), so on wide screens a little of the top and bottom is
           trimmed. Below lg the text needs more height than a 16:9 strip,
@@ -68,13 +68,13 @@ export default function HomeHero() {
         className="absolute inset-0 pointer-events-none bg-gradient-to-t lg:bg-gradient-to-tr from-[#0a0a0a]/90 from-10% via-[#0a0a0a]/40 via-50% to-transparent to-80%"
         aria-hidden="true"
       />
-      <div className="relative lg:h-full min-h-[560px] lg:min-h-0 max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-16 lg:pt-0 lg:pb-20 flex flex-col justify-end">
+      <div className="relative lg:h-full min-h-[560px] lg:min-h-0 max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-16 lg:pt-0 lg:pb-14 flex flex-col justify-end">
         <div className="max-w-2xl border-l-2 sm:border-l-[3px] border-brand-red pl-4 sm:pl-6">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red-light">
             Villa Park, Illinois &middot; Family Owned Since 2014
           </p>
           <h1
-            className="mt-3 font-heading font-extrabold leading-[0.98] text-[clamp(2rem,7vw,4.25rem)]"
+            className="mt-3 font-heading font-extrabold leading-[0.98] text-[clamp(2rem,7vw,4.25rem)] lg:text-[clamp(2.25rem,3.6vw,3.5rem)]"
           >
             {t.hero.headline}
             <br />
