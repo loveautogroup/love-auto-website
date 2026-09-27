@@ -188,15 +188,15 @@ export default function DuPageCountyPage() {
       <SiteBreadcrumb trail={[{ label: "Serving DuPage County, IL" }]} />
 
       {/* Hero */}
-      <section className="bg-brand-navy text-white py-12 md:py-16">
+      <section className="bg-brand-navy text-white py-12 md:py-16 border-b border-white/[.14]">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+          <h1 className="font-heading font-extrabold leading-[0.98] text-[clamp(1.9rem,5vw,3.5rem)]">
             Used Car Dealer in
             <span className="block text-brand-red mt-2">
               DuPage County, IL
             </span>
           </h1>
-          <p className="mt-4 text-base md:text-lg text-brand-gray-300 max-w-3xl leading-relaxed">
+          <p className="mt-4 text-base md:text-lg text-ink-300 max-w-3xl leading-relaxed">
             Family owned in Villa Park since 2014. Specialists in used Subaru,
             Lexus, Acura, Honda, Toyota, and Mazda. Serving the entire DuPage
             County market and the western Chicago suburbs.
@@ -204,14 +204,14 @@ export default function DuPageCountyPage() {
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <Link
               href="/inventory"
-              className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+              className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
             >
               Browse Inventory
             </Link>
             <TrackedPhoneLink
               location="serving_dupage_county_hero"
               href={`tel:${SITE_CONFIG.phoneRaw}`}
-              className="inline-flex items-center justify-center border-2 border-white/30 hover:bg-white/10 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+              className="inline-flex items-center justify-center border border-white/35 hover:border-white hover:bg-white/[.06] text-white px-6 py-3 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
             >
               Call {SITE_CONFIG.phone}
             </TrackedPhoneLink>
@@ -221,7 +221,7 @@ export default function DuPageCountyPage() {
 
       {/* Editorial */}
       <section className="max-w-4xl mx-auto px-4 py-12 prose prose-lg">
-        <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
+        <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">
           Family owned, in DuPage County since 2014
         </h2>
         <p className="text-brand-gray-700 leading-relaxed mb-4">
@@ -247,7 +247,7 @@ export default function DuPageCountyPage() {
           CARFAX badge come with a free report you can pull yourself.
         </p>
 
-        <h2 className="text-2xl font-bold text-brand-gray-900 mt-12 mb-4">
+        <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mt-12 mb-4">
           Where DuPage County buyers come from
         </h2>
         <p className="text-brand-gray-700 leading-relaxed mb-6">
@@ -260,7 +260,7 @@ export default function DuPageCountyPage() {
             <Link
               key={city.slug}
               href={`/serving/${city.slug}/`}
-              className="bg-white border border-brand-gray-200 rounded-lg p-4 hover:border-brand-red hover:shadow-md transition-all"
+              className="bg-white border border-ink-200 p-4 hover:border-brand-red transition-colors"
             >
               <div className="font-semibold text-brand-gray-900">
                 {city.name}
@@ -278,7 +278,7 @@ export default function DuPageCountyPage() {
           suburbs to the east.
         </p>
 
-        <h2 className="text-2xl font-bold text-brand-gray-900 mt-12 mb-4">
+        <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mt-12 mb-4">
           Used cars by make
         </h2>
         <p className="text-brand-gray-700 leading-relaxed mb-6">
@@ -290,7 +290,7 @@ export default function DuPageCountyPage() {
             <Link
               key={brand.slug}
               href={`/brands/${brand.slug}/`}
-              className="bg-white border border-brand-gray-200 rounded-lg p-3 text-center hover:border-brand-red hover:shadow-md transition-all"
+              className="bg-white border border-ink-200 p-3 text-center hover:border-brand-red transition-colors"
             >
               <div className="font-semibold text-brand-gray-900">
                 Used {brand.name}
@@ -301,9 +301,9 @@ export default function DuPageCountyPage() {
       </section>
 
       {/* Live Inventory Preview */}
-      <section className="bg-brand-gray-50 py-12">
+      <section className="bg-ink-100 py-12">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-brand-gray-900 mb-2">
+          <h2 className="font-heading font-extrabold text-2xl md:text-3xl text-brand-gray-900 mb-2">
             Current inventory
           </h2>
           <p className="text-brand-gray-600 mb-6">
@@ -314,7 +314,7 @@ export default function DuPageCountyPage() {
           <div className="mt-6 text-center">
             <Link
               href="/inventory"
-              className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-lg text-base font-semibold transition-colors"
+              className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white px-7 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
             >
               View Full Inventory
             </Link>
@@ -324,16 +324,16 @@ export default function DuPageCountyPage() {
 
       {/* FAQ */}
       <section className="max-w-4xl mx-auto px-4 py-12">
-        <h2 className="text-2xl md:text-3xl font-bold text-brand-gray-900 mb-6">
+        <h2 className="font-heading font-extrabold text-2xl md:text-3xl text-brand-gray-900 mb-6">
           Frequently asked questions
         </h2>
         <div className="space-y-4">
           {FAQS.map((faq, i) => (
             <details
               key={i}
-              className="bg-white border border-brand-gray-200 rounded-lg p-5 group"
+              className="bg-white border border-ink-200 p-5 group"
             >
-              <summary className="font-semibold text-brand-gray-900 cursor-pointer list-none flex justify-between items-center">
+              <summary className="font-heading font-bold text-brand-gray-900 cursor-pointer list-none flex justify-between items-center">
                 {faq.question}
                 <span className="text-brand-red text-2xl group-open:rotate-45 transition-transform">
                   +
@@ -350,10 +350,10 @@ export default function DuPageCountyPage() {
       {/* CTA */}
       <section className="bg-brand-navy text-white py-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
+          <h2 className="font-heading font-extrabold text-2xl md:text-3xl mb-4">
             Stop in or call (630) 359-3643
           </h2>
-          <p className="text-brand-gray-300 mb-6">
+          <p className="text-ink-300 mb-6">
             735 N Yale Ave, Unit A, Villa Park, IL 60181. Mon 2-7, Tue-Fri 11-7,
             Sat 12-7. Closed Sunday.
           </p>
@@ -361,13 +361,13 @@ export default function DuPageCountyPage() {
             <TrackedPhoneLink
               location="serving_dupage_county_cta"
               href={`tel:${SITE_CONFIG.phoneRaw}`}
-              className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-lg text-base font-semibold transition-colors"
+              className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
             >
               Call {SITE_CONFIG.phone}
             </TrackedPhoneLink>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center border-2 border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-lg text-base font-semibold transition-colors"
+              className="inline-flex items-center justify-center border border-white/35 hover:border-white hover:bg-white/[.06] text-white px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
             >
               Send a message
             </Link>

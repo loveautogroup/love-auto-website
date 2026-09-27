@@ -72,15 +72,15 @@ export default function UsedCarsVillaParkPage() {
       <SiteBreadcrumb trail={[{ label: "Used Cars in Villa Park, IL" }]} />
 
       {/* Hero */}
-      <section className="bg-brand-navy text-white py-12 md:py-16">
+      <section className="bg-brand-navy text-white py-12 md:py-16 border-b border-white/[.14]">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+          <h1 className="font-heading font-extrabold leading-[0.98] text-[clamp(1.9rem,5vw,3.5rem)]">
             Used Cars in Villa Park, IL
             <span className="block text-brand-red mt-2">
               Family Owned Since 2014
             </span>
           </h1>
-          <p className="mt-4 text-lg md:text-xl text-brand-gray-300 max-w-3xl">
+          <p className="mt-4 text-lg md:text-xl text-ink-300 max-w-3xl">
             Love Auto Group is Villa Park&apos;s used car specialist — 735 N
             Yale Ave, one mile from Route 83. Free Carfax reports on
             marked vehicles, 4.7 stars on Google.
@@ -88,14 +88,14 @@ export default function UsedCarsVillaParkPage() {
           <div className="mt-6 flex flex-wrap gap-4">
             <Link
               href="/inventory"
-              className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-xl font-semibold"
+              className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               Browse Inventory
             </Link>
             <TrackedPhoneLink
               location="used_cars_villa_park_hero"
               href="tel:+16303593643"
-              className="inline-flex items-center border border-white text-white hover:bg-white hover:text-brand-navy px-6 py-3 rounded-xl font-semibold"
+              className="inline-flex items-center border border-white text-white hover:bg-white hover:text-brand-navy px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               Call (630) 359-3643
             </TrackedPhoneLink>
@@ -108,7 +108,7 @@ export default function UsedCarsVillaParkPage() {
         <div className="text-center mb-8">
           <h2
             id="inv-heading"
-            className="text-2xl md:text-3xl font-bold text-brand-gray-900"
+            className="font-heading font-extrabold text-2xl md:text-3xl text-brand-gray-900"
           >
             Used Cars For Sale in Villa Park Right Now
           </h2>
@@ -120,7 +120,7 @@ export default function UsedCarsVillaParkPage() {
         <div className="text-center mt-8">
           <Link
             href="/inventory"
-            className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3 rounded-xl font-semibold"
+            className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-7 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
           >
             View Full Inventory
           </Link>
@@ -130,7 +130,7 @@ export default function UsedCarsVillaParkPage() {
       {/* Editorial */}
       <article className="max-w-4xl mx-auto px-4 pb-12">
         <section className="mb-10">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">
             Villa Park&apos;s Used Car Dealer Since 2014
           </h2>
           <p className="text-brand-gray-700 leading-relaxed mb-4">
@@ -158,7 +158,7 @@ export default function UsedCarsVillaParkPage() {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">
             Serving Villa Park and All of DuPage County
           </h2>
           <p className="text-brand-gray-700 leading-relaxed mb-4">
@@ -184,10 +184,10 @@ export default function UsedCarsVillaParkPage() {
             is already emitted on this page by LocalBusinessSchema in the
             root layout — do not add a second AutoDealer entity. */}
         <section className="mb-10">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">
             Visit Our Villa Park Car Dealership
           </h2>
-          <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
+          <div className="bg-white border border-ink-200 p-6">
             <p className="font-semibold text-brand-gray-900">
               {SITE_CONFIG.name}
             </p>
@@ -229,7 +229,7 @@ export default function UsedCarsVillaParkPage() {
         {/* Brand hubs — the brief calls for links out to the brand pages
             so the geo hub feeds the make-level pages we want to rank. */}
         <section className="mb-10">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">
             Browse Our Villa Park Inventory by Brand
           </h2>
           <p className="text-brand-gray-700 leading-relaxed mb-4">
@@ -251,7 +251,7 @@ export default function UsedCarsVillaParkPage() {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">
             Used Car Financing in Villa Park, IL
           </h2>
           <p className="text-brand-gray-700 leading-relaxed mb-4">
@@ -271,7 +271,7 @@ export default function UsedCarsVillaParkPage() {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">
             Sell or Trade Your Car in Villa Park
           </h2>
           <p className="text-brand-gray-700 leading-relaxed">
@@ -291,13 +291,13 @@ export default function UsedCarsVillaParkPage() {
 
         {/* FAQ */}
         <section className="mb-10">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-6">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-6">
             Frequently Asked Questions — Used Cars in Villa Park, IL
           </h2>
           <div className="space-y-6">
             {FAQ_ITEMS.map((item, i) => (
-              <div key={i} className="border-b border-brand-gray-200 pb-6">
-                <h3 className="font-semibold text-brand-gray-900 mb-2">
+              <div key={i} className="border-b border-ink-200 pb-6">
+                <h3 className="font-heading font-bold text-brand-gray-900 mb-2">
                   {item.question}
                 </h3>
                 <p className="text-brand-gray-700 leading-relaxed">
@@ -309,24 +309,24 @@ export default function UsedCarsVillaParkPage() {
         </section>
 
         {/* CTA */}
-        <div className="bg-brand-navy rounded-2xl p-8 text-center text-white">
-          <h2 className="text-2xl font-bold mb-2">
+        <div className="bg-brand-navy p-8 text-center text-white">
+          <h2 className="font-heading font-extrabold text-2xl mb-2">
             Ready to Find Your Next Car in Villa Park?
           </h2>
-          <p className="text-brand-gray-300 mb-6">
+          <p className="text-ink-300 mb-6">
             Stop in at 735 N Yale Ave, Unit A — or call us at (630) 359-3643.
             Mon 2–7pm, Tue–Fri 11am–7pm, Sat 12–7pm.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/inventory"
-              className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3 rounded-xl font-semibold"
+              className="bg-brand-red hover:bg-brand-red-dark text-white px-7 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               Browse Inventory
             </Link>
             <Link
               href="/contact"
-              className="border border-white text-white hover:bg-white hover:text-brand-navy px-8 py-3 rounded-xl font-semibold"
+              className="border border-white text-white hover:bg-white hover:text-brand-navy px-7 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               Get Directions
             </Link>
