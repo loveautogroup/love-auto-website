@@ -105,7 +105,7 @@ export default function UsedLexusDuPageCountyPage() {
 
       <article className="max-w-3xl mx-auto px-4 py-8 md:py-12">
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-brand-gray-900 leading-tight">
+          <h1 className="font-heading font-extrabold text-3xl md:text-4xl text-brand-gray-900 leading-tight">
             Where to Buy a Used Lexus in DuPage County
           </h1>
           <p className="mt-3 text-brand-gray-500 text-sm">
@@ -291,7 +291,7 @@ export default function UsedLexusDuPageCountyPage() {
 
           {FAQS.map((faq, i) => (
             <div key={i} className="mb-6">
-              <h3 className="text-lg font-bold text-brand-gray-900">
+              <h3 className="font-heading font-bold text-lg text-brand-gray-900">
                 {faq.question}
               </h3>
               <p className="text-brand-gray-700 leading-relaxed">
@@ -310,7 +310,7 @@ export default function UsedLexusDuPageCountyPage() {
             <li>
               <Link
                 href="/brands/lexus/"
-                className="block bg-white border border-brand-gray-200 rounded-lg p-4 hover:border-brand-red hover:shadow-md transition-all"
+                className="block bg-white border border-ink-200 p-4 hover:border-brand-red transition-colors"
               >
                 <div className="font-semibold text-brand-gray-900">
                   Used Lexus Inventory
@@ -323,7 +323,7 @@ export default function UsedLexusDuPageCountyPage() {
             <li>
               <Link
                 href="/serving/dupage-county-il/"
-                className="block bg-white border border-brand-gray-200 rounded-lg p-4 hover:border-brand-red hover:shadow-md transition-all"
+                className="block bg-white border border-ink-200 p-4 hover:border-brand-red transition-colors"
               >
                 <div className="font-semibold text-brand-gray-900">
                   Used Cars in DuPage County
@@ -336,7 +336,7 @@ export default function UsedLexusDuPageCountyPage() {
             <li>
               <Link
                 href="/free-carfax-villa-park/"
-                className="block bg-white border border-brand-gray-200 rounded-lg p-4 hover:border-brand-red hover:shadow-md transition-all"
+                className="block bg-white border border-ink-200 p-4 hover:border-brand-red transition-colors"
               >
                 <div className="font-semibold text-brand-gray-900">
                   Free Carfax Reports
@@ -349,7 +349,7 @@ export default function UsedLexusDuPageCountyPage() {
             <li>
               <Link
                 href="/financing/"
-                className="block bg-white border border-brand-gray-200 rounded-lg p-4 hover:border-brand-red hover:shadow-md transition-all"
+                className="block bg-white border border-ink-200 p-4 hover:border-brand-red transition-colors"
               >
                 <div className="font-semibold text-brand-gray-900">
                   Soft Credit Pre-Approval
@@ -377,12 +377,12 @@ export default function UsedLexusDuPageCountyPage() {
         </div>
       </article>
 
-      <section className="bg-brand-navy text-white py-12 mt-12">
+      <section className="bg-brand-navy text-white py-12 mt-12 border-t border-white/[.14]">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
+          <h2 className="font-heading font-extrabold text-2xl md:text-3xl mb-4">
             Looking for a specific Lexus?
           </h2>
-          <p className="text-brand-gray-300 mb-6">
+          <p className="text-ink-300 mb-6">
             Tell us what you want and we will let you know when one
             lands. We get fresh inventory every week.
           </p>
@@ -390,13 +390,13 @@ export default function UsedLexusDuPageCountyPage() {
             <TrackedPhoneLink
               location="buying_guide_lexus_cta"
               href={`tel:${SITE_CONFIG.phoneRaw}`}
-              className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-lg text-base font-semibold transition-colors"
+              className="inline-flex items-center justify-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
             >
               Call {SITE_CONFIG.phone}
             </TrackedPhoneLink>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center border-2 border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-lg text-base font-semibold transition-colors"
+              className="inline-flex items-center justify-center border border-white/35 hover:border-white hover:bg-white/[.06] text-white px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
             >
               Send a message
             </Link>

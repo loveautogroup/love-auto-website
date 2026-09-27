@@ -15,8 +15,8 @@ export default function WaitlistIntro({ sidebar = false }: { sidebar?: boolean }
   if (sidebar) {
     return (
       <div className="space-y-6">
-        <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
-          <h2 className="font-bold text-brand-gray-900 mb-3">{w.whyTitle}</h2>
+        <div className="bg-white border border-ink-200 p-6">
+          <h2 className="font-heading font-bold text-brand-gray-900 mb-3">{w.whyTitle}</h2>
           <ol className="space-y-3">
             {w.why.map((item, i) => (
               <li key={item} className="flex items-start gap-3 text-sm text-brand-gray-700">
@@ -26,8 +26,8 @@ export default function WaitlistIntro({ sidebar = false }: { sidebar?: boolean }
             ))}
           </ol>
         </div>
-        <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
-          <h3 className="font-bold text-brand-gray-900 mb-2">{w.callTitle}</h3>
+        <div className="bg-white border border-ink-200 p-6">
+          <h3 className="font-heading font-bold text-brand-gray-900 mb-2">{w.callTitle}</h3>
           <p className="text-sm text-brand-gray-600 mb-3">{w.callBody}</p>
           <a
             href={`tel:${SITE_CONFIG.phoneRaw}`}
@@ -42,11 +42,11 @@ export default function WaitlistIntro({ sidebar = false }: { sidebar?: boolean }
   }
 
   return (
-    <section className="bg-brand-navy text-white">
+    <section className="bg-brand-navy text-white border-b border-white/[.14]">
       <div className="max-w-4xl mx-auto px-4 py-14">
-        <p className="text-xs font-semibold uppercase tracking-widest text-brand-red mb-3">{w.eyebrow}</p>
-        <h1 className="text-3xl sm:text-4xl font-bold mb-4">{w.heading}</h1>
-        <p className="text-brand-gray-300 max-w-2xl">{w.sub}</p>
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red-light mb-3">{w.eyebrow}</p>
+        <h1 className="font-heading font-extrabold text-3xl sm:text-4xl mb-4">{w.heading}</h1>
+        <p className="text-ink-300 max-w-2xl">{w.sub}</p>
       </div>
     </section>
   );

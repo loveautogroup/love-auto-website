@@ -25,7 +25,7 @@ const HOUSE_MAKES = ["Subaru", "Lexus", "Acura", "Mazda", "Honda", "Toyota"];
 const BODIES = ["suv", "sedan", "truck", "coupe", "hatchback", "van", "wagon", "convertible"] as const;
 
 const inputCls =
-  "w-full border border-brand-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red";
+  "w-full border border-ink-200 px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red";
 const labelCls = "block text-sm font-medium text-brand-gray-900 mb-1";
 
 /** Any US phone string -> E.164 (+1XXXXXXXXXX), or null if it is not ten digits. */
@@ -146,18 +146,18 @@ export default function WaitlistForm() {
 
   if (state === "done") {
     return (
-      <div className="bg-brand-green/10 border border-brand-green/20 rounded-xl p-8 text-center">
+      <div className="bg-brand-green/10 border border-brand-green/20 border-l-[3px] border-l-brand-green p-8 text-center">
         <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 text-brand-green mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 className="text-xl font-bold text-brand-gray-900 mb-2">{w.successHeading}</h3>
+        <h3 className="font-heading font-extrabold text-xl text-brand-gray-900 mb-2">{w.successHeading}</h3>
         <p className="text-brand-gray-600">{w.successBody}</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={submit} className="bg-white rounded-xl border border-brand-gray-200 p-6 space-y-5">
+    <form onSubmit={submit} className="bg-white border border-ink-200 p-6 space-y-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="sm:col-span-2">
           <label className={labelCls} htmlFor="wl-name">{w.nameLabel} <span className="text-brand-red">*</span></label>
@@ -226,7 +226,7 @@ export default function WaitlistForm() {
       <button
         type="submit"
         disabled={state === "sending"}
-        className="w-full bg-brand-red hover:bg-brand-red-dark disabled:opacity-60 text-white py-3 rounded-lg font-semibold transition-colors"
+        className="w-full bg-brand-red hover:bg-brand-red-dark disabled:opacity-60 text-white py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
       >
         {state === "sending" ? w.sending : w.button}
       </button>
