@@ -20,7 +20,7 @@ export default function AboutPage() {
       <section className="max-w-4xl mx-auto px-4 py-16">
         {/* Story */}
         <div className="prose prose-lg max-w-none">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">
             Our Story
           </h2>
           <p className="text-brand-gray-700 leading-relaxed mb-6">
@@ -57,14 +57,14 @@ export default function AboutPage() {
           </p>
         </div>
 
-        {/* What sets us apart */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-6">
+        {/* What sets us apart — hairline spec blocks, not rounded cards */}
+        <div className="mt-14">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-6">
             What Makes Us Different
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
-              <h3 className="font-bold text-brand-gray-900 mb-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 border-t border-l border-ink-200">
+            <div className="border-r border-b border-ink-200 p-6">
+              <h3 className="font-heading font-bold text-brand-gray-900 mb-2">
                 Free CARFAX Reports
               </h3>
               <p className="text-brand-gray-600 text-sm leading-relaxed">
@@ -73,8 +73,8 @@ export default function AboutPage() {
                 title status, ready before you ask.
               </p>
             </div>
-            <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
-              <h3 className="font-bold text-brand-gray-900 mb-2">
+            <div className="border-r border-b border-ink-200 p-6">
+              <h3 className="font-heading font-bold text-brand-gray-900 mb-2">
                 Transparent Pricing
               </h3>
               <p className="text-brand-gray-600 text-sm leading-relaxed">
@@ -83,8 +83,8 @@ export default function AboutPage() {
                 see is the price you pay.
               </p>
             </div>
-            <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
-              <h3 className="font-bold text-brand-gray-900 mb-2">
+            <div className="border-r border-b border-ink-200 p-6">
+              <h3 className="font-heading font-bold text-brand-gray-900 mb-2">
                 Carefully Selected
               </h3>
               <p className="text-brand-gray-600 text-sm leading-relaxed">
@@ -93,8 +93,8 @@ export default function AboutPage() {
                 so you can buy with confidence.
               </p>
             </div>
-            <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
-              <h3 className="font-bold text-brand-gray-900 mb-2">
+            <div className="border-r border-b border-ink-200 p-6">
+              <h3 className="font-heading font-bold text-brand-gray-900 mb-2">
                 Small Team, Big Care
               </h3>
               <p className="text-brand-gray-600 text-sm leading-relaxed">
@@ -108,7 +108,7 @@ export default function AboutPage() {
 
         {/* "Our happy customers" video, click-to-play. */}
         <div className="mt-16 text-center">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-6">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-6">
             Our happy customers
           </h2>
           <PromoVideo
@@ -122,25 +122,28 @@ export default function AboutPage() {
         </div>
 
         {/* CTA */}
-        <div className="mt-16 bg-brand-red rounded-2xl p-8 md:p-12 text-center text-white">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
+        <div className="mt-16 bg-brand-red p-8 md:p-12 text-center text-white">
+          <h2 className="font-heading font-extrabold text-2xl md:text-3xl mb-4">
             Ready to Find Your Next Vehicle?
           </h2>
           <p className="text-red-100 mb-6 max-w-xl mx-auto">
             Browse our inventory online or stop by the lot. We&apos;re always
             happy to show you around.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-3">
             <Link
               href="/inventory"
-              className="inline-flex items-center justify-center bg-white text-brand-red px-8 py-3 rounded-xl font-bold hover:bg-brand-gray-100 transition-colors"
+              className="group inline-flex items-center justify-center gap-2.5 bg-white hover:bg-brand-gray-100 text-brand-red px-7 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
             >
               Browse Inventory
+              <svg className="w-4 h-4 transition-transform duration-150 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
             </Link>
             <TrackedPhoneLink
               location="about_cta"
               href={`tel:${SITE_CONFIG.phoneRaw}`}
-              className="inline-flex items-center justify-center border-2 border-white/30 hover:bg-white/10 text-white px-8 py-3 rounded-xl font-semibold transition-colors"
+              className="inline-flex items-center justify-center border border-white/35 hover:border-white hover:bg-white/[.06] text-white px-7 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
             >
               Call {SITE_CONFIG.phone}
             </TrackedPhoneLink>

@@ -242,7 +242,7 @@ export default function LeadForm({
 
   if (success) {
     return (
-      <div className="rounded-xl border border-brand-green/30 bg-brand-green/10 p-6">
+      <div className="border border-brand-green/30 border-l-[3px] border-l-brand-green bg-brand-green/10 p-6">
         <div className="flex items-start gap-3">
           <svg
             className="w-6 h-6 text-brand-green flex-shrink-0 mt-0.5"
@@ -258,7 +258,7 @@ export default function LeadForm({
             />
           </svg>
           <div>
-            <h3 className="font-bold text-brand-gray-900">{t.leadForm.successHeading}</h3>
+            <h3 className="font-heading font-bold text-brand-gray-900">{t.leadForm.successHeading}</h3>
             <p className="mt-1 text-sm text-brand-gray-700">{success}</p>
           </div>
         </div>
@@ -267,7 +267,7 @@ export default function LeadForm({
   }
 
   const inputCss =
-    "w-full rounded-lg border border-brand-gray-200 bg-white px-3 py-2.5 text-sm text-brand-gray-900 placeholder:text-brand-gray-400 focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red";
+    "w-full border border-ink-200 bg-white px-3 py-2.5 text-sm text-brand-gray-900 placeholder:text-brand-gray-400 focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red";
 
   return (
     <form onSubmit={handleSubmit} className={compact ? "space-y-3" : "space-y-4"}>
@@ -364,7 +364,7 @@ export default function LeadForm({
         <input
           type="checkbox"
           required
-          className="mt-0.5 h-4 w-4 rounded border-brand-gray-300 text-brand-red focus:ring-brand-red"
+          className="mt-0.5 h-4 w-4 border-brand-gray-300 text-brand-red focus:ring-brand-red"
           checked={values.marketingOptIn}
           onChange={(e) => update("marketingOptIn", e.target.checked)}
         />
@@ -387,7 +387,7 @@ export default function LeadForm({
       <LeadFormConsent />
 
       {error && (
-        <div className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
+        <div className="bg-red-50 border border-red-200 border-l-[3px] border-l-red-600 px-3 py-2 text-sm text-red-700">
           {error}
         </div>
       )}
@@ -395,7 +395,7 @@ export default function LeadForm({
       <button
         type="submit"
         disabled={submitting}
-        className="w-full rounded-lg bg-brand-red text-white font-semibold px-4 py-3 hover:bg-brand-red-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-brand-red text-white text-[12.5px] font-bold uppercase tracking-[0.08em] px-4 py-3.5 hover:bg-brand-red-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {submitting ? t.leadForm.sending : (submitLabel ?? t.leadForm.submitDefault)}
       </button>

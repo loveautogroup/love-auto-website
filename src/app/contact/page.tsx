@@ -20,13 +20,13 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact info */}
           <div>
-            <h2 className="text-2xl font-bold text-brand-gray-900 mb-6">
+            <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-6">
               Get in Touch
             </h2>
 
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-brand-red/10 rounded-xl flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 bg-brand-red/10 flex items-center justify-center shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-6 h-6 text-brand-red"
@@ -58,7 +58,7 @@ export default function ContactPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-brand-red/10 rounded-xl flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 bg-brand-red/10 flex items-center justify-center shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-6 h-6 text-brand-red"
@@ -86,7 +86,7 @@ export default function ContactPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-brand-red/10 rounded-xl flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 bg-brand-red/10 flex items-center justify-center shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-6 h-6 text-brand-red"
@@ -128,8 +128,8 @@ export default function ContactPage() {
             </div>
 
             {/* Hours */}
-            <div className="mt-8 bg-white rounded-xl border border-brand-gray-200 p-6">
-              <h3 className="font-bold text-brand-gray-900 mb-4">
+            <div className="mt-8 bg-white border border-ink-200 p-6">
+              <h3 className="font-heading font-bold text-brand-gray-900 mb-4">
                 Business Hours
               </h3>
               <ul className="space-y-2">
@@ -147,7 +147,7 @@ export default function ContactPage() {
             </div>
 
             {/* Map */}
-            <div className="mt-6 rounded-xl overflow-hidden border border-brand-gray-200">
+            <div className="mt-6 overflow-hidden border border-ink-200">
               <iframe
                 title={`Map of ${SITE_CONFIG.name} at ${SITE_CONFIG.address.full}`}
                 src={`https://www.google.com/maps?q=${encodeURIComponent(SITE_CONFIG.address.full)}&output=embed`}
@@ -161,7 +161,7 @@ export default function ContactPage() {
 
           {/* Contact form */}
           <div>
-            <h2 className="text-2xl font-bold text-brand-gray-900 mb-6">
+            <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-6">
               Send Us a Message
             </h2>
             <ContactForm />

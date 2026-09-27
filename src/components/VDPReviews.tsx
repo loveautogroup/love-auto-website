@@ -77,7 +77,7 @@ export default async function VDPReviews() {
     <section className="bg-ink-100 p-6 md:p-8" aria-labelledby="vdp-reviews-heading">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 id="vdp-reviews-heading" className="text-2xl font-bold text-brand-gray-900">
+          <h2 id="vdp-reviews-heading" className="font-heading font-extrabold text-2xl text-brand-gray-900">
             <T path={["vdp", "reviewsHeading"]} />
           </h2>
           <div className="flex items-center gap-2 mt-1 text-sm text-brand-gray-600">

@@ -126,13 +126,13 @@ export default function FAQPage() {
       <FAQHero />
 
       <section className="max-w-3xl mx-auto px-4 py-16">
-        <div className="space-y-6">
+        <div className="border-t border-ink-200">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="bg-white rounded-xl border border-brand-gray-200 p-6"
+              className="border-b border-ink-200 py-6"
             >
-              <h2 className="text-lg font-bold text-brand-gray-900">
+              <h2 className="font-heading font-bold text-lg text-brand-gray-900">
                 {faq.question}
               </h2>
               <p className="mt-3 text-brand-gray-600 leading-relaxed">
@@ -142,7 +142,9 @@ export default function FAQPage() {
           ))}
         </div>
 
-        <FAQCta />
+        <div className="mt-12">
+          <FAQCta />
+        </div>
       </section>
     </>
   );

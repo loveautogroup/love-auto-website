@@ -84,62 +84,59 @@ export default async function GoogleReviewsBadge({
     );
   }
 
-  // Full badge (homepage)
+  // Full badge — mounted inline inside the /reviews hero (a dark section),
+  // so this returns the badge itself rather than its own light-band
+  // <section>; the caller controls background and spacing.
   return (
-    <section
-      className="bg-brand-gray-50 py-12"
-      aria-labelledby="reviews-heading"
-    >
-      <div className="max-w-3xl mx-auto px-4 text-center">
-        <a
-          href={SITE_CONFIG.reviews.google.readUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-6 bg-white rounded-2xl border border-brand-gray-200 px-8 py-6 shadow-sm hover:shadow-md transition-shadow group"
-        >
-          <div className="flex items-center gap-3">
-            <GoogleIcon size={40} />
-            <div className="text-left">
-              <p
-                id="reviews-heading"
-                className="text-sm font-semibold text-brand-gray-900"
-              >
-                Google Reviews
-              </p>
-              <div className="flex items-center gap-1 mt-0.5">
-                <Stars rating={reviews.rating} />
-                <span className="ml-1 text-sm font-bold text-brand-gray-900">
-                  {reviews.rating}
-                </span>
-              </div>
+    <div className="text-center sm:text-left">
+      <a
+        href={SITE_CONFIG.reviews.google.readUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-6 bg-white border border-ink-200 px-8 py-6 hover:border-brand-red transition-colors group"
+      >
+        <div className="flex items-center gap-3">
+          <GoogleIcon size={40} />
+          <div className="text-left">
+            <p
+              id="reviews-heading"
+              className="text-sm font-semibold text-brand-gray-900"
+            >
+              Google Reviews
+            </p>
+            <div className="flex items-center gap-1 mt-0.5">
+              <Stars rating={reviews.rating} />
+              <span className="ml-1 text-sm font-bold text-brand-gray-900">
+                {reviews.rating}
+              </span>
             </div>
           </div>
+        </div>
 
-          <div className="hidden sm:block w-px h-12 bg-brand-gray-200" />
+        <div className="hidden sm:block w-px h-12 bg-ink-200" />
 
-          <p className="text-sm text-brand-gray-500 group-hover:text-brand-red transition-colors">
-            Read our {reviews.reviewCount} reviews on Google
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="inline w-4 h-4 ml-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              />
-            </svg>
-          </p>
-        </a>
-        <p className="mt-3 text-xs text-brand-gray-400">
-          Rated {reviews.rating} out of 5 stars based on{" "}
-          {reviews.reviewCount} reviews
+        <p className="text-sm text-brand-gray-500 group-hover:text-brand-red transition-colors">
+          Read our {reviews.reviewCount} reviews on Google
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="inline w-4 h-4 ml-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+            />
+          </svg>
         </p>
-      </div>
-    </section>
+      </a>
+      <p className="mt-3 text-xs text-ink-400">
+        Rated {reviews.rating} out of 5 stars based on{" "}
+        {reviews.reviewCount} reviews
+      </p>
+    </div>
   );
 }

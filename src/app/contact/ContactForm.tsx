@@ -10,7 +10,7 @@ import LeadForm from "@/components/LeadForm";
 
 export default function ContactForm() {
   return (
-    <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
+    <div className="bg-white border border-ink-200 p-6">
       <LeadForm source="website-contact" submitLabel="Send message" />
     </div>
   );

@@ -64,10 +64,10 @@ export default function ReviewsPage() {
       {/* Hero */}
       <section className="bg-brand-navy text-white py-12 md:py-16">
         <div className="max-w-4xl mx-auto px-4">
-          <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+          <h1 className="font-heading font-extrabold leading-[0.98] text-[clamp(2rem,5vw,3.5rem)]">
             What Our Customers Say
           </h1>
-          <p className="mt-4 text-lg md:text-xl text-brand-gray-300">
+          <p className="mt-4 text-lg md:text-xl text-ink-300">
             Honest reviews from drivers across Villa Park, Lombard, Elmhurst,
             Oak Brook and the rest of DuPage County. Every review on this
             page is pulled live from Google.
@@ -89,9 +89,9 @@ export default function ReviewsPage() {
         uploadDate="2026-09-26"
         duration="PT1M47S"
       />
-      <section className="bg-brand-gray-50 py-12">
+      <section className="bg-ink-100 py-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-brand-gray-900 mb-6">
+          <h2 className="font-heading font-extrabold text-2xl md:text-3xl text-brand-gray-900 mb-6">
             Our happy customers
           </h2>
           <PromoVideo
@@ -112,9 +112,9 @@ export default function ReviewsPage() {
       </section>
 
       {/* Leave a review CTA */}
-      <section className="bg-brand-gray-50 py-12">
+      <section className="bg-ink-100 py-12">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-brand-gray-900 mb-3">
+          <h2 className="font-heading font-extrabold text-2xl md:text-3xl text-brand-gray-900 mb-3">
             Bought from us? Tell future buyers what you thought.
           </h2>
           <p className="text-brand-gray-600 mb-6">
@@ -132,13 +132,13 @@ export default function ReviewsPage() {
               href="https://g.page/r/CZ_PEUY7mM9NEAI/review"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-xl font-semibold"
+              className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               Leave a Google Review
             </a>
             <Link
               href="/inventory/"
-              className="inline-flex items-center border-2 border-brand-gray-300 hover:bg-brand-gray-100 text-brand-gray-900 px-6 py-3 rounded-xl font-semibold"
+              className="inline-flex items-center border border-brand-gray-300 hover:border-brand-gray-900 text-brand-gray-900 px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               Browse Inventory
             </Link>

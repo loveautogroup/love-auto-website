@@ -78,10 +78,10 @@ export default function InquiryModal({
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b border-brand-gray-100 px-6 py-4 flex items-center justify-between">
+      <div className="relative w-full max-w-lg bg-white border border-ink-200 max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-white border-b border-ink-200 px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-brand-gray-900">{title}</h2>
+            <h2 className="font-heading font-bold text-lg text-brand-gray-900">{title}</h2>
             {subtitle && (
               <p className="mt-0.5 text-sm text-brand-gray-500">{subtitle}</p>
             )}
