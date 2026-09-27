@@ -4,44 +4,21 @@
  * author attribution + star ratings + relative publish dates.
  *
  * When the Places API key isn't set (dev or first deploy), falls back to
- * Jordan-curated quote cards so the VDP never has an empty reviews slot.
+ * real Google reviews (src/data/realGoogleReviews.ts) so the VDP never has
+ * an empty reviews slot.
  * Real reviews replace the fallbacks as soon as GOOGLE_PLACES_API_KEY is
  * configured in Cloudflare Pages environment variables.
  *
  * Server component — fetches at build time, no client JS required.
  */
 
+import { REAL_GOOGLE_REVIEWS } from "@/data/realGoogleReviews";
 import { getGoogleReviews, type GoogleReviewSnippet } from "@/lib/google-reviews";
 import T from "@/components/T";
 import { SITE_CONFIG } from "@/lib/constants";
 
-// Jordan-curated fallback reviews — used when the Places API key isn't
-// set yet. Real reviews taken from actual Google listings, paraphrased
-// slightly for brand voice consistency. Replace with live data as soon
-// as the API key is wired.
-const FALLBACK_REVIEWS: GoogleReviewSnippet[] = [
-  {
-    author: "Maria R.",
-    rating: 5,
-    text: "Honest, friendly, and no pressure. Love took the time to walk me through the Carfax on my Subaru and answer every question. Would recommend to any family in Villa Park looking for a used car.",
-    relativeTime: "a month ago",
-    publishTime: new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString(),
-  },
-  {
-    author: "David K.",
-    rating: 5,
-    text: "Drove in from Oak Brook after seeing a Lexus RX online. The car was exactly as described and priced fairly. They handled all the paperwork quickly and I was out the door the same afternoon.",
-    relativeTime: "2 weeks ago",
-    publishTime: new Date(Date.now() - 14 * 24 * 3600 * 1000).toISOString(),
-  },
-  {
-    author: "Jennifer T.",
-    rating: 5,
-    text: "Been buying cars for 20 years and this was one of the easiest experiences I've had. Family-owned, transparent pricing, free Carfax — exactly what independent dealers should look like.",
-    relativeTime: "3 weeks ago",
-    publishTime: new Date(Date.now() - 21 * 24 * 3600 * 1000).toISOString(),
-  },
-];
+/** Real Google reviews, used only when the Places API is unreachable. */
+const FALLBACK_REVIEWS = REAL_GOOGLE_REVIEWS.slice(0, 3);
 
 function Star({ filled }: { filled: boolean }) {
   return (
