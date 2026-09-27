@@ -37,12 +37,13 @@ export default function HomeHero() {
   };
 
   return (
-    <section className="relative bg-brand-navy text-white overflow-hidden lg:h-[min(56.25vw,36vh)] lg:min-h-[340px]">
+    <section className="relative bg-brand-navy text-white overflow-hidden lg:min-h-[min(56.25vw,36vh)]">
       {/* Video plays BEHIND the headline at every width (owner,
           2026-09-27). From lg up the hero is 16:9 but capped at 36% of the
           screen height (owner: 16:9 at full width was "way too big" on
-          desktop), so on wide screens a little of the top and bottom is
-          trimmed. Below lg the text needs more height than a 16:9 strip,
+          desktop), so on wide screens the top and bottom are trimmed. The crop is
+          anchored near the top (object-position 15%) so customers' faces
+          stay in frame (owner: "cutting off customers heads"). Below lg the text needs more height than a 16:9 strip,
           so the video covers a taller box and trims the sides; center
           position keeps the people in frame. */}
       <video
@@ -55,7 +56,7 @@ export default function HomeHero() {
         poster="/videos/happy-customers-loop-poster.jpg"
         aria-label="Love Auto Group customers and their cars"
         onPlay={handlePlay}
-        className="absolute inset-0 w-full h-full object-cover object-center opacity-[.8]"
+        className="absolute inset-0 w-full h-full object-cover object-[center_15%] opacity-[.8]"
       >
         <source src="/videos/happy-customers-loop.mp4" type="video/mp4" />
       </video>
@@ -65,19 +66,19 @@ export default function HomeHero() {
         className="absolute inset-0 pointer-events-none bg-gradient-to-t lg:bg-gradient-to-tr from-[#0a0a0a]/90 from-10% via-[#0a0a0a]/40 via-50% to-transparent to-80%"
         aria-hidden="true"
       />
-      <div className="relative lg:h-full min-h-[560px] lg:min-h-0 max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-16 lg:pt-0 lg:pb-10 flex flex-col justify-end">
+      <div className="relative lg:min-h-[inherit] min-h-[560px] max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-16 lg:pt-14 lg:pb-12 flex flex-col justify-end">
         <div className="max-w-2xl border-l-2 sm:border-l-[3px] border-brand-red pl-4 sm:pl-6">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red-light">
             Villa Park, Illinois &middot; Family Owned Since 2014
           </p>
           <h1
-            className="mt-3 font-heading font-extrabold leading-[0.98] text-[clamp(2rem,7vw,4.25rem)] lg:text-[clamp(2rem,3vw,3rem)]"
+            className="mt-3 font-heading font-extrabold leading-[0.98] text-[clamp(2rem,7vw,4.25rem)] lg:text-[clamp(2.75rem,4.2vw,4.5rem)]"
           >
             {t.hero.headline}
             <br />
             <span className="text-brand-red">{t.hero.headlineSub}</span>
           </h1>
-          <p className="mt-4 sm:mt-5 text-sm sm:text-base text-ink-300 leading-relaxed max-w-lg">
+          <p className="mt-4 sm:mt-5 text-sm sm:text-base lg:text-lg text-ink-300 leading-relaxed max-w-xl">
             {t.hero.subtext}
           </p>
           <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row gap-3">
