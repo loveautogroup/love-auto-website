@@ -20,6 +20,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import VDPReviews from "@/components/VDPReviews";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
+import PromoVideo from "@/components/PromoVideo";
+import { VideoObjectSchema } from "@/components/StructuredData";
 import { SITE_CONFIG } from "@/lib/constants";
 import { TrackedPhoneLink } from "@/components/TrackedLink";
 import { getGoogleReviews } from "@/lib/google-reviews";
@@ -73,6 +75,37 @@ export default function ReviewsPage() {
           <div className="mt-6">
             <GoogleReviewsBadge />
           </div>
+        </div>
+      </section>
+
+      {/* "Our happy customers" video — click-to-play, full ~1:47 cut with
+          review slides. Placed at the top of the page's content, right
+          below the hero and above the individual review cards. */}
+      <VideoObjectSchema
+        name="Love Auto Group happy customers"
+        description="Love Auto Group customers in Villa Park, IL share their experience buying a used car."
+        thumbnailUrl={`${SITE_CONFIG.url}/videos/happy-customers-poster.jpg`}
+        contentUrl={`${SITE_CONFIG.url}/videos/happy-customers.mp4`}
+        uploadDate="2026-09-26"
+        duration="PT1M47S"
+      />
+      <section className="bg-brand-gray-50 py-12">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-brand-gray-900 mb-2">
+            Our happy customers
+          </h2>
+          <p className="italic text-brand-gray-500 mb-6">
+            &ldquo;Enter as strangers, leave as friends.&rdquo;
+          </p>
+          <PromoVideo
+            id="happy-customers-video"
+            src="/videos/happy-customers.mp4"
+            posterSrc="/videos/happy-customers-poster.jpg"
+            mode="click"
+            ariaLabel="Love Auto Group customers sharing their experience"
+            analyticsVideo="happy_customers"
+            analyticsLocation="reviews_page"
+          />
         </div>
       </section>
 

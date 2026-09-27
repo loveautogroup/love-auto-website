@@ -362,6 +362,46 @@ export function FAQSchema({ items }: { items: { question: string; answer: string
 }
 
 /**
+ * VideoObject — used on /reviews for the "happy customers" promo video so
+ * it's eligible for video rich results / thumbnail carousels, same schema
+ * shape Google documents for any hosted video with a stable URL and poster.
+ * https://developers.google.com/search/docs/appearance/structured-data/video
+ */
+export function VideoObjectSchema({
+  name,
+  description,
+  thumbnailUrl,
+  contentUrl,
+  uploadDate,
+  duration,
+}: {
+  name: string;
+  description: string;
+  thumbnailUrl: string;
+  contentUrl: string;
+  uploadDate: string;
+  duration: string;
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name,
+    description,
+    thumbnailUrl: [thumbnailUrl],
+    contentUrl,
+    uploadDate,
+    duration,
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
+    />
+  );
+}
+
+/**
  * Upper bound on emitted ListItems. This is a page-weight backstop against a
  * bad feed (each item is ~130 bytes inlined into the static HTML, and a whole
  * archive pull would be ~1,200 of them), NOT a schema rule — schema.org sets

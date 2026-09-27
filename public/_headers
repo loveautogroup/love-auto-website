@@ -101,3 +101,5 @@
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 /*.ico
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+/*.mp4
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400

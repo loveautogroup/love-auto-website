@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
 import { TrackedPhoneLink } from "@/components/TrackedLink";
+import PromoVideo from "@/components/PromoVideo";
 import AboutHero from "./AboutHero";
 
 export const metadata: Metadata = {
@@ -105,6 +106,24 @@ export default function AboutPage() {
           </div>
         </div>
 
+        {/* "Our happy customers" video — click-to-play. Enter as strangers,
+            leave as friends is the sign above the owner's office door. */}
+        <div className="mt-16 text-center">
+          <h2 className="text-2xl font-bold text-brand-gray-900 mb-2">
+            Our happy customers
+          </h2>
+          <p className="italic text-brand-gray-500 mb-6">
+            &ldquo;Enter as strangers, leave as friends.&rdquo;
+          </p>
+          <PromoVideo
+            src="/videos/happy-customers.mp4"
+            posterSrc="/videos/happy-customers-poster.jpg"
+            mode="click"
+            ariaLabel="Love Auto Group customers sharing their experience"
+            analyticsVideo="happy_customers"
+            analyticsLocation="about_page"
+          />
+        </div>
 
         {/* CTA */}
         <div className="mt-16 bg-brand-red rounded-2xl p-8 md:p-12 text-center text-white">
