@@ -60,13 +60,13 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
       />
 
       {/* Hero */}
-      <section className="bg-brand-navy text-white py-12 md:py-16">
+      <section className="bg-brand-navy text-white py-12 md:py-16 border-b border-white/[.14]">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+          <h1 className="font-heading font-extrabold leading-[0.98] text-[clamp(1.9rem,5vw,3.5rem)]">
             {isBodyStyle ? `Used ${pluralNoun}` : `Used ${content.make}`} for Sale in
             <span className="block text-brand-red mt-2">Villa Park, IL</span>
           </h1>
-          <p className="mt-4 text-lg md:text-xl text-brand-gray-300 max-w-3xl">
+          <p className="mt-4 text-lg md:text-xl text-ink-300 max-w-3xl">
             {content.hero}
           </p>
         </div>
@@ -86,7 +86,7 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
 
         {content.sections.map((section, i) => (
           <section key={i} className="mb-10">
-            <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">{section.heading}</h2>
+            <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">{section.heading}</h2>
             {section.body.map((paragraph, j) => (
               <p key={j} className="text-brand-gray-700 leading-relaxed mb-4">
                 {paragraph}
@@ -95,8 +95,8 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
           </section>
         ))}
 
-        <section className="mb-10 bg-brand-gray-50 rounded-xl p-6 border border-brand-gray-200">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-4">
+        <section className="mb-10 bg-ink-100 p-6 border border-ink-200">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">
             {isBodyStyle ? (
               <>{pluralNoun} <T path={["makeLandingChrome", "specializeInBodyStyle"]} /></>
             ) : (
@@ -117,9 +117,9 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
         </section>
 
         {/* CTA */}
-        <section className="bg-brand-navy text-white rounded-xl p-8 text-center">
-          <h2 className="text-2xl font-bold mb-2"><T path={["makeLandingChrome", "ctaHeading"]} /></h2>
-          <p className="text-brand-gray-300 mb-6">
+        <section className="bg-brand-navy text-white p-8 text-center">
+          <h2 className="font-heading font-extrabold text-2xl mb-2"><T path={["makeLandingChrome", "ctaHeading"]} /></h2>
+          <p className="text-ink-300 mb-6">
             <T
               path={["makeLandingChrome", "ctaBody"]}
               replace={{
@@ -132,14 +132,14 @@ export default function MakeLandingPage({ content }: MakeLandingPageProps) {
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/inventory"
-              className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-xl font-semibold"
+              className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               <T path={["makeLandingChrome", "browseFullInventory"]} />
             </Link>
             <TrackedPhoneLink
               location="make_landing_cta"
               href="tel:6303593643"
-              className="inline-flex items-center border-2 border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-xl font-semibold"
+              className="inline-flex items-center border border-white/35 hover:border-white hover:bg-white/[.06] text-white px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               <T
                 path={["makeLandingChrome", "callPhone"]}

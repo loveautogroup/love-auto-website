@@ -54,7 +54,7 @@ export default function MakeLandingInventory({
     >
       <h2
         id="live-inv-heading"
-        className="text-2xl font-bold text-brand-gray-900 mb-2"
+        className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-2"
       >
         Available {isBodyStyle ? pluralNoun : `Used ${make}`} Inventory
       </h2>
@@ -80,7 +80,7 @@ export default function MakeLandingInventory({
           ))}
         </div>
       ) : (
-        <div className="bg-brand-gray-50 border border-brand-gray-200 rounded-xl p-8 text-center">
+        <div className="bg-ink-100 border border-ink-200 p-8 text-center">
           <p className="text-brand-gray-700">
             We rotate inventory weekly. Browse our{" "}
             <Link

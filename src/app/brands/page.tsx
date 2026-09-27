@@ -85,15 +85,15 @@ export default function BrandsIndexPage() {
       <SiteBreadcrumb trail={[{ label: "Brands" }]} />
 
       {/* Hero */}
-      <section className="bg-brand-navy text-white py-12 md:py-16">
+      <section className="bg-brand-navy text-white py-12 md:py-16 border-b border-white/[.14]">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+          <h1 className="font-heading font-extrabold leading-[0.98] text-[clamp(1.9rem,5vw,3.5rem)]">
             Browse Used Cars by Brand
             <span className="block text-brand-red mt-2">
               Villa Park, IL
             </span>
           </h1>
-          <p className="mt-4 text-lg md:text-xl text-brand-gray-300 max-w-3xl">
+          <p className="mt-4 text-lg md:text-xl text-ink-300 max-w-3xl">
             family-owned independent dealer since 2014. Honda, Subaru, Lexus, Acura,
             and Mazda in steady rotation on our Villa Park lot.
           </p>
@@ -123,23 +123,23 @@ export default function BrandsIndexPage() {
           {BRANDS.map((b) => (
             <li
               key={b.slug}
-              className="border border-brand-gray-200 rounded-xl bg-white hover:shadow-lg transition-shadow flex flex-col"
+              className="group border border-ink-200 bg-white hover:border-brand-red transition-colors flex flex-col"
             >
               <Link
                 href={`/brands/${b.slug}/`}
                 className="flex flex-col p-6 h-full"
               >
-                <h2 className="text-2xl font-bold text-brand-gray-900 mb-2">
+                <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-2">
                   Used {b.displayName}
                 </h2>
                 <p className="text-base text-brand-gray-700 leading-relaxed mb-4 flex-grow">
                   {b.hero}
                 </p>
-                <span className="inline-flex items-center text-brand-red font-semibold mt-auto">
+                <span className="inline-flex items-center gap-2 text-[12.5px] font-bold uppercase tracking-[0.08em] text-brand-red border-b border-current pb-0.5 mt-auto self-start">
                   View {b.displayName} inventory
-                  <span aria-hidden="true" className="ml-2">
-                    &rarr;
-                  </span>
+                  <svg className="w-3 h-3 transition-transform duration-150 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
                 </span>
               </Link>
             </li>
@@ -148,9 +148,9 @@ export default function BrandsIndexPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="bg-brand-gray-50 py-12">
+      <section className="bg-ink-100 py-12">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-2">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-2">
             Looking for a different make?
           </h2>
           <p className="text-brand-gray-600 mb-6">
@@ -161,13 +161,13 @@ export default function BrandsIndexPage() {
             <TrackedPhoneLink
               location="brands_cta"
               href="tel:6303593643"
-              className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-xl font-semibold"
+              className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               Call (630) 359-3643
             </TrackedPhoneLink>
             <Link
               href="/inventory"
-              className="inline-flex items-center border-2 border-brand-gray-300 hover:bg-brand-gray-100 text-brand-gray-900 px-6 py-3 rounded-xl font-semibold"
+              className="inline-flex items-center border border-brand-gray-300 hover:border-brand-gray-900 text-brand-gray-900 px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               View Full Inventory
             </Link>

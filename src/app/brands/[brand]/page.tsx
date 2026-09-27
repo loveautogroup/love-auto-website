@@ -145,13 +145,13 @@ export default async function BrandPage({
       />
 
       {/* Hero */}
-      <section className="bg-brand-navy text-white py-12 md:py-16">
+      <section className="bg-brand-navy text-white py-12 md:py-16 border-b border-white/[.14]">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+          <h1 className="font-heading font-extrabold leading-[0.98] text-[clamp(1.9rem,5vw,3.5rem)]">
             Used {content.displayName} for Sale in
             <span className="block text-brand-red mt-2">Villa Park, IL</span>
           </h1>
-          <p className="mt-4 text-lg md:text-xl text-brand-gray-300 max-w-3xl">
+          <p className="mt-4 text-lg md:text-xl text-ink-300 max-w-3xl">
             {content.hero}
           </p>
         </div>
@@ -196,13 +196,13 @@ export default async function BrandPage({
       {/* FAQ section, when authored */}
       {content.faqs && content.faqs.length > 0 ? (
         <section className="max-w-4xl mx-auto px-4 pb-8">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-6">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-6">
             <T path={["brandsChrome", "faqHeading"]} />
           </h2>
           <div className="space-y-6">
             {content.faqs.map((faq) => (
               <div key={faq.question}>
-                <h3 className="text-lg font-semibold text-brand-gray-900 mb-2">
+                <h3 className="font-heading font-bold text-lg text-brand-gray-900 mb-2">
                   {faq.question}
                 </h3>
                 <p className="text-brand-gray-700 leading-relaxed">
@@ -225,9 +225,9 @@ export default async function BrandPage({
       />
 
       {/* Final CTA */}
-      <section className="bg-brand-gray-50 py-12">
+      <section className="bg-ink-100 py-12">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-brand-gray-900 mb-2">
+          <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-2">
             <T
               path={["brandsChrome", "lookingForModel"]}
               replace={{ "{make}": content.displayName }}
@@ -243,7 +243,7 @@ export default async function BrandPage({
             <TrackedPhoneLink
               location="brand_detail_cta"
               href="tel:6303593643"
-              className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3 rounded-xl font-semibold"
+              className="inline-flex items-center bg-brand-red hover:bg-brand-red-dark text-white px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               <T
                 path={["brandsChrome", "callPhone"]}
@@ -252,7 +252,7 @@ export default async function BrandPage({
             </TrackedPhoneLink>
             <Link
               href="/inventory"
-              className="inline-flex items-center border-2 border-brand-gray-300 hover:bg-brand-gray-100 text-brand-gray-900 px-6 py-3 rounded-xl font-semibold"
+              className="inline-flex items-center border border-brand-gray-300 hover:border-brand-gray-900 text-brand-gray-900 px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               <T path={["brandsChrome", "viewFullInventory"]} />
             </Link>
