@@ -21,8 +21,8 @@ export default function SellYourCarPage() {
           <TradeInForm />
 
           <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
-              <h2 className="font-bold text-brand-gray-900 mb-3">
+            <div className="bg-white border border-ink-200 p-6">
+              <h2 className="font-heading font-bold text-brand-gray-900 mb-3">
                 Why Sell to Us?
               </h2>
               <ul className="space-y-3">
@@ -57,8 +57,8 @@ export default function SellYourCarPage() {
               </ul>
             </div>
 
-            <div className="bg-white rounded-xl border border-brand-gray-200 p-6">
-              <h3 className="font-bold text-brand-gray-900 mb-2">
+            <div className="bg-white border border-ink-200 p-6">
+              <h3 className="font-heading font-bold text-brand-gray-900 mb-2">
                 Prefer to Call?
               </h3>
               <p className="text-sm text-brand-gray-600 mb-3">

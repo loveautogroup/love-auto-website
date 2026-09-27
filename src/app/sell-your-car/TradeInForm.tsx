@@ -12,7 +12,7 @@ import { trackFormSubmit, trackLeadTradeIn } from "@/lib/analytics";
 import { useLanguage } from "@/context/LanguageContext";
 
 const inputCls =
-  "w-full border border-brand-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red";
+  "w-full border border-ink-200 px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red";
 const labelCls = "block text-sm font-medium text-brand-gray-900 mb-1";
 
 async function compressImage(file: File): Promise<string> {
@@ -88,11 +88,11 @@ export default function TradeInForm() {
 
   if (submitted) {
     return (
-      <div className="bg-brand-green/10 border border-brand-green/20 rounded-xl p-8 text-center">
+      <div className="bg-brand-green/10 border border-brand-green/20 border-l-[3px] border-l-brand-green p-8 text-center">
         <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 text-brand-green mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 className="text-xl font-bold text-brand-gray-900 mb-2">{t.tradeInForm.successHeading}</h3>
+        <h3 className="font-heading font-extrabold text-xl text-brand-gray-900 mb-2">{t.tradeInForm.successHeading}</h3>
         <p className="text-brand-gray-600">
           {t.tradeInForm.successBody.replace(
             "{photosNote}",
@@ -150,8 +150,8 @@ export default function TradeInForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-brand-gray-200 p-6 space-y-5">
-      <h2 className="text-xl font-bold text-brand-gray-900">{t.tradeInForm.heading}</h2>
+    <form onSubmit={handleSubmit} className="bg-white border border-ink-200 p-6 space-y-5">
+      <h2 className="font-heading font-extrabold text-xl text-brand-gray-900">{t.tradeInForm.heading}</h2>
 
       {/* Honeypot — off-screen, not display:none. Found in the website
           audit: className="hidden" (display:none) is the one style some
@@ -172,7 +172,7 @@ export default function TradeInForm() {
           <input id="trade-vin" value={vin} onChange={(e) => setVin(e.target.value.toUpperCase())} maxLength={17}
             className={`${inputCls} font-mono flex-1`} placeholder={t.tradeInForm.vinPlaceholder} />
           <button type="button" onClick={decodeVin} disabled={decoding}
-            className="shrink-0 bg-brand-gray-900 hover:bg-black text-white px-4 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50">
+            className="shrink-0 bg-brand-gray-900 hover:bg-black text-white px-4 text-[12px] font-bold uppercase tracking-[0.06em] transition-colors disabled:opacity-50">
             {decoding ? t.tradeInForm.decoding : t.tradeInForm.decode}
           </button>
         </div>
@@ -237,14 +237,14 @@ export default function TradeInForm() {
       <div>
         <label className={labelCls}>{t.tradeInForm.photos} <span className="text-brand-gray-500 font-normal">{t.tradeInForm.photosHint}</span></label>
         <input ref={fileRef} type="file" accept="image/*" multiple onChange={(e) => addPhotos(e.target.files)}
-          className="block w-full text-sm text-brand-gray-600 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-red file:px-4 file:py-2.5 file:text-sm file:font-semibold file:text-white hover:file:bg-brand-red-dark" />
+          className="block w-full text-sm text-brand-gray-600 file:mr-3 file:border-0 file:bg-brand-red file:px-4 file:py-2.5 file:text-[12px] file:font-bold file:uppercase file:tracking-[0.06em] file:text-white hover:file:bg-brand-red-dark" />
         {photoErr && <p className="mt-1 text-xs text-brand-red">{photoErr}</p>}
         {photos.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-2">
             {photos.map((p, i) => (
               <div key={i} className="relative">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p} alt={`Photo ${i + 1}`} className="h-16 w-24 rounded-lg object-cover border border-brand-gray-200" />
+                <img src={p} alt={`Photo ${i + 1}`} className="h-16 w-24 object-cover border border-ink-200" />
                 <button type="button" onClick={() => setPhotos((cur) => cur.filter((_, j) => j !== i))}
                   aria-label={t.tradeInForm.removePhoto}
                   className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-brand-gray-900 text-white text-xs leading-none">
@@ -256,9 +256,9 @@ export default function TradeInForm() {
         )}
       </div>
 
-      <hr className="border-brand-gray-100" />
+      <hr className="border-ink-200" />
 
-      <h3 className="font-semibold text-brand-gray-900">{t.tradeInForm.contactHeading}</h3>
+      <h3 className="font-heading font-bold text-brand-gray-900">{t.tradeInForm.contactHeading}</h3>
 
       <div>
         <label htmlFor="trade-name" className={labelCls}>{t.tradeInForm.fullName} <span className="text-brand-red">*</span></label>
@@ -277,11 +277,11 @@ export default function TradeInForm() {
       </div>
 
       {error && (
-        <p className="rounded-lg border border-brand-red/30 bg-brand-red/5 px-4 py-3 text-sm text-brand-red">{error}</p>
+        <p className="border border-brand-red/30 border-l-[3px] border-l-brand-red bg-brand-red/5 px-4 py-3 text-sm text-brand-red">{error}</p>
       )}
 
       <button type="submit" disabled={sending}
-        className="w-full bg-brand-red hover:bg-brand-red-dark text-white py-3.5 rounded-xl font-semibold text-lg transition-colors disabled:opacity-60">
+        className="w-full bg-brand-red hover:bg-brand-red-dark text-white py-3.5 text-[13px] font-bold uppercase tracking-[0.08em] transition-colors disabled:opacity-60">
         {sending ? t.tradeInForm.sending : t.tradeInForm.submit}
       </button>
     </form>
