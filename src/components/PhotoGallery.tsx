@@ -234,10 +234,6 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
     vehicle?.recentlyReduced ?? false
   );
   const overlay = vehicle ? overlayLive : null;
-  // Sold cars show a grayscale photo (owner, 2026-09-27) — the photo only,
-  // every badge and overlay (SOLD stamp, CARFAX, phone, No Dealer Fees...)
-  // stays exactly as it is today, in full color.
-  const isSold = overlay?.effectiveStatus === "sold";
   const showBadges = vehicle && selectedIndex === 0;
   const forcePlaceholder = overlay?.useComingSoonPlaceholder === true;
   // "Coming Soon" state — only CARFAX badge shows (Jeremiah, 2026-06-10).
@@ -342,7 +338,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     src={heroSrc}
                     alt={`${alt} for sale in Villa Park, IL — Photo ${selectedIndex + 1} of ${photoCount}`}
                     fill
-                    className={`${heroSrc === COMING_SOON_PLACEHOLDER ? "object-contain" : "object-cover"} ${isSold ? "grayscale opacity-80" : ""}`}
+                    className={heroSrc === COMING_SOON_PLACEHOLDER ? "object-contain" : "object-cover"}
                     sizes="(max-width: 768px) 100vw, 60vw"
                     priority={selectedIndex === 0}
                     unoptimized
@@ -672,7 +668,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
                     src={images[i]}
                     alt={`${alt} — view ${i + 1}`}
                     fill
-                    className={`object-cover ${isSold ? "grayscale opacity-80" : ""}`}
+                    className="object-cover"
                     sizes="150px"
                     unoptimized
                   />
