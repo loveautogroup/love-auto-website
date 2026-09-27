@@ -94,6 +94,7 @@ async function _fetchGoogleReviews(): Promise<GoogleReviewsData> {
         rating: r.stars,
         text: r.body,
         relativeTime: _relativeTime(r.review_date),
+        publishTime: r.review_date,
       }));
     }
 
@@ -108,20 +109,17 @@ async function _fetchGoogleReviews(): Promise<GoogleReviewsData> {
   }
 }
 
+// A month and year, not "3 days ago": this runs at build time on a static
+// site, so a relative age would freeze at whatever it was on the build day.
 function _relativeTime(dateStr: string): string {
   try {
-    const date = new Date(dateStr);
-    const now = new Date();
-    const diffDays = Math.floor((now.getTime() - date.getTime()) / 86400000);
-    if (diffDays < 7) return `${diffDays} day${diffDays !== 1 ? "s" : ""} ago`;
-    if (diffDays < 30) {
-      const weeks = Math.floor(diffDays / 7);
-      return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
-    }
-    const months = Math.floor(diffDays / 30);
-    if (months < 12) return `${months} month${months !== 1 ? "s" : ""} ago`;
-    const years = Math.floor(months / 12);
-    return `${years} year${years !== 1 ? "s" : ""} ago`;
+    const date = new Date(`${dateStr}T12:00:00Z`);
+    if (Number.isNaN(date.getTime())) return "";
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+      timeZone: "America/Chicago",
+    });
   } catch {
     return "";
   }
