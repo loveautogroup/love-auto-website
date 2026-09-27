@@ -274,7 +274,12 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             src={heroImage}
             alt={`${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}`}
             fill
-            className={`${heroSrc === COMING_SOON_PLACEHOLDER ? "object-contain" : "object-cover"} group-hover:scale-105 transition-transform duration-300`}
+            className={`${heroSrc === COMING_SOON_PLACEHOLDER ? "object-contain" : "object-cover"} group-hover:scale-105 transition-transform duration-300 ${
+              // Sold cars show a grayscale photo (owner, 2026-09-27) — the
+              // photo only, never the badges. Available / Sale Pending /
+              // Just Arrived stay full color.
+              isSold ? "grayscale opacity-80" : ""
+            }`}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             onError={() => {
               // Fall back to branded Coming Soon placeholder. Remember the
