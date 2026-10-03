@@ -13,15 +13,20 @@ export const SITE_CONFIG = {
   },
   url: "https://www.loveautogroup.net",
   established: 2014,
+  // Owner, 2026-10-03: Tue–Sat 2–6 PM, closed Sun + Mon, other times by
+  // appointment. Mirrors: StructuredData.tsx openingHoursSpecification,
+  // functions/api/store-hours.ts DEFAULT_HOURS, i18n header.hours.
   hours: [
     { day: "Sunday", hours: "Closed" },
-    { day: "Monday", hours: "2:00 PM – 7:00 PM" },
-    { day: "Tuesday", hours: "11:00 AM – 7:00 PM" },
-    { day: "Wednesday", hours: "11:00 AM – 7:00 PM" },
-    { day: "Thursday", hours: "11:00 AM – 7:00 PM" },
-    { day: "Friday", hours: "11:00 AM – 7:00 PM" },
-    { day: "Saturday", hours: "12:00 PM – 7:00 PM" },
+    { day: "Monday", hours: "Closed" },
+    { day: "Tuesday", hours: "2:00 PM – 6:00 PM" },
+    { day: "Wednesday", hours: "2:00 PM – 6:00 PM" },
+    { day: "Thursday", hours: "2:00 PM – 6:00 PM" },
+    { day: "Friday", hours: "2:00 PM – 6:00 PM" },
+    { day: "Saturday", hours: "2:00 PM – 6:00 PM" },
   ],
+  /** Shown under every hours table. */
+  hoursNote: "Other times by appointment. Call or text (630) 359-3643.",
   social: {
     facebook: "https://www.facebook.com/loveautogroup",
     google: "https://g.page/loveautogroup",

@@ -53,7 +53,7 @@ const FAQ_ITEMS = [
   {
     question: "What are Love Auto Group's hours?",
     answer:
-      "Monday 2:00 PM to 7:00 PM, Tuesday through Friday 11:00 AM to 7:00 PM, Saturday 12:00 PM to 7:00 PM. Closed Sunday. Call or text us at (630) 359-3643 anytime.",
+      "Tuesday through Saturday, 2:00 PM to 6:00 PM. Closed Sunday and Monday. Other times are available by appointment, so call or text us at (630) 359-3643.",
   },
 ];
 
@@ -223,6 +223,7 @@ export default function UsedCarsVillaParkPage() {
                 </li>
               ))}
             </ul>
+            <p className="mt-2 text-sm text-brand-gray-500">{SITE_CONFIG.hoursNote}</p>
           </div>
         </section>
 
@@ -315,7 +316,7 @@ export default function UsedCarsVillaParkPage() {
           </h2>
           <p className="text-ink-300 mb-6">
             Stop in at 735 N Yale Ave, Unit A — or call us at (630) 359-3643.
-            Mon 2–7pm, Tue–Fri 11am–7pm, Sat 12–7pm.
+            Tue–Sat 2–6pm, other times by appointment.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link

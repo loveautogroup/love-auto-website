@@ -101,23 +101,13 @@ export function LocalBusinessSchema() {
       addressCountry: "US",
     },
     openingHoursSpecification: [
+      // Owner, 2026-10-03: Tue–Sat 2–6 PM; Sun + Mon closed (omitted =
+      // closed). Other times by appointment.
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: "Monday",
+        dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         opens: "14:00",
-        closes: "19:00",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "11:00",
-        closes: "19:00",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: "Saturday",
-        opens: "12:00",
-        closes: "19:00",
+        closes: "18:00",
       },
     ],
     geo: {

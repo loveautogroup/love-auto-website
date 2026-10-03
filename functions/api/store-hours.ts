@@ -54,13 +54,14 @@ const DEFAULT_HOURS: StoreHoursConfig = {
   durationMinutes: 60,
   maxDaysAhead: 60,
   days: {
+    // Owner, 2026-10-03: Tue-Sat 2-6 PM, Sun + Mon closed.
     "0": null,                                 // Sunday - closed
-    "1": { open: "14:00", close: "19:00" },    // Monday
-    "2": { open: "11:00", close: "19:00" },    // Tuesday
-    "3": { open: "11:00", close: "19:00" },    // Wednesday
-    "4": { open: "11:00", close: "19:00" },    // Thursday
-    "5": { open: "11:00", close: "19:00" },    // Friday
-    "6": { open: "12:00", close: "19:00" },    // Saturday
+    "1": null,                                 // Monday - closed
+    "2": { open: "14:00", close: "18:00" },    // Tuesday
+    "3": { open: "14:00", close: "18:00" },    // Wednesday
+    "4": { open: "14:00", close: "18:00" },    // Thursday
+    "5": { open: "14:00", close: "18:00" },    // Friday
+    "6": { open: "14:00", close: "18:00" },    // Saturday
   },
 };
 

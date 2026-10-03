@@ -183,6 +183,7 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
+            <p className="mt-3 text-[12.5px] text-ink-300">{t.footer.byAppointment}</p>
           </div>
 
           {/* Column 4: Contact */}

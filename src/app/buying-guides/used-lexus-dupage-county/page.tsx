@@ -365,8 +365,8 @@ export default function UsedLexusDuPageCountyPage() {
 
           <p>
             Love Auto Group, 735 N Yale Ave, Unit A, Villa Park, IL 60181. Phone
-            (630) 359-3643. Mon 2-7, Tue-Fri 11-7, Sat 12-7. Closed
-            Sunday.
+            (630) 359-3643. Tue-Sat 2-6 PM. Other times by
+            appointment.
           </p>
 
           <p>

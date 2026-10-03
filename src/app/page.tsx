@@ -379,6 +379,9 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
+              <p className="mt-3 text-sm text-brand-gray-500">
+                <T path={["homePage", "byAppointment"]} />
+              </p>
             </div>
           </div>
 

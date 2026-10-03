@@ -54,8 +54,8 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Visit Us in Villa Park",
         body: [
-          "We're at 735 N Yale Ave Unit A, two blocks north of North Avenue between Yale and Westmore. Free parking, no appointment necessary, and our hours run afternoons into evenings most weekdays plus Saturday afternoons. Browse the current inventory online or just stop by — there's always someone on the lot who can walk you through whatever's available.",
-          "Call us at (630) 359-3643 to confirm a specific vehicle is still available before you make the drive, or text any photo you have a question about. We respond quickly during business hours.",
+          "We're at 735 N Yale Ave Unit A, two blocks north of North Avenue between Yale and Westmore. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment. Browse the current inventory online or stop by while we're open to walk through whatever's available.",
+          "Call us at (630) 359-3643 to confirm a specific vehicle is still available before you make the drive, or text any photo you have a question about. We respond quickly during business hours, Tuesday through Saturday from 2 to 6 PM.",
         ],
       },
     ],
@@ -74,7 +74,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
         heading: "Why Wheaton Buyers Drive East",
         body: [
           "Wheaton has a deep market for franchise dealers, but the vehicles most Wheaton drivers actually want — Subaru for AWD winter security, Lexus for luxury that doesn't break down, Acura and Honda for resale, Mazda for buyers who care about driving feel — are often easier to find at an independent dealer that specializes in those brands rather than carries them as a footnote. We hand-pick our inventory at auction, focus on what holds value, and pull a free Carfax history report on every vehicle before it gets listed.",
-          "The drive is straightforward: Roosevelt Road east through Glen Ellyn and Lombard, into Villa Park, then north on Yale Avenue. About 15 minutes on a normal afternoon, less on a Saturday morning.",
+          "The drive is straightforward: Roosevelt Road east through Glen Ellyn and Lombard, into Villa Park, then north on Yale Avenue. About 15 minutes on a normal afternoon, less on a Saturday.",
         ],
       },
       {
@@ -87,7 +87,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Visit Us From Wheaton",
         body: [
-          "We're at 735 N Yale Ave in Villa Park, IL. From most of Wheaton, head east on Roosevelt Road or North Avenue, then north on Yale Avenue when you hit Villa Park. Free parking, no appointment necessary, and our hours run afternoons into evenings most weekdays plus Saturday afternoons.",
+          "We're at 735 N Yale Ave in Villa Park, IL. From most of Wheaton, head east on Roosevelt Road or North Avenue, then north on Yale Avenue when you hit Villa Park. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment.",
         ],
       },
     ],
@@ -119,7 +119,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Find Us From Westmont",
         body: [
-          "735 N Yale Ave, Unit A, Villa Park, IL 60181. About 10 minutes north of downtown Westmont via Cass Avenue. Free parking, no appointment needed, afternoons-into-evenings hours most weekdays plus Saturday afternoons.",
+          "735 N Yale Ave, Unit A, Villa Park, IL 60181. About 10 minutes north of downtown Westmont via Cass Avenue. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment.",
         ],
       },
     ],
@@ -150,7 +150,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "How to Find Us From Lisle",
         body: [
-          "735 N Yale Ave, Unit A, Villa Park, IL 60181. From downtown Lisle, head north on Naperville Road, east on Roosevelt Road, and look for Yale Avenue once you're in Villa Park. Free parking and afternoons-into-evenings hours most weekdays plus Saturday afternoons. Call (630) 359-3643 to confirm a specific vehicle is available before the drive.",
+          "735 N Yale Ave, Unit A, Villa Park, IL 60181. From downtown Lisle, head north on Naperville Road, east on Roosevelt Road, and look for Yale Avenue once you're in Villa Park. Free parking, open Tuesday through Saturday from 2 to 6 PM, and other times by appointment. Call (630) 359-3643 to confirm a specific vehicle is available before the drive.",
         ],
       },
     ],
@@ -182,7 +182,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Visit Us From Downers Grove",
         body: [
-          "735 N Yale Ave, Unit A, Villa Park, IL 60181. Best route from Downers Grove is north on Ogden Avenue or Route 53 to North Avenue. Free parking, no appointment needed, afternoons-into-evenings hours most weekdays plus Saturday afternoons.",
+          "735 N Yale Ave, Unit A, Villa Park, IL 60181. Best route from Downers Grove is north on Ogden Avenue or Route 53 to North Avenue. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment.",
         ],
       },
     ],
@@ -214,7 +214,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Visit Us From Lombard",
         body: [
-          "We're at 735 N Yale Ave in Villa Park, just north of North Avenue. From most of Lombard, that's a 5-10 minute drive. Our hours run afternoons through evenings most weekdays so you can stop by after work, plus Saturday afternoons. Browse our inventory online first, or just stop in — there's always someone here to walk you through what's on the lot.",
+          "We're at 735 N Yale Ave in Villa Park, just north of North Avenue. From most of Lombard, that's a 5-10 minute drive. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment. Browse our inventory online first, or stop in while we're open to walk through what's on the lot.",
         ],
       },
     ],
@@ -245,7 +245,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Find Us From Elmhurst",
         body: [
-          "735 N Yale Ave, Unit A, Villa Park, IL 60181. Best route is North Avenue west, then a quick turn north on Yale. Free parking, no appointment necessary — we keep extended afternoon and evening hours so you can stop by after work without rushing.",
+          "735 N Yale Ave, Unit A, Villa Park, IL 60181. Best route is North Avenue west, then a quick turn north on Yale. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment. If you can't make it while we're open, call or text (630) 359-3643 to set a time.",
         ],
       },
     ],
@@ -276,7 +276,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Easy Drive From Oak Brook",
         body: [
-          "From most of Oak Brook, the fastest route is north on Route 83 to North Avenue, then east a few blocks to Yale. About 10-15 minutes. We're at 735 N Yale Ave, Villa Park. Free parking, afternoons-into-evenings hours most days, and Saturday hours for weekend test drives.",
+          "From most of Oak Brook, the fastest route is north on Route 83 to North Avenue, then east a few blocks to Yale. About 10-15 minutes. We're at 735 N Yale Ave, Villa Park. Free parking, open Tuesday through Saturday from 2 to 6 PM (Saturday works well for a weekend test drive), and other times by appointment.",
         ],
       },
     ],
@@ -307,7 +307,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Visit Us From Glen Ellyn",
         body: [
-          "From Glen Ellyn, head east on Roosevelt Road or North Avenue to Yale Avenue in Villa Park, then north a few blocks. About 12 minutes door-to-door. We're at 735 N Yale Ave, free parking, no appointment needed.",
+          "From Glen Ellyn, head east on Roosevelt Road or North Avenue to Yale Avenue in Villa Park, then north a few blocks. About 12 minutes door-to-door. We're at 735 N Yale Ave with free parking, and no appointment is needed Tuesday through Saturday from 2 to 6 PM.",
         ],
       },
     ],
@@ -338,7 +338,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "How to Find Us",
         body: [
-          "From Addison, head south on Lake Street or Addison Road to North Avenue, then west to Yale Avenue and north a few blocks. About 7 minutes. We're at 735 N Yale Ave, Villa Park, with free parking and afternoons-into-evenings hours.",
+          "From Addison, head south on Lake Street or Addison Road to North Avenue, then west to Yale Avenue and north a few blocks. About 7 minutes. We're at 735 N Yale Ave, Villa Park, with free parking. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment.",
         ],
       },
     ],

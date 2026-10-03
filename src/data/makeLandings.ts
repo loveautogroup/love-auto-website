@@ -79,7 +79,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Serving Villa Park, Lombard, Elmhurst, and the Western Suburbs",
         body: [
-          "We're located at 735 N Yale Ave, Unit A, Villa Park, IL 60181 — easy to reach from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the rest of DuPage County. Customers regularly drive in from Naperville, Wheaton, and the I-290 / I-294 corridor for our focus. Browse the current Subaru inventory below or stop by during our extended afternoon hours.",
+          "We're located at 735 N Yale Ave, Unit A, Villa Park, IL 60181 — easy to reach from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the rest of DuPage County. Customers regularly drive in from Naperville, Wheaton, and the I-290 / I-294 corridor for our focus. Browse the current Subaru inventory below or stop by Tuesday through Saturday from 2 to 6 PM. Other times are available by appointment.",
         ],
       },
     ],
@@ -222,7 +222,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Visit Us in Villa Park",
         body: [
-          "We're at 735 N Yale Ave, Unit A, Villa Park, IL 60181, easy to get to from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the broader DuPage County area. Our hours run afternoons-into-evenings most days so working professionals can stop by after the I-290 commute. Browse current Mazda inventory below or call ahead to ask about a specific model.",
+          "We're at 735 N Yale Ave, Unit A, Villa Park, IL 60181, easy to get to from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the broader DuPage County area. We're open Tuesday through Saturday from 2 to 6 PM. If the I-290 commute makes that hard, call or text (630) 359-3643 and we'll set a time by appointment. Browse current Mazda inventory below or call ahead to ask about a specific model.",
         ],
       },
     ],
@@ -320,7 +320,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Visit Our Villa Park Lot",
         body: [
-          "We're at 735 N Yale Ave, Unit A, Villa Park, IL 60181 — easy reach from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the broader DuPage County. Browse the live SUV inventory below or stop by during our extended afternoon hours.",
+          "We're at 735 N Yale Ave, Unit A, Villa Park, IL 60181 — easy reach from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the broader DuPage County. Browse the live SUV inventory below or stop by Tuesday through Saturday from 2 to 6 PM. Other times are available by appointment.",
         ],
       },
     ],

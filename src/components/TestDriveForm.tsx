@@ -176,7 +176,7 @@ function nowAtStore(tz: string): { date: string; minutes: number } {
 
 /**
  * Human summary of the week, grouping runs of identical days:
- * ["Mon 2:00 PM - 7:00 PM", "Tue - Fri 11:00 AM - 7:00 PM", ...].
+ * ["Mon Closed", "Tue - Sat 2:00 PM - 6:00 PM", ...].
  *
  * Derived from the SAME config that constrains the picker, so the printed
  * hours can never drift from the offered times.
@@ -684,6 +684,7 @@ export default function TestDriveForm({
               </li>
             ))}
           </ul>
+          <p className="mt-1 text-xs text-brand-gray-600">{t.footer.byAppointment}</p>
         </div>
       )}
       <p className="text-xs text-brand-gray-500">{td.confirmNote}</p>
