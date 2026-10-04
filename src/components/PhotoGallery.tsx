@@ -9,20 +9,12 @@ import { useResolveOverlay } from "@/data/useMerchandising";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import { useReviews } from "@/context/ReviewsContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { urlBadgeVisible } from "../../shared/urlBadgeVisibility";
 import {
-  CarfaxBadge,
-  CarfaxPillStack,
   DealerCluster,
-  GoogleReviewsLockup,
-  FeaturePillCluster,
-  PhoneCTA,
   UrlBadge,
   PhotoScrim,
-  StatusPill,
-  WarrantyBadge,
-  NoDealerFeesBadge,
 } from "./badges";
+import HeroBadgeOverlay, { heroBadgeStatus } from "./badges/HeroBadgeOverlay";
 
 interface PhotoGalleryProps {
   images: string[];
@@ -236,59 +228,15 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
   const overlay = vehicle ? overlayLive : null;
   const showBadges = vehicle && selectedIndex === 0;
   const forcePlaceholder = overlay?.useComingSoonPlaceholder === true;
-  // "Coming Soon" state — only CARFAX badge shows (Jeremiah, 2026-06-10).
+  // "Coming Soon" state — no hero badges (the free-CARFAX card left the photo 2026-10-04).
   const isComingSoon = forcePlaceholder || !hasRealPhotos;
   // Gallery photos (index > 0): show minimal dealer logo + URL badge only.
   // Mirrors the DealerCenter gallery bake so every photo carries branding.
   const showMinimalBadges = Boolean(vehicle && overlay && selectedIndex > 0 && hasRealPhotos && !forcePlaceholder);
-  const warrantyCopy = overlay?.warranty;
   const remaining = Math.max(0, photoCount - 5);
 
   // Badge config derived values — fall back to "show everything" when absent.
   const MARGIN_PCT = badgeConfig?.margin_pct ?? 2.2;
-  // Hero is baked when Railway has composited the dealer logo into the photo pixels.
-  // Detected by the "hero-baked" prefix in the R2 object key embedded in the URL.
-  const hasBakedHero = Boolean(images[0]?.includes("hero-baked"));
-  // Hide the HTML "LOVE AUTO GROUP" text pill when the logo is already baked.
-  const hideDealerPill = hasBakedHero && (badgeConfig?.dealer_badge_enabled !== false);
-  // When a badge is baked into the hero pixels, suppress its HTML twin —
-  // the baked badges are pixel replicas of these components (Session 17),
-  // so rendering both double-stamps the photo. Non-baked heroes keep the
-  // interactive HTML overlays.
-  const showGoogleBadge =
-    !hasBakedHero &&
-    !isComingSoon &&
-    (badgeConfig?.google_badge_enabled !== false) &&
-    (overlay?.showGoogleReviewsBadge !== false);
-  const showPhoneBadge = !hasBakedHero && !isComingSoon && badgeConfig?.phone_badge_enabled !== false;
-  // URL badge mirrors the phone gating — bottom-center, same Montserrat
-  // treatment, baked into the hero pixels when the hero is baked — and,
-  // since 2026-09-17, honours the DMS "Website URL" toggle (per vehicle,
-  // then the global default). It was the one badge here that read no
-  // config at all. Rule lives in shared/urlBadgeVisibility.ts.
-  const showUrlBadge = urlBadgeVisible({
-    hasBakedHero,
-    hasRealPhotos,
-    forcePlaceholder,
-    globalEnabled: badgeConfig?.website_badge_enabled,
-    vehicleEnabled: vehicle?.websiteBadgeEnabled,
-  });
-  // ALSO honours the per-vehicle opt-out, not just the global flag. The badge
-  // links straight to carfax.com/.../Report.cfx?vin=..., which renders an OFFER
-  // / purchase page rather than a report when the VIN is not in our CARFAX
-  // Advantage inventory yet. Opting a vehicle out (overlay.carfax === false) is
-  // exactly the documented case "while waiting for a fresh report" — it used to
-  // hide only the SHOW ME THE CARFAX button and leave this badge pointing at
-  // the offer page.
-  const showCarfaxBadge =
-    !hasBakedHero &&
-    badgeConfig?.carfax_badge_enabled !== false &&
-    overlay?.carfax !== false;
-  // Same !hasBakedHero gate as its siblings: when the hero is baked the mark
-  // is already in the pixels, so rendering the HTML copy would double-stamp.
-  // Opt-in rather than opt-out, mirroring no_fee_badge_enabled's default.
-  const showNoFeeBadge =
-    !hasBakedHero && !isComingSoon && badgeConfig?.no_fee_badge_enabled === true;
 
   // Only open on mobile; desktop keeps thumbnail-swap-only behaviour
   const openLightbox = (index: number) => {
@@ -321,7 +269,7 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") openLightbox(selectedIndex);
             }}
-            className={`@container relative aspect-[3/2] bg-brand-gray-100 overflow-hidden ${
+            className={`@container relative aspect-[4/3] bg-brand-gray-100 overflow-hidden ${
               hasRealPhotos && !forcePlaceholder && isMobile ? "cursor-pointer" : ""
             }`}
           >
@@ -376,204 +324,22 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
               </div>
             )}
 
-            {/* Badge overlay — stopPropagation so badge clicks don't open lightbox.
-                Positions use %-based inline styles (matching badge_spec.json from Railway)
-                so the HTML overlay layer aligns exactly with the baked pixel layer. */}
-            {showBadges && vehicle && overlay && (
-              <div onClick={(e) => e.stopPropagation()}>
-                {/* Scrim exists for HTML badge legibility. On baked heroes the
-                    badges live INSIDE the photo pixels — the scrim would sit on
-                    top of them and wash them out (Session 18 finding). */}
-                {!hasBakedHero && <PhotoScrim />}
-
-                {/* SOLD stamp across the hero (Jeremiah, 2026-08-25: "put the
-                    stamp across the vdp image that says sold").
-                    
-                    Rejected for the inventory GRID — at 8-sold-of-15 a wall of
-                    stamps reads "clearance sale". On a single VDP there is no
-                    density problem and it is the clearest possible signal that
-                    the car in the photo is gone.
-
-                    pointer-events-none so it never blocks the gallery controls
-                    underneath, and aria-hidden because the page already says
-                    SOLD in text — a screen reader should not hear it twice. */}
-                {overlay.effectiveStatus === "sold" && (
-                  <div
-                    className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center overflow-hidden"
-                    aria-hidden="true"
-                  >
-                    <span className="-rotate-[18deg] select-none rounded-xl border-[6px] border-white/90 bg-[#dc2626]/85 px-[6%] py-[1.5%] text-[13vw] font-black uppercase leading-none tracking-[0.12em] text-white shadow-[0_8px_30px_rgba(0,0,0,0.45)] @min-[760px]:text-[9vw] @min-[1100px]:text-[7rem]">
-                      Sold
-                    </span>
-                  </div>
-                )}
-
-                {/* Top-left: CARFAX logo + feature pills (1-Owner, No Accidents…) + status.
-                    The CARFAX card hides when baked into the hero pixels; the
-                    feature/status pills are never baked so they always render.
-
-                    ⚠ These three use `zoom`, NOT `transform: scale`, and that is
-                    deliberate. They are the only scaled elements that are
-                    siblings in a flow layout, and transforms do not affect
-                    layout — the column reserves each badge's PRE-transform
-                    height, so scaling up makes them render on top of each
-                    other while the layout still thinks they fit. At the old
-                    1.15 the overflow was ~11px and the gap hid it; at 1.725 the
-                    CARFAX card laid out at ~83px, rendered at 144px, and
-                    covered the pill stack by 54px. `zoom` scales the layout box
-                    too, so the flex gap just works. Do not "tidy" these back
-                    to scale-[...].
-
-                    And the tiers are @container, not sm:. The hero is 380px on
-                    a phone and 1233px on this monitor, and `sm:` keys off the
-                    VIEWPORT — so below 640px the marks were sized for a much
-                    wider box (logo 197px = 52% of the hero against 39.9% on
-                    desktop; CARFAX 145px = 38% against 26%), which is the
-                    61x64px CARFAX-through-the-logo collision on a real phone.
-                    Worse, sm: also flipped to the DESKTOP values at a 640px
-                    viewport while the hero was still only ~600px, so there was
-                    a second broken band from 640-1000px that nobody had looked
-                    at. Container tiers track the box itself.
-
-                    Four tiers, not three: at a 728px hero the first attempt's
-                    mid tier still put CARFAX at 28.6% and the logo at 43.9%
-                    (targets 26% / 39.9%) and they collided by 20x93px. Each
-                    tier is sized so a mark holds roughly the same FRACTION of
-                    the hero it holds on desktop -- that fraction is the thing
-                    being conserved, not any single px value. */}
-                <div
-                  className="absolute z-10 flex flex-col items-start gap-1 sm:gap-1.5"
-                  style={{
-                    top: `${MARGIN_PCT}%`,
-                    left: `${MARGIN_PCT}%`,
-                    paddingTop:
-                      hasBakedHero && badgeConfig?.carfax_badge_enabled !== false
-                        ? "5.5%"
-                        : undefined,
-                  }}
-                >
-                  {showCarfaxBadge && (
-                    /* Natural size like GoogleReviewsLockup — uniform badge
-                       spec (Jeremiah 2026-06-05): carfax/dealer/google all
-                       186px wide on the desktop VDP. Mobile gets the same
-                       0.6 treatment as the lockup wrapper below. */
-                    <div className="[zoom:0.43] @min-[400px]:[zoom:0.545] @min-[500px]:[zoom:0.69] @min-[620px]:[zoom:0.864] @min-[760px]:[zoom:1.07] @min-[920px]:[zoom:1.301] @min-[1100px]:[zoom:1.563] @min-[1220px]:[zoom:1.725]">
-                      <CarfaxBadge vin={vehicle.vin} />
-                    </div>
-                  )}
-                  {!isComingSoon && (
-                    <div className="[zoom:0.321] @min-[400px]:[zoom:0.408] @min-[500px]:[zoom:0.516] @min-[620px]:[zoom:0.646] @min-[760px]:[zoom:0.8] @min-[920px]:[zoom:0.973] @min-[1100px]:[zoom:1.169] @min-[1220px]:[zoom:1.29]">
-                      <CarfaxPillStack overlay={overlay} />
-                    </div>
-                  )}
-                  {!isComingSoon && overlay.effectiveStatus && (
-                    <div className="[zoom:0.321] @min-[400px]:[zoom:0.408] @min-[500px]:[zoom:0.516] @min-[620px]:[zoom:0.646] @min-[760px]:[zoom:0.8] @min-[920px]:[zoom:0.973] @min-[1100px]:[zoom:1.169] @min-[1220px]:[zoom:1.29]">
-                      <StatusPill kind={overlay.effectiveStatus} />
-                    </div>
-                  )}
-                </div>
-
-                {/* Top-center: dealer logo pill — hidden when baked into hero pixels
-                    or when the photo is the coming-soon placeholder.
-
-                    Scale is 1.15 x 1.15 = 1.3225 (owner, 2026-08-22: "increase
-                    our dealership logo by 15%"). The logo was deliberately held
-                    OUT of the earlier +50% badge bump because a uniform
-                    increase put it at 51% of the hero width and it competed
-                    with the car; 15% is the deliberate, smaller correction.
-                    Mobile keeps the same ratio (0.46 x 1.15 = 0.529).
-
-                    KEEP IN SYNC: photo_overlay.py _LOGO_UPSCALE_COMPENSATION
-                    and the DMS VdpHeroReplica. */}
-                {!hideDealerPill && !isComingSoon && (
-                  <div
-                    className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
-                    style={{ top: `${MARGIN_PCT}%` }}
-                  >
-                    <div className="pointer-events-auto scale-[0.329] @min-[400px]:scale-[0.418] @min-[500px]:scale-[0.529] @min-[620px]:scale-[0.663] @min-[760px]:scale-[0.82] @min-[920px]:scale-[0.997] @min-[1100px]:scale-[1.198] @min-[1220px]:scale-[1.323] origin-top">
-                      <DealerCluster
-                        showBadge={false}
-                        hideDealerPill={false}
-                        rating={googleReviews.rating}
-                        reviewCount={googleReviews.reviewCount}
-                        reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Top-right: merchandising feature pills */}
-                {!isComingSoon && (
-                  <div
-                    className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.321] @min-[400px]:scale-[0.408] @min-[500px]:scale-[0.516] @min-[620px]:scale-[0.646] @min-[760px]:scale-[0.8] @min-[920px]:scale-[0.973] @min-[1100px]:scale-[1.169] @min-[1220px]:scale-[1.29] origin-top-right"
-                    style={{ top: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
-                  >
-                    <FeaturePillCluster pills={overlay.featurePills} stack="inline" />
-                  </div>
-                )}
-
-                {/* Bottom-left: phone number (mobile compact / desktop full) */}
-                {showPhoneBadge && (
-                  <>
-                    <div
-                      className="absolute z-10 md:hidden scale-[0.6] @min-[500px]:scale-[0.78] @min-[620px]:scale-[0.96] @min-[720px]:scale-[1.14] origin-bottom-left"
-                      style={{ bottom: `${MARGIN_PCT}%`, left: `${MARGIN_PCT}%` }}
-                    >
-                      <PhoneCTA
-                        phone={SITE_CONFIG.phone}
-                        phoneRaw={SITE_CONFIG.phoneRaw}
-                        compact
-                      />
-                    </div>
-                    <div
-                      className="absolute z-10 hidden md:block"
-                      style={{ bottom: `${MARGIN_PCT}%`, left: `${MARGIN_PCT}%` }}
-                    >
-                      <PhoneCTA
-                        phone={SITE_CONFIG.phone}
-                        phoneRaw={SITE_CONFIG.phoneRaw}
-                      />
-                    </div>
-                  </>
-                )}
-
-                {/* Bottom-center: dealership URL — matches phone treatment */}
-                {showUrlBadge && (
-                  <div
-                    className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
-                    style={{ bottom: `${MARGIN_PCT}%` }}
-                  >
-                    <span className="md:hidden inline-block scale-[0.64] @min-[500px]:scale-[0.85] @min-[620px]:scale-[1.05] @min-[720px]:scale-[1.25] origin-bottom"><UrlBadge compact /></span>
-                    <span className="hidden md:inline"><UrlBadge /></span>
-                  </div>
-                )}
-
-                {/* Bottom-right: no-dealer-fees mark + Google Reviews lockup.
-                    Stacked in that order so the mark sits ABOVE the lockup,
-                    matching composite_all_badges in photo_overlay.py, which
-                    lifts the baked mark clear of the Google pill. */}
-                <div
-                  className="absolute z-10 flex flex-col items-end gap-1 sm:gap-1.5 scale-[0.321] @min-[400px]:scale-[0.408] @min-[500px]:scale-[0.516] @min-[620px]:scale-[0.646] @min-[760px]:scale-[0.8] @min-[920px]:scale-[0.973] @min-[1100px]:scale-[1.169] @min-[1220px]:scale-[1.29] origin-bottom-right"
-                  style={{ bottom: `${MARGIN_PCT}%`, right: `${MARGIN_PCT}%` }}
-                >
-                  {!isComingSoon && warrantyCopy && (
-                    <WarrantyBadge copy={warrantyCopy} compact />
-                  )}
-                  {!isComingSoon && showNoFeeBadge && (
-                    <NoDealerFeesBadge
-                      copy={badgeConfig?.no_fee_badge_copy}
-                      compact
-                    />
-                  )}
-                  {showGoogleBadge && (
-                    <GoogleReviewsLockup
-                      rating={googleReviews.rating}
-                      reviewCount={googleReviews.reviewCount}
-                      reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
-                    />
-                  )}
-                </div>
-              </div>
+            {/* Hero badges — the owner-approved FINAL design (2026-10-04),
+                the HTML twin of the baked hero (BAKE RULES: photo_overlay.py
+                composite_hero_v3 + the DMS replica). Sized in cqw against this
+                @container box, so it is the same picture at every width. The
+                old cluster (CARFAX card, centred logo, phone/URL text, Google
+                lockup, no-fee mark, top-right pills, the old SOLD stamp) is
+                retired from the hero; "Show me the CARFAX" stays on the VDP. */}
+            {showBadges && vehicle && overlay && !isComingSoon && (
+              <HeroBadgeOverlay
+                status={heroBadgeStatus(overlay.effectiveStatus === "sold" ? "sold" : vehicle.status)}
+                pills={vehicle.badgePills ?? []}
+                rating={googleReviews.rating}
+                phone={SITE_CONFIG.phone.replace(/[()]/g, "").replace(/\s+/g, "-")}
+                phoneHref={`tel:${SITE_CONFIG.phoneRaw}`}
+                reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
+              />
             )}
 
             {/* Gallery minimal badges — dealer logo (top-center) + URL badge

@@ -28,6 +28,8 @@ export interface Vehicle {
    *  shared/urlBadgeVisibility.ts. Absent = shown. PARITY CHAIN:
    *  routers/public.py -> DMS proxy -> functions/api/inventory.ts -> here. */
   websiteBadgeEnabled?: boolean;
+  /** Resolved hero badge pills (FINAL design 2026-10-04; Railway badge_pills.py). PARITY CHAIN. */
+  badgePills?: string[];
   status: "available" | "sale-pending" | "sold" | "coming-soon";
   /** ISO date the car sold. Present only on recently-sold rows — Railway emits
    *  sold cars for 30 days so their VDP keeps working. PARITY CHAIN:

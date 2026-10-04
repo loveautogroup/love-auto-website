@@ -32,6 +32,8 @@ export interface SyncedVehicle {
   bakedHeroUrl?: string | null;
   /** Per-vehicle "Website URL" overlay toggle; absent = shown. */
   websiteBadgeEnabled?: boolean;
+  /** Resolved hero badge pills (FINAL design 2026-10-04; Railway badge_pills.py). PARITY CHAIN. */
+  badgePills?: string[];
   stockNumber?: string;
   slug: string;
   year: number;
@@ -149,6 +151,7 @@ export function adaptVehicle(v: SyncedVehicle): Vehicle {
     recentlyReduced: Boolean(v.recentlyReduced),
     bakedHeroUrl: v.bakedHeroUrl ?? null,
     websiteBadgeEnabled: v.websiteBadgeEnabled !== false,
+    badgePills: Array.isArray(v.badgePills) ? v.badgePills : [],
     asIs: v.asIs ?? true,
     knownIssues: v.knownIssues ?? null,
   };

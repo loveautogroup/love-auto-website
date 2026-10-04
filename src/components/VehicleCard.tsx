@@ -9,21 +9,8 @@ import { useInventory } from "@/lib/useInventory";
 import { useLanguage } from "@/context/LanguageContext";
 import { useResolveOverlay } from "@/data/useMerchandising";
 import { applyPhotoOrder } from "@/data/photoOrder";
-import {
-  CarfaxBadge,
-  CarfaxPillStack,
-  DealerCluster,
-  GoogleReviewsLockup,
-  FeaturePillCluster,
-  NoDealerFeesBadge,
-  PhoneCTA,
-  PhotoScrim,
-  StatusPill,
-  UrlBadge,
-} from "./badges";
+import HeroBadgeOverlay, { heroBadgeStatus } from "./badges/HeroBadgeOverlay";
 import { useReviews } from "@/context/ReviewsContext";
-import { useBadgeConfig } from "@/context/BadgeConfigContext";
-import { urlBadgeVisible } from "../../shared/urlBadgeVisibility";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -62,7 +49,6 @@ function estimateMonthlyPayment(
  */
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const googleReviews = useReviews();
-  const badgeConfig = useBadgeConfig();
   const { t } = useLanguage();
   const c = t.card;
 
@@ -185,35 +171,6 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   // the branded Coming Soon placeholder. Local state so the swap
   // survives re-render.
   const [heroSrc, setHeroSrc] = useState<string>(initialHero);
-  // Baked-hero detection: Railway bakes pixel replicas of the badge
-  // components into hero photos (Session 17). When the displayed image is
-  // baked, suppress the HTML twins below to avoid double-stamping.
-  const cardHasBakedHero = heroSrc.includes("hero-baked");
-  // Opt-IN, exactly as PhotoGallery gates it — `=== true`, not a truthiness
-  // check, so a missing config does not silently switch the mark on.
-  const showNoFeeBadge =
-    !cardHasBakedHero && badgeConfig?.no_fee_badge_enabled === true;
-  // The CARFAX badge honors the DMS merchandising opt-out, exactly as the
-  // VDP's PhotoGallery does. It previously checked only the baked-hero
-  // flag, so turning the badge OFF in the DMS hid it on vehicle detail
-  // pages while every inventory card kept showing it.
-  // NOTE: deliberately NOT gated on isComingSoon — per Jeremiah's
-  // 2026-06-10 ruling the CARFAX badge is the ONE badge that still shows
-  // on a Coming Soon card (that's why its siblings below are suppressed).
-  // Per-vehicle opt-out honoured here too — see the note in PhotoGallery.
-  // An explicit `carfax: false` is a deliberate instruction and outranks the
-  // Coming Soon exception above.
-  const showCarfaxBadge =
-    !cardHasBakedHero &&
-    badgeConfig.carfax_badge_enabled !== false &&
-    overlay.carfax !== false;
-  const showUrlBadge = urlBadgeVisible({
-    hasBakedHero: cardHasBakedHero,
-    hasRealPhotos: !isComingSoon,
-    forcePlaceholder: false,
-    globalEnabled: badgeConfig?.website_badge_enabled,
-    vehicleEnabled: vehicle.websiteBadgeEnabled,
-  });
   // Track the specific URL that 404'd so we can prevent retrying it while
   // still allowing a *different* (live) URL to replace it. A boolean latch
   // would block the upgrade from a failed seed path to a working R2/DC URL.
@@ -268,7 +225,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           apart. A single scale cannot satisfy all three: at 298px the top row
           has to fit CARFAX + a centred logo + the pill column, and the centred
           logo's left edge closes on the left column as the card narrows. */}
-      <div className="@container relative aspect-[3/2] bg-brand-gray-100 overflow-hidden">
+      <div className="@container relative aspect-[4/3] bg-brand-gray-100 overflow-hidden">
         {showImage ? (
           <Image
             src={heroImage}
@@ -307,167 +264,20 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           </div>
         )}
 
-        {/* Gradient scrim for overlay legibility — skipped on baked heroes
-            so it doesn't dim the badges baked into the photo pixels. */}
-        {!cardHasBakedHero && <PhotoScrim />}
-
-        {/* Top-left column: full Carfax + status cluster — shield,
-            active Carfax pills, status pill (in that vertical order).
-            Mirrors the VDP hero so the inventory grid feels consistent.
-            Shield scaled 26% on mobile / 32% on sm+ (kept tight on cards).
-            NOTE: target the descendant <a> directly — the prior [&_.cf]
-            selector matched nothing (no descendant carried the `cf` class)
-            so the badge had been rendering at full 140px on cards. */}
-        <div
-          className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 flex flex-col items-start gap-1"
-          style={{ paddingTop: cardHasBakedHero ? "5.5%" : undefined }}
-        >
-          {showCarfaxBadge && (
-            <div className="[zoom:0.38] @min-[330px]:[zoom:0.45] @min-[380px]:[zoom:0.51]">
-              <CarfaxBadge vin={vehicle.vin} />
-            </div>
-          )}
-          {/* Container scales below, not sm:. These were the last two marks
-              still keyed to the VIEWPORT, so a 298px card at a 1312px viewport
-              rendered them at 0.86 and the left column ran 147px down a 199px
-              card — far enough to collide with the phone+URL stack in the
-              corner below it.
-
-              The narrow tier is 0.52 rather than 0.6: at 0.6 the column still
-              ended at y151 against a stack starting at y146 on a 199px-tall
-              card. Measured, not estimated — the pill stack is the tallest
-              thing on a card and it is what has to give.
-
-              And these are `zoom`, not scale-[...], for the same reason the
-              VDP's top-left stack is: transform:scale shrinks a child
-              VISUALLY but leaves its layout box full size, so the flex column
-              below keeps stacking at unscaled offsets and the column never
-              actually gets shorter. Dropping 0.6 -> 0.52 under scale changed
-              the overlap by exactly 0px. zoom scales the box, so the column
-              shortens. Do not "tidy" these back to scale-[...]. */}
-          {!isComingSoon && (
-            <div className="[zoom:0.52] @min-[330px]:[zoom:0.72] @min-[380px]:[zoom:0.86]">
-              <CarfaxPillStack overlay={overlay} compact />
-            </div>
-          )}
-          {!isComingSoon && overlay.effectiveStatus && (
-            <div className="[zoom:0.52] @min-[330px]:[zoom:0.72] @min-[380px]:[zoom:0.86]">
-              <StatusPill kind={overlay.effectiveStatus} compact />
-            </div>
-          )}
-        </div>
-
-        {/* Top-center: dealer logo pill — not shown on coming-soon placeholder
-            or when already baked into the hero pixels. */}
-        {!isComingSoon && !cardHasBakedHero && (
-          <div className="absolute top-1.5 left-0 right-0 flex justify-center z-10 pointer-events-none">
-            {/* Clearance either side of the centred logo is
-                  (cardW - logoW) / 2 - inset - sideClusterW
-                and it must stay positive at EVERY card width. Worked through,
-                with the logo 252.2px natural and CARFAX 186.3px natural:
-
-                  card  logo   half-gap   CARFAX needs   pills need
-                  298   105.9    96.0          88.8          89.5
-                  341   131.1   105.0          99.8          97.8
-                  398   158.8   119.6         113.0         113.5
-
-                Every row clears. At a single fixed scale it cannot: 0.63
-                everywhere overlaps CARFAX by 10px at 341px and by far more at
-                298px, which is the mobile overlap this fixes.
-
-                NO sm: bump. The 1.15 that used to be here was copied from the VDP hero, which
-                is ~1233px wide; a card is ~398px, so the same multiplier made
-                the logo 72.8% of the card against 39.9% of the hero and drove
-                it straight through the CARFAX badge on the left and the
-                feature pills on the right. At 0.63 it is 158.8px = 39.9% of
-                the card — the same fraction the VDP shows. Measured, not
-                guessed. */}
-            <div className="pointer-events-auto scale-[0.42] @min-[330px]:scale-[0.52] @min-[380px]:scale-[0.63] origin-top">
-              <DealerCluster
-                compact
-                rating={googleReviews.rating}
-                reviewCount={googleReviews.reviewCount}
-                reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Top-right column: compact feature pill stack only. Right-
-            aligned, mirrors the VDP. */}
-        {/* w-[32%] gives the pill column an actual layout width so max-w
-            inside the cluster resolves correctly and long pill labels
-            truncate instead of spanning to the card center.
-
-            32%, was 40%: with the logo corrected to 158.8px the pill column
-            still ran 7.5px into it. 32% -> 95.5px visible, starting at 294.5
-            against the logo's right edge at 278.5 — 16px of daylight. */}
+        {/* Hero badges — the owner-approved FINAL design (2026-10-04), the
+            same component as the VDP hero and the HTML twin of the baked
+            picture (BAKE RULES). cqw-sized against this @container card, so a
+            298px card is the 300px-thumbnail check the owner approved. Sold
+            cards get the Sold picture too (grey photo + SOLD stamp). */}
         {!isComingSoon && (
-          <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 flex flex-col items-end gap-1 w-[32%] scale-75 origin-top-right">
-            <FeaturePillCluster pills={overlay.featurePills} compact stack="inline" />
-          </div>
-        )}
-
-        {/* Warranty intentionally NOT shown on cards — it's a VDP-level
-            signal. Putting it on the card crowds the bottom row at compact
-            widths and conflicts with the phone CTA, which is the higher
-            priority callout (bypasses third-party spoofed lead numbers). */}
-
-        {/* Bottom-left: phone CTA with the site URL stacked under it.
-            (Anchored left so it can't collide with the dealer cluster on the
-            right at narrow card widths.)
-
-            The VDP puts the URL bottom-CENTRE. That is impossible on a card:
-            the phone is 119px and the Google lockup 121px, so on a 298px card
-            they already take 240px and leave a 31.7px centre gap. Measured max
-            width for a centred URL — 398px card 96px, 341px card 63px, 298px
-            card nothing — works out at a 4-7px font, i.e. present but
-            unreadable. Stacking it under the phone keeps the mark, keeps it
-            legible, and keeps the corner it belongs to.
-
-            0.72 puts it at ~120px, matching the phone above it. */}
-        {!cardHasBakedHero && !isComingSoon && (
-          <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 z-10 flex flex-col items-start gap-0.5">
-            <PhoneCTA
-              phone={SITE_CONFIG.phone}
-              phoneRaw={SITE_CONFIG.phoneRaw}
-              compact
-            />
-            {/* Honours the DMS "Website URL" toggle (per vehicle, then the
-                global default) since 2026-09-17 — same rule as the VDP hero,
-                shared/urlBadgeVisibility.ts. */}
-            {showUrlBadge && (
-              <div className="scale-[0.72] origin-bottom-left">
-                <UrlBadge compact />
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Bottom-right column: NO DEALER FEES over the Google lockup, the same
-            order and stacking the VDP hero uses. Both sit in ONE scaled
-            wrapper, which is what keeps them the same width — the two badges
-            have near-identical natural widths (184.3 vs 185.9), so any shared
-            scale lands them matched, exactly as on the VDP.
-
-            Scale stays 0.76 rather than dropping to the VDP's proportion: the
-            lockup carries real text and "132+ reviews" is unreadable smaller.
-            Nothing collides bottom-right, so legibility wins over proportion.
-
-            Hidden when baked into the hero pixels. */}
-        {!cardHasBakedHero && !isComingSoon && (
-          <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
-            <div className="flex flex-col items-end gap-1 scale-[0.76] origin-bottom-right">
-              {showNoFeeBadge && (
-                <NoDealerFeesBadge copy={badgeConfig?.no_fee_badge_copy} compact />
-              )}
-              <GoogleReviewsLockup
-                rating={googleReviews.rating}
-                reviewCount={googleReviews.reviewCount}
-                reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
-              />
-            </div>
-          </div>
+          <HeroBadgeOverlay
+            status={heroBadgeStatus(isSold ? "sold" : vehicle.status)}
+            pills={vehicle.badgePills ?? []}
+            rating={googleReviews.rating}
+            phone={SITE_CONFIG.phone.replace(/[()]/g, "").replace(/\s+/g, "-")}
+            phoneHref={`tel:${SITE_CONFIG.phoneRaw}`}
+            reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
+          />
         )}
 
         {/* Coming Soon diagonal ribbon — top-left corner of the photo area.

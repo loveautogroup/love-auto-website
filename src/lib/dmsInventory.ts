@@ -256,6 +256,8 @@ interface DmsVehicle {
   bakedHeroUrl?: string | null;
   /** Resolved per-vehicle "Website URL" overlay toggle (2026-09-17). */
   websiteBadgeEnabled?: boolean | null;
+  /** Resolved hero badge pills (FINAL design 2026-10-04; Railway badge_pills.py). PARITY CHAIN. */
+  badgePills?: string[];
   /** V2 photo pipeline media shape — optional, absent on older responses. */
   media?: {
     hero_url?: string | null;
@@ -360,6 +362,7 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     // Phase 2 photo pipeline — null in Phase 1 (VDPWalkaround renders nothing).
     bakedHeroUrl: rewritePhotoHost(v.bakedHeroUrl) ?? null,
     websiteBadgeEnabled: v.websiteBadgeEnabled !== false,
+    badgePills: Array.isArray(v.badgePills) ? v.badgePills : [],
     walkaroundUrl: v.media?.walkaround_url ?? null,
     walkaroundPosterUrl: v.media?.walkaround_poster_url ?? null,
     // AS-IS / legal disclosure fields (Diane, 2026-05-12)
@@ -589,5 +592,6 @@ export function syncedToVehicle(s: SyncedVehicle): Vehicle {
     knownIssues: s.knownIssues ?? null,
     bakedHeroUrl: s.bakedHeroUrl ?? null,
     websiteBadgeEnabled: s.websiteBadgeEnabled !== false,
+    badgePills: Array.isArray(s.badgePills) ? s.badgePills : [],
   };
 }

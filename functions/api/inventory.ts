@@ -126,6 +126,8 @@ interface DmsVehicle {
   // Resolved per-vehicle "Website URL" overlay toggle (DMS proxy, 2026-09-17).
   // Absent on older deploys = shown.
   websiteBadgeEnabled?: boolean | null;
+  /** Resolved hero badge pills (FINAL design 2026-10-04; Railway badge_pills.py). PARITY CHAIN. */
+  badgePills?: string[];
   // E1: AS-IS disclosure flag + seller-disclosed defects. The DMS mirror
   // emits these camelCase (it converts Railway's as_is/known_issues).
   asIs?: boolean | null;
@@ -174,6 +176,8 @@ interface SyncedVehicle {
    *  Railway public.py -> DMS proxy -> here -> inventoryAdapter -> the
    *  card and the VDP hero (shared/urlBadgeVisibility.ts). */
   websiteBadgeEnabled?: boolean;
+  /** Resolved hero badge pills (FINAL design 2026-10-04; Railway badge_pills.py). PARITY CHAIN. */
+  badgePills?: string[];
   /** E1 — AS-IS flag + disclosed defects, passed through to the site's
    *  inventoryAdapter (which already declares both fields). */
   asIs?: boolean;
@@ -264,6 +268,7 @@ function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     recentlyReduced: Boolean(v.recently_reduced),
     bakedHeroUrl: rewritePhotoHost(v.bakedHeroUrl) ?? null,
     websiteBadgeEnabled: v.websiteBadgeEnabled !== false,
+    badgePills: Array.isArray(v.badgePills) ? v.badgePills : [],
     // E1: default asIs to TRUE — every Love Auto vehicle is sold as-is;
     // the flag only goes false if the DMS explicitly says so.
     asIs: v.asIs ?? true,
