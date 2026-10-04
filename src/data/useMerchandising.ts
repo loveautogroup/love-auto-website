@@ -28,6 +28,7 @@ import {
   type VehicleOverlay,
 } from "./merchandising";
 import { carfaxVisible } from "../../shared/carfaxVisibility";
+import { isBrowsable } from "@/lib/browsable";
 import { DEV_READ_API_BASE } from "@/lib/devApiBase";
 
 // Module-level cache — survives between hook calls but is fresh on a full
@@ -142,10 +143,15 @@ export function useGlobalTextPhone(): string | undefined {
  * Pure filter — preserves order. Call this BEFORE sortWithFeaturedFirst
  * in any client component that renders a vehicle list.
  */
-export function useVisibleVehicles<T extends { vin: string }>(
+export function useVisibleVehicles<T extends { vin: string; status?: string }>(
   vehicles: T[]
 ): T[] {
   const config = useMerchandising();
   const overlays = config.overlays ?? {};
-  return vehicles.filter((v) => overlays[v.vin]?.hidden !== true);
+  // isBrowsable: sold cars never appear on any list (owner, 2026-10-04). Their
+  // own VDP is unaffected: VDP components read useInventory() directly and
+  // look the car up by slug/VIN, they do not go through this hook.
+  return vehicles.filter(
+    (v) => overlays[v.vin]?.hidden !== true && isBrowsable(v)
+  );
 }

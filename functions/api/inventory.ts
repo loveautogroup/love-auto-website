@@ -113,6 +113,9 @@ interface DmsVehicle {
   description?: string | null;
   status?: string | null;
   soldDate?: string | null;
+  /** Railway public feed: false for a SOLD car whose floor plan is still open. Snake form accepted too until the proxy layer is confirmed. */
+  showInSoldList?: boolean | null;
+  show_in_sold_list?: boolean | null;
   daysOnLot?: number | null;
   features?: string[] | null;
   photos?: DmsPhoto[] | null;
@@ -163,6 +166,8 @@ interface SyncedVehicle {
    *  src/lib/inventoryAdapter.ts's SyncedVehicle, which this interface is a
    *  runtime-side copy of (the edge bundle cannot import from src/). */
   soldDate?: string | null;
+  /** See DmsVehicle. Undefined = shown. */
+  showInSoldList?: boolean;
   features: string[];
   daysOnLot: number;
   dateInStock: string;
@@ -257,6 +262,7 @@ function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     price,
     status: mapStatus(v.status),
     soldDate: v.soldDate ?? null,
+    showInSoldList: v.showInSoldList ?? v.show_in_sold_list ?? undefined,
     features: Array.isArray(v.features) ? v.features.filter((f) => typeof f === "string") : [],
     daysOnLot: Number(v.daysOnLot) || 0,
     dateInStock: v.dateInStock ?? "",

@@ -237,6 +237,9 @@ interface DmsVehicle {
   description?: string | null;
   status?: string | null;
   soldDate?: string | null;
+  /** Railway public feed: false for a SOLD car whose floor plan is still open. Snake form accepted too until the proxy layer is confirmed. */
+  showInSoldList?: boolean | null;
+  show_in_sold_list?: boolean | null;
   daysOnLot?: number | null;
   features?: string[] | null;
   photos?: DmsPhoto[] | null;
@@ -346,6 +349,7 @@ export function adaptDmsVehicle(v: DmsVehicle): SyncedVehicle {
     price,
     status: mapStatus(v.status),
     soldDate: v.soldDate ?? null,
+    showInSoldList: v.showInSoldList ?? v.show_in_sold_list ?? undefined,
     features: Array.isArray(v.features)
       ? v.features.filter((f) => typeof f === "string")
       : [],
@@ -585,6 +589,7 @@ export function syncedToVehicle(s: SyncedVehicle): Vehicle {
     images: s.images,
     status: s.status,
     soldDate: s.soldDate ?? null,
+    showInSoldList: s.showInSoldList,
     dateInStock: s.dateInStock,
     daysOnLot: s.daysOnLot,
     recentlyReduced: s.recentlyReduced,

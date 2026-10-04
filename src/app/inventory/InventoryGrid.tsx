@@ -12,6 +12,7 @@ import { useVisibleVehicles } from "@/data/useMerchandising";
 import { trackInventoryFilter } from "@/lib/analytics";
 import { matchesVehicleSearch } from "@/lib/vehicleSearch";
 import { hasOwnPhoto } from "../../../shared/ownPhoto";
+import { isBrowsable } from "@/lib/browsable";
 
 interface InventoryGridProps {
   /**
@@ -59,7 +60,7 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
   // lockstep. Newest sale first.
   const soldHistoryAll = useMemo(() => {
     const pool = baseVehicles.filter(
-      (v) => v.status === "sold" && hasOwnPhoto(v.images)
+      (v) => v.status === "sold" && isBrowsable(v) && hasOwnPhoto(v.images)
     );
     return [...pool].sort((a, b) => {
       const at = a.soldDate ? Date.parse(a.soldDate) : 0;

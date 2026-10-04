@@ -55,6 +55,8 @@ export interface SyncedVehicle {
   /** ISO date the car sold — present only on recently-sold rows.
    *  PARITY CHAIN: routers/public.py -> DMS proxy -> here -> Vehicle. */
   soldDate?: string | null;
+  /** false = SOLD car whose floor plan is still open; hide from lists. Undefined = shown. */
+  showInSoldList?: boolean;
   features: string[];
   /** Long-form marketing copy from the DMS public feed
    *  (Railway vehicle.description). Empty/absent -> the VDP falls back to
@@ -146,6 +148,7 @@ export function adaptVehicle(v: SyncedVehicle): Vehicle {
     features: v.features,
     images: v.images,
     status: v.status,
+    showInSoldList: v.showInSoldList,
     dateInStock: v.dateInStock,
     daysOnLot: v.daysOnLot,
     recentlyReduced: Boolean(v.recentlyReduced),

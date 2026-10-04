@@ -35,6 +35,8 @@ export interface Vehicle {
    *  sold cars for 30 days so their VDP keeps working. PARITY CHAIN:
    *  routers/public.py -> DMS proxy -> functions/api/inventory.ts -> here. */
   soldDate?: string | null;
+  /** false = SOLD car whose floor plan is still open; hidden from LISTS only (its VDP still loads). Undefined = shown. */
+  showInSoldList?: boolean;
   dateInStock: string;
   daysOnLot: number;
   /** Public feed flag — true if vehicle had a price decrease in the

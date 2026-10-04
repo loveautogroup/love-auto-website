@@ -22,6 +22,8 @@ interface FeedVehicle {
   mileage: number;
   price: number;
   status: string;
+  /** false = sold car whose floor plan is still open; off the lists, page stays. Absent = shown. */
+  showInSoldList?: boolean;
   images?: string[];
 }
 
@@ -134,7 +136,7 @@ test.describe("sold cars: history, never a purchase", () => {
   test("a sold vehicle with a real photo appears in the grid, marked sold, with no price", async ({ page }) => {
     const vehicles = await liveInventory(page);
     const soldWithPhoto = vehicles.filter(
-      (v) => v.status === "sold" && hasOwnPhoto(v.images)
+      (v) => v.status === "sold" && v.showInSoldList !== false && hasOwnPhoto(v.images)
     );
     test.skip(
       soldWithPhoto.length === 0,
@@ -153,6 +155,22 @@ test.describe("sold cars: history, never a purchase", () => {
       });
       expect(body, `${v.slug}'s old price must not render on the grid`).not.toContain(priceStr);
     }
+  });
+
+  test("a sold car still on an open floor plan stays off the grid, but its page loads", async ({ page }) => {
+    const hidden = (await liveInventory(page)).filter(
+      (v) => v.status === "sold" && v.showInSoldList === false
+    );
+    test.skip(hidden.length === 0, "no sold car is currently held back (field not live, or all plans paid off)");
+
+    await page.goto("/inventory/");
+    await page.waitForTimeout(3000);
+    const body = await page.locator("body").innerText();
+    for (const v of hidden) {
+      expect(body, `${v.slug} (open floor plan) must not be on the grid`).not.toContain(v.vin);
+    }
+    const res = await page.goto(`/inventory/${hidden[0].slug}/`);
+    expect(res?.status(), "a hidden sold car's own page must still load").toBe(200);
   });
 
   test("a sold vehicle with no real photo still stays off the grid", async ({ page }) => {

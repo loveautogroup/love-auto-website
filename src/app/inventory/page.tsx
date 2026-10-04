@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { sampleInventory } from "@/data/inventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
 import { hasOwnPhoto } from "../../../shared/ownPhoto";
+import { isBrowsable } from "@/lib/browsable";
 import InventoryGrid from "./InventoryGrid";
 import VehicleAlertSignup from "@/components/VehicleAlertSignup";
 import WaitlistCta from "@/components/WaitlistCta";
@@ -44,7 +45,7 @@ export default function InventoryPage() {
   // live/KV data hydrates — this build-time list is the SSR/crawler view
   // and the Suspense fallback.
   const sold = sampleInventory
-    .filter((v) => v.status === "sold" && hasOwnPhoto(v.images))
+    .filter((v) => v.status === "sold" && isBrowsable(v) && hasOwnPhoto(v.images))
     .sort((a, b) => {
       const at = a.soldDate ? Date.parse(a.soldDate) : 0;
       const bt = b.soldDate ? Date.parse(b.soldDate) : 0;
