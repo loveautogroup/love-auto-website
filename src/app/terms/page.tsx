@@ -36,8 +36,8 @@ export default function TermsPage() {
           <p>
             This website is provided for informational purposes and to
             facilitate communication between you and {SITE_CONFIG.name}. You may
-            browse vehicle inventory, submit inquiries, apply for financing
-            pre-approval, and access other features we make available.
+            browse vehicle inventory, submit inquiries, apply for financing,
+            and access other features we make available.
           </p>
           <p>
             You agree to use this website only for lawful purposes and in a
@@ -67,7 +67,7 @@ export default function TermsPage() {
 
           <h2 className="mt-10 mb-4">Financing</h2>
           <p>
-            Financing pre-approval submissions made through this website are
+            Financing applications submitted through this website are
             requests for information only and do not constitute a binding loan
             agreement. All financing is subject to lender approval, verification
             of information, and execution of final loan documents. Rates, terms,

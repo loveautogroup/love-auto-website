@@ -24,12 +24,6 @@ export default function FinancingHero() {
           >
             {f.ctaFull}
           </a>
-          <a
-            href="#prequal"
-            className="inline-flex items-center justify-center gap-2.5 border border-white/35 hover:border-white hover:bg-white/[.06] text-white px-7 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
-          >
-            {f.ctaQuick}
-          </a>
         </div>
         <p className="mt-3 text-sm text-ink-400">{f.softInquiry}</p>
       </div>

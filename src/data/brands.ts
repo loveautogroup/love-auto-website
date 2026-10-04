@@ -282,7 +282,7 @@ export const BRANDS: BrandContent[] = [
       },
     ],
     relatedLinks: [
-      { label: "Soft credit pre-approval", href: "/financing/" },
+      { label: "Apply for financing", href: "/financing/" },
       { label: "Free Carfax Reports", href: "/free-carfax-villa-park/" },
     ],
   },

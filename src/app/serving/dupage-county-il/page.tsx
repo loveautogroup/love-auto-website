@@ -56,7 +56,7 @@ const FAQS = [
   {
     question: "Do you offer financing for DuPage County buyers?",
     answer:
-      "Yes. We work with major lenders including Westlake Financial and offer soft-pull pre-approval that doesn't affect your credit score. You can pre-qualify online, then come in to test drive and finish paperwork. We also accept cash and outside bank financing, and we're happy to work with your credit union if you have one.",
+      "Yes. We work with multiple lenders. You can apply online, then come in to test drive and finish paperwork. We also accept cash and outside bank financing, and we're happy to work with your credit union if you have one.",
   },
   {
     question: "Do you take trade-ins from DuPage County?",

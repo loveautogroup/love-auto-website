@@ -17,7 +17,7 @@ const faqs = [
   {
     question: "Do you offer financing?",
     answer:
-      "We work with multiple lenders to help you find financing that fits your budget, including options for buyers with less-than-perfect credit. You can apply for financing right on our website with no impact to your credit score.",
+      "We work with multiple lenders to help you find financing that fits your budget, including options for buyers with less-than-perfect credit. You can apply for financing right on our website.",
   },
   {
     question: "Can I trade in my current vehicle?",
@@ -97,7 +97,7 @@ const faqs = [
   {
     question: "Do you work with buyers who have bankruptcy or repossession on their credit?",
     answer:
-      "Yes. We work with multiple lenders including partners that specialize in challenged credit situations. Bankruptcy or repossession on your record doesn't automatically disqualify you. A steady income, a down payment, and an honest conversation about your situation go a long way. Start with our online pre-approval (soft credit pull, no score impact) or call us directly.",
+      "Yes. We work with multiple lenders including partners that specialize in challenged credit situations. Bankruptcy or repossession on your record doesn't automatically disqualify you. A steady income, a down payment, and an honest conversation about your situation go a long way. Start with our online credit application or call us directly.",
   },
 ];
 

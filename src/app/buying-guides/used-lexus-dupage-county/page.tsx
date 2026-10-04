@@ -352,10 +352,10 @@ export default function UsedLexusDuPageCountyPage() {
                 className="block bg-white border border-ink-200 p-4 hover:border-brand-red transition-colors"
               >
                 <div className="font-semibold text-brand-gray-900">
-                  Soft Credit Pre-Approval
+                  Apply for Financing
                 </div>
                 <div className="text-sm text-brand-gray-500 mt-0.5">
-                  No impact to your credit score
+                  Multiple lenders, all credit welcome
                 </div>
               </Link>
             </li>

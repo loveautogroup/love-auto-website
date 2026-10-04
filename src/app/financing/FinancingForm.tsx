@@ -405,8 +405,7 @@ export default function FinancingForm() {
     // every field already carries the right required/pattern/type attrs,
     // the co-buyer section's required fields are conditionally MOUNTED (not
     // just hidden) so they never trip "invalid unfocusable field", and the
-    // sibling QuickPreQualifyForm already relies on native validation the
-    // same way with no noValidate.
+    // form relies on native validation with no noValidate.
     <form
       onSubmit={onSubmit}
       className="bg-white border border-ink-200 p-6 sm:p-8 space-y-6"

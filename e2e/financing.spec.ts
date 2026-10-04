@@ -4,11 +4,20 @@ import { test, expect } from "@playwright/test";
  * Financing forms — the vehicle picker (2026-09-01).
  *
  * Every credit application on file had reached the DMS with year / VIN /
- * stock / price empty because the form only had a free-text box. Both forms
- * on /financing now offer the live inventory as a dropdown, keep "another
+ * stock / price empty because the form only had a free-text box. The form
+ * on /financing now offers the live inventory as a dropdown, keep "another
  * vehicle" as the free-text fallback, and preselect the car a VDP apply link
  * named. Runs against production (PLAYWRIGHT_BASE_URL overrides).
  */
+
+test.describe("financing — only the full credit application", () => {
+  test("no Quick Pre-Qualify tab, button or form (removed 2026-10-04)", async ({ page }) => {
+    await page.goto("/financing/#prequal");
+    await expect(page.getByRole("tab")).toHaveCount(0);
+    await expect(page.getByText(/pre-?qualif/i)).toHaveCount(0);
+    await expect(page.locator('select[name="vehiclePick"]')).toHaveCount(1);
+  });
+});
 
 test.describe("financing — vehicle picker", () => {
   test("offers the current inventory as a dropdown, plus 'another vehicle'", async ({ page }) => {

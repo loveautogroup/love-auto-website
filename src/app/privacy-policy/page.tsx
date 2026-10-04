@@ -56,7 +56,7 @@ export default function PrivacyPolicyPage() {
           <p>We use the information we collect to:</p>
           <p>
             Respond to your inquiries and requests. Process financing
-            pre-approval applications. Schedule test drives and appointments.
+            applications. Schedule test drives and appointments.
             Provide you with information about vehicles that may interest you.
             Improve our website and customer experience. Comply with legal
             obligations.
