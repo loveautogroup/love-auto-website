@@ -36,3 +36,38 @@ test("Escape still closes it", async ({ page }) => {
   await page.keyboard.press("Escape");
   await expect(page.getByTestId("lightbox")).toHaveCount(0);
 });
+
+// ── Clean-view cue + opening on any viewport (owner 2026-10-04) ──────────
+async function gotoListedVdp(page: import("@playwright/test").Page) {
+  await page.goto("/inventory/");
+  const link = page.locator('a[href^="/inventory/"][href$="/"]').first();
+  await link.waitFor();
+  await link.click();
+  await page.getByRole("button", { name: /photos fullscreen/i }).first().waitFor({ timeout: 15000 });
+}
+
+test.describe("mobile", () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  test("cue reads 'Tap for a clean view' and a tap opens full screen", async ({ page }) => {
+    await gotoListedVdp(page);
+    const cue = page.getByTestId("clean-view-cue");
+    await expect(cue).toBeVisible();
+    await expect(cue).toContainText("Tap for a clean view");
+    await expect(cue).not.toContainText(/badge/i);
+    await page.getByRole("button", { name: /photos fullscreen/i }).first().tap();
+    await expect(page.getByTestId("lightbox")).toBeVisible();
+  });
+});
+
+test.describe("desktop", () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+  test("cue reads 'Click for a clean view' and a click on the photo opens full screen", async ({ page }) => {
+    await gotoListedVdp(page);
+    const cue = page.getByTestId("clean-view-cue");
+    await expect(cue).toContainText("Click for a clean view");
+    await page.getByRole("button", { name: /photos fullscreen/i }).first().click();
+    await expect(page.getByTestId("lightbox")).toBeVisible();
+    await page.getByTestId("lightbox-close").click();
+    await expect(page.getByTestId("lightbox")).toHaveCount(0);
+  });
+});

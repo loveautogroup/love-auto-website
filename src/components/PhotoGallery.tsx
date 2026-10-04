@@ -27,22 +27,6 @@ interface PhotoGalleryProps {
 const COMING_SOON_PLACEHOLDER = "/images/coming-soon.png";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// useIsMobile — true when viewport < 768 px (Tailwind md breakpoint).
-// Gates the lightbox to mobile only; desktop keeps thumbnail-swap behaviour.
-// ─────────────────────────────────────────────────────────────────────────────
-
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-  return isMobile;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
 // Lightbox — full-screen photo viewer, mobile-first with swipe support
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -212,7 +196,6 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
   const [erroredSrcs, setErroredSrcs] = useState<Set<string>>(new Set());
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const isMobile = useIsMobile();
 
   const hasRealPhotos = rawImages.length > 0 && !rawImages[0]?.includes("placeholder");
   const images = hasRealPhotos && vehicle
@@ -236,16 +219,16 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
   const showMinimalBadges = Boolean(vehicle && overlay && selectedIndex > 0 && hasRealPhotos && !forcePlaceholder);
   const remaining = Math.max(0, photoCount - 5);
 
-  // Only open on mobile; desktop keeps thumbnail-swap-only behaviour
+  // Opens full screen on the photo currently shown, on every viewport.
   const openLightbox = (index: number) => {
-    if (!hasRealPhotos || forcePlaceholder || !isMobile) return;
+    if (!hasRealPhotos || forcePlaceholder) return;
     setLightboxIndex(index);
     setLightboxOpen(true);
   };
 
   return (
     <>
-      {/* Full-screen lightbox — mobile only */}
+      {/* Full-screen viewer — clean photo, no overlays */}
       {lightboxOpen && hasRealPhotos && (
         <Lightbox
           images={images}
@@ -260,15 +243,15 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
         <div>
           {/* On mobile: tapping opens lightbox. On desktop: no-op (thumbnails swap hero). */}
           <div
-            role={hasRealPhotos && !forcePlaceholder && isMobile ? "button" : undefined}
-            tabIndex={hasRealPhotos && !forcePlaceholder && isMobile ? 0 : undefined}
-            aria-label={hasRealPhotos && !forcePlaceholder && isMobile ? `View all ${photoCount} photos fullscreen` : undefined}
+            role={hasRealPhotos && !forcePlaceholder ? "button" : undefined}
+            tabIndex={hasRealPhotos && !forcePlaceholder ? 0 : undefined}
+            aria-label={hasRealPhotos && !forcePlaceholder ? `View all ${photoCount} photos fullscreen` : undefined}
             onClick={() => openLightbox(selectedIndex)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") openLightbox(selectedIndex);
             }}
             className={`@container relative aspect-[4/3] bg-brand-gray-100 overflow-hidden ${
-              hasRealPhotos && !forcePlaceholder && isMobile ? "cursor-pointer" : ""
+              hasRealPhotos && !forcePlaceholder ? "cursor-pointer" : ""
             }`}
           >
             {(hasRealPhotos || forcePlaceholder) ? (
@@ -369,6 +352,24 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
             )}
           </div>
         </div>
+
+        {/* Cue: only while the shown photo carries labels. Sits under the
+            photo, so it cannot collide with the CALL pill, Google badge,
+            top bar or the Sale Pending / Sold marks on the photo. */}
+        {hasRealPhotos && !forcePlaceholder && (showBadges && overlay && !isComingSoon || showMinimalBadges) && (
+          <button
+            type="button"
+            data-testid="clean-view-cue"
+            onClick={() => openLightbox(selectedIndex)}
+            className="mx-auto flex items-center gap-1.5 text-xs text-brand-gray-500 hover:text-brand-gray-800 py-1"
+          >
+            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current" aria-hidden="true">
+              <path d="M3 3h7v2H5v5H3V3zm11 0h7v7h-2V5h-5V3zM3 14h2v5h5v2H3v-7zm16 5h-5v2h7v-7h-2v5z" />
+            </svg>
+            <span className="hidden pointer-coarse:inline">{t.gallery.cleanViewTouch}</span>
+            <span className="hidden pointer-fine:inline">{t.gallery.cleanViewMouse}</span>
+          </button>
+        )}
 
         {/* Horizontal scrollable thumbnail strip — click to swap hero */}
         <div className="flex gap-2 overflow-x-auto pb-2 mt-3">
