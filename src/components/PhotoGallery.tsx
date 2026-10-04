@@ -93,6 +93,7 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
 
   return (
     <div
+      data-testid="lightbox"
       className="fixed inset-0 z-50 bg-black flex flex-col select-none"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -102,12 +103,17 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
         <span className="text-white/70 text-sm font-medium">
           {idx + 1} / {count}
         </span>
+        {/* Red X (owner 2026-10-04): brand red, 44px minimum touch target.
+            It sits in the top bar (a flex row above the photo), so it cannot
+            collide with the counter, the desktop arrows or the thumbnails. */}
         <button
+          type="button"
           onClick={onClose}
           aria-label={t.gallery.close}
-          className="text-white/80 hover:text-white p-2 -mr-2 transition-colors"
+          data-testid="lightbox-close"
+          className="flex items-center justify-center w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#dc2626] text-white hover:bg-[#b91c1c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-colors"
         >
-          <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
+          <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current" aria-hidden="true">
             <path d="M18.3 5.71a1 1 0 00-1.41 0L12 10.59 7.11 5.7A1 1 0 005.7 7.11L10.59 12 5.7 16.89a1 1 0 001.41 1.41L12 13.41l4.89 4.89a1 1 0 001.41-1.41L13.41 12l4.89-4.89a1 1 0 000-1.4z" />
           </svg>
         </button>
