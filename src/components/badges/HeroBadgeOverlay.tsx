@@ -14,7 +14,8 @@
  * love-auto-dms/src/components/inventory/HeroBadgeOverlay.tsx. Change all
  * three in the same session. The only allowed difference is hover.
  *
- * Elements: top bar (logo, NO DEALER FEES, CARFAX Advantage Dealer shield) ·
+ * Elements: top bar (HeroTopBar — also the ONLY overlay on gallery photos 2+,
+ * via GalleryBarOverlay; owner 2026-10-04) ·
  * up to three feature pills (available only) · Google Reviews badge (live
  * rating, no count) · CALL pill (ASK ABOUT SIMILAR CARS when Pending/Sold) ·
  * Sale Pending plate or Sold stamp (Sold also greys the photo). Fills are 85%
@@ -84,6 +85,55 @@ function Stars({ rating }: { rating: number }) {
         );
       })}
     </span>
+  );
+}
+
+/**
+ * The top bar alone: logo (30%), "NO DEALER FEES" (3.8%, FEES brand red) and
+ * the CARFAX Advantage Dealer shield on an 85% glass bar. ONE component for
+ * the hero (inside HeroBadgeOverlay) and every gallery photo
+ * (GalleryBarOverlay) so the two cannot drift. Baked twin: _draw_top_bar in
+ * dms-inventory-api/photo_overlay.py.
+ */
+export function HeroTopBar({
+  logoSrc = "/images/badges/logo-primary.png",
+  shieldSrc = "/images/badges/carfax-advantage-dealer.png",
+}: { logoSrc?: string; shieldSrc?: string }) {
+  return (
+    <div
+      style={{
+        position: "absolute", left: 0, right: 0, top: 0, height: "12cqw", boxSizing: "content-box",
+        borderBottom: `0.5cqw solid ${RED}`, background: INK, ...glass,
+        display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 2cqw",
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={logoSrc} alt="Love Auto Group" style={{ width: "30cqw", height: "auto", flex: "none", display: "block" }} />
+      <span style={{ fontWeight: 900, fontSize: "3.8cqw", lineHeight: 1.219, color: "#fff", whiteSpace: "nowrap" }}>
+        NO DEALER <span style={{ color: RED }}>FEES</span>
+      </span>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={shieldSrc}
+        alt="CARFAX Advantage Dealer"
+        style={{ height: "9.4cqw", width: "auto", flex: "none", display: "block", filter: "drop-shadow(0 0.4cqw 1cqw rgba(0,0,0,0.6))" }}
+      />
+    </div>
+  );
+}
+
+/**
+ * Gallery photos 2 onward (owner 2026-10-04: "bring only the header to the
+ * remaining pictures in the gallery"): the hero's top bar and nothing else —
+ * no pills, Google, CALL, URL or status stamp, whatever the car's status.
+ * Baked twin: composite_gallery_bar in photo_overlay.py. Parent must be the
+ * @container photo box, as for HeroBadgeOverlay.
+ */
+export function GalleryBarOverlay({ logoSrc, shieldSrc }: { logoSrc?: string; shieldSrc?: string }) {
+  return (
+    <div className="hero-badges" style={{ position: "absolute", inset: 0, fontFamily: FONT, pointerEvents: "none", zIndex: 10 }}>
+      <HeroTopBar logoSrc={logoSrc} shieldSrc={shieldSrc} />
+    </div>
   );
 }
 
@@ -169,25 +219,7 @@ export default function HeroBadgeOverlay({
       )}
 
       {/* Top bar: logo · NO DEALER FEES · CARFAX Advantage Dealer shield. */}
-      <div
-        style={{
-          position: "absolute", left: 0, right: 0, top: 0, height: "12cqw", boxSizing: "content-box",
-          borderBottom: `0.5cqw solid ${RED}`, background: INK, ...glass,
-          display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 2cqw",
-        }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={logoSrc} alt="Love Auto Group" style={{ width: "30cqw", height: "auto", flex: "none", display: "block" }} />
-        <span style={{ fontWeight: 900, fontSize: "3.8cqw", lineHeight: 1.219, color: "#fff", whiteSpace: "nowrap" }}>
-          NO DEALER <span style={{ color: RED }}>FEES</span>
-        </span>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={shieldSrc}
-          alt="CARFAX Advantage Dealer"
-          style={{ height: "9.4cqw", width: "auto", flex: "none", display: "block", filter: "drop-shadow(0 0.4cqw 1cqw rgba(0,0,0,0.6))" }}
-        />
-      </div>
+      <HeroTopBar logoSrc={logoSrc} shieldSrc={shieldSrc} />
 
       {/* Feature pills, stacked bottom-left (available cars only). */}
       {shownPills.length > 0 && (

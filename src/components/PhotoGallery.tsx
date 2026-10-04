@@ -9,12 +9,7 @@ import { useResolveOverlay } from "@/data/useMerchandising";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import { useReviews } from "@/context/ReviewsContext";
 import { useLanguage } from "@/context/LanguageContext";
-import {
-  DealerCluster,
-  UrlBadge,
-  PhotoScrim,
-} from "./badges";
-import HeroBadgeOverlay, { heroBadgeStatus } from "./badges/HeroBadgeOverlay";
+import HeroBadgeOverlay, { GalleryBarOverlay, heroBadgeStatus } from "./badges/HeroBadgeOverlay";
 
 interface PhotoGalleryProps {
   images: string[];
@@ -204,7 +199,7 @@ function Lightbox({ images, alt, initialIndex, onClose }: LightboxProps) {
  * navigation. On desktop the lightbox is not triggered — clicking a
  * thumbnail still swaps the hero as before.
  */
-export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeConfig }: PhotoGalleryProps) {
+export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoGalleryProps) {
   const { t } = useLanguage();
   const googleReviews = useReviews();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -230,13 +225,10 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
   const forcePlaceholder = overlay?.useComingSoonPlaceholder === true;
   // "Coming Soon" state — no hero badges (the free-CARFAX card left the photo 2026-10-04).
   const isComingSoon = forcePlaceholder || !hasRealPhotos;
-  // Gallery photos (index > 0): show minimal dealer logo + URL badge only.
-  // Mirrors the DealerCenter gallery bake so every photo carries branding.
+  // Gallery photos (index > 0): the hero's top bar only (owner 2026-10-04).
+  // Mirrors the gallery bake (composite_gallery_bar) so every photo is branded.
   const showMinimalBadges = Boolean(vehicle && overlay && selectedIndex > 0 && hasRealPhotos && !forcePlaceholder);
   const remaining = Math.max(0, photoCount - 5);
-
-  // Badge config derived values — fall back to "show everything" when absent.
-  const MARGIN_PCT = badgeConfig?.margin_pct ?? 2.2;
 
   // Only open on mobile; desktop keeps thumbnail-swap-only behaviour
   const openLightbox = (index: number) => {
@@ -342,37 +334,11 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle, badgeCon
               />
             )}
 
-            {/* Gallery minimal badges — dealer logo (top-center) + URL badge
-                (bottom-center) on every non-hero photo. Keeps every gallery
-                slot branded without the full CARFAX/Google/phone overlay
-                that would crowd the image. Mirrors the DealerCenter bake
-                produced by composite_gallery_badges in photo_overlay.py. */}
-            {showMinimalBadges && (
-              <div onClick={(e) => e.stopPropagation()}>
-                <PhotoScrim />
-                <div
-                  className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
-                  style={{ top: `${MARGIN_PCT}%` }}
-                >
-                  <div className="pointer-events-auto scale-[0.329] @min-[400px]:scale-[0.418] @min-[500px]:scale-[0.529] @min-[620px]:scale-[0.663] @min-[760px]:scale-[0.82] @min-[920px]:scale-[0.997] @min-[1100px]:scale-[1.198] @min-[1220px]:scale-[1.323] origin-top">
-                    <DealerCluster
-                      showBadge={false}
-                      hideDealerPill={false}
-                      rating={googleReviews.rating}
-                      reviewCount={googleReviews.reviewCount}
-                      reviewsUrl={SITE_CONFIG.reviews.google.readUrl}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="absolute z-10 left-0 right-0 flex justify-center pointer-events-none"
-                  style={{ bottom: `${MARGIN_PCT}%` }}
-                >
-                  <span className="md:hidden inline-block scale-[0.64] @min-[500px]:scale-[0.85] @min-[620px]:scale-[1.05] @min-[720px]:scale-[1.25] origin-bottom"><UrlBadge compact /></span>
-                  <span className="hidden md:inline"><UrlBadge /></span>
-                </div>
-              </div>
-            )}
+            {/* Gallery photos 2+: ONLY the hero's top bar (logo · NO DEALER
+                FEES · CARFAX Advantage Dealer shield), whatever the status —
+                owner 2026-10-04. Same HeroTopBar component the hero uses, and
+                the HTML twin of composite_gallery_bar in photo_overlay.py. */}
+            {showMinimalBadges && <GalleryBarOverlay />}
 
             {/* Expand icon — mobile only, non-first photos (first photo has badge overlay) */}
             {hasRealPhotos && !forcePlaceholder && !showBadges && (
