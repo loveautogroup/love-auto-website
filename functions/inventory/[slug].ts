@@ -248,7 +248,7 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
         <div class="cta-box">
           <p class="cta-title">${available ? "Ready to make a deal?" : "This vehicle is being prepared for sale"}</p>
           <p class="cta-body">
-            ${available ? `This ${v.year} ${make} ${model} is available now on our lot in Villa Park, IL. Call or text us to schedule a test drive.` : `We're finishing up reconditioning on this ${v.year} ${make} ${model}. Contact us to get first dibs — we'll reach out the moment it's lot-ready.`}
+            ${available ? `This ${v.year} ${make} ${model} is available now on our lot in Villa Park, IL. Call us to schedule a test drive.` : `We're finishing up reconditioning on this ${v.year} ${make} ${model}. Contact us to get first dibs — we'll reach out the moment it's lot-ready.`}
           </p>
           <div class="cta-buttons">
             <a class="btn btn-primary" href="tel:+16303593643">Call (630) 359-3643</a>

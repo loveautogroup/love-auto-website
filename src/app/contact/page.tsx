@@ -52,7 +52,7 @@ export default function ContactPage() {
                     {SITE_CONFIG.phone}
                   </TrackedPhoneLink>
                   <p className="text-sm text-brand-gray-500 mt-0.5">
-                    Call or text during business hours
+                    Call during business hours
                   </p>
                 </div>
               </div>

@@ -36,7 +36,7 @@ export default function PhoneCTA({ phone, phoneRaw, compact }: PhoneCTAProps) {
         textShadow:
           "0 0 1px rgba(0,0,0,0.95), 1px 1px 1px rgba(0,0,0,0.95), -1px -1px 1px rgba(0,0,0,0.95), 0 2px 8px rgba(0,0,0,0.7)",
       }}
-      aria-label={`Call or text us at ${phone}`}
+      aria-label={`Call us at ${phone}`}
     >
       <span
         className={
