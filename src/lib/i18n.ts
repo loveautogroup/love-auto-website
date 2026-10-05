@@ -39,7 +39,7 @@ export const translations = {
     footer: {
       quickLinks: "Quick Links",
       businessHours: "Business Hours",
-      byAppointment: "Other times by appointment. Call or text (630) 359-3643.",
+      byAppointment: "Other times by appointment. Call 630-359-3643.",
       contactUs: "Contact Us",
       about:
         "Family-owned independent dealer in Villa Park, IL, 20 miles from Chicago. Since 2014. Carefully selected inventory, no dealer fees, free CARFAX on marked vehicles.",
@@ -640,7 +640,7 @@ export const translations = {
       visitSub: "Conveniently located off North Avenue in DuPage County",
       callOrText: "Call or text, we respond fast",
       businessHours: "Business Hours",
-      byAppointment: "Other times by appointment. Call or text (630) 359-3643.",
+      byAppointment: "Other times by appointment. Call 630-359-3643.",
       onTheLotHeading: "On the Lot Now",
       onTheLotSub: "Available today in Villa Park",
       viewAll: "View All \u2192",
@@ -693,7 +693,7 @@ export const translations = {
     footer: {
       quickLinks: "Enlaces Rápidos",
       businessHours: "Horario",
-      byAppointment: "Otros horarios con cita. Llama o envía un mensaje al (630) 359-3643.",
+      byAppointment: "Otros horarios con cita. Llama al 630-359-3643.",
       contactUs: "Contáctenos",
       about:
         "Concesionario independiente familiar en Villa Park, IL, a 20 millas de Chicago. Negocio familiar desde 2014. Inventario cuidadosamente seleccionado, sin cargos de concesionario, Carfax gratis en vehículos marcados.",
@@ -1268,7 +1268,7 @@ export const translations = {
       visitSub: "Ubicados convenientemente junto a North Avenue en el condado de DuPage",
       callOrText: "Llama o env\u00eda un mensaje, respondemos r\u00e1pido",
       businessHours: "Horario de Atenci\u00f3n",
-      byAppointment: "Otros horarios con cita. Llama o env\u00eda un mensaje al (630) 359-3643.",
+      byAppointment: "Otros horarios con cita. Llama al 630-359-3643.",
       onTheLotHeading: "Disponibles Ahora",
       onTheLotSub: "Disponibles hoy en Villa Park",
       viewAll: "Ver Todos \u2192",
