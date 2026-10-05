@@ -102,7 +102,7 @@ export function LocalBusinessSchema() {
     },
     openingHoursSpecification: [
       // Owner, 2026-10-03: Tue–Sat 2–6 PM; Sun + Mon closed (omitted =
-      // closed). Other times by appointment.
+      // closed). Appointments available outside of office hours.
       {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],

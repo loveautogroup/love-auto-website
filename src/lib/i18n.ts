@@ -34,12 +34,12 @@ export const translations = {
     header: {
       browseInventory: "Browse Inventory",
       freeCarfax: "Free CARFAX on marked cars",
-      hours: "Tue–Sat 2PM–6PM | Other times by appt.",
+      hours: "Tue–Sat 2PM–6PM | Appointments available outside of office hours",
     },
     footer: {
       quickLinks: "Quick Links",
       businessHours: "Business Hours",
-      byAppointment: "Other times by appointment. Call 630-359-3643.",
+      byAppointment: "Appointments available outside of office hours. Call 630-359-3643.",
       contactUs: "Contact Us",
       about:
         "Family-owned independent dealer in Villa Park, IL, 20 miles from Chicago. Since 2014. Carefully selected inventory, no dealer fees, free CARFAX on marked vehicles.",
@@ -291,7 +291,7 @@ export const translations = {
           "No. We charge no dealer fee, no doc fee, and no prep fee — on this {model} or anything else on the lot. The advertised price is the price of the car. On top of it you pay Illinois sales tax, title, and registration, which are set by the state and go to the Secretary of State, not to us. If a charge ever shows up on your paperwork that nobody explained to you first, stop and ask.",
         locationQ: "Where can I see this {model} in person?",
         locationA:
-          "We're at 735 N Yale Ave, Unit A, Villa Park, IL 60181 — easy to reach from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the broader DuPage County area. Test drives are walk-in friendly during business hours (Tuesday through Saturday, 2 to 6 PM), and other times are available by appointment; call (630) 359-3643 to confirm the vehicle is on the lot before you head over.",
+          "We're at 735 N Yale Ave, Unit A, Villa Park, IL 60181 — easy to reach from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the broader DuPage County area. Test drives are walk-in friendly during business hours (Tuesday through Saturday, 2 to 6 PM), and appointments are available outside of office hours; call (630) 359-3643 to confirm the vehicle is on the lot before you head over.",
       },
     },
     card: {
@@ -640,7 +640,7 @@ export const translations = {
       visitSub: "Conveniently located off North Avenue in DuPage County",
       callOrText: "Call, we respond fast",
       businessHours: "Business Hours",
-      byAppointment: "Other times by appointment. Call 630-359-3643.",
+      byAppointment: "Appointments available outside of office hours. Call 630-359-3643.",
       onTheLotHeading: "On the Lot Now",
       onTheLotSub: "Available today in Villa Park",
       viewAll: "View All \u2192",
@@ -688,12 +688,12 @@ export const translations = {
       browseInventory: "Ver Inventario",
       freeCarfax: "Carfax gratis en autos marcados",
       hours:
-        "Mar–Sáb 2PM–6PM | Otros horarios con cita",
+        "Mar–Sáb 2PM–6PM | Citas disponibles fuera del horario de oficina",
     },
     footer: {
       quickLinks: "Enlaces Rápidos",
       businessHours: "Horario",
-      byAppointment: "Otros horarios con cita. Llama al 630-359-3643.",
+      byAppointment: "Citas disponibles fuera del horario de oficina. Llama al 630-359-3643.",
       contactUs: "Contáctenos",
       about:
         "Concesionario independiente familiar en Villa Park, IL, a 20 millas de Chicago. Negocio familiar desde 2014. Inventario cuidadosamente seleccionado, sin cargos de concesionario, Carfax gratis en vehículos marcados.",
@@ -921,7 +921,7 @@ export const translations = {
           "No. No cobramos cargos de concesionario, ni de documentación, ni de preparación — ni en este {model} ni en ningún otro vehículo del lote. El precio anunciado es el precio del auto. Además de eso, usted paga el impuesto sobre la venta de Illinois, el título y la placa, que fija el estado y se pagan a la Secretaría de Estado, no a nosotros. Si alguna vez aparece un cargo en su documentación que nadie le explicó antes, deténgase y pregunte.",
         locationQ: "¿Dónde puedo ver este {model} en persona?",
         locationA:
-          "Estamos en 735 N Yale Ave, Unit A, Villa Park, IL 60181 — de fácil acceso desde Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison y el área del condado de DuPage. Las pruebas de manejo no requieren cita durante el horario de atención (martes a sábado, de 2 a 6 PM), y otros horarios están disponibles con cita; llame al (630) 359-3643 para confirmar que el vehículo está en el lote antes de venir.",
+          "Estamos en 735 N Yale Ave, Unit A, Villa Park, IL 60181 — de fácil acceso desde Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison y el área del condado de DuPage. Las pruebas de manejo no requieren cita durante el horario de atención (martes a sábado, de 2 a 6 PM), y hay citas disponibles fuera del horario de oficina; llame al (630) 359-3643 para confirmar que el vehículo está en el lote antes de venir.",
       },
     },
     card: {
@@ -1268,7 +1268,7 @@ export const translations = {
       visitSub: "Ubicados convenientemente junto a North Avenue en el condado de DuPage",
       callOrText: "Llama, respondemos r\u00e1pido",
       businessHours: "Horario de Atenci\u00f3n",
-      byAppointment: "Otros horarios con cita. Llama al 630-359-3643.",
+      byAppointment: "Citas disponibles fuera del horario de oficina. Llama al 630-359-3643.",
       onTheLotHeading: "Disponibles Ahora",
       onTheLotSub: "Disponibles hoy en Villa Park",
       viewAll: "Ver Todos \u2192",

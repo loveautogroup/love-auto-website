@@ -54,7 +54,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Visit Us in Villa Park",
         body: [
-          "We're at 735 N Yale Ave Unit A, two blocks north of North Avenue between Yale and Westmore. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment. Browse the current inventory online or stop by while we're open to walk through whatever's available.",
+          "We're at 735 N Yale Ave Unit A, two blocks north of North Avenue between Yale and Westmore. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and appointments are available outside of office hours. Browse the current inventory online or stop by while we're open to walk through whatever's available.",
           "Call us at (630) 359-3643 to confirm a specific vehicle is still available before you make the drive, or text any photo you have a question about. We respond quickly during business hours, Tuesday through Saturday from 2 to 6 PM.",
         ],
       },
@@ -87,7 +87,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Visit Us From Wheaton",
         body: [
-          "We're at 735 N Yale Ave in Villa Park, IL. From most of Wheaton, head east on Roosevelt Road or North Avenue, then north on Yale Avenue when you hit Villa Park. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment.",
+          "We're at 735 N Yale Ave in Villa Park, IL. From most of Wheaton, head east on Roosevelt Road or North Avenue, then north on Yale Avenue when you hit Villa Park. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and appointments are available outside of office hours.",
         ],
       },
     ],
@@ -119,7 +119,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Find Us From Westmont",
         body: [
-          "735 N Yale Ave, Unit A, Villa Park, IL 60181. About 10 minutes north of downtown Westmont via Cass Avenue. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment.",
+          "735 N Yale Ave, Unit A, Villa Park, IL 60181. About 10 minutes north of downtown Westmont via Cass Avenue. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and appointments are available outside of office hours.",
         ],
       },
     ],
@@ -150,7 +150,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "How to Find Us From Lisle",
         body: [
-          "735 N Yale Ave, Unit A, Villa Park, IL 60181. From downtown Lisle, head north on Naperville Road, east on Roosevelt Road, and look for Yale Avenue once you're in Villa Park. Free parking, open Tuesday through Saturday from 2 to 6 PM, and other times by appointment. Call (630) 359-3643 to confirm a specific vehicle is available before the drive.",
+          "735 N Yale Ave, Unit A, Villa Park, IL 60181. From downtown Lisle, head north on Naperville Road, east on Roosevelt Road, and look for Yale Avenue once you're in Villa Park. Free parking, open Tuesday through Saturday from 2 to 6 PM, and appointments are available outside of office hours. Call (630) 359-3643 to confirm a specific vehicle is available before the drive.",
         ],
       },
     ],
@@ -182,7 +182,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Visit Us From Downers Grove",
         body: [
-          "735 N Yale Ave, Unit A, Villa Park, IL 60181. Best route from Downers Grove is north on Ogden Avenue or Route 53 to North Avenue. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment.",
+          "735 N Yale Ave, Unit A, Villa Park, IL 60181. Best route from Downers Grove is north on Ogden Avenue or Route 53 to North Avenue. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and appointments are available outside of office hours.",
         ],
       },
     ],
@@ -214,7 +214,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Visit Us From Lombard",
         body: [
-          "We're at 735 N Yale Ave in Villa Park, just north of North Avenue. From most of Lombard, that's a 5-10 minute drive. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment. Browse our inventory online first, or stop in while we're open to walk through what's on the lot.",
+          "We're at 735 N Yale Ave in Villa Park, just north of North Avenue. From most of Lombard, that's a 5-10 minute drive. We're open Tuesday through Saturday from 2 to 6 PM, and appointments are available outside of office hours. Browse our inventory online first, or stop in while we're open to walk through what's on the lot.",
         ],
       },
     ],
@@ -245,7 +245,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Find Us From Elmhurst",
         body: [
-          "735 N Yale Ave, Unit A, Villa Park, IL 60181. Best route is North Avenue west, then a quick turn north on Yale. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment. If you can't make it while we're open, call 630-359-3643 to set a time.",
+          "735 N Yale Ave, Unit A, Villa Park, IL 60181. Best route is North Avenue west, then a quick turn north on Yale. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and appointments are available outside of office hours. If you can't make it while we're open, call 630-359-3643 to set a time.",
         ],
       },
     ],
@@ -276,7 +276,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Easy Drive From Oak Brook",
         body: [
-          "From most of Oak Brook, the fastest route is north on Route 83 to North Avenue, then east a few blocks to Yale. About 10-15 minutes. We're at 735 N Yale Ave, Villa Park. Free parking, open Tuesday through Saturday from 2 to 6 PM (Saturday works well for a weekend test drive), and other times by appointment.",
+          "From most of Oak Brook, the fastest route is north on Route 83 to North Avenue, then east a few blocks to Yale. About 10-15 minutes. We're at 735 N Yale Ave, Villa Park. Free parking, open Tuesday through Saturday from 2 to 6 PM (Saturday works well for a weekend test drive), and appointments are available outside of office hours.",
         ],
       },
     ],
@@ -338,7 +338,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "How to Find Us",
         body: [
-          "From Addison, head south on Lake Street or Addison Road to North Avenue, then west to Yale Avenue and north a few blocks. About 7 minutes. We're at 735 N Yale Ave, Villa Park, with free parking. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment.",
+          "From Addison, head south on Lake Street or Addison Road to North Avenue, then west to Yale Avenue and north a few blocks. About 7 minutes. We're at 735 N Yale Ave, Villa Park, with free parking. We're open Tuesday through Saturday from 2 to 6 PM, and appointments are available outside of office hours.",
         ],
       },
     ],

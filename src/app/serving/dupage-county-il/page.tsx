@@ -354,8 +354,8 @@ export default function DuPageCountyPage() {
             Stop in or call (630) 359-3643
           </h2>
           <p className="text-ink-300 mb-6">
-            735 N Yale Ave, Unit A, Villa Park, IL 60181. Tue-Sat 2-6 PM,
-            other times by appointment.
+            735 N Yale Ave, Unit A, Villa Park, IL 60181. Tue-Sat 2-6 PM.
+            Appointments available outside of office hours.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <TrackedPhoneLink

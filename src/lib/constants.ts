@@ -26,7 +26,7 @@ export const SITE_CONFIG = {
     { day: "Saturday", hours: "2:00 PM – 6:00 PM" },
   ],
   /** Shown under every hours table. */
-  hoursNote: "Other times by appointment. Call 630-359-3643.",
+  hoursNote: "Appointments available outside of office hours. Call 630-359-3643.",
   social: {
     facebook: "https://www.facebook.com/loveautogroup",
     google: "https://g.page/loveautogroup",
