@@ -79,7 +79,7 @@ const FAQS = [
 export const metadata: Metadata = {
   title: "Used Subaru Dealer in Villa Park, IL | Love Auto Group",
   description:
-    "Independent used Subaru dealer serving Countryside, Hinsdale, La Grange, and the western Chicago suburbs from Villa Park, IL. Forester, Outback, and Crosstrek — the 2014 to 2018 value range runs $9,000 to $15,000. Free Carfax on every vehicle, no dealer fees. Call or text (630) 359-3643.",
+    "Independent used Subaru dealer serving Countryside, Hinsdale, La Grange, and the western Chicago suburbs from Villa Park, IL. Forester, Outback, and Crosstrek — the 2014 to 2018 value range runs $9,000 to $15,000. Free Carfax on every vehicle, no dealer fees. Call 630-359-3643.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Used Subaru Dealer in Villa Park, IL | Love Auto Group",

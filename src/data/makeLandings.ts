@@ -222,7 +222,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Visit Us in Villa Park",
         body: [
-          "We're at 735 N Yale Ave, Unit A, Villa Park, IL 60181, easy to get to from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the broader DuPage County area. We're open Tuesday through Saturday from 2 to 6 PM. If the I-290 commute makes that hard, call or text (630) 359-3643 and we'll set a time by appointment. Browse current Mazda inventory below or call ahead to ask about a specific model.",
+          "We're at 735 N Yale Ave, Unit A, Villa Park, IL 60181, easy to get to from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the broader DuPage County area. We're open Tuesday through Saturday from 2 to 6 PM. If the I-290 commute makes that hard, call 630-359-3643 and we'll set a time by appointment. Browse current Mazda inventory below or call ahead to ask about a specific model.",
         ],
       },
     ],

@@ -245,7 +245,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Find Us From Elmhurst",
         body: [
-          "735 N Yale Ave, Unit A, Villa Park, IL 60181. Best route is North Avenue west, then a quick turn north on Yale. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment. If you can't make it while we're open, call or text (630) 359-3643 to set a time.",
+          "735 N Yale Ave, Unit A, Villa Park, IL 60181. Best route is North Avenue west, then a quick turn north on Yale. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and other times are available by appointment. If you can't make it while we're open, call 630-359-3643 to set a time.",
         ],
       },
     ],

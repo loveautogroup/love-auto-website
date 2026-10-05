@@ -53,7 +53,7 @@ const FAQ_ITEMS = [
   {
     question: "What are Love Auto Group's hours?",
     answer:
-      "Tuesday through Saturday, 2:00 PM to 6:00 PM. Closed Sunday and Monday. Other times are available by appointment, so call or text us at (630) 359-3643.",
+      "Tuesday through Saturday, 2:00 PM to 6:00 PM. Closed Sunday and Monday. Other times are available by appointment, so call us at 630-359-3643.",
   },
 ];
 
@@ -204,7 +204,7 @@ export default function UsedCarsVillaParkPage() {
               >
                 {SITE_CONFIG.phone}
               </TrackedPhoneLink>{" "}
-              — call or text
+              — call
             </p>
             <h3 className="font-semibold text-brand-gray-900 mb-2">Hours</h3>
             <ul className="space-y-1 text-sm">

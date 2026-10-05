@@ -37,7 +37,7 @@ const faqs = [
   {
     question: "What are your business hours?",
     answer:
-      "Tuesday through Saturday, 2PM to 6PM. We're closed on Sundays and Mondays. Other times are available by appointment, so call or text (630) 359-3643 to set one up.",
+      "Tuesday through Saturday, 2PM to 6PM. We're closed on Sundays and Mondays. Other times are available by appointment, so call 630-359-3643 to set one up.",
   },
   {
     question: "Can I schedule a test drive?",
