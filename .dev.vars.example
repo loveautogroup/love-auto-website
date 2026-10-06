@@ -1,0 +1,25 @@
+# Cloudflare Pages secrets for the OBD scan helper (/admin/obd-scan).
+#
+# PRODUCTION / PREVIEW: set these in the Cloudflare dashboard, NOT here:
+#   Workers & Pages -> love-auto-website -> Settings -> Environment variables
+#   Add each as type "Secret", for BOTH Production and Preview.
+#
+# LOCAL (`wrangler pages dev`): copy this file to .dev.vars and fill it in.
+# .dev.vars is gitignored; never commit a real key.
+
+# From https://console.anthropic.com -> API Keys. Same key the photo
+# classifier (scripts/classify-photos.ts) uses.
+ANTHROPIC_API_KEY=
+
+# From https://aistudio.google.com -> Get API key. NOT the Google Cloud
+# key the classifier can use; that is Cloud Vision, a different product.
+GEMINI_API_KEY=
+
+# Optional. Default is gemini-3.5-flash. On the FREE Gemini tier set this
+# to gemini-2.5-flash: free Google-search grounding is only attached to the
+# 2.5 Flash models. See docs/admin-runbook.md "Running it free".
+# GEMINI_MODEL=gemini-2.5-flash
+
+# Already required by every /admin page (see functions/_lib/admin-auth.ts).
+ADMIN_PASSWORD=
+ADMIN_AUTH_SECRET=
