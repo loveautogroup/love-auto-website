@@ -123,6 +123,20 @@ platform, what to check first, typical fix and rough cost, any TSB or
 recall, with links to every source. Codes can also be typed in by hand
 when there is no photo.
 
+**Two AIs, both every time.** Claude (Anthropic, with its own web search)
+and Gemini (Google, with Google Search) each do every step, and the page
+shows where they agree:
+
+- Reading the photo: a code both read is marked *both readers*; a code
+  only one read is flagged *only Claude · check* / *only Gemini · check*
+  so the tech looks at the screen before researching it.
+- Researching: each writes its own brief, then Claude folds the two into
+  one that keeps every source link and has a *Where the two sources
+  differ* section when they disagree on a cause, cost or bulletin. Both
+  original briefs sit underneath, collapsed.
+- If one key is missing or one service is down, the other still answers
+  and the page says which one was skipped or failed. Nothing is hidden.
+
 How it works, in order:
 
 1. **Vehicle** — pick the unit from the lot list (engine and miles fill
@@ -130,16 +144,29 @@ How it works, in order:
 2. **Codes** — add up to 4 photos and press *Read codes from photo*.
    Check every code against the screen before going further: the read
    is cheap, the research is not, and a misread code researched is
-   worse than nothing.
-3. **Research** — takes about a minute. The brief shows on the page
+   worse than nothing. Full-system scans (Toyota especially) list codes
+   per module and show the same code twice as current + history; the
+   reader keeps both and notes modules that are flagged but collapsed.
+   Expand those and take another photo.
+3. **Research** — takes a minute or two. The brief shows on the page
    with a *Copy brief* button for pasting into the RO or a text.
 
-Needs one secret in Cloudflare Pages → Settings → Environment variables
-(Production **and** Preview): `ANTHROPIC_API_KEY`. It is the same key the
-photo classifier below uses. Without it the page says so (503) rather
-than silently returning nothing. Cost is a few cents per scan read and
-roughly 10–20 cents per research brief (model tokens plus per-search
-billing, capped at 6 searches per brief).
+Needs two secrets in Cloudflare Pages → Settings → Environment variables
+(Production **and** Preview):
+
+| Secret | Where from | Notes |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | console.anthropic.com | Same key the photo classifier below uses. |
+| `GEMINI_API_KEY` | aistudio.google.com | NOT the Google Cloud key; that is Cloud Vision. Free tier works but its data may be used to improve Google products; the paid tier's is not. |
+
+Optional: `GEMINI_MODEL` (defaults to `gemini-3.5-flash`).
+
+Either key alone works; the page then runs on that one and says so.
+Without both keys set the page returns a clear 503 rather than silently
+returning nothing. Cost per scan with both: a few cents to read the photo
+and roughly 15–30 cents per brief (two researches plus the combine; Claude
+searches are capped at 6 per brief, Gemini grounding has a daily free
+allowance then is billed per search).
 
 The brief is a research aid from public web sources, not a diagnosis.
 Part numbers, bulletin numbers and costs get checked against OEM service
@@ -238,7 +265,7 @@ Quickest wins:
 | `wrangler.jsonc` | KV bindings (MERCHANDISING, LEADS, SIGNING) |
 | `functions/api/finance-application.ts` | Public lead-capture POST |
 | `functions/api/admin/leads.ts` | Admin GET/PATCH for leads |
-| `functions/api/admin/obd-scan.ts` | OBD scan helper: reads codes from photos, web-researches fixes (needs `ANTHROPIC_API_KEY`) |
+| `functions/api/admin/obd-scan.ts` | OBD scan helper: Claude + Gemini read codes from photos and web-research fixes (needs `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`) |
 | `functions/api/admin/signing-sessions.ts` | Admin POST/GET for e-sig sessions |
 | `functions/api/sign/[id].ts` | Public customer signing endpoints |
 | `src/data/photoOrder.ts` | Hand-maintained photo manifest |
