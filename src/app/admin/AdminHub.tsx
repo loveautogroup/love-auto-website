@@ -135,6 +135,11 @@ export default function AdminHub() {
             description="Control which vehicles are featured, set custom photo overlays and market estimates, and manage the Text Us number."
           />
           <NavCard
+            href="/admin/obd-scan"
+            title="OBD Scan Helper"
+            description="Photograph the scan tool screen, confirm the codes it read, and get a researched brief for that exact unit: likely causes, what to check first, typical fix and cost, TSBs and recalls, with sources."
+          />
+          <NavCard
             href="/admin/sync-status"
             title="Website Inventory Status"
             description="Is the site showing the current lot right now? Checks live DMS data, whether the deployed car pages still match the lot, and whether the marketplace feeds are publishing. Rebuild the site from here."
