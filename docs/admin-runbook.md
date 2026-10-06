@@ -17,6 +17,7 @@ the new website admin. Bookmark `https://www.loveautogroup.net/admin`
 | **Finance Leads** | `/admin/leads` | Every pre-qual application from the public /financing form |
 | **E-Sign Sessions** | `/admin/signing` | Create + track paperless signatures with customers |
 | **Merchandising** | `/admin/merchandising` | Which vehicles are featured, overlays, Text Us number |
+| **OBD Scan Helper** | `/admin/obd-scan` | Photograph a scan tool screen, confirm the codes, get a researched fix brief for that unit |
 
 All of these are gated by Cloudflare Access. Only emails on the
 allow-list can reach them (currently: `loveautogroup@gmail.com`).
@@ -112,6 +113,40 @@ feature pills), and the Text Us phone number.
 
 ---
 
+## OBD Scan Helper (recon)
+
+`/admin/obd-scan`. For the shop: a tech photographs the scan tool screen
+with their phone, the page reads the trouble codes off the photo into an
+editable list, and one more click researches those codes for that exact
+year/make/model/engine and writes a brief — likely causes ranked for that
+platform, what to check first, typical fix and rough cost, any TSB or
+recall, with links to every source. Codes can also be typed in by hand
+when there is no photo.
+
+How it works, in order:
+
+1. **Vehicle** — pick the unit from the lot list (engine and miles fill
+   in automatically) or enter one by hand for a car that is not ours.
+2. **Codes** — add up to 4 photos and press *Read codes from photo*.
+   Check every code against the screen before going further: the read
+   is cheap, the research is not, and a misread code researched is
+   worse than nothing.
+3. **Research** — takes about a minute. The brief shows on the page
+   with a *Copy brief* button for pasting into the RO or a text.
+
+Needs one secret in Cloudflare Pages → Settings → Environment variables
+(Production **and** Preview): `ANTHROPIC_API_KEY`. It is the same key the
+photo classifier below uses. Without it the page says so (503) rather
+than silently returning nothing. Cost is a few cents per scan read and
+roughly 10–20 cents per research brief (model tokens plus per-search
+billing, capped at 6 searches per brief).
+
+The brief is a research aid from public web sources, not a diagnosis.
+Part numbers, bulletin numbers and costs get checked against OEM service
+information before anything is quoted.
+
+---
+
 ## Photo arrangement (automated)
 
 When new vehicles arrive in Dealer Center, their photos import in
@@ -203,6 +238,7 @@ Quickest wins:
 | `wrangler.jsonc` | KV bindings (MERCHANDISING, LEADS, SIGNING) |
 | `functions/api/finance-application.ts` | Public lead-capture POST |
 | `functions/api/admin/leads.ts` | Admin GET/PATCH for leads |
+| `functions/api/admin/obd-scan.ts` | OBD scan helper: reads codes from photos, web-researches fixes (needs `ANTHROPIC_API_KEY`) |
 | `functions/api/admin/signing-sessions.ts` | Admin POST/GET for e-sig sessions |
 | `functions/api/sign/[id].ts` | Public customer signing endpoints |
 | `src/data/photoOrder.ts` | Hand-maintained photo manifest |
