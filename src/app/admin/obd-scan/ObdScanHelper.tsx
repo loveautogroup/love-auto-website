@@ -9,10 +9,15 @@
  *                  make, model, trim, engine, miles come along for free) or
  *                  type one in for a car that is not on the lot.
  *   2. Codes     — photograph the scan tool screen; /api/admin/obd-scan
- *                  reads the codes off it into an EDITABLE list. The tech
- *                  can also skip the photo and type codes straight in.
+ *                  has BOTH Claude and Gemini read the codes off it into an
+ *                  EDITABLE list. A code both saw is marked; a code only one
+ *                  saw is flagged for the tech to check. The tech can also
+ *                  skip the photo and type codes straight in.
  *   3. Research  — one click sends vehicle + confirmed codes to the same
- *                  endpoint, which web-searches and writes the brief.
+ *                  endpoint. Claude (web search) and Gemini (Google Search)
+ *                  each research and write a brief; Claude folds the two
+ *                  into one that says where they disagree. The combined
+ *                  brief is shown with both originals underneath.
  *
  * WHY THE CODES ARE CONFIRMED BEFORE RESEARCH. Reading a photo is cheap;
  * the research call is the one that pays for web searches. A misread code
@@ -46,6 +51,13 @@ interface SnapshotVehicle {
 }
 
 type CodeStatus = "confirmed" | "pending" | "permanent" | "history" | "unknown";
+type Provider = "claude" | "gemini";
+
+interface ProviderStatus {
+  provider: Provider;
+  state: "ok" | "skipped" | "error";
+  detail?: string;
+}
 
 interface DtcCode {
   code: string;
@@ -53,6 +65,16 @@ interface DtcCode {
   status: CodeStatus;
   /** Control unit that set it (Engine, Brake/EPB, SRS Airbag...). */
   module: string;
+  /** Which readers saw it on the photo; absent for a hand-typed row. */
+  readers?: Provider[];
+}
+
+interface Brief {
+  provider: Provider;
+  summary: string;
+  sources: Array<{ title: string; url: string }>;
+  searches: number;
+  truncated: boolean;
 }
 
 interface VehicleForm {
@@ -74,15 +96,31 @@ interface Photo {
 }
 
 interface ResearchResult {
+  /** The combined brief when both providers answered, else the one brief. */
   summary: string;
-  sources: Array<{ title: string; url: string }>;
+  combined: boolean;
+  briefs: Brief[];
+  sources: Array<{ title: string; url: string; providers: Provider[] }>;
   searches: number;
   truncated: boolean;
+  providers: ProviderStatus[];
 }
 
 type Busy = "idle" | "reading" | "researching";
 
 const STATUS_OPTIONS: CodeStatus[] = ["confirmed", "pending", "permanent", "history", "unknown"];
+const PROVIDER_LABEL: Record<Provider, string> = { claude: "Claude", gemini: "Gemini (Google)" };
+
+function providerLine(statuses: ProviderStatus[]): string {
+  return statuses
+    .map((p) => {
+      const name = PROVIDER_LABEL[p.provider];
+      if (p.state === "ok") return `${name} ✓`;
+      if (p.state === "skipped") return `${name} skipped (${p.detail ?? "no key"})`;
+      return `${name} failed: ${p.detail ?? "unknown error"}`;
+    })
+    .join(" · ");
+}
 const CODE_RE = /^[PBCU][0-9A-F]{4}$/;
 const MAX_PHOTOS = 4;
 const MAX_SIDE = 1600;
@@ -150,6 +188,7 @@ export default function ObdScanHelper() {
   const [codes, setCodes] = useState<DtcCode[]>([]);
   const [scannerNotes, setScannerNotes] = useState("");
   const [vehicleHint, setVehicleHint] = useState("");
+  const [readStatus, setReadStatus] = useState<ProviderStatus[]>([]);
   const [techNotes, setTechNotes] = useState("");
 
   // Research
@@ -265,6 +304,7 @@ export default function ObdScanHelper() {
         codes: DtcCode[];
         scannerNotes: string;
         vehicleHint: string | null;
+        providers: ProviderStatus[];
       };
       // Keep anything the tech already typed; add what the photo shows. The
       // same code can appear twice on a full-system scan (current + history),
@@ -275,6 +315,7 @@ export default function ObdScanHelper() {
       });
       setScannerNotes(data.scannerNotes ?? "");
       setVehicleHint(data.vehicleHint ?? "");
+      setReadStatus(data.providers ?? []);
       if (data.codes.length === 0) {
         setError("No codes could be read from the photo. Try a straighter, closer shot, or type the codes in below.");
       }
@@ -303,7 +344,7 @@ export default function ObdScanHelper() {
           mileage: vehicle.mileage ? Number(vehicle.mileage.replace(/[^0-9]/g, "")) : null,
           vin: vehicle.vin || null,
         },
-        codes: validCodes,
+        codes: validCodes.map(({ code, description, status, module }) => ({ code, description, status, module })),
         notes: [scannerNotes, techNotes].filter(Boolean).join("\n"),
       });
       if (!res.ok) {
@@ -321,7 +362,11 @@ export default function ObdScanHelper() {
   async function copySummary() {
     if (!result) return;
     const label = [vehicle.year, vehicle.make, vehicle.model, vehicle.trim].filter(Boolean).join(" ");
-    const text = `OBD scan brief — ${label}\nCodes: ${validCodes.map((c) => c.code).join(", ")}\n\n${result.summary}\n\nSources:\n${result.sources
+    const body =
+      result.combined || result.briefs.length === 1
+        ? result.summary
+        : result.briefs.map((b) => `=== ${PROVIDER_LABEL[b.provider]} ===\n${b.summary}`).join("\n\n");
+    const text = `OBD scan brief — ${label}\nCodes: ${validCodes.map((c) => c.code).join(", ")}\n\n${body}\n\nSources:\n${result.sources
       .map((s) => `- ${s.title}: ${s.url}`)
       .join("\n")}`;
     try {
@@ -337,6 +382,7 @@ export default function ObdScanHelper() {
     setCodes([]);
     setScannerNotes("");
     setVehicleHint("");
+    setReadStatus([]);
     setTechNotes("");
     setResult(null);
     setError(null);
@@ -439,6 +485,9 @@ export default function ObdScanHelper() {
             {photos.length}/{MAX_PHOTOS} photos
           </span>
         </div>
+        {readStatus.length > 0 && (
+          <p className="mt-2 text-xs text-brand-gray-500">Read by: {providerLine(readStatus)}</p>
+        )}
 
         {photos.length > 0 && (
           <ul className="mt-4 flex flex-wrap gap-3">
@@ -482,7 +531,7 @@ export default function ObdScanHelper() {
                 const normalised = c.code.trim().toUpperCase();
                 const bad = normalised !== "" && !CODE_RE.test(normalised);
                 return (
-                  <li key={i} className="grid grid-cols-[6rem_8rem_1fr_auto_auto] gap-2 items-center">
+                  <li key={i} className="grid grid-cols-[6rem_8rem_1fr_auto_auto_auto] gap-2 items-center">
                     <input
                       value={c.code}
                       onChange={(e) => updateCode(i, { code: e.target.value.toUpperCase() })}
@@ -508,6 +557,7 @@ export default function ObdScanHelper() {
                       aria-label="Scanner description"
                       className="rounded-md border border-brand-gray-300 px-2 py-1.5 text-sm"
                     />
+                    <ReadersBadge readers={c.readers} />
                     <select
                       value={c.status}
                       onChange={(e) => updateCode(i, { status: e.target.value as CodeStatus })}
@@ -602,11 +652,13 @@ export default function ObdScanHelper() {
 
         {result && (
           <div className="mt-5">
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-3 text-xs text-brand-gray-500">
-              <span>
-                {result.searches > 0 ? `${result.searches} web search${result.searches === 1 ? "" : "es"} · ` : ""}
-                {result.sources.length} source{result.sources.length === 1 ? "" : "s"}
-                {result.truncated ? " · brief was cut short, consider re-running" : ""}
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-1 text-xs text-brand-gray-500">
+              <span className="font-medium text-brand-gray-700">
+                {result.combined
+                  ? "Combined brief from Claude (web search) and Gemini (Google Search)"
+                  : result.briefs.length === 1
+                    ? `Brief from ${PROVIDER_LABEL[result.briefs[0].provider]} only`
+                    : "Two briefs, shown separately (combining failed)"}
               </span>
               <button
                 type="button"
@@ -616,9 +668,36 @@ export default function ObdScanHelper() {
                 {copied ? "Copied" : "Copy brief"}
               </button>
             </div>
-            <article className="prose-like text-sm text-brand-gray-800 space-y-3">
-              {renderMarkdown(result.summary)}
-            </article>
+            <p className="mb-3 text-xs text-brand-gray-500">
+              {providerLine(result.providers)}
+              {result.searches > 0 ? ` · ${result.searches} web search${result.searches === 1 ? "" : "es"}` : ""}
+              {` · ${result.sources.length} source${result.sources.length === 1 ? "" : "s"}`}
+              {result.truncated ? " · a brief was cut short, consider re-running" : ""}
+            </p>
+            {(result.combined || result.briefs.length === 1) && (
+              <article className="text-sm text-brand-gray-800 space-y-3">{renderMarkdown(result.summary)}</article>
+            )}
+            {result.briefs.length > 1 && (
+              <div className="mt-5 space-y-3">
+                {result.briefs.map((b) => (
+                  <details
+                    key={b.provider}
+                    open={!result.combined}
+                    className="rounded-lg border border-brand-gray-200 bg-brand-gray-50 p-3"
+                  >
+                    <summary className="cursor-pointer text-sm font-medium text-brand-gray-700">
+                      {PROVIDER_LABEL[b.provider]} brief
+                      <span className="font-normal text-brand-gray-500">
+                        {" "}
+                        · {b.sources.length} source{b.sources.length === 1 ? "" : "s"}
+                        {b.truncated ? " · cut short" : ""}
+                      </span>
+                    </summary>
+                    <article className="mt-3 text-sm text-brand-gray-800 space-y-3">{renderMarkdown(b.summary)}</article>
+                  </details>
+                ))}
+              </div>
+            )}
             {result.sources.length > 0 && (
               <div className="mt-6 pt-4 border-t border-brand-gray-200">
                 <p className="text-xs font-medium uppercase tracking-wide text-brand-gray-500 mb-2">Sources</p>
@@ -634,6 +713,11 @@ export default function ObdScanHelper() {
                         {s.title}
                       </a>
                       <span className="text-brand-gray-400 break-all"> — {hostOf(s.url)}</span>
+                      {result.briefs.length > 1 && (
+                        <span className="ml-2 text-[11px] uppercase tracking-wide text-brand-gray-400">
+                          {s.providers.map((pv) => (pv === "gemini" ? "google" : pv)).join(" + ")}
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ol>
@@ -690,6 +774,30 @@ function Field({
         className="mt-1 w-full rounded-md border border-brand-gray-300 px-2 py-1.5 text-sm"
       />
     </label>
+  );
+}
+
+function ReadersBadge({ readers }: { readers?: Provider[] }) {
+  if (!readers || readers.length === 0) {
+    return <span className="text-[11px] text-brand-gray-400 whitespace-nowrap">typed in</span>;
+  }
+  if (readers.length >= 2) {
+    return (
+      <span
+        className="rounded-full bg-green-50 border border-green-200 px-2 py-0.5 text-[11px] text-green-800 whitespace-nowrap"
+        title="Both Claude and Gemini read this code from the photo"
+      >
+        both readers
+      </span>
+    );
+  }
+  return (
+    <span
+      className="rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-[11px] text-amber-800 whitespace-nowrap"
+      title={`Only ${PROVIDER_LABEL[readers[0]]} read this code. Check it against the screen before researching.`}
+    >
+      only {readers[0] === "claude" ? "Claude" : "Gemini"} · check
+    </span>
   );
 }
 
