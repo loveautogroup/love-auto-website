@@ -68,6 +68,8 @@ interface DtcCode {
   code: string;
   description: string;
   status: CodeStatus;
+  /** Control unit that set it (Engine, Brake/EPB, SRS Airbag...). */
+  module: string;
 }
 
 interface VehicleInfo {
@@ -139,20 +141,27 @@ function normaliseStatus(v: unknown): CodeStatus {
 }
 
 /** Keep only well-formed DTCs; the model is told the format but the tech
- *  can also type codes by hand, so the shape is checked here regardless. */
+ *  can also type codes by hand, so the shape is checked here regardless.
+ *  The same code may legitimately appear twice (current + history copies on
+ *  a Toyota scan), so rows are de-duplicated on code + status, not code. */
 function sanitiseCodes(raw: unknown): DtcCode[] {
   if (!Array.isArray(raw)) return [];
   const seen = new Set<string>();
   const out: DtcCode[] = [];
   for (const item of raw) {
     if (!item || typeof item !== "object") continue;
-    const code = (str((item as { code?: unknown }).code, 8) ?? "").toUpperCase().replace(/\s+/g, "");
-    if (!CODE_RE.test(code) || seen.has(code)) continue;
-    seen.add(code);
+    const o = item as { code?: unknown; description?: unknown; status?: unknown; module?: unknown };
+    const code = (str(o.code, 8) ?? "").toUpperCase().replace(/\s+/g, "");
+    if (!CODE_RE.test(code)) continue;
+    const status = normaliseStatus(o.status);
+    const key = `${code}:${status}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
     out.push({
       code,
-      description: str((item as { description?: unknown }).description, 160) ?? "",
-      status: normaliseStatus((item as { status?: unknown }).status),
+      description: str(o.description, 160) ?? "",
+      status,
+      module: str(o.module, 60) ?? "",
     });
     if (out.length >= MAX_CODES) break;
   }
@@ -192,15 +201,17 @@ async function callAnthropic(
 
 // ─── Step 1: read the codes off the photo(s) ──────────────────────────
 
-const EXTRACT_SYSTEM = `You read photographs of OBD-II scan tool screens for a used-car dealership's reconditioning team.
+const EXTRACT_SYSTEM = `You read photographs of OBD-II scan tool screens for a used-car dealership's reconditioning team. The photo is often taken at an angle under shop lighting with glare and scratches on the screen; read through that.
 
-Transcribe exactly what the screen shows. Diagnostic trouble codes are one letter (P, B, C or U) followed by four hex characters, e.g. P0420, C1234, U0100, P1E00. Read each character carefully: 0 vs O vs D, 1 vs I, 8 vs B, 5 vs S. If a character is genuinely unreadable, omit that code rather than guess, and say so in scannerNotes.
+Transcribe exactly what the screen shows. Diagnostic trouble codes are one letter (P, B, C or U) followed by four hex characters, e.g. P0420, C1214, U0100, P1E00. Read each character carefully: 0 vs O vs D, 1 vs I, 8 vs B, 5 vs S. If a character is genuinely unreadable, omit that code rather than guess, and say so in scannerNotes.
 
-For each code capture the scanner's own description text if visible and its status if the screen labels it (confirmed / stored / current = "confirmed"; pending = "pending"; permanent = "permanent"; history / cleared = "history"; otherwise "unknown").
+Full-system scans list codes under the module (control unit) that set them: Engine, Hybrid Control, Brake/EPB, ABS, SRS Airbag, EMPS/Power Steering, TCM, Body, etc. Record that module name for each code. The same code can be listed twice under one module when the scanner shows a current and a history (stored) copy; keep both rows and give each its own status.
 
-scannerNotes: anything else useful on the screen in one or two sentences — freeze frame data, module names (ECM, TCM, ABS, SRS), readiness monitors, mileage, a "no codes" message, or legibility problems.
+Status: current / confirmed / stored = "confirmed"; pending = "pending"; permanent = "permanent"; history / past / cleared = "history". Toyota-style scanners flag each row with a single letter at the right edge: C = current -> "confirmed", H = history -> "history", P = pending -> "pending". Otherwise "unknown".
 
-vehicleHint: the year/make/model/VIN if the screen shows one, else an empty string.`;
+scannerNotes: one to three sentences of anything else useful. Especially: modules the screen flags with a fault marker whose codes are collapsed or cut off (say which, so the tech expands and photographs them too), freeze frame data, readiness monitors, mileage, a "no codes" message, legibility problems.
+
+vehicleHint: the make, model, generation/platform code, years and VIN if the screen shows them (e.g. "Toyota Prius MXWH60 12/2022-09/2024"), else an empty string.`;
 
 const EXTRACT_SCHEMA = {
   type: "object",
@@ -216,8 +227,9 @@ const EXTRACT_SCHEMA = {
             type: "string",
             enum: ["confirmed", "pending", "permanent", "history", "unknown"],
           },
+          module: { type: "string" },
         },
-        required: ["code", "description", "status"],
+        required: ["code", "description", "status", "module"],
         additionalProperties: false,
       },
     },
@@ -364,13 +376,21 @@ async function handleResearch(apiKey: string, body: Record<string, unknown>): Pr
   };
   const notes = str(body.notes, 1000);
 
-  const codeLines = codes
-    .map(
-      (c) =>
-        `- ${c.code}${c.description ? ` — scanner says "${c.description}"` : ""}${
-          c.status !== "unknown" ? ` (${c.status})` : ""
-        }`
-    )
+  // One line per code. A current + history pair of the same code (common on
+  // Toyota full-system scans) is one fault, so it becomes one line that
+  // says it recurred rather than two lines the model might treat separately.
+  const byCode = new Map<string, DtcCode[]>();
+  for (const c of codes) byCode.set(c.code, [...(byCode.get(c.code) ?? []), c]);
+  const codeLines = [...byCode.entries()]
+    .map(([code, rows]) => {
+      const first = rows[0];
+      const statuses = [...new Set(rows.map((r) => r.status).filter((st) => st !== "unknown"))];
+      const parts = [`- ${code}`];
+      if (first.module) parts.push(`[${first.module} module]`);
+      if (first.description) parts.push(`— scanner says "${first.description}"`);
+      if (statuses.length) parts.push(`(${statuses.join(" + ")})`);
+      return parts.join(" ");
+    })
     .join("\n");
 
   const prompt = `Vehicle: ${vehicleLabel(vehicle)}
