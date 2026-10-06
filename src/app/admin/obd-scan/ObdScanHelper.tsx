@@ -51,6 +51,8 @@ interface DtcCode {
   code: string;
   description: string;
   status: CodeStatus;
+  /** Control unit that set it (Engine, Brake/EPB, SRS Airbag...). */
+  module: string;
 }
 
 interface VehicleForm {
@@ -223,7 +225,7 @@ export default function ObdScanHelper() {
     setCodes((c) => c.filter((_, idx) => idx !== i));
   }
   function addCode() {
-    setCodes((c) => [...c, { code: "", description: "", status: "unknown" }]);
+    setCodes((c) => [...c, { code: "", description: "", status: "unknown", module: "" }]);
   }
 
   const validCodes = codes
@@ -264,10 +266,12 @@ export default function ObdScanHelper() {
         scannerNotes: string;
         vehicleHint: string | null;
       };
-      // Keep anything the tech already typed; add what the photo shows.
+      // Keep anything the tech already typed; add what the photo shows. The
+      // same code can appear twice on a full-system scan (current + history),
+      // so a row is a duplicate only when code AND status match.
       setCodes((existing) => {
-        const have = new Set(existing.map((c) => c.code.trim().toUpperCase()));
-        return [...existing, ...data.codes.filter((c) => !have.has(c.code))];
+        const have = new Set(existing.map((c) => `${c.code.trim().toUpperCase()}:${c.status}`));
+        return [...existing, ...data.codes.filter((c) => !have.has(`${c.code}:${c.status}`))];
       });
       setScannerNotes(data.scannerNotes ?? "");
       setVehicleHint(data.vehicleHint ?? "");
@@ -478,7 +482,7 @@ export default function ObdScanHelper() {
                 const normalised = c.code.trim().toUpperCase();
                 const bad = normalised !== "" && !CODE_RE.test(normalised);
                 return (
-                  <li key={i} className="grid grid-cols-[6rem_1fr_auto_auto] gap-2 items-center">
+                  <li key={i} className="grid grid-cols-[6rem_8rem_1fr_auto_auto] gap-2 items-center">
                     <input
                       value={c.code}
                       onChange={(e) => updateCode(i, { code: e.target.value.toUpperCase() })}
@@ -489,6 +493,13 @@ export default function ObdScanHelper() {
                       className={`rounded-md border px-2 py-1.5 font-mono text-sm uppercase ${
                         bad ? "border-red-400 bg-red-50" : "border-brand-gray-300"
                       }`}
+                    />
+                    <input
+                      value={c.module}
+                      onChange={(e) => updateCode(i, { module: e.target.value })}
+                      placeholder="Module"
+                      aria-label="Module that set the code"
+                      className="rounded-md border border-brand-gray-300 px-2 py-1.5 text-sm"
                     />
                     <input
                       value={c.description}
