@@ -168,6 +168,25 @@ and roughly 15–30 cents per brief (two researches plus the combine; Claude
 searches are capped at 6 per brief, Gemini grounding has a daily free
 allowance then is billed per search).
 
+**Running it free.** Gemini's free tier covers the whole thing — reading
+the photo, the Google searches and the brief — at $0, with no code change:
+
+1. Set only `GEMINI_API_KEY` (leave `ANTHROPIC_API_KEY` unset).
+2. Set `GEMINI_MODEL=gemini-2.5-flash`. Free Google-search grounding is
+   only attached to the 2.5 Flash models; the 3.x models get no free
+   grounding on the free tier (as reported in late 2026 — confirm the live
+   quota in AI Studio under your project).
+3. Limits are roughly 15 requests a minute and ~500 grounded searches a
+   day, far more than the shop uses.
+
+What you give up: the second reader and the second brief (no cross-check),
+and on the free tier Google may use what is sent to improve its products.
+Adding a card to the Gemini project (Tier 1) removes that clause, keeps a
+free daily grounding allowance, and prices tokens at fractions of a cent,
+so it stays effectively free at shop volume. Adding `ANTHROPIC_API_KEY`
+back turns the cross-check on; that is where the 15–30 cents per brief
+comes from.
+
 The brief is a research aid from public web sources, not a diagnosis.
 Part numbers, bulletin numbers and costs get checked against OEM service
 information before anything is quoted.
