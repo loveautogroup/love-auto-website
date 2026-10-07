@@ -9,7 +9,9 @@ test.use({ viewport: { width: 390, height: 844 } });
 
 async function openFirstListedGallery(page: import("@playwright/test").Page) {
   await page.goto("/inventory/");
-  const link = page.locator('a[href^="/inventory/"][href$="/"]').filter({ hasNot: page.locator("text=Sold") }).first();
+  // A car page, never the "Inventory" menu link itself: it matched first, hidden, after the
+  // header menu change, and every canary run timed out on it (2026-10-05 to 10-07).
+  const link = page.locator('a[href^="/inventory/"][href$="/"]:not([href="/inventory/"])').filter({ hasNot: page.locator("text=Sold") }).first();
   await link.waitFor();
   await link.click();
   const hero = page.getByRole("button", { name: /photos fullscreen/i }).first();
