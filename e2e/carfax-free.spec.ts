@@ -21,6 +21,9 @@ import { carfaxVisible } from "../shared/carfaxVisibility";
  *   FAIL — secure.carfax.com, or a title containing "Get a CARFAX Report
  *          Now" (their $49.99 paid-order page) — the exact false-advertising
  *          shape the owner flagged, on a car our own site says is live.
+ *   BLOCKED — CARFAX's bot screen (bare "carfax.com" title, access-denied text): recorded
+ *          as "could not check from here", NOT a failure (owner, 2026-10-07). The Valet
+ *          carfax_links check in the owner's Chrome is the guard for those cars.
  *
  * Runs once a day (.github/workflows/carfax-free-report-check.yml, 15:00
  * UTC) — not on every push. It hits carfax.com, a third party, for at most
@@ -63,6 +66,20 @@ async function liveOverlays(page: Page): Promise<Record<string, MerchOverlay>> {
   return body.overlays ?? {};
 }
 
+/**
+ * CARFAX's bot screen, as GitHub's runners get it (2026-10-06/07: all 6 badged cars came back
+ * with the bare title "carfax.com", while the same links opened full free reports in the
+ * owner's Chrome). That is "could not check from here", not a verdict on the badge: a paid
+ * order page or any other unrecognised page still FAILS. Owner, 2026-10-07: "make the CARFAX
+ * check change as recommended" — record it, don't fail on it, and let the Valet carfax_links
+ * check (daily, the owner's own Chrome) be the guard.
+ */
+function isCarfaxBotScreen(title: string, body: string): boolean {
+  const t = title.trim().toLowerCase();
+  if (t === "carfax.com" || t === "www.carfax.com") return true;
+  return /access denied|pardon our interruption|verify you are (a )?human|are you a robot|unusual traffic|request blocked|just a moment/i.test(`${title}\n${body.slice(0, 2000)}`);
+}
+
 const dvwReportUrl = (vin: string) =>
   `https://www.carfax.com/VehicleHistory/p/Report.cfx?partner=DVW_1&vin=${vin}`;
 
@@ -83,6 +100,7 @@ test.describe("CARFAX free-report check — the link must actually be free", () 
     );
 
     const failures: string[] = [];
+    const blocked: string[] = [];
 
     for (const v of badged) {
       const label = v.stockNumber ? `stock ${v.stockNumber}` : v.slug;
@@ -98,8 +116,12 @@ test.describe("CARFAX free-report check — the link must actually be free", () 
         const isPaidOrderPage =
           landedOnSecure || /get a carfax report now/i.test(title);
         const isRealReport = title.startsWith("CARFAX Vehicle History Report");
+        const body = isRealReport || isPaidOrderPage ? "" : await carfaxPage.locator("body").innerText().catch(() => "");
+        const isBotScreen = !isRealReport && !isPaidOrderPage && isCarfaxBotScreen(title, body);
 
-        if (isPaidOrderPage) {
+        if (isBotScreen) {
+          blocked.push(`${label} (VIN ${v.vin}): CARFAX showed its bot screen (title "${title}") — could not check from here.`);
+        } else if (isPaidOrderPage) {
           failures.push(
             `${label} (VIN ${v.vin}): our badge is LIVE but the link lands on CARFAX's PAID order page ` +
               `(title="${title}", url=${carfaxPage.url()}) — this is the exact false-advertising defect. ` +
@@ -119,6 +141,16 @@ test.describe("CARFAX free-report check — the link must actually be free", () 
       } finally {
         await carfaxPage.close();
       }
+    }
+
+    if (blocked.length) {
+      // Recorded on the run (annotation + log), not a failure: the Valet carfax_links check
+      // in the owner's Chrome is the guard that can still see these reports.
+      test.info().annotations.push({
+        type: "carfax-blocked",
+        description: `${blocked.length} of ${badged.length} could not be checked (CARFAX bot screen). The Valet daily carfax_links check covers them.`,
+      });
+      console.warn(`CARFAX blocked this runner for ${blocked.length} of ${badged.length} badged vehicles:\n${blocked.join("\n")}`);
     }
 
     expect(
