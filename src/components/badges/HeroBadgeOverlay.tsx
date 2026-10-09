@@ -149,7 +149,8 @@ export default function HeroBadgeOverlay({
   onBadgeClick,
 }: HeroBadgeOverlayProps) {
   const r = Math.round((Number(rating) || 0) * 10) / 10;
-  const shownPills = status === "available" ? pills.filter(Boolean).slice(0, 3) : [];
+  // Up to six since 2026-10-09 (owner), matching badge_pills.MAX_PILLS and the bake.
+  const shownPills = status === "available" ? pills.filter(Boolean).slice(0, 6) : [];
   const sim = status !== "available";
   const stop = (e: React.MouseEvent) => {
     e.stopPropagation();
