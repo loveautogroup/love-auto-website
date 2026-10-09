@@ -137,6 +137,16 @@ export function GalleryBarOverlay({ logoSrc, shieldSrc }: { logoSrc?: string; sh
   );
 }
 
+/**
+ * Size of each hero pill by how many there are (owner 2026-10-09: "reduce size
+ * of the badges when using more than 3"). 1-3 full size; 4 / 5 / 6 at 80% /
+ * 70% / 62%. MIRRORED in photo_overlay.py pill_scale() and the other
+ * HeroBadgeOverlay.tsx (website / DMS). Change all three.
+ */
+export function pillScale(count: number): number {
+  return ({ 4: 0.8, 5: 0.7, 6: 0.62 } as Record<number, number>)[count] ?? 1;
+}
+
 export default function HeroBadgeOverlay({
   status,
   pills = [],
@@ -151,6 +161,7 @@ export default function HeroBadgeOverlay({
   const r = Math.round((Number(rating) || 0) * 10) / 10;
   // Up to six since 2026-10-09 (owner), matching badge_pills.MAX_PILLS and the bake.
   const shownPills = status === "available" ? pills.filter(Boolean).slice(0, 6) : [];
+  const ps = pillScale(shownPills.length);
   const sim = status !== "available";
   const stop = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -224,14 +235,14 @@ export default function HeroBadgeOverlay({
 
       {/* Feature pills, stacked bottom-left (available cars only). */}
       {shownPills.length > 0 && (
-        <div style={{ position: "absolute", left: "1.8cqw", bottom: "2.2cqw", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "0.9cqw" }}>
+        <div style={{ position: "absolute", left: "1.8cqw", bottom: "2.2cqw", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: `${0.9 * ps}cqw` }}>
           {shownPills.map((p) => (
             <span
               key={p}
               style={{
-                background: INK, ...glass, color: "#fff", fontWeight: 800, fontSize: "3.1cqw", lineHeight: 1.219,
-                padding: "0.9cqw 2.4cqw 0.9cqw 1.8cqw", borderRadius: 99, borderLeft: `1.1cqw solid ${RED}`,
-                boxShadow: "0 0.3cqw 1cqw rgba(0,0,0,0.467)", whiteSpace: "nowrap", display: "block",
+                background: INK, ...glass, color: "#fff", fontWeight: 800, fontSize: `${3.1 * ps}cqw`, lineHeight: 1.219,
+                padding: `${0.9 * ps}cqw ${2.4 * ps}cqw ${0.9 * ps}cqw ${1.8 * ps}cqw`, borderRadius: 99, borderLeft: `${1.1 * ps}cqw solid ${RED}`,
+                boxShadow: `0 ${0.3 * ps}cqw ${1 * ps}cqw rgba(0,0,0,0.467)`, whiteSpace: "nowrap", display: "block",
               }}
             >
               {p}
