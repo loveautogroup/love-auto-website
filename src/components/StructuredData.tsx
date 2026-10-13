@@ -115,7 +115,7 @@ export function LocalBusinessSchema() {
       latitude: SITE_CONFIG.geo.lat,
       longitude: SITE_CONFIG.geo.lng,
     },
-    priceRange: "$4,500–$18,000",
+    priceRange: "$4,500–$20,000",
     image: `${SITE_CONFIG.url}/images/storefront.jpg`,
     // aggregateRating intentionally ABSENT (removed 2026-07-20, SEO plan
     // Phase 1 / DMS #6). Google's review-snippet policy: "If the entity
@@ -125,9 +125,12 @@ export function LocalBusinessSchema() {
     // Google rating here is self-serving markup and a manual-action risk.
     // The 4.7/128 rating surfaces through the Business Profile instead.
     // https://developers.google.com/search/docs/appearance/structured-data/review-snippet
+    // The same business on other sites, so AI answer engines can tie the
+    // listings together (GEO, owner 2026-10-13). CarGurus checked 200.
     sameAs: [
       SITE_CONFIG.social.facebook,
       SITE_CONFIG.social.google,
+      "https://www.cargurus.com/Cars/m-Love-Auto-Group-sp414393",
     ],
   };
 
