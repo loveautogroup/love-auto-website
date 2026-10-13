@@ -90,7 +90,7 @@ export default function BuyingGuidesIndexPage() {
           </h1>
           <p className="mt-4 text-lg md:text-xl text-ink-300 max-w-3xl">
             Plain-English guides from a family owned dealer in Villa Park, IL.
-            What to look for, what to ask, and which model years make sense.
+            What to look for, what to ask and which model years make sense.
           </p>
         </div>
       </section>

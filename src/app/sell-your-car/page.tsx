@@ -9,12 +9,12 @@ const FAQS = [
   {
     question: "How does selling my car to Love Auto Group work?",
     answer:
-      "Fill out the form with your VIN, mileage, and photos. We review what you send and then call you to talk about an offer. If the offer works for you, we set a time for you to bring the car in.",
+      "Fill out the form with your VIN, mileage and photos. We review what you send and then call you to talk about an offer. If the offer works for you, we set a time for you to bring the car in.",
   },
   {
     question: "What kinds of cars do you look at?",
     answer:
-      "We look at any make and model. We especially like Japanese makes such as Subaru, Lexus, Honda, Acura, Mazda, and Toyota. Whether we make an offer depends on the car, its condition, and what we see in the local market.",
+      "We look at any make and model. We especially like Japanese makes such as Subaru, Lexus, Honda, Acura, Mazda and Toyota. Whether we make an offer depends on the car, its condition and what we see in the local market.",
   },
   {
     question: "Can I trade in my car instead of selling it?",
@@ -24,7 +24,7 @@ const FAQS = [
   {
     question: "What should I bring when I come in?",
     answer:
-      "Bring the title if you have it, a valid photo ID, all the keys you have, and your loan payoff information if the car is financed. If you are missing something, call us before you come and we will tell you what to expect.",
+      "Bring the title if you have it, a valid photo ID, all the keys you have and your loan payoff information if the car is financed. If you are missing something, call us before you come and we will tell you what to expect.",
   },
   {
     question: "Can I sell a car that still has a loan on it?",
@@ -129,7 +129,7 @@ export default function SellYourCarPage() {
         <ol className="list-decimal pl-6 space-y-2 mb-6">
           <li>
             <strong>Send your details.</strong> Use the form above to give us
-            your VIN, your mileage, and a few photos of the car.
+            your VIN, your mileage and a few photos of the car.
           </li>
           <li>
             <strong>We review it.</strong> We look at the photos and the
@@ -147,7 +147,7 @@ export default function SellYourCarPage() {
         </h2>
         <p className="mb-6">
           We look at any make and model. Japanese makes are what we know best,
-          so Subaru, Lexus, Honda, Acura, Mazda, and Toyota are the cars we
+          so Subaru, Lexus, Honda, Acura, Mazda and Toyota are the cars we
           are most likely to want. A car with high mileage or a mechanical
           problem is still worth sending us. Whether we make an offer depends
           on the car and its condition, and we will tell you plainly if it is
@@ -166,7 +166,7 @@ export default function SellYourCarPage() {
             <strong>Trade in.</strong> If you are buying a car from our lot,
             the value of your trade goes toward the price of the car you
             choose, and it all happens in one visit. Buyers pay the price plus
-            tax, title, and license. We charge no dealer fees.
+            tax, title and license. We charge no dealer fees.
           </li>
           <li>
             <strong>Sell outright.</strong> If you only want to sell, we can
@@ -227,7 +227,7 @@ export default function SellYourCarPage() {
             {SITE_CONFIG.phone}
           </TrackedPhoneLink>
           . We are open Tuesday to Saturday, 2 to 6 PM, closed Sunday and
-          Monday, and other times by appointment. Illinois dealer license
+          Monday. Other times by appointment. Illinois dealer license
           DL5428.
         </p>
       </section>
