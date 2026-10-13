@@ -39,7 +39,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
   title: `Customer Reviews, ${rating} Stars on Google | Love Auto Group`,
   description:
-    `Read real Google reviews from Love Auto Group customers. ${rating}-star rating across ${reviewCount} reviews from buyers in Villa Park, Lombard, Elmhurst, Oak Brook and the surrounding DuPage County area.`,
+    `Real Google reviews from Love Auto Group buyers: ${rating} stars across ${reviewCount} reviews from Villa Park, Lombard, Elmhurst and all of DuPage County.`,
   alternates: { canonical: "https://www.loveautogroup.net/reviews/" },
   openGraph: {
     title: "Customer Reviews — Love Auto Group",

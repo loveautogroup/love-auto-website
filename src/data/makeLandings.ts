@@ -340,7 +340,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     filterValue: "sedan",
     title: "Used Sedans for Sale in Villa Park, IL | Love Auto Group",
     description:
-      "Used sedans in Villa Park, IL — Honda Accord, Toyota Camry, Lexus ES, Acura TLX. Free Carfax, family owned since 2014. DuPage County's independent used-car dealer.",
+      "Used sedans in Villa Park, IL: Honda Accord, Toyota Camry, Lexus ES, Acura TLX. Free Carfax on marked cars. Family owned in DuPage County since 2014.",
     hero:
       "Commuter-ready used sedans with the highest resale value, lowest cost of ownership, and most efficient fuel economy in the market.",
     intro:

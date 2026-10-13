@@ -65,7 +65,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
     town: "Wheaton",
     title: "Used Car Dealer Near Wheaton, IL | Love Auto Group",
     description:
-      "Used cars for Wheaton, IL buyers. Family-owned independent dealer, free Carfax on marked vehicles, 4.7 stars on Google. About 15 minutes east via Roosevelt Road.",
+      "Used cars for Wheaton, IL buyers. Family-owned dealer, free Carfax on marked cars, 4.7 stars on Google. About 15 minutes east on Roosevelt Road.",
     proximity: "About 15 minutes east via Roosevelt Road or North Avenue.",
     intro:
       "Love Auto Group is the closest family-owned independent dealer to Wheaton, IL, and we've been Carfax Advantage accredited and family owned since 2014. The drive from downtown Wheaton is about 15 minutes east on Roosevelt Road. Most Wheaton buyers find us when they want a used Lexus, Subaru, Acura, Mazda, or Honda but don't want to deal with the volume-driven franchise dealers along the Butterfield Road corridor.",

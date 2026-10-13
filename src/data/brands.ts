@@ -123,7 +123,7 @@ export const BRANDS: BrandContent[] = [
     displayName: "Subaru",
     metaTitle: "Used Subaru Near Chicago | Villa Park, IL | Love Auto Group",
     metaDescription:
-      "Used Subaru Forester, Outback, Crosstrek, and Legacy near Chicago. Family owned dealer in Villa Park, IL serving the western suburbs and DuPage County. AWD-ready. Free Carfax on marked vehicles, no dealer fees. (630) 359-3643.",
+      "Used Subaru Forester, Outback, Crosstrek and Legacy near Chicago. Family owned dealer in Villa Park, IL. Free Carfax on marked cars, no dealer fees.",
     hero:
       "AWD-ready Subarus near Chicago. Family owned, serving Villa Park and the western suburbs since 2014.",
     body: [
@@ -182,9 +182,9 @@ export const BRANDS: BrandContent[] = [
     slug: "lexus",
     pluralName: "Lexus models",
     displayName: "Lexus",
-    metaTitle: "Used Lexus in the Chicago Suburbs | Villa Park, IL | Love Auto Group",
+    metaTitle: "Used Lexus Near Chicago | Villa Park, IL | Love Auto Group",
     metaDescription:
-      "Used Lexus RX 350, ES, IS, and GX in the Chicago suburbs. Family owned dealer in Villa Park, IL serving DuPage County and the western suburbs. Free Carfax. (630) 359-3643.",
+      "Used Lexus RX 350, ES, IS and GX in the Chicago suburbs. Family owned dealer in Villa Park, IL serving DuPage County. Free Carfax. (630) 359-3643.",
     hero:
       "Used Lexus in the Chicago suburbs. Family owned, serving Villa Park and DuPage County since 2014.",
     body: [

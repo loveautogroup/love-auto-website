@@ -12,7 +12,7 @@ const PAGE_URL = "https://www.loveautogroup.net/used-cars-villa-park-il/";
 export const metadata: Metadata = {
   title: "Used Cars in Villa Park, IL | Love Auto Group",
   description:
-    "Family owned used car dealership in Villa Park, IL since 2014. Browse quality used cars, trucks, and SUVs — Subaru, Lexus, Honda, Acura, and more. Serving DuPage County and the western Chicago suburbs.",
+    "Family owned used car dealer in Villa Park, IL since 2014. Used cars, trucks and SUVs from Subaru, Lexus, Honda and Acura. Serving DuPage County.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Used Cars in Villa Park, IL | Love Auto Group",

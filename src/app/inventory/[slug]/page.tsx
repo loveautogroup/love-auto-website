@@ -80,7 +80,7 @@ export async function generateMetadata({
   const title = withTrim.length <= 60 ? withTrim : withoutTrim;
 
   const formattedMileage = new Intl.NumberFormat().format(vehicle.mileage);
-  const description = `${[base, vehicle.trim].filter(Boolean).join(" ")} for sale in Villa Park, IL. ${formattedMileage} miles, ${vehicle.drivetrain}. Carefully selected at Love Auto Group.`;
+  const description = `${[base, vehicle.trim].filter(Boolean).join(" ")} for sale in Villa Park, IL. ${[`${formattedMileage} miles`, vehicle.drivetrain].filter(Boolean).join(", ")}. Carefully selected at Love Auto Group.`;
 
   const url = `https://www.loveautogroup.net/inventory/${slug}/`;
   // Hero photo for social-share preview reflects Jordan's manifest, so
@@ -436,9 +436,11 @@ export default async function VehicleDetailPage({
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="bg-white border border-ink-200 p-6 space-y-5">
                   <div>
-                    <h1 className="text-xl font-bold text-brand-gray-900">
+                    {/* h2, not h1 (SEO 2026-10-13): the mobile title below is the page's
+                        one h1; both blocks are in the HTML at every width. */}
+                    <h2 className="text-xl font-bold text-brand-gray-900">
                       {vehicle.year} {vehicle.make} {vehicle.model}
-                    </h1>
+                    </h2>
                     <p className="text-sm text-brand-gray-500">{vehicle.trim}</p>
                     {vehicle.vin && (
                       <p className="text-xs text-brand-gray-400 mt-1 font-mono tracking-wide">
