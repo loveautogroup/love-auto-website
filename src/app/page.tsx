@@ -559,7 +559,9 @@ export default function HomePage() {
             {/* Buying guides */}
             <div>
               <h3 className="font-semibold text-brand-gray-900 mb-4 text-lg">
-                <T path={["homePage", "buyingGuides"]} />
+                <Link href="/buying-guides/" className="hover:text-brand-red transition-colors">
+                  <T path={["homePage", "buyingGuides"]} />
+                </Link>
               </h3>
               <ul className="space-y-2">
                 <li>

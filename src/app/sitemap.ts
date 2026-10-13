@@ -114,6 +114,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Buying guides — 2026-05-02, closes the AEO Q5 / Q6 gaps (every
     // engine surfaces only franchise dealers on Subaru-near-Chicago and
     // Lexus-in-Chicago-suburbs queries)
+    { url: `${BASE}/buying-guides/`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/buying-guides/used-subaru-near-chicago/`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/buying-guides/used-lexus-dupage-county/`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     // 2026-05-05 — closes the AEO Q8 gap (engines were returning JDM importers
