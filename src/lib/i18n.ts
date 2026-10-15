@@ -149,7 +149,7 @@ export const translations = {
       waitlistCtaLink: "Get on the waitlist",
     },
     notifyReady: {
-      heading: "Coming soon. Want first dibs?",
+      heading: "Arriving soon. Get notified when it's ready",
       sub: "This car is still being photographed and finished. Leave your details, and we will let you know the moment it is ready to see.",
       nameLabel: "Your name",
       emailLabel: "Email",
@@ -817,7 +817,7 @@ export const translations = {
       waitlistCtaLink: "Únete a la lista de espera",
     },
     notifyReady: {
-      heading: "Próximamente. ¿Quieres ser el primero?",
+      heading: "Llega pronto. Te avisamos cuando esté listo",
       sub: "Todavía estamos tomando las fotos y terminando este auto. Déjanos tus datos y te avisaremos en cuanto esté listo para verlo.",
       nameLabel: "Tu nombre",
       emailLabel: "Correo electrónico",
