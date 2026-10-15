@@ -7,6 +7,7 @@ import { applyPhotoOrder } from "@/data/photoOrder";
 import { SITE_CONFIG } from "@/lib/constants";
 import { TrackedPhoneLink } from "@/components/TrackedLink";
 import VDPLivePhotos from "@/components/VDPLivePhotos";
+import VDPNotifyWhenReady from "@/components/VDPNotifyWhenReady";
 import VDPTabs from "@/components/VDPTabs";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
 import VDPPaymentCalculator from "@/components/VDPPaymentCalculator";
@@ -424,6 +425,22 @@ export default async function VehicleDetailPage({
               vehicle={vehicle}
               badgeConfig={badgeConfig}
             />
+
+            {/* Coming Soon cars (no photos yet): "notify me when it's ready" puts the
+                shopper on the waitlist for THIS car (owner, 2026-10-15). Disappears
+                by itself once real photos reach the feed. */}
+            <div className="mt-6">
+              <VDPNotifyWhenReady
+                vin={vehicle.vin}
+                seedImages={vehicle.images}
+                year={vehicle.year}
+                make={vehicle.make}
+                model={vehicle.model}
+                trim={vehicle.trim}
+                stockNumber={vehicle.stockNumber}
+                isSold={isSold}
+              />
+            </div>
 
             {/* Desktop price + CTAs + Carfax + payment calculator —
                 lives directly under the gallery (per Jeremiah, 2026-04-30).

@@ -254,7 +254,10 @@ export default function PhotoGallery({ images: rawImages, alt, vehicle }: PhotoG
               hasRealPhotos && !forcePlaceholder ? "cursor-pointer" : ""
             }`}
           >
-            {(hasRealPhotos || forcePlaceholder) ? (
+            {/* A car with no photos shows the branded Coming Soon picture, the same as its
+                inventory card (owner, 2026-10-15: post cars without pics using the coming
+                soon picture). The grey empty-state below is now only a safety net. */}
+            {(hasRealPhotos || forcePlaceholder || isComingSoon) ? (
               (() => {
                 const rawHero = hasRealPhotos ? images[selectedIndex] : COMING_SOON_PLACEHOLDER;
                 const heroSrc = forcePlaceholder
