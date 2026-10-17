@@ -39,7 +39,7 @@ const FAQS = [
   {
     question: "Where are you located and when are you open?",
     answer:
-      "We are at 735 N Yale Ave, Unit A, Villa Park, IL 60181. Our hours are Tuesday to Saturday, 2 to 6 PM. We are closed Sunday and Monday, and we can meet at other times by appointment. Call or text (630) 359-3643.",
+      "We are at 735 N Yale Ave, Unit A, Villa Park, IL 60181. Our hours are Tuesday to Saturday, 2 to 6 PM. We are closed Sunday and Monday, and we can meet at other times by appointment. Call (630) 359-3643.",
   },
 ];
 
@@ -218,7 +218,7 @@ export default function SellYourCarPage() {
         </div>
 
         <p>
-          Prefer to talk first? Call or text{" "}
+          Prefer to talk first? Call{" "}
           <TrackedPhoneLink
             location="sell_your_car_content"
             href={`tel:${SITE_CONFIG.phoneRaw}`}

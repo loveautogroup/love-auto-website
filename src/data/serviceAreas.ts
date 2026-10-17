@@ -55,7 +55,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
         heading: "Visit Us in Villa Park",
         body: [
           "We're at 735 N Yale Ave Unit A, two blocks north of North Avenue between Yale and Westmore. Free parking and no appointment needed during open hours. We're open Tuesday through Saturday from 2 to 6 PM, and appointments are available outside of office hours. Browse the current inventory online or stop by while we're open to walk through whatever's available.",
-          "Call us at (630) 359-3643 to confirm a specific vehicle is still available before you make the drive, or text any photo you have a question about. We respond quickly during business hours, Tuesday through Saturday from 2 to 6 PM.",
+          "Call us at (630) 359-3643 to confirm a specific vehicle is still available before you make the drive. We respond quickly during business hours, Tuesday through Saturday from 2 to 6 PM.",
         ],
       },
     ],

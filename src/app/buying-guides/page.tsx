@@ -127,7 +127,7 @@ export default function BuyingGuidesIndexPage() {
             Have a question about a car?
           </h2>
           <p className="text-brand-gray-600 mb-6">
-            Call or text (630) 359-3643. 735 N Yale Ave, Unit A, Villa Park, IL
+            Call (630) 359-3643. 735 N Yale Ave, Unit A, Villa Park, IL
             60181. Open Tuesday to Saturday, 2 to 6 PM, other times by
             appointment.
           </p>
