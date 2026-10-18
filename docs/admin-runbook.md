@@ -1,3 +1,5 @@
+> **RETIRED 2026-10-18.** The website `/admin` area is gone (owner: "lets move the obd scanner and delete this admin page"). Finance leads → DMS Credit Apps; merchandising → DMS; OBD Scan Helper → DMS `/dashboard/obd-scan`. This file is history only.
+
 # Love Auto Group — Admin Runbook
 
 **Audience:** Jeremiah (and Jordan once onboarded)
