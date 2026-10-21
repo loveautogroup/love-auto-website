@@ -1,19 +1,21 @@
 "use client";
 
 /**
- * Homepage sticky bar for phones (owner, 2026-10-21): Call and Text Us, the
- * same buttons the car pages carry. The deal calculator lives on the car pages
+ * Homepage sticky bar for phones (owner, 2026-10-21): Call, Text Us and
+ * Financing (the Financing button the car-page bar had before Calculate took
+ * its place, put back here at the owner's ask). The deal calculator lives on the car pages
  * only (owner: "it's fine just being on the vdp"); a homepage calculator would
  * need a vehicle selector, which is overkill for the footer.
  */
+import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { SITE_CONFIG } from "@/lib/constants";
 import { TrackedPhoneLink, TrackedTextLink } from "@/components/TrackedLink";
 import { useGlobalTextPhone } from "@/data/useMerchandising";
 
 const COPY = {
-  en: { call: "Call", text: "Text us" },
-  es: { call: "Llamar", text: "Mensaje" },
+  en: { call: "Call", text: "Text us", financing: "Financing" },
+  es: { call: "Llamar", text: "Mensaje", financing: "Financiamiento" },
 } as const;
 
 export default function HomeStickyBar() {
@@ -50,6 +52,15 @@ export default function HomeStickyBar() {
           </svg>
           {c.text}
         </TrackedTextLink>
+        <Link
+          href="/financing/"
+          className="flex-1 flex items-center justify-center gap-1.5 bg-brand-navy text-white py-3.5 text-[12px] font-bold uppercase tracking-[0.05em]"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          {c.financing}
+        </Link>
       </div>
     </>
   );
