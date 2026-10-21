@@ -42,6 +42,8 @@ const COPY = {
     unknown: "We could not place that ZIP. The figures assume an Illinois address outside Chicago.",
     oos: (s: string) => `Out-of-state buyer (${s}): you pay your home state's tax and registration when you register the car there, so the total depends on your state. We will work out your exact out-the-door figure.`,
     oosTotal: "Price with no dealer fees",
+    carPrice: "Car price",
+    typePrice: "Type a car price to see your out-the-door total.",
     call: "Call",
     text: "or text",
   },
@@ -69,6 +71,8 @@ const COPY = {
     unknown: "No pudimos ubicar ese código postal. Las cifras suponen una dirección en Illinois fuera de Chicago.",
     oos: (s: string) => `Comprador de otro estado (${s}): usted paga el impuesto y el registro de su estado al registrar el auto allí, así que el total depende de su estado. Calcularemos su costo total exacto.`,
     oosTotal: "Precio sin cargos del concesionario",
+    carPrice: "Precio del auto",
+    typePrice: "Escriba el precio de un auto para ver su costo total final.",
     call: "Llame al",
     text: "o envíe un mensaje al",
   },
@@ -86,7 +90,8 @@ function Line({ label, sub, value, green = false }: { label: string; sub?: strin
   );
 }
 
-export default function VDPOutTheDoor({ vehiclePrice, className = "" }: { vehiclePrice: number; className?: string }) {
+/** `editablePrice`: no car is picked (the homepage), so the buyer types a price. */
+export default function VDPOutTheDoor({ vehiclePrice = 0, className = "", editablePrice = false }: { vehiclePrice?: number; className?: string; editablePrice?: boolean }) {
   const { locale } = useLanguage();
   // The page renders one copy for desktop and one for phones; useId keeps the
   // ZIP field and the radio group of each copy separate.
@@ -95,15 +100,20 @@ export default function VDPOutTheDoor({ vehiclePrice, className = "" }: { vehicl
   const c = COPY[locale === "es" ? "es" : "en"];
   const [zip, setZip] = useState("");
   const [plates, setPlates] = useState<Plates>("new");
+  const [priceText, setPriceText] = useState("");
+  const priceId = `otd-price-${uid}`;
+  const typedPrice = Number(priceText.replace(/[^0-9.]/g, "")) || 0;
+  const price = editablePrice ? typedPrice : vehiclePrice;
   // The landline cannot take texts: call 630-359-3643, text the configured
   // text number (the same one the header's Text button uses).
   const globalText = useGlobalTextPhone();
   const textRaw = globalText && /^[0-9]{10,15}$/.test(globalText) ? globalText : null;
 
   const place = useMemo(() => placeForZip(zip), [zip]);
-  const est = useMemo(() => outTheDoor(vehiclePrice, place, plates), [vehiclePrice, place, plates]);
+  const est = useMemo(() => outTheDoor(price, place, plates), [price, place, plates]);
 
-  if (!vehiclePrice || vehiclePrice <= 0) return null;
+  if (!editablePrice && (!vehiclePrice || vehiclePrice <= 0)) return null;
+  const showBreakdown = price > 0;
 
   const taxSub =
     place.kind === "illinois"
@@ -117,6 +127,17 @@ export default function VDPOutTheDoor({ vehiclePrice, className = "" }: { vehicl
         <p className="text-xs text-brand-gray-300 mt-0.5">{c.lead}</p>
       </div>
       <div className="p-4 space-y-3">
+        {editablePrice ? (
+          <div className="flex items-center gap-3">
+            <label htmlFor={priceId} className="text-xs font-medium text-brand-gray-700">{c.carPrice}</label>
+            <div className="relative">
+              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-brand-gray-500">$</span>
+              <input id={priceId} inputMode="decimal" value={priceText}
+                onChange={(e) => setPriceText(e.target.value.replace(/[^0-9.,]/g, "").slice(0, 10))}
+                placeholder="12,999" className="w-36 text-sm border border-brand-gray-200 rounded-md pl-6 pr-2.5 py-1.5 bg-white" />
+            </div>
+          </div>
+        ) : null}
         <p className="text-sm font-bold text-green-700">{c.noFees}</p>
 
         <div className="flex items-center gap-3">
@@ -148,6 +169,10 @@ export default function VDPOutTheDoor({ vehiclePrice, className = "" }: { vehicl
           </div>
         ) : null}
 
+        {!showBreakdown ? (
+          <p className="text-sm text-brand-gray-500">{c.typePrice}</p>
+        ) : (
+        <>
         <div>
           <Line label={c.price} value={usd(est.price)} />
           <Line label={c.fees} value={usd(est.dealerFees)} green />
@@ -179,6 +204,8 @@ export default function VDPOutTheDoor({ vehiclePrice, className = "" }: { vehicl
               ) : null}
             </p>
           </div>
+        )}
+        </>
         )}
 
         <p className="text-[11px] leading-snug text-brand-gray-500">{c.note}</p>

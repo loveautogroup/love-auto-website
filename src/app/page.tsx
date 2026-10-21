@@ -10,6 +10,7 @@ import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
 import HomeHero from "@/components/HomeHero";
 import HomeStatBand from "@/components/HomeStatBand";
+import HomeStickyBar from "@/components/HomeStickyBar";
 import { SERVICE_AREAS } from "@/data/serviceAreas";
 import { BRANDS } from "@/data/brands";
 
@@ -609,6 +610,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Phone sticky bar: Call / Text Us / Calculate (owner, 2026-10-21). */}
+      <HomeStickyBar />
     </>
   );
 }
