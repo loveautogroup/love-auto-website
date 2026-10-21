@@ -611,7 +611,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Phone sticky bar: Call / Text Us / Calculate (owner, 2026-10-21). */}
+      {/* Phone sticky bar: Call / Text Us (owner, 2026-10-21). */}
       <HomeStickyBar />
     </>
   );
