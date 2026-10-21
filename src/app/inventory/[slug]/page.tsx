@@ -11,6 +11,7 @@ import VDPNotifyWhenReady from "@/components/VDPNotifyWhenReady";
 import VDPTabs from "@/components/VDPTabs";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
 import VDPPaymentCalculator from "@/components/VDPPaymentCalculator";
+import VDPOutTheDoor from "@/components/VDPOutTheDoor";
 import VDPMarketPrice from "@/components/VDPMarketPrice";
 import MobileCalculatorButton from "@/components/MobileCalculatorButton";
 import VDPFAQ from "@/components/VDPFAQ";
@@ -594,6 +595,12 @@ export default async function VehicleDetailPage({
                   )}
                 </div>
 
+                {/* Out-the-door estimate (owner, 2026-10-21): price + Illinois tax,
+                    title and plates for the buyer's ZIP; no dealer fees. */}
+                {!isSold && (
+                  <VDPOutTheDoor vehiclePrice={vehicle.price} />
+                )}
+
                 {/* Card 3 — payment calculator */}
                 <div className="bg-white border border-ink-200 p-6">
                   {!isSold && (
@@ -689,6 +696,12 @@ export default async function VehicleDetailPage({
               />
                     )}
             </div>
+
+            {/* Out-the-door estimate, phone layout (the desktop copy sits in the
+                sidebar, which phones never show). */}
+            {!isSold && (
+              <VDPOutTheDoor vehiclePrice={vehicle.price} className="lg:hidden mb-4" />
+            )}
 
             {/* Market price comparison — only renders when Jordan has set
                 a marketEstimate in the merchandising overlay. Client wrapper
