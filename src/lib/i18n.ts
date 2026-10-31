@@ -559,8 +559,6 @@ export const translations = {
     vdpTrustStrip: {
       inspected: "Carefully Selected",
       inspectedSuffix: "Free CARFAX on Marked Vehicles",
-      specialist: "Family-Owned Independent Dealer",
-      specialistSuffix: "Over a Decade in Villa Park",
       noFees: "No Hidden Fees",
       noFeesSuffix: "All Credit Welcome · Same-Day Title & Plates",
     },
@@ -1203,8 +1201,6 @@ export const translations = {
     vdpTrustStrip: {
       inspected: "Cuidadosamente Seleccionado",
       inspectedSuffix: "Carfax Gratis en Vehículos Marcados",
-      specialist: "Concesionario Independiente Familiar",
-      specialistSuffix: "Más de una Década en Villa Park",
       noFees: "Sin Cuotas Ocultas",
       noFeesSuffix: "Todo Crédito Bienvenido · Título y Placas el Mismo Día",
     },

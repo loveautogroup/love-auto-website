@@ -3,10 +3,13 @@
 /**
  * Trust strip — displayed on the VDP, homepage, and inventory page.
  *
- * Three credibility pillars for Love Auto Group:
+ * Two credibility pillars for Love Auto Group:
  *   1. Carefully Selected · Free CARFAX on Marked Vehicles
- *   2. Family-Owned Independent Dealer · Over a Decade in Villa Park
- *   3. No Hidden Fees · All Credit Welcome · Same-Day Title & Plates
+ *   2. No Hidden Fees · All Credit Welcome · Same-Day Title & Plates
+ *
+ * The middle pillar, "Family-Owned Independent Dealer · Over a Decade in
+ * Villa Park", was removed on the owner's word (2026-10-31). Its second half
+ * was also wrong: the Villa Park store opened in 2018. Do not bring it back.
  *
  * The CARFAX line is a claim about ONE specific car when this strip sits
  * on a VDP (the only call site with a `vehicle` in context) — same
@@ -61,16 +64,6 @@ export default function VDPTrustStrip({ vehicle }: VDPTrustStripProps = {}) {
                 &middot; {t.vdpTrustStrip.inspectedSuffix}
               </span>
             )}
-          </span>
-
-          <span className="hidden sm:inline-block w-px h-3.5 bg-white/[.14]" aria-hidden="true" />
-
-          <span className="px-4 text-[11px] font-bold uppercase tracking-[0.14em] text-white/90 whitespace-nowrap">
-            {t.vdpTrustStrip.specialist}
-            <span className="hidden md:inline text-ink-400 font-semibold">
-              {" "}
-              &middot; {t.vdpTrustStrip.specialistSuffix}
-            </span>
           </span>
 
           <span className="hidden sm:inline-block w-px h-3.5 bg-white/[.14]" aria-hidden="true" />
