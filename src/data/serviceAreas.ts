@@ -40,7 +40,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       {
         heading: "Villa Park's Used Car Dealer",
         body: [
-          "Villa Park has roughly 22,000 residents and one independent used-car dealer. That's us. We've been here since 2014 at 735 N Yale Ave, two blocks north of North Avenue and a five-minute drive from anywhere in town. Our customers include neighbors who've bought multiple cars from us over the years, families upgrading from a kid's first car to a third-row SUV, and Villa Park residents who tried a franchise dealer first and came back for the smaller, slower, more honest experience.",
+          "Villa Park has roughly 22,000 residents, and we're an independent used-car dealer at 735 N Yale Ave, two blocks north of North Avenue and a five-minute drive from anywhere in town. Our customers include neighbors who've bought multiple cars from us over the years, families upgrading from a kid's first car to a third-row SUV, and Villa Park residents who tried a franchise dealer first and came back for the smaller, slower, more honest experience.",
           "When people search 'used cars Villa Park IL' or 'Villa Park car dealerships', the answer they're looking for is usually us. If you'd rather not drive to Oak Brook, Schaumburg, or Naperville for your next used car, browse our inventory online and then come walk the lot.",
         ],
       },
