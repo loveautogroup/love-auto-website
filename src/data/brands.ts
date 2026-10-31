@@ -11,7 +11,6 @@
  * filtered to the matching make. Voice-rule clean per Mark:
  *   - No em dashes
  *   - No "auction" / "technician" alt for the m-word / "pre-owned"
- *   - "Family owned" no hyphen
  *   - No exclamation marks in body
  *   - Specific over vague (mile ranges, model years)
  *
@@ -74,7 +73,7 @@ export const BRANDS: BrandContent[] = [
     displayName: "Honda",
     metaTitle: "Used Honda Near Chicago | Villa Park, IL | Love Auto Group",
     metaDescription:
-      "Used Honda Pilot, CR-V, Accord, and Civic in Villa Park, IL. The reliability standard. Free Carfax. Family owned. (630) 359-3643.",
+      "Used Honda Pilot, CR-V, Accord, and Civic in Villa Park, IL. The reliability standard. Free Carfax. (630) 359-3643.",
     hero:
       "The reliability standard, in steady rotation on our Villa Park lot.",
     body: [
@@ -123,11 +122,11 @@ export const BRANDS: BrandContent[] = [
     displayName: "Subaru",
     metaTitle: "Used Subaru Near Chicago | Villa Park, IL | Love Auto Group",
     metaDescription:
-      "Used Subaru Forester, Outback, Crosstrek and Legacy near Chicago. Family owned dealer in Villa Park, IL. Free Carfax on marked cars, no dealer fees.",
+      "Used Subaru Forester, Outback, Crosstrek and Legacy near Chicago. Independent dealer in Villa Park, IL. Free Carfax on marked cars, no dealer fees.",
     hero:
-      "AWD-ready Subarus near Chicago. Family owned, serving Villa Park and the western suburbs since 2014.",
+      "AWD-ready Subarus near Chicago. Serving Villa Park and the western suburbs since 2014.",
     body: [
-      "Looking for a used Subaru near Chicago? You're in the right place. Love Auto Group is a family owned used Subaru dealer in Villa Park, IL, twenty minutes west of downtown Chicago and central to the western suburbs and DuPage County. We've been buying and selling Foresters, Outbacks, and Crosstreks here since 2014, and Subaru is one of the makes we know best.",
+      "Looking for a used Subaru near Chicago? You're in the right place. Love Auto Group is an independent used Subaru dealer in Villa Park, IL, twenty minutes west of downtown Chicago and central to the western suburbs and DuPage County. We've been buying and selling Foresters, Outbacks, and Crosstreks here since 2014, and Subaru is one of the makes we know best.",
       "A Subaru built after 2014 will run past 250,000 miles when properly maintained. That is not a marketing claim. That is what every long-term reliability study and what we see at the buying stage shows us. Foresters, Outbacks, and Crosstreks from the second-generation 2014 to 2017 era are the value sweet spot in the used Subaru market, and they are exactly what we keep in rotation on our lot in Villa Park.",
       "{{STOCK}} Symmetrical all-wheel drive, eight inches of ground clearance on the Forester, and the kind of all-season capability that handles a Chicago suburbs winter without drama. Buyers come to us from across DuPage County, including Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, and Naperville, plus the broader western suburbs.",
       "Every used Subaru on our lot has been carefully selected before it is listed for sale. The head gasket area, the CVT transmission behavior, and the all-wheel drive engagement are all things we know to look for on this platform. We also pull a free Carfax on every vehicle, looking for documented CVT fluid services, head gasket history, and consistent oil change records.",
@@ -162,7 +161,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "Where can I buy a used Subaru near Chicago?",
         answer:
-          "Love Auto Group at 735 N Yale Ave in Villa Park is a family owned used Subaru dealer, twenty minutes west of downtown Chicago and central to the western suburbs. We're a small specialist lot focused on makes including Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Our customers regularly come from across DuPage County, the Chicago suburbs, and the wider Chicagoland area. Call (630) 359-3643 or check current Subaru inventory below.",
+          "Love Auto Group at 735 N Yale Ave in Villa Park is an independent used Subaru dealer, twenty minutes west of downtown Chicago and central to the western suburbs. We're a small specialist lot focused on makes including Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Our customers regularly come from across DuPage County, the Chicago suburbs, and the wider Chicagoland area. Call (630) 359-3643 or check current Subaru inventory below.",
       },
       {
         question: "Do you serve buyers from Chicago and the western suburbs?",
@@ -184,11 +183,11 @@ export const BRANDS: BrandContent[] = [
     displayName: "Lexus",
     metaTitle: "Used Lexus Near Chicago | Villa Park, IL | Love Auto Group",
     metaDescription:
-      "Used Lexus RX 350, ES, IS and GX in the Chicago suburbs. Family owned dealer in Villa Park, IL serving DuPage County. Free Carfax. (630) 359-3643.",
+      "Used Lexus RX 350, ES, IS and GX in the Chicago suburbs. Independent dealer in Villa Park, IL serving DuPage County. Free Carfax. (630) 359-3643.",
     hero:
-      "Used Lexus in the Chicago suburbs. Family owned, serving Villa Park and DuPage County since 2014.",
+      "Used Lexus in the Chicago suburbs. Serving Villa Park and DuPage County since 2014.",
     body: [
-      "Looking for a used Lexus in the Chicago suburbs? Love Auto Group is a family owned used Lexus dealer in Villa Park, IL, central to DuPage County and the western suburbs. We've been buying and selling RX, ES, IS, and GX models here since 2014. Lexus is one of the makes we specialize in, alongside Subaru, Acura, Honda, Toyota, and Mazda.",
+      "Looking for a used Lexus in the Chicago suburbs? Love Auto Group is an independent used Lexus dealer in Villa Park, IL, central to DuPage County and the western suburbs. We've been buying and selling RX, ES, IS, and GX models here since 2014. Lexus is one of the makes we specialize in, alongside Subaru, Acura, Honda, Toyota, and Mazda.",
       "The Lexus RX is the most reliable mid-size luxury SUV ever built, and the ES is the closest thing to a Toyota Avalon wearing a tailored suit. Both are platforms that hold up well past 200,000 miles when serviced properly. That is why we keep them in regular rotation on our lot.",
       "{{STOCK}} We focus on the 2010 to 2017 model years, where prices have come down from new but the cars still feel current inside. Most are in the 90,000 to 130,000 mile range, which on a Lexus is barely broken in. Buyers come to us from across the Chicago suburbs, including Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, Naperville, and Hinsdale, plus drive-ins from Chicago itself.",
       "Every used Lexus on our lot has been carefully selected before it gets a price tag. We pull a free Carfax on every vehicle and review it before listing. We are a Carfax Advantage Dealer, and vehicles that show the CARFAX badge come with that report ready to pull before you ask.",
@@ -223,7 +222,7 @@ export const BRANDS: BrandContent[] = [
       {
         question: "Where can I buy a used Lexus in the Chicago suburbs?",
         answer:
-          "Love Auto Group at 735 N Yale Ave in Villa Park is a family owned used Lexus dealer central to the western Chicago suburbs and DuPage County. We're a small specialist lot, not a franchise store, which means lower overhead and lower prices on the same drivetrains the franchise dealers sell. Buyers come to us regularly from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, Naperville, and Hinsdale. Call (630) 359-3643 or browse current Lexus inventory below.",
+          "Love Auto Group at 735 N Yale Ave in Villa Park is an independent used Lexus dealer central to the western Chicago suburbs and DuPage County. We're a small specialist lot, not a franchise store, which means lower overhead and lower prices on the same drivetrains the franchise dealers sell. Buyers come to us regularly from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, Naperville, and Hinsdale. Call (630) 359-3643 or browse current Lexus inventory below.",
       },
       {
         question: "Independent vs franchise Lexus dealer in the Chicago suburbs?",

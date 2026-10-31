@@ -38,12 +38,12 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    "Family-owned used car dealer in Villa Park, IL. Subaru, Lexus, Honda, Acura and Mazda. No dealer fees, just tax, title and license. Free Carfax on marked cars.",
+    "Used car dealer in Villa Park, IL. Subaru, Lexus, Honda, Acura and Mazda. No dealer fees, just tax, title and license. Free Carfax on marked cars.",
   keywords: [
     "used cars Villa Park IL",
     "used car dealership Villa Park",
     "used cars DuPage County",
-    "family owned dealership",
+    "independent used car dealer",
     "used Lexus",
     "used Subaru",
     "used Acura",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Love Auto Group | Used Car Dealership in Villa Park, IL",
     description:
-      "Family-owned used car dealer in Villa Park, IL. Subaru, Lexus, Honda, Acura and Mazda. No dealer fees, just tax, title and license. Free Carfax on marked cars.",
+      "Used car dealer in Villa Park, IL. Subaru, Lexus, Honda, Acura and Mazda. No dealer fees, just tax, title and license. Free Carfax on marked cars.",
     url: "https://www.loveautogroup.net",
     siteName: "Love Auto Group",
     locale: "en_US",
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     creator: "@loveautogroup",
     title: "Love Auto Group | Used Car Dealership in Villa Park, IL",
     description:
-      "Family-owned independent dealer in Villa Park, IL. No dealer fees, free Carfax on marked vehicles. Since 2014.",
+      "Independent dealer in Villa Park, IL. No dealer fees, free Carfax on marked vehicles. Since 2014.",
     images: ["https://www.loveautogroup.net/og-image.png"],
   },
   verification: {

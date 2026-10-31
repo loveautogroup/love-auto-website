@@ -235,7 +235,7 @@ export interface MerchandisingConfig {
 
 export const MERCHANDISING: MerchandisingConfig = {
   // Jordan's hero picks in display order. Four selected to match the
-  // family-owned independent dealer positioning + highest-margin units.
+  // independent dealer positioning + highest-margin units.
   featuredVins: [
     // 2026-04-27: Featured rotated to the 3 cleanest active units after a
     // full Carfax sweep on every vehicle. Previous picks pulled because:

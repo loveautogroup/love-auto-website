@@ -42,7 +42,7 @@ export const translations = {
       byAppointment: "Appointments available outside of office hours. Call 630-359-3643.",
       contactUs: "Contact Us",
       about:
-        "Family-owned independent dealer in Villa Park, IL, 20 miles from Chicago. Since 2014. Carefully selected inventory, no dealer fees, free CARFAX on marked vehicles.",
+        "Independent dealer in Villa Park, IL, 20 miles from Chicago. Since 2014. Carefully selected inventory, no dealer fees, free CARFAX on marked vehicles.",
       rights: "All rights reserved.",
       privacy: "Privacy Policy",
       terms: "Terms",
@@ -52,7 +52,7 @@ export const translations = {
       headline: "Great cars. Fair prices.",
       headlineSub: "No dealer fees.",
       subtext:
-        "Family owned and independent since 2014. Carefully selected cars, and we ship anywhere in the U.S.",
+        "Independent since 2014. Carefully selected cars, and we ship anywhere in the U.S.",
       cta: "Browse Inventory",
       ctaFinancing: "Apply for Financing",
       pills: {
@@ -331,7 +331,7 @@ export const translations = {
     },
     about: {
       heading: "About Love Auto Group",
-      subtext: "Family owned in Villa Park, IL since {year}.",
+      subtext: "In business since {year}.",
     },
     contact: {
       heading: "Contact Us",
@@ -625,7 +625,7 @@ export const translations = {
       inspectedBody: "Every vehicle that shows the CARFAX badge comes with a free history report: accident history, service records, and title status, ready before you ask.",
       pricingTitle: "Transparent Pricing",
       pricingBody: "Our prices are competitive and clearly listed. No hidden fees, no pressure tactics. Just deals that respect your time and budget.",
-      familyTitle: "Family Owned Since 2014",
+      familyTitle: "In Business Since 2014",
       familyBody: "We are not a big corporate dealer group. We know our customers by name, and our reputation is everything. That is why we do it right.",
       accreditedHeading: "Accredited & Recognized",
       sellEyebrow: "Selling Your Car?",
@@ -659,7 +659,7 @@ export const translations = {
       onTheLotSub: "Available today in Villa Park",
       viewAll: "View All \u2192",
       aboutHeading: "An Independent Car Dealership in Villa Park, IL",
-      aboutP1: "Love Auto Group is a small, family-owned car dealership at 735 N Yale Ave, Unit A in Villa Park \u2014 about 20 miles west of Chicago. We have been here since 2014. No franchise banner, no acre of balloons, no handoff to a finance office. You deal directly with the people who found the car and priced it.",
+      aboutP1: "Love Auto Group is a small, independent car dealership at 735 N Yale Ave, Unit A in Villa Park \u2014 about 20 miles west of Chicago. We have been here since 2014. No franchise banner, no acre of balloons, no handoff to a finance office. You deal directly with the people who found the car and priced it.",
       aboutP2Lead: "Most of our lot is makes \u2014",
       aboutP2Tail: ", Lexus, Honda, Acura, Toyota, Mazda \u2014 because they hold up. A free Carfax report is available on every vehicle that shows the badge. If a car is not good enough to put our name on, we do not sell it.",
       aboutP3: "The price you see is the price you pay, plus tax, title, and license. No dealer fees. If you are comparing car dealerships in Villa Park or anywhere in DuPage County, come walk the lot \u2014 or start with the pages below.",
@@ -667,7 +667,7 @@ export const translations = {
       browseInventory: "Browse the inventory \u2192",
       usedCarsVillaPark: "Used cars in Villa Park \u2192",
       servingHeading: "Serving Used Car Buyers Across DuPage County",
-      servingBody: "We are family owned in Villa Park, IL \u2014 20 miles from Chicago \u2014 and we draw buyers from every neighboring town. Find your route below, or browse by brand or buying guide.",
+      servingBody: "We are an independent dealer in Villa Park, IL \u2014 20 miles from Chicago \u2014 and we draw buyers from every neighboring town. Find your route below, or browse by brand or buying guide.",
       townsWeServe: "Towns We Serve",
       usedCarsIn: "Used Cars in {town}, IL",
       allOfDupage: "All of DuPage County \u2192",
@@ -710,7 +710,7 @@ export const translations = {
       byAppointment: "Citas disponibles fuera del horario de oficina. Llama al 630-359-3643.",
       contactUs: "Contáctenos",
       about:
-        "Concesionario independiente familiar en Villa Park, IL, a 20 millas de Chicago. Negocio familiar desde 2014. Inventario cuidadosamente seleccionado, sin cargos de concesionario, Carfax gratis en vehículos marcados.",
+        "Concesionario independiente en Villa Park, IL, a 20 millas de Chicago. En el negocio desde 2014. Inventario cuidadosamente seleccionado, sin cargos de concesionario, Carfax gratis en vehículos marcados.",
       rights: "Todos los derechos reservados.",
       areasServed: "Áreas Que Atendemos",
       privacy: "Política de Privacidad",
@@ -720,7 +720,7 @@ export const translations = {
       headline: "Autos excelentes. Precios justos.",
       headlineSub: "Sin cargos de concesionario.",
       subtext:
-        "Familiar e independiente desde 2014. Autos cuidadosamente seleccionados, y enviamos a cualquier parte de EE. UU.",
+        "Independiente desde 2014. Autos cuidadosamente seleccionados, y enviamos a cualquier parte de EE. UU.",
       cta: "Ver Inventario",
       ctaFinancing: "Solicitar Financiamiento",
       pills: {
@@ -973,7 +973,7 @@ export const translations = {
     },
     about: {
       heading: "Sobre Love Auto Group",
-      subtext: "Negocio familiar en Villa Park, IL desde {year}.",
+      subtext: "En el negocio desde {year}.",
     },
     contact: {
       heading: "Contáctenos",
@@ -1267,7 +1267,7 @@ export const translations = {
       inspectedBody: "Cada veh\u00edculo que muestra el distintivo CARFAX incluye un reporte de historial gratis: historial de accidentes, registros de servicio y estado del t\u00edtulo, listo antes de que preguntes.",
       pricingTitle: "Precios Transparentes",
       pricingBody: "Nuestros precios son justos y claros. Sin cargos escondidos, sin presi\u00f3n de venta. Solo ofertas que respetan tu tiempo y tu dinero.",
-      familyTitle: "Negocio Familiar Desde 2014",
+      familyTitle: "En el Negocio Desde 2014",
       familyBody: "No somos una gran cadena de concesionarios. Conocemos a nuestros clientes por su nombre, y nuestra reputaci\u00f3n lo es todo. Por eso hacemos las cosas bien.",
       accreditedHeading: "Acreditados y Reconocidos",
       sellEyebrow: "\u00bfVendes tu Auto?",
@@ -1301,7 +1301,7 @@ export const translations = {
       onTheLotSub: "Disponibles hoy en Villa Park",
       viewAll: "Ver Todos \u2192",
       aboutHeading: "Un Concesionario Independiente en Villa Park, IL",
-      aboutP1: "Love Auto Group es un concesionario peque\u00f1o y familiar en 735 N Yale Ave, Unit A, en Villa Park, a unas 20 millas al oeste de Chicago. Aqu\u00ed llevamos desde 2014. Sin letrero de franquicia, sin un mar de globos y sin que te manden a una oficina de financiamiento. Tratas directamente con las personas que encontraron el auto y le pusieron el precio.",
+      aboutP1: "Love Auto Group es un concesionario peque\u00f1o e independiente en 735 N Yale Ave, Unit A, en Villa Park, a unas 20 millas al oeste de Chicago. Aqu\u00ed llevamos desde 2014. Sin letrero de franquicia, sin un mar de globos y sin que te manden a una oficina de financiamiento. Tratas directamente con las personas que encontraron el auto y le pusieron el precio.",
       aboutP2Lead: "La mayor parte de nuestro lote:",
       aboutP2Tail: ", Lexus, Honda, Acura, Toyota y Mazda, porque duran. Los que muestran el distintivo incluyen un reporte Carfax gratis. Si un auto no es lo bastante bueno para llevar nuestro nombre, no lo vendemos.",
       aboutP3: "El precio que ves es el precio que pagas, m\u00e1s impuestos, t\u00edtulo y placas. Sin cargos de concesionario. Si est\u00e1s comparando concesionarios en Villa Park o en cualquier parte del condado de DuPage, ven a recorrer el lote o empieza por las p\u00e1ginas de abajo.",
@@ -1309,7 +1309,7 @@ export const translations = {
       browseInventory: "Explora el inventario \u2192",
       usedCarsVillaPark: "Autos usados en Villa Park \u2192",
       servingHeading: "Atendemos a Compradores de Autos Usados en Todo el Condado de DuPage",
-      servingBody: "Somos un negocio familiar en Villa Park, IL, a 20 millas de Chicago, y recibimos compradores de todos los pueblos vecinos. Encuentra tu ruta abajo, o explora por marca o por gu\u00eda de compra.",
+      servingBody: "Somos un concesionario independiente en Villa Park, IL, a 20 millas de Chicago, y recibimos compradores de todos los pueblos vecinos. Encuentra tu ruta abajo, o explora por marca o por gu\u00eda de compra.",
       townsWeServe: "Pueblos Que Atendemos",
       usedCarsIn: "Autos Usados en {town}, IL",
       allOfDupage: "Todo el Condado de DuPage \u2192",

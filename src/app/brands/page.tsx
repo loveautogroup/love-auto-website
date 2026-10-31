@@ -17,7 +17,6 @@ import { TrackedPhoneLink } from "@/components/TrackedLink";
  * Voice-rule clean per Mark:
  *   - No em dashes
  *   - No "auction" / "technician" alt for the m-word / "pre-owned"
- *   - "Family owned" no hyphen
  */
 
 const BASE = "https://www.loveautogroup.net";
@@ -26,7 +25,7 @@ const PAGE_URL = `${BASE}/brands/`;
 export const metadata: Metadata = {
   title: "Browse Used Cars by Brand | Love Auto Group",
   description:
-    "Used Honda, Subaru, Lexus, Acura and Mazda at Love Auto Group in Villa Park, IL. Family-owned independent dealer since 2014. Free Carfax on marked cars.",
+    "Used Honda, Subaru, Lexus, Acura and Mazda at Love Auto Group in Villa Park, IL. Independent dealer since 2014. Free Carfax on marked cars.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Browse Used Cars by Brand | Love Auto Group",
@@ -94,7 +93,7 @@ export default function BrandsIndexPage() {
             </span>
           </h1>
           <p className="mt-4 text-lg md:text-xl text-ink-300 max-w-3xl">
-            family-owned independent dealer since 2014. Honda, Subaru, Lexus, Acura,
+            independent dealer since 2014. Honda, Subaru, Lexus, Acura,
             and Mazda in steady rotation on our Villa Park lot.
           </p>
         </div>
@@ -103,7 +102,7 @@ export default function BrandsIndexPage() {
       {/* Intro */}
       <section className="max-w-4xl mx-auto px-4 py-10">
         <p className="text-lg text-brand-gray-700 leading-relaxed mb-4">
-          Love Auto Group is a family owned independent dealership in Villa
+          Love Auto Group is an independent dealership in Villa
           Park, IL focused on makes. Honda, Subaru, Lexus, Acura,
           and Mazda are the five brands you will see in regular rotation on
           our lot, because they are the brands with the longest service lives,

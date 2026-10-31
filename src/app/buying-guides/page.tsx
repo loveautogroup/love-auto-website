@@ -26,14 +26,14 @@ const GUIDES = [
     slug: "used-lexus-dupage-county",
     title: "Where to Buy a Used Lexus in DuPage County",
     summary:
-      "Used Lexus RX 350, ES, IS and GX in DuPage County, from a family owned dealer in Villa Park, IL.",
+      "Used Lexus RX 350, ES, IS and GX in DuPage County, from an independent dealer in Villa Park, IL.",
   },
 ];
 
 export const metadata: Metadata = {
   title: "Used Car Buying Guides | Love Auto Group",
   description:
-    "Plain-English used car buying guides for the Chicago suburbs. Subaru and Lexus guides from Love Auto Group, a family owned dealer in Villa Park, IL.",
+    "Plain-English used car buying guides for the Chicago suburbs. Subaru and Lexus guides from Love Auto Group, an independent dealer in Villa Park, IL.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Used Car Buying Guides | Love Auto Group",
@@ -89,7 +89,7 @@ export default function BuyingGuidesIndexPage() {
             <span className="block text-brand-red mt-2">Villa Park, IL</span>
           </h1>
           <p className="mt-4 text-lg md:text-xl text-ink-300 max-w-3xl">
-            Plain-English guides from a family owned dealer in Villa Park, IL.
+            Plain-English guides from an independent dealer in Villa Park, IL.
             What to look for, what to ask and which model years make sense.
           </p>
         </div>

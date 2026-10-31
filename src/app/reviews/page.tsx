@@ -118,7 +118,7 @@ export default function ReviewsPage() {
             Bought from us? Tell future buyers what you thought.
           </h2>
           <p className="text-brand-gray-600 mb-6">
-            Reviews help small, family-owned dealerships compete with the
+            Reviews help small dealerships compete with the
             mega-lots. It takes 60 seconds and means a lot to us.
           </p>
           <div className="flex flex-wrap justify-center gap-3">

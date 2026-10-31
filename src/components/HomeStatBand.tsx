@@ -41,7 +41,7 @@ export default function HomeStatBand() {
             2014
           </div>
           <div className="mt-2 text-[11px] font-bold uppercase tracking-[0.1em] text-ink-400">
-            Family Owned Since
+            In Business Since
           </div>
         </div>
         <div className="px-4 py-10 sm:py-14 text-center border-t border-l border-white/[.14]">

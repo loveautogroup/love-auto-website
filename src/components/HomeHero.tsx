@@ -71,7 +71,7 @@ export default function HomeHero() {
       <div className="relative lg:min-h-[inherit] max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-12 lg:pt-14 lg:pb-12 flex flex-col justify-end">
         <div className="max-w-2xl border-l-2 sm:border-l-[3px] border-brand-red pl-4 sm:pl-6">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red-light">
-            Villa Park, Illinois &middot; Family Owned Since 2014
+            Villa Park, Illinois &middot; Since 2014
           </p>
           <h1
             className="mt-3 font-heading font-extrabold leading-[0.98] text-[clamp(2rem,7vw,4.25rem)] lg:text-[clamp(2.75rem,4.2vw,4.5rem)]"

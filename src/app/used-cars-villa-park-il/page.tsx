@@ -12,12 +12,12 @@ const PAGE_URL = "https://www.loveautogroup.net/used-cars-villa-park-il/";
 export const metadata: Metadata = {
   title: "Used Cars in Villa Park, IL | Love Auto Group",
   description:
-    "Family owned used car dealer in Villa Park, IL since 2014. Used cars, trucks and SUVs from Subaru, Lexus, Honda and Acura. Serving DuPage County.",
+    "Used car dealer in Villa Park, IL since 2014. Used cars, trucks and SUVs from Subaru, Lexus, Honda and Acura. Serving DuPage County.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Used Cars in Villa Park, IL | Love Auto Group",
     description:
-      "Family owned used car dealership in Villa Park, IL since 2014. Browse quality used cars, trucks, and SUVs. Serving DuPage County.",
+      "Used car dealership in Villa Park, IL since 2014. Browse quality used cars, trucks, and SUVs. Serving DuPage County.",
     url: PAGE_URL,
     type: "website",
     siteName: "Love Auto Group",
@@ -28,7 +28,7 @@ const FAQ_ITEMS = [
   {
     question: "Where can I find used cars for sale in Villa Park, IL?",
     answer:
-      "Love Auto Group is a family owned used car dealership located at 735 N Yale Ave, Unit A, Villa Park, IL 60181. We carry a carefully selected inventory of quality used cars, SUVs, and trucks — with a specialty in makes like Subaru, Lexus, Acura, Honda, and Mazda.",
+      "Love Auto Group is an independent used car dealership located at 735 N Yale Ave, Unit A, Villa Park, IL 60181. We carry a carefully selected inventory of quality used cars, SUVs, and trucks — with a specialty in makes like Subaru, Lexus, Acura, Honda, and Mazda.",
   },
   {
     question: "What are the best used car dealerships in Villa Park, Illinois?",
@@ -77,7 +77,7 @@ export default function UsedCarsVillaParkPage() {
           <h1 className="font-heading font-extrabold leading-[0.98] text-[clamp(1.9rem,5vw,3.5rem)]">
             Used Cars in Villa Park, IL
             <span className="block text-brand-red mt-2">
-              Family Owned Since 2014
+              In Business Since 2014
             </span>
           </h1>
           <p className="mt-4 text-lg md:text-xl text-ink-300 max-w-3xl">
@@ -134,14 +134,14 @@ export default function UsedCarsVillaParkPage() {
             Villa Park&apos;s Used Car Dealer Since 2014
           </h2>
           <p className="text-brand-gray-700 leading-relaxed mb-4">
-            Love Auto Group has been selling quality used cars in Villa Park,
-            Illinois for over a decade. We&apos;re a family owned dealership —
+            Love Auto Group has been selling quality used cars since 2014
+            and operates from Villa Park, Illinois. We&apos;re an independent dealership —
             not a chain, not a mega-lot — which means you deal directly with
             the people who stand behind every car we sell. Our lot is at 735 N
             Yale Ave, Unit A, right here in Villa Park.
           </p>
           <p className="text-brand-gray-700 leading-relaxed mb-4">
-            We're a family-owned independent dealer because they hold up. Subaru,
+            We specialize in Japanese makes because they hold up. Subaru,
             Lexus, Acura, Honda, Toyota, and Mazda make up the core of our
             used car inventory in Villa Park. These vehicles have the longest
             service lives, the strongest resale curves, and the lowest

@@ -9,7 +9,7 @@ import SiteBreadcrumb from "@/components/SiteBreadcrumb";
 export const metadata: Metadata = {
   title: "Free Carfax Reports | Love Auto Group, Villa Park IL",
   description:
-    "Carfax Advantage Dealer in Villa Park, IL. Free Carfax history reports on vehicles that show the CARFAX badge. Family owned since 2014.",
+    "Carfax Advantage Dealer in Villa Park, IL. Free Carfax history reports on vehicles that show the CARFAX badge. In business since 2014.",
   alternates: { canonical: "https://www.loveautogroup.net/free-carfax-villa-park/" },
   openGraph: {
     title: "Free Carfax Reports | Love Auto Group, Villa Park IL",

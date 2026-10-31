@@ -121,7 +121,7 @@ export default function SellYourCarPage() {
           How Selling Your Car to Us Works
         </h2>
         <p className="mb-4">
-          Love Auto Group is a family owned dealership at 735 N Yale Ave in
+          Love Auto Group is an independent dealership at 735 N Yale Ave in
           Villa Park, IL, and we have been selling cars since 2014. When you
           sell or trade a car to us, you deal with the people who decide on
           the offer. There are three steps.

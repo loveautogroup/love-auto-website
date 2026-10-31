@@ -28,7 +28,7 @@ const FAQS = [
   {
     question: "Where can I buy a used Lexus in DuPage County?",
     answer:
-      "Love Auto Group at 735 N Yale Ave in Villa Park, IL is a family owned independent used Lexus dealer in DuPage County. We carry Lexus, Subaru, Acura, Honda, Toyota, and Mazda. Buyers regularly come from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Wheaton, Naperville, Hinsdale, and the wider western Chicago suburbs. Franchise Lexus dealers nearby include McGrath Lexus of Westmont, Lexus of Naperville, Woodfield Lexus in Schaumburg, Lexus of Arlington Heights, and Bill Jacobs Lexus in Naperville.",
+      "Love Auto Group at 735 N Yale Ave in Villa Park, IL is an independent used Lexus dealer in DuPage County. We carry Lexus, Subaru, Acura, Honda, Toyota, and Mazda. Buyers regularly come from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Wheaton, Naperville, Hinsdale, and the wider western Chicago suburbs. Franchise Lexus dealers nearby include McGrath Lexus of Westmont, Lexus of Naperville, Woodfield Lexus in Schaumburg, Lexus of Arlington Heights, and Bill Jacobs Lexus in Naperville.",
   },
   {
     question: "Independent used Lexus dealer vs. franchise Lexus store: which is right for me?",
@@ -71,12 +71,12 @@ export const metadata: Metadata = {
   title:
     "Where to Buy a Used Lexus in DuPage County | Love Auto Group",
   description:
-    "Used Lexus RX 350, ES, IS and GX in DuPage County. Family owned dealer in Villa Park, IL since 2014. Free Carfax on marked cars. (630) 359-3643.",
+    "Used Lexus RX 350, ES, IS and GX in DuPage County. Independent dealer in Villa Park, IL since 2014. Free Carfax on marked cars. (630) 359-3643.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Where to Buy a Used Lexus in DuPage County | Love Auto Group",
     description:
-      "Independent used Lexus dealer in Villa Park, IL. RX 350, ES 350, IS 250, GX 460 in the value sweet spot. Family owned since 2014. Free Carfax.",
+      "Independent used Lexus dealer in Villa Park, IL. RX 350, ES 350, IS 250, GX 460 in the value sweet spot. In business since 2014. Free Carfax.",
     url: PAGE_URL,
     type: "article",
     siteName: "Love Auto Group",
@@ -153,8 +153,8 @@ export default function UsedLexusDuPageCountyPage() {
           </p>
 
           <p>
-            Love Auto Group is family owned, has operated in Villa Park
-            since 2014, and is a family-owned independent dealer. Lexus is
+            Love Auto Group is an independent dealer in Villa Park and has
+            been in business since 2014. Lexus is
             one of the makes we know best, and a free Carfax report is
             available on every vehicle that shows the badge.
           </p>
@@ -370,7 +370,7 @@ export default function UsedLexusDuPageCountyPage() {
           </p>
 
           <p>
-            Family owned, in business since 2014, specializing in
+            In business since 2014, specializing in
             makes including Lexus, Subaru, Acura, Honda, Toyota,
             and Mazda.
           </p>

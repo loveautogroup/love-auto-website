@@ -17,9 +17,8 @@ function safeJsonLd(data: unknown): string {
 export function LocalBusinessSchema() {
   // Schema upgraded 2026-05-02 (AEO audit follow-up). Added:
   //   - description: gives engines a clean quotable sentence with
-  //     "family owned" + service area baked in.
-  //     Closes the Google AI Overview Q8 miss on "family owned"
-  //     and reinforces the Q5/Q6 brand-near-Chicago positioning.
+  //     independent dealer + service area baked in.
+  //     Reinforces the Q5/Q6 brand-near-Chicago positioning.
   //   - foundingDate: 2014. Closes the Claude.ai factual error
   //     ("operating since 2018"); locks in correct founding year
   //     for every engine that reads schema.
@@ -48,8 +47,8 @@ export function LocalBusinessSchema() {
     logo: `${SITE_CONFIG.url}/images/logo-primary-v2.svg`,
     legalName: "Love Auto Group Inc.",
     description:
-      "Family-owned independent dealer in Villa Park, IL — 20 miles from Chicago. Since 2014. Specializing in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Serving DuPage County and the western Chicago suburbs.",
-    slogan: "Family-Owned Independent Dealer in Villa Park, IL — 20 miles from Chicago",
+      "Independent dealer in Villa Park, IL — 20 miles from Chicago. Since 2014. Specializing in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Serving DuPage County and the western Chicago suburbs.",
+    slogan: "Independent Dealer in Villa Park, IL — 20 miles from Chicago",
     foundingDate: "2014",
     knowsAbout: [
       "Used Subaru",

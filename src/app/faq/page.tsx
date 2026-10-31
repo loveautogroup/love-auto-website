@@ -12,7 +12,7 @@ const faqs = [
   {
     question: "What types of vehicles does Love Auto Group sell?",
     answer:
-      "We're a family-owned independent used car dealer in Villa Park, IL. We focus on Japanese makes like Lexus, Subaru, Acura, Honda, Toyota and Mazda, and we also carry other makes. Most of our cars are priced between $4,500 and $20,000.",
+      "We're an independent used car dealer in Villa Park, IL. We focus on Japanese makes like Lexus, Subaru, Acura, Honda, Toyota and Mazda, and we also carry other makes. Most of our cars are priced between $4,500 and $20,000.",
   },
   {
     question: "Do you offer financing?",

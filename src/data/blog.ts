@@ -150,7 +150,7 @@ export const blogPosts: BlogPost[] = [
       </ul>
 
       <h2>Where to Buy a Used Lexus in the Chicago Suburbs</h2>
-      <p>You have three options: a Lexus franchise dealer (highest price, certified pre-owned with warranty), a large used-car supermarket (competitive pricing, variable quality), or an independent dealer that is a family-owned independent dealer. Franchise dealers charge a premium for the badge and the warranty, which can make sense if you want maximum peace of mind. Supermarkets have volume but the inspection depth can vary.</p>
+      <p>You have three options: a Lexus franchise dealer (highest price, certified pre-owned with warranty), a large used-car supermarket (competitive pricing, variable quality), or an independent dealer. Franchise dealers charge a premium for the badge and the warranty, which can make sense if you want maximum peace of mind. Supermarkets have volume but the inspection depth can vary.</p>
 
       <p>Specialist independents are the third option, and for most buyers, the best value. We've been selling Lexus and other makes in Villa Park since 2014. We know which model years have issues and which ones are gold. And our prices reflect the fact that we don't have a franchise fee baked in.</p>
 
@@ -215,7 +215,7 @@ export const blogPosts: BlogPost[] = [
       </ul>
 
       <h2>Our Take: AWD is the Sweet Spot</h2>
-      <p>Love Auto Group is a family-owned independent dealer specifically because they hit the best value in winter-ready used vehicles. Reliability that doesn't break down when it's 10 degrees, parts that are affordable when something does need service, and depreciation curves that let you get a quality AWD vehicle for under $15,000.</p>
+      <p>Love Auto Group is an independent dealer specifically because they hit the best value in winter-ready used vehicles. Reliability that doesn't break down when it's 10 degrees, parts that are affordable when something does need service, and depreciation curves that let you get a quality AWD vehicle for under $15,000.</p>
 
       <p>We typically keep a rotating selection of AWD SUVs in stock: Subaru Forester and Outback, Acura MDX, Lexus RX, and others as they come through. <a href="/inventory">Browse the current inventory</a> or call (630) 359-3643 to ask what's coming in.</p>
     `,

@@ -74,7 +74,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // ── SEO landing pages — make + body style + service area + Carfax ──
   const landingPages: MetadataRoute.Sitemap = [
-    // Makes — family-owned independent dealer positioning
+    // Makes — independent dealer positioning
     { url: `${BASE}/inventory/used-subaru/`,   lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${BASE}/inventory/used-lexus/`,    lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${BASE}/inventory/used-acura/`,    lastModified: now, changeFrequency: "weekly",  priority: 0.8 },

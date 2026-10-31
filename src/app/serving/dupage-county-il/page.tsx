@@ -18,7 +18,7 @@ import { TrackedPhoneLink } from "@/components/TrackedLink";
  * county-level hub. This page is the county-level anchor.
  *
  * Targets: "used car dealer DuPage County", "used cars DuPage County IL",
- * "best used car dealership DuPage County", "family owned used car dealer
+ * "best used car dealership DuPage County", "used car dealer
  * DuPage County", and the broader Western Suburbs query cluster.
  *
  * Cross-links to all 6 city sub-pages we already serve and to the brand
@@ -31,7 +31,7 @@ const FAQS = [
   {
     question: "Is Love Auto Group in DuPage County?",
     answer:
-      "Yes. Love Auto Group is a family owned used car dealer at 735 N Yale Ave in Villa Park, IL, which is in DuPage County. We've operated here since 2014 and serve buyers across all of DuPage County and the surrounding western Chicago suburbs.",
+      "Yes. Love Auto Group is an independent used car dealer at 735 N Yale Ave in Villa Park, IL, which is in DuPage County. We've operated here since 2014 and serve buyers across all of DuPage County and the surrounding western Chicago suburbs.",
   },
   {
     question: "What towns in DuPage County does Love Auto Group serve?",
@@ -42,11 +42,6 @@ const FAQS = [
     question: "What kinds of used cars do you sell?",
     answer:
       "We carry Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Inventory is typically priced from around $4,500 to $18,000, with most vehicles in the 2013 to 2018 model years and 80,000 to 140,000 mile range. Every vehicle is carefully selected, and a free Carfax is available on the ones that show the badge.",
-  },
-  {
-    question: "Are you a family owned dealer?",
-    answer:
-      "Yes. Love Auto Group is family owned and has been operating in Villa Park since 2014. We are a small specialist team, not a corporate franchise group. Every deal gets personal attention and every vehicle is personally signed off on before it goes on the lot.",
   },
   {
     question: "Why buy from a small DuPage County dealer instead of a big-name lot?",
@@ -106,12 +101,12 @@ export const metadata: Metadata = {
   title:
     "Used Car Dealer in DuPage County, IL | Love Auto Group",
   description:
-    "Family owned used car dealer in DuPage County, IL since 2014. Subaru, Lexus, Acura, Honda, Toyota and Mazda, minutes from Lombard, Elmhurst and Wheaton.",
+    "Used car dealer in DuPage County, IL since 2014. Subaru, Lexus, Acura, Honda, Toyota and Mazda, minutes from Lombard, Elmhurst and Wheaton.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Used Car Dealer in DuPage County, IL | Love Auto Group",
     description:
-      "Family owned used car dealer in DuPage County since 2014. Specialists in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda.",
+      "Used car dealer in DuPage County since 2014. Specialists in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda.",
     url: PAGE_URL,
     type: "website",
     siteName: "Love Auto Group",
@@ -128,7 +123,7 @@ function CountyLocalBusinessSchema() {
     url: PAGE_URL,
     name: "Used Car Dealer in DuPage County, IL",
     description:
-      "Family owned used car dealer serving DuPage County, IL since 2014. Specialists in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda.",
+      "Used car dealer serving DuPage County, IL since 2014. Specialists in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda.",
     about: {
       "@type": "AutoDealer",
       "@id": `${SITE_CONFIG.url}/#dealership`,
@@ -154,7 +149,7 @@ function CountyLocalBusinessSchema() {
         })),
       ],
       foundingDate: "2014",
-      slogan: "Family owned in Villa Park, IL since 2014",
+      slogan: "Independent used car dealer in Villa Park, IL since 2014",
       aggregateRating: {
         "@type": "AggregateRating",
         ratingValue: SITE_CONFIG.reviews.google.rating.toFixed(1),
@@ -197,7 +192,7 @@ export default function DuPageCountyPage() {
             </span>
           </h1>
           <p className="mt-4 text-base md:text-lg text-ink-300 max-w-3xl leading-relaxed">
-            Family owned in Villa Park since 2014. Specialists in used Subaru,
+            In business since 2014. Specialists in used Subaru,
             Lexus, Acura, Honda, Toyota, and Mazda. Serving the entire DuPage
             County market and the western Chicago suburbs.
           </p>
@@ -222,10 +217,10 @@ export default function DuPageCountyPage() {
       {/* Editorial */}
       <section className="max-w-4xl mx-auto px-4 py-12 prose prose-lg">
         <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">
-          Family owned, in DuPage County since 2014
+          Serving DuPage County since 2014
         </h2>
         <p className="text-brand-gray-700 leading-relaxed mb-4">
-          Love Auto Group is a family owned used car dealer at 735 N Yale Ave in
+          Love Auto Group is an independent used car dealer at 735 N Yale Ave in
           Villa Park, IL, central to all of DuPage County and the western
           Chicago suburbs. We&apos;re a small specialist team, not a corporate
           franchise group. Every deal gets personal attention, and every
