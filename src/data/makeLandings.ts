@@ -198,7 +198,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     hero:
       "The brand that puts driving feel ahead of marketing budgets — and prices its used inventory accordingly.",
     intro:
-      "Mazda is the underrated player in the used-vehicle market. The brand consistently builds cars that drivers genuinely enjoy — sharp steering, well-judged suspension tuning, premium interior materials at mainstream prices — and yet they depreciate at competitive rates. That's the buyer opportunity we work with at Love Auto Group, and Mazda has been a quiet specialty of ours since we opened in Villa Park, IL in 2014.",
+      "Mazda is the underrated player in the used-vehicle market. The brand consistently builds cars that drivers genuinely enjoy — sharp steering, well-judged suspension tuning, premium interior materials at mainstream prices — and yet they depreciate at competitive rates. That's the buyer opportunity we work with at Love Auto Group, and Mazda has been a quiet specialty of ours since we went into business in 2014.",
     sections: [
       {
         heading: "Why Mazda Stands Out in the Used Market",
@@ -245,7 +245,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     hero:
       "The benchmark for reliability, fuel economy, and resale value — at independent-dealer pricing.",
     intro:
-      "Honda is the brand that built the modern reliability reputation in the U.S. market — bulletproof drivetrains, exceptional fuel economy, the strongest resale value curve in the segment, and the kind of repair costs that make Honda ownership pay for itself over time. Love Auto Group has been a Honda specialist since opening in Villa Park, IL in 2014, and Civic, Accord, CR-V, Pilot, and Odyssey are constants on our lot.",
+      "Honda is the brand that built the modern reliability reputation in the U.S. market — bulletproof drivetrains, exceptional fuel economy, the strongest resale value curve in the segment, and the kind of repair costs that make Honda ownership pay for itself over time. Love Auto Group has been a Honda specialist since going into business in 2014, and Civic, Accord, CR-V, Pilot, and Odyssey are constants on our lot.",
     sections: [
       {
         heading: "Why Honda Holds Value",
@@ -344,7 +344,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     hero:
       "Commuter-ready used sedans with the highest resale value, lowest cost of ownership, and most efficient fuel economy in the market.",
     intro:
-      "Sedans are still the smart-money play for commuters and value-focused buyers, and Love Auto Group has been a used-sedan specialist since opening in Villa Park, IL in 2014. Our rotation includes Honda Accord and Civic, Toyota Camry and Corolla, Lexus ES and IS, Acura TLX and ILX, Mazda3 and Mazda6, and Subaru Legacy and Impreza — the deepest sedan inventory of any independent dealer in DuPage County.",
+      "Sedans are still the smart-money play for commuters and value-focused buyers, and Love Auto Group has been a used-sedan specialist since going into business in 2014. Our rotation includes Honda Accord and Civic, Toyota Camry and Corolla, Lexus ES and IS, Acura TLX and ILX, Mazda3 and Mazda6, and Subaru Legacy and Impreza — the deepest sedan inventory of any independent dealer in DuPage County.",
     sections: [
       {
         heading: "Why a Used Sedan Still Wins",

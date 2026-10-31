@@ -12,12 +12,12 @@ const PAGE_URL = "https://www.loveautogroup.net/used-cars-villa-park-il/";
 export const metadata: Metadata = {
   title: "Used Cars in Villa Park, IL | Love Auto Group",
   description:
-    "Used car dealer in Villa Park, IL since 2014. Used cars, trucks and SUVs from Subaru, Lexus, Honda and Acura. Serving DuPage County.",
+    "Used car dealer in Villa Park, IL, in business since 2014. Used cars, trucks and SUVs from Subaru, Lexus, Honda and Acura. Serving DuPage County.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Used Cars in Villa Park, IL | Love Auto Group",
     description:
-      "Used car dealership in Villa Park, IL since 2014. Browse quality used cars, trucks, and SUVs. Serving DuPage County.",
+      "Used car dealership in Villa Park, IL, in business since 2014. Browse quality used cars, trucks, and SUVs. Serving DuPage County.",
     url: PAGE_URL,
     type: "website",
     siteName: "Love Auto Group",
@@ -33,7 +33,7 @@ const FAQ_ITEMS = [
   {
     question: "What are the best used car dealerships in Villa Park, Illinois?",
     answer:
-      "Love Auto Group has been serving Villa Park and the surrounding DuPage County area since 2014. We're a CarGurus top-rated dealer with a 4.7-star Google rating and 129 reviews. Every vehicle is carefully selected before it hits our lot, and a free Carfax report is included on the ones that show the CARFAX badge.",
+      "Love Auto Group has been in business since 2014 and serves Villa Park and the surrounding DuPage County area. We're a CarGurus top-rated dealer with a 4.7-star Google rating and 129 reviews. Every vehicle is carefully selected before it hits our lot, and a free Carfax report is included on the ones that show the CARFAX badge.",
   },
   {
     question: "What used cars does Love Auto Group have in Villa Park?",
@@ -131,7 +131,7 @@ export default function UsedCarsVillaParkPage() {
       <article className="max-w-4xl mx-auto px-4 pb-12">
         <section className="mb-10">
           <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">
-            Villa Park&apos;s Used Car Dealer Since 2014
+            Villa Park&apos;s Used Car Dealer, In Business Since 2014
           </h2>
           <p className="text-brand-gray-700 leading-relaxed mb-4">
             Love Auto Group has been selling quality used cars since 2014

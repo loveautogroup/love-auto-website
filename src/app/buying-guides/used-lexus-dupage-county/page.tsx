@@ -71,7 +71,7 @@ export const metadata: Metadata = {
   title:
     "Where to Buy a Used Lexus in DuPage County | Love Auto Group",
   description:
-    "Used Lexus RX 350, ES, IS and GX in DuPage County. Independent dealer in Villa Park, IL since 2014. Free Carfax on marked cars. (630) 359-3643.",
+    "Used Lexus RX 350, ES, IS and GX in DuPage County. Independent dealer in Villa Park, IL. In business since 2014. Free Carfax on marked cars. (630) 359-3643.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Where to Buy a Used Lexus in DuPage County | Love Auto Group",

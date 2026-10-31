@@ -8,7 +8,7 @@ import AboutHero from "./AboutHero";
 export const metadata: Metadata = {
   title: "About Love Auto Group, Used Cars in Villa Park IL",
   description:
-    "Independent dealer in Villa Park, IL since 2014. Every vehicle carefully selected, no dealer fees, free CARFAX on marked vehicles.",
+    "Independent dealer in Villa Park, IL. In business since 2014. Every vehicle carefully selected, no dealer fees, free CARFAX on marked vehicles.",
   alternates: { canonical: "https://www.loveautogroup.net/about/" },
 };
 

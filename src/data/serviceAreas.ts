@@ -31,11 +31,11 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
     town: "Villa Park",
     title: "Used Cars in Villa Park, IL | Love Auto Group",
     description:
-      "Independent used car dealer in Villa Park IL since 2014. Free Carfax on marked vehicles, 4.7 stars on Google with 125+ reviews. Visit our lot at 735 N Yale Ave.",
+      "Independent used car dealer in Villa Park IL, in business since 2014. Free Carfax on marked vehicles, 4.7 stars on Google with 125+ reviews. Visit our lot at 735 N Yale Ave.",
     proximity:
       "We're located at 735 N Yale Ave, just north of North Avenue between Yale and Westmore.",
     intro:
-      "Love Auto Group is an independent used car dealer in Villa Park, IL. We've operated from 735 N Yale Avenue since 2014, specializing in quality used Lexus, Subaru, Acura, Mazda, Honda, and Toyota at independent-dealer prices. Free Carfax on marked vehicles, 4.7 stars on Google with 125+ reviews, and a no-pressure approach to test drives. If you're a Villa Park resident shopping for a used car, you don't need to leave town.",
+      "Love Auto Group is an independent used car dealer in Villa Park, IL. We've been in business since 2014, specializing in quality used Lexus, Subaru, Acura, Mazda, Honda, and Toyota at independent-dealer prices. Free Carfax on marked vehicles, 4.7 stars on Google with 125+ reviews, and a no-pressure approach to test drives. If you're a Villa Park resident shopping for a used car, you don't need to leave town.",
     sections: [
       {
         heading: "Villa Park's Used Car Dealer",
@@ -97,7 +97,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
     town: "Westmont",
     title: "Used Car Dealer Near Westmont, IL | Love Auto Group",
     description:
-      "Used cars for Westmont, IL drivers. Independent dealer with free Carfax, in Villa Park since 2014. Quick drive north on Cass Avenue.",
+      "Used cars for Westmont, IL drivers. Independent dealer with free Carfax, in business since 2014. Quick drive north on Cass Avenue.",
     proximity: "About 10 minutes north via Cass Avenue or Ogden Avenue.",
     intro:
       "Love Auto Group is one of the closest independent dealers to Westmont, IL — about a 10-minute drive north via Cass Avenue. We're Carfax Advantage accredited, in business since 2014, and have built a reputation among Westmont buyers as the go-to spot for used Subaru, Lexus, Acura, Mazda, and Honda when the franchise option doesn't fit.",
@@ -129,7 +129,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
     town: "Lisle",
     title: "Used Car Dealer Near Lisle, IL | Love Auto Group",
     description:
-      "Used cars for Lisle, IL buyers. Independent dealer, free Carfax on marked vehicles, in Villa Park since 2014. About 12 minutes north.",
+      "Used cars for Lisle, IL buyers. Independent dealer, free Carfax on marked vehicles, in business since 2014. About 12 minutes north.",
     proximity: "About 12 minutes north via Naperville Road and Roosevelt Road.",
     intro:
       "Love Auto Group serves Lisle, IL buyers from our Villa Park lot at 735 N Yale Ave, about 12 minutes north. We carry used vehicles — Lexus, Subaru, Acura, Mazda, Honda, Toyota — and we've been Carfax Advantage accredited and in business since 2014. Lisle residents shopping for a used car that holds its value regularly make the short drive north.",
@@ -163,7 +163,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       "Used cars for Downers Grove, IL drivers. Independent dealer with free Carfax, since 2014. About 10 minutes north on Ogden Avenue.",
     proximity: "About 10 minutes north via Ogden Avenue or Route 53.",
     intro:
-      "Love Auto Group is one of the closest independent dealers to Downers Grove, IL — about 10 minutes north via Ogden Avenue. We're Carfax Advantage accredited and have been operating in Villa Park since 2014. Downers Grove buyers regularly drive up when they're shopping used Lexus, Subaru, Acura, Mazda, or Honda and want an independent dealer who specializes in those brands.",
+      "Love Auto Group is one of the closest independent dealers to Downers Grove, IL — about 10 minutes north via Ogden Avenue. We're Carfax Advantage accredited and have been in business since 2014. Downers Grove buyers regularly drive up when they're shopping used Lexus, Subaru, Acura, Mazda, or Honda and want an independent dealer who specializes in those brands.",
     sections: [
       {
         heading: "Why Downers Grove Residents Drive North",
@@ -195,7 +195,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
       "Quality used cars for Lombard, IL drivers — just minutes from downtown. Independent dealer, free Carfax, since 2014. Visit our Villa Park lot.",
     proximity: "About 5 minutes east via Roosevelt Road or North Avenue.",
     intro:
-      "Love Auto Group is the closest independent used car dealer to downtown Lombard, and we've been serving Lombard buyers from our Villa Park, IL location since 2014. Our specialty is quality vehicles — Subaru, Lexus, Acura, Mazda, Honda, Toyota — at independent-dealer prices, with free Carfax reports on marked vehicles and zero pressure on the test drive.",
+      "Love Auto Group is the closest independent used car dealer to downtown Lombard, and we've been in business since 2014, serving Lombard buyers from our Villa Park, IL location. Our specialty is quality vehicles — Subaru, Lexus, Acura, Mazda, Honda, Toyota — at independent-dealer prices, with free Carfax reports on marked vehicles and zero pressure on the test drive.",
     sections: [
       {
         heading: "Why Lombard Residents Shop With Us",
@@ -286,7 +286,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
     town: "Glen Ellyn",
     title: "Used Car Dealer Near Glen Ellyn, IL | Love Auto Group",
     description:
-      "Used cars for Glen Ellyn, IL drivers. Independent dealer, free Carfax, in Villa Park since 2014. Quick drive east on Roosevelt or North Avenue.",
+      "Used cars for Glen Ellyn, IL drivers. Independent dealer, free Carfax, in business since 2014. Quick drive east on Roosevelt or North Avenue.",
     proximity: "About 12 minutes east via Roosevelt Road or North Avenue.",
     intro:
       "Love Auto Group is the closest independent dealer to Glen Ellyn, IL — about a 12-minute drive east from most of town. We've been Carfax Advantage accredited and in business since 2014, and Glen Ellyn buyers regularly make the trip when they're shopping used Subaru, Lexus, Acura, Mazda, or Honda.",
