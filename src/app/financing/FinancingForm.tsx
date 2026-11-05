@@ -57,6 +57,21 @@ interface ApplicantFields {
   employerPhone: string;
   monthlyIncome: string;
   timeAtJobMonths: string;
+  // Housing and time at the address. Owner, 2026-11-05: required for the
+  // buyer AND the co-buyer, along with the driver's license.
+  housingStatus: "own" | "rent" | "other" | "";
+  monthlyHousingPayment: string;
+  yearsAtAddress: string;
+  monthsAtAddress: string;
+}
+
+/** The co-buyer also says where they live: the buyer's address, or their own. */
+interface CoBuyerFields extends ApplicantFields {
+  sameAddress: boolean;
+  addressStreet: string;
+  addressCity: string;
+  addressState: string;
+  addressZip: string;
 }
 
 interface FormValues extends ApplicantFields {
@@ -68,9 +83,6 @@ interface FormValues extends ApplicantFields {
   addressCity: string;
   addressState: string;
   addressZip: string;
-  // Housing (buyer only — co-buyer sharing address)
-  housingStatus: "own" | "rent" | "other" | "";
-  monthlyHousingPayment: string;
   // Vehicle / deal
   vehicleInterest: string;
   desiredMonthlyPayment: string;
@@ -82,7 +94,7 @@ interface FormValues extends ApplicantFields {
   tradeInDetails: string;
   // Co-buyer
   hasCoBuyer: boolean;
-  coBuyer: ApplicantFields;
+  coBuyer: CoBuyerFields;
   // Consents + anti-spam
   tcpaConsent: boolean;
   privacyConsent: boolean;
@@ -108,6 +120,19 @@ const EMPTY_APPLICANT: ApplicantFields = {
   employerPhone: "",
   monthlyIncome: "",
   timeAtJobMonths: "",
+  housingStatus: "",
+  monthlyHousingPayment: "",
+  yearsAtAddress: "",
+  monthsAtAddress: "",
+};
+
+const EMPTY_COBUYER: CoBuyerFields = {
+  ...EMPTY_APPLICANT,
+  sameAddress: true,
+  addressStreet: "",
+  addressCity: "",
+  addressState: "IL",
+  addressZip: "",
 };
 
 const INITIAL: FormValues = {
@@ -128,6 +153,8 @@ const INITIAL: FormValues = {
   dlExpiryDate: "",
   housingStatus: "",
   monthlyHousingPayment: "",
+  yearsAtAddress: "",
+  monthsAtAddress: "",
   employmentStatus: "",
   employer: "",
   jobTitle: "",
@@ -141,7 +168,7 @@ const INITIAL: FormValues = {
   hasTradeIn: false,
   tradeInDetails: "",
   hasCoBuyer: false,
-  coBuyer: { ...EMPTY_APPLICANT },
+  coBuyer: { ...EMPTY_COBUYER },
   tcpaConsent: false,
   privacyConsent: false,
   fcraConsent: false,
@@ -231,9 +258,9 @@ export default function FinancingForm() {
     setValues((prev) => ({ ...prev, [key]: value }));
   }
 
-  function updateCoBuyer<K extends keyof ApplicantFields>(
+  function updateCoBuyer<K extends keyof CoBuyerFields>(
     key: K,
-    value: ApplicantFields[K]
+    value: CoBuyerFields[K]
   ) {
     setValues((prev) => ({ ...prev, coBuyer: { ...prev.coBuyer, [key]: value } }));
   }
@@ -265,6 +292,13 @@ export default function FinancingForm() {
         a.timeAtJobMonths === "" ? undefined : Number(a.timeAtJobMonths) % 12,
       incomeType: a.employmentStatus || undefined,
     });
+    const housing = (a: ApplicantFields) => ({
+      housingType: a.housingStatus || undefined,
+      monthlyHousing: a.monthlyHousingPayment === "" ? undefined : Number(a.monthlyHousingPayment),
+      yearsAtAddress: a.yearsAtAddress === "" ? undefined : Number(a.yearsAtAddress),
+      monthsAtAddress: a.monthsAtAddress === "" ? undefined : Number(a.monthsAtAddress),
+    });
+    const cb = values.coBuyer;
 
     const payload = {
       honeypot: values.honeypot,
@@ -279,11 +313,7 @@ export default function FinancingForm() {
         city: values.addressCity,
         state: values.addressState,
         zip: values.addressZip,
-        housingType: values.housingStatus || undefined,
-        monthlyHousing:
-          values.monthlyHousingPayment === ""
-            ? undefined
-            : Number(values.monthlyHousingPayment),
+        ...housing(values),
       },
       employment: employment(values),
       vehicle: {
@@ -311,7 +341,17 @@ export default function FinancingForm() {
         ? { model: values.tradeInDetails || "yes" }
         : undefined,
       coBuyer: values.hasCoBuyer
-        ? { ...person(values.coBuyer), employment: employment(values.coBuyer) }
+        ? {
+            ...person(cb),
+            employment: employment(cb),
+            residence: {
+              street: cb.sameAddress ? values.addressStreet : cb.addressStreet,
+              city: cb.sameAddress ? values.addressCity : cb.addressCity,
+              state: cb.sameAddress ? values.addressState : cb.addressState,
+              zip: cb.sameAddress ? values.addressZip : cb.addressZip,
+              ...housing(cb),
+            },
+          }
         : undefined,
       consents: {
         creditAuth: values.fcraConsent,
@@ -395,6 +435,148 @@ export default function FinancingForm() {
   const disabled = state.kind === "submitting";
   const fieldClass =
     "w-full border border-ink-200 px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red disabled:bg-ink-100";
+
+  /**
+   * Housing, rent or mortgage, and time at the address. Every field is
+   * required (owner, 2026-11-05). Someone who owns outright enters 0.
+   */
+  const housingFields = (
+    a: ApplicantFields,
+    set: (key: "housingStatus" | "monthlyHousingPayment" | "yearsAtAddress" | "monthsAtAddress", value: string) => void,
+  ) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <label className="block">
+        <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+          {t.creditApp.housingStatus} <span className="text-brand-red">*</span>
+        </span>
+        <select
+          required
+          className={fieldClass}
+          value={a.housingStatus}
+          onChange={(e) => set("housingStatus", e.target.value)}
+        >
+          <option value="">{t.creditApp.selectEllipsis}</option>
+          <option value="own">{t.creditApp.own}</option>
+          <option value="rent">{t.creditApp.rent}</option>
+          <option value="other">{t.creditApp.other}</option>
+        </select>
+      </label>
+      <label className="block">
+        <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+          {t.creditApp.monthlyHousing} <span className="text-brand-red">*</span>
+        </span>
+        <input
+          type="number"
+          required
+          inputMode="numeric"
+          min={0}
+          placeholder="$"
+          className={fieldClass}
+          value={a.monthlyHousingPayment}
+          onChange={(e) => set("monthlyHousingPayment", e.target.value)}
+        />
+      </label>
+      <label className="block">
+        <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+          {t.creditApp.yearsAtAddress} <span className="text-brand-red">*</span>
+        </span>
+        <input
+          type="number"
+          required
+          inputMode="numeric"
+          min={0}
+          max={99}
+          className={fieldClass}
+          value={a.yearsAtAddress}
+          onChange={(e) => set("yearsAtAddress", e.target.value)}
+        />
+      </label>
+      <label className="block">
+        <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+          {t.creditApp.monthsAtAddress} <span className="text-brand-red">*</span>
+        </span>
+        <input
+          type="number"
+          required
+          inputMode="numeric"
+          min={0}
+          max={11}
+          className={fieldClass}
+          value={a.monthsAtAddress}
+          onChange={(e) => set("monthsAtAddress", e.target.value)}
+        />
+      </label>
+    </div>
+  );
+
+  /** Driver's license: all four fields required (owner, 2026-11-05). */
+  const licenseFields = (
+    a: ApplicantFields,
+    set: (key: "dlNumber" | "dlState" | "dlIssueDate" | "dlExpiryDate", value: string) => void,
+  ) => (
+    <div className="pt-4 border-t border-ink-200">
+      <p className="text-xs uppercase tracking-wide text-brand-gray-500 font-semibold mb-3">
+        {t.creditApp.dlSection}
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <label className="block">
+          <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+            {t.creditApp.dlNumber} <span className="text-brand-red">*</span>
+          </span>
+          <input
+            type="text"
+            required
+            maxLength={30}
+            autoComplete="off"
+            className={fieldClass}
+            value={a.dlNumber}
+            onChange={(e) => set("dlNumber", e.target.value)}
+          />
+        </label>
+        <label className="block">
+          <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+            {t.creditApp.dlState} <span className="text-brand-red">*</span>
+          </span>
+          <select
+            required
+            className={fieldClass}
+            value={a.dlState}
+            onChange={(e) => set("dlState", e.target.value)}
+          >
+            {US_STATES.map((st) => (
+              <option key={st} value={st}>
+                {st}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="block">
+          <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+            {t.creditApp.dlIssueDate} <span className="text-brand-red">*</span>
+          </span>
+          <input
+            type="date"
+            required
+            className={fieldClass}
+            value={a.dlIssueDate}
+            onChange={(e) => set("dlIssueDate", e.target.value)}
+          />
+        </label>
+        <label className="block">
+          <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+            {t.creditApp.dlExpiryDate} <span className="text-brand-red">*</span>
+          </span>
+          <input
+            type="date"
+            required
+            className={fieldClass}
+            value={a.dlExpiryDate}
+            onChange={(e) => set("dlExpiryDate", e.target.value)}
+          />
+        </label>
+      </div>
+    </div>
+  );
 
   return (
     // Found in the website audit: `noValidate` was set here with no
@@ -603,98 +785,9 @@ export default function FinancingForm() {
               {t.creditApp.ssnHelper}
             </span>
           </label>
-          <label className="block">
-            <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-              {t.creditApp.housingStatus} <span className="text-brand-red">*</span>
-            </span>
-            <select
-              required
-              className={fieldClass}
-              value={values.housingStatus}
-              onChange={(e) =>
-                update("housingStatus", e.target.value as FormValues["housingStatus"])
-              }
-            >
-              <option value="">{t.creditApp.selectEllipsis}</option>
-              <option value="own">{t.creditApp.own}</option>
-              <option value="rent">{t.creditApp.rent}</option>
-              <option value="other">{t.creditApp.other}</option>
-            </select>
-          </label>
         </div>
-        <label className="block">
-          <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-            {t.creditApp.monthlyHousing}
-          </span>
-          <input
-            type="number"
-            inputMode="numeric"
-            min={0}
-            placeholder="$"
-            className={fieldClass}
-            value={values.monthlyHousingPayment}
-            onChange={(e) => update("monthlyHousingPayment", e.target.value)}
-          />
-        </label>
-
-        {/* Driver's License (optional — saves a follow-up call when submitting to lender) */}
-        <div className="pt-4 border-t border-ink-200">
-          <p className="text-xs uppercase tracking-wide text-brand-gray-500 font-semibold mb-3">
-            {t.creditApp.dlSection}
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <label className="block">
-              <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                {t.creditApp.dlNumber}
-              </span>
-              <input
-                type="text"
-                maxLength={30}
-                className={fieldClass}
-                value={values.dlNumber}
-                onChange={(e) => update("dlNumber", e.target.value)}
-              />
-            </label>
-            <label className="block">
-              <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                {t.creditApp.dlState}
-              </span>
-              <select
-                className={fieldClass}
-                value={values.dlState}
-                onChange={(e) => update("dlState", e.target.value)}
-              >
-                {US_STATES.map((st) => (
-                  <option key={st} value={st}>
-                    {st}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="block">
-              <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                {t.creditApp.dlIssueDate}
-              </span>
-              <input
-                type="date"
-                className={fieldClass}
-                value={values.dlIssueDate}
-                onChange={(e) => update("dlIssueDate", e.target.value)}
-              />
-            </label>
-            <label className="block">
-              <span className="block text-sm font-medium text-brand-gray-900 mb-1">
-                {t.creditApp.dlExpiryDate}
-              </span>
-              <input
-                type="date"
-                className={fieldClass}
-                value={values.dlExpiryDate}
-                onChange={(e) => update("dlExpiryDate", e.target.value)}
-              />
-            </label>
-          </div>
-        </div>
+        {housingFields(values, (k, v) => update(k, v as never))}
+        {licenseFields(values, (k, v) => update(k, v))}
       </fieldset>
 
       {/* ─── Employment ─── */}
@@ -1065,9 +1158,84 @@ export default function FinancingForm() {
                 />
               </label>
             </div>
-            <p className="text-xs text-brand-gray-500 pt-2 border-t border-ink-200">
-              {t.creditApp.coBuyerDlNote}
-            </p>
+            <div className="space-y-4 pt-4 border-t border-ink-200">
+              <p className="text-xs uppercase tracking-wide text-brand-gray-500 font-semibold">
+                {t.creditApp.coBuyerAddress}
+              </p>
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="mt-1"
+                  checked={values.coBuyer.sameAddress}
+                  onChange={(e) => updateCoBuyer("sameAddress", e.target.checked)}
+                />
+                <span className="text-sm text-brand-gray-700">{t.creditApp.coBuyerSameAddress}</span>
+              </label>
+              {!values.coBuyer.sameAddress && (
+                <>
+                  <label className="block">
+                    <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                      {t.creditApp.street} <span className="text-brand-red">*</span>
+                    </span>
+                    <input
+                      type="text"
+                      required
+                      className={fieldClass}
+                      value={values.coBuyer.addressStreet}
+                      onChange={(e) => updateCoBuyer("addressStreet", e.target.value)}
+                    />
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-[1fr_120px_140px] gap-4">
+                    <label className="block">
+                      <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                        {t.creditApp.city} <span className="text-brand-red">*</span>
+                      </span>
+                      <input
+                        type="text"
+                        required
+                        className={fieldClass}
+                        value={values.coBuyer.addressCity}
+                        onChange={(e) => updateCoBuyer("addressCity", e.target.value)}
+                      />
+                    </label>
+                    <label className="block">
+                      <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                        {t.creditApp.state} <span className="text-brand-red">*</span>
+                      </span>
+                      <select
+                        required
+                        className={fieldClass}
+                        value={values.coBuyer.addressState}
+                        onChange={(e) => updateCoBuyer("addressState", e.target.value)}
+                      >
+                        {US_STATES.map((st) => (
+                          <option key={st} value={st}>
+                            {st}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="block">
+                      <span className="block text-sm font-medium text-brand-gray-900 mb-1">
+                        {t.creditApp.zip} <span className="text-brand-red">*</span>
+                      </span>
+                      <input
+                        type="text"
+                        required
+                        inputMode="numeric"
+                        pattern="\d{5}(-\d{4})?"
+                        title="5 digits, or 5+4 with a dash (60181 or 60181-1234)"
+                        className={fieldClass}
+                        value={values.coBuyer.addressZip}
+                        onChange={(e) => updateCoBuyer("addressZip", e.target.value)}
+                      />
+                    </label>
+                  </div>
+                </>
+              )}
+              {housingFields(values.coBuyer, (k, v) => updateCoBuyer(k, v as never))}
+            </div>
+            {licenseFields(values.coBuyer, (k, v) => updateCoBuyer(k, v))}
           </div>
         )}
       </fieldset>
