@@ -41,6 +41,28 @@ const DYNAMIC_LOCALIZED_PATTERNS: readonly RegExp[] = [
 ];
 
 /**
+ * One-segment /inventory/<x> routes that are NOT vehicle pages: the make and
+ * category landing pages, which are real English folders under
+ * src/app/inventory/ but have no Spanish twin. The pattern above cannot tell
+ * them from a VDP slug, so without this list the switcher linked
+ * /inventory/used-lexus/ to /es/inventory/used-lexus/, a hard 404 that Search
+ * Console reported on 2026-11-09.
+ *
+ * scripts/check-locale-routes.mjs (run in prebuild) fails the build if a
+ * static folder appears under src/app/inventory/ that is missing here, so a
+ * new landing page cannot silently reintroduce the bug.
+ */
+export const NON_VDP_INVENTORY_SEGMENTS: readonly string[] = [
+  "used-acura",
+  "used-honda",
+  "used-lexus",
+  "used-mazda",
+  "used-sedans",
+  "used-subaru",
+  "used-suvs",
+];
+
+/**
  * Trailing slashes are load-bearing on this site: production 308s `/inventory`
  * to `/inventory/`, so a URL emitted without one is a redirect, not a page.
  * Google reports a redirecting sitemap entry as "Page with redirect" and
@@ -83,10 +105,10 @@ export function isSpanishPath(path: string): boolean {
  */
 export function hasSpanishVersion(englishPath: string): boolean {
   const p = normalize(englishPath);
-  return (
-    LOCALIZED_PATHS.includes(p) ||
-    DYNAMIC_LOCALIZED_PATTERNS.some((rx) => rx.test(p))
-  );
+  if (LOCALIZED_PATHS.includes(p)) return true;
+  const m = /^\/inventory\/([^/]+)$/.exec(p);
+  if (m && NON_VDP_INVENTORY_SEGMENTS.includes(m[1])) return false;
+  return DYNAMIC_LOCALIZED_PATTERNS.some((rx) => rx.test(p));
 }
 
 function normalize(path: string): string {

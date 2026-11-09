@@ -176,7 +176,11 @@
 /gmc/terrain-for-sale                          /inventory/            301
 /ford/taurus-for-sale                          /inventory/            301
 /minivan/passenger-for-sale                    /inventory/            301
-/volvo/v60%20cross%20country-for-sale          /inventory/            301
+# Google reports this as /volvo/v60+cross+country-for-sale (literal plus) and
+# the old %20 spelling 301s but the + form 404ed. Cloudflare's docs do not say
+# how a literal + in a source is matched, so use one splat that catches every
+# spelling. We have no Volvo pages, so nothing live can be shadowed.
+/volvo/*                                       /inventory/            301
 
 # ─── Misc legacy top-level pages (GSC 404 list) ─────────────────────
 /terms-and-conditions                          /terms/                301

@@ -466,9 +466,35 @@ interface Env {
 
 const MERCH_CONFIG_KEY = "config:v1";
 
+/**
+ * Old sold-car URLs that are in neither the live feed nor the retired-slugs
+ * list (their slugs were minted by an older slug function), so they fell to a
+ * plain 404. Google still crawls them. 301 to the inventory page.
+ *
+ * This lives here and NOT in public/_redirects on purpose: /inventory/* is in
+ * _routes.json, and Cloudflare does not apply _redirects to requests a Pages
+ * Function serves, so a single-segment rule there would be dead. One entry
+ * covers the with- and without-trailing-slash forms (params.slug has neither).
+ * Add a slug here only when it is confirmed gone; a live car must never be
+ * listed (this runs before the static page).
+ */
+const GONE_SLUG_REDIRECTS: ReadonlySet<string> = new Set([
+  "2013-gmc-terrain-slt-11316",
+  "2020-hyundai-kona-sel-awd-11341",
+  "2008-saab-9-3-convertible-11262",
+  "2019-subaru-outback-3-6r-limited-16",
+  "2018-subaru-forester-2-5i-limited-11",
+  "2015-acura-tlx-3-5-10",
+  "2011-jaguar-xj-base-4dr-18",
+]);
+
 export const onRequest: PagesFunction<Env> = async (context) => {
+  const rawSlug = (context.params as Record<string, string>).slug as string;
+  if (rawSlug && GONE_SLUG_REDIRECTS.has(rawSlug.toLowerCase())) {
+    return Response.redirect(new URL("/inventory/", context.request.url).toString(), 301);
+  }
   const staticResponse = await context.next();
-  const slug = (context.params as Record<string, string>).slug as string;
+  const slug = rawSlug;
   if (!slug) return staticResponse;
 
   // Pass redirects straight through, untouched.
