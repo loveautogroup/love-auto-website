@@ -23,11 +23,12 @@
 
 import type { Metadata } from "next";
 import InventoryPage from "../../inventory/page";
+import { SITE_CONFIG } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Inventario de Autos Usados | Love Auto Group",
   description:
-    "Autos usados en Villa Park, IL, desde $4,500 hasta $18,000: Lexus, Subaru, Acura y Mazda. Carfax gratis y sin cargos de concesionario.",
+    `Autos usados en Villa Park, IL, desde ${SITE_CONFIG.priceRange.minLabel} hasta ${SITE_CONFIG.priceRange.maxLabel}: Lexus, Subaru, Acura y Mazda. Carfax gratis y sin cargos de concesionario.`,
   alternates: {
     canonical: "https://www.loveautogroup.net/es/inventory/",
     languages: {

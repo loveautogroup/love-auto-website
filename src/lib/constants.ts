@@ -13,6 +13,19 @@ export const SITE_CONFIG = {
   },
   url: "https://www.loveautogroup.net",
   established: 2014,
+  // ONE source for the public price range. Feeds the AutoDealer JSON-LD
+  // priceRange, the /inventory/ meta description, the FAQ-style copy on the
+  // geo pages and the Subaru hub/guide. Change it here and nowhere else.
+  priceRange: {
+    min: 4500,
+    max: 100000,
+    minLabel: "$4,500",
+    maxLabel: "$100,000",
+    /** "$4,500 to $100,000" for prose and meta descriptions. Owner, 2026-11-12. */
+    text: "$4,500 to $100,000",
+    /** "$4,500–$100,000" for schema.org priceRange. */
+    schema: "$4,500–$100,000",
+  },
   // Owner, 2026-10-03: Tue–Sat 2–6 PM, closed Sun + Mon, other times by
   // appointment. Mirrors: StructuredData.tsx openingHoursSpecification,
   // functions/api/store-hours.ts DEFAULT_HOURS, i18n header.hours.

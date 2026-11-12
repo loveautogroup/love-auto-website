@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
 import { TrackedPhoneLink } from "@/components/TrackedLink";
 import ContactForm from "./ContactForm";
@@ -125,6 +126,22 @@ export default function ContactPage() {
                   </a>
                 </div>
               </div>
+            </div>
+
+            {/* Book a visit */}
+            <div className="mt-8 border-l-4 border-brand-red bg-white border border-ink-200 p-6">
+              <h3 className="font-heading font-bold text-brand-gray-900 mb-1">
+                Planning a visit?
+              </h3>
+              <p className="text-sm text-brand-gray-700">
+                Pick a day and time and we will call or text to confirm.
+              </p>
+              <Link
+                href="/book-a-visit/"
+                className="mt-3 inline-block text-sm font-semibold text-brand-red hover:underline"
+              >
+                Book a visit
+              </Link>
             </div>
 
             {/* Hours */}

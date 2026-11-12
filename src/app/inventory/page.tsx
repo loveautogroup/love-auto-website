@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { sampleInventory } from "@/data/inventory";
 import { sortWithFeaturedFirst } from "@/data/merchandising";
 import { hasOwnPhoto } from "../../../shared/ownPhoto";
@@ -9,11 +10,11 @@ import WaitlistCta from "@/components/WaitlistCta";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
 import InventoryHero from "./InventoryHero";
 import { ItemListSchema } from "@/components/StructuredData";
+import { SITE_CONFIG } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Browse Our Full Used Car Inventory | Love Auto Group",
-  description:
-    "Browse our Villa Park, IL inventory of quality used cars from $4,500 to $18,000. Lexus, Subaru, Acura, Mazda. No dealer fees, free CARFAX on marked vehicles.",
+  description: `Browse our Villa Park, IL inventory of used cars from ${SITE_CONFIG.priceRange.text}. Lexus, Subaru, Acura, Mazda. No dealer fees, free CARFAX on marked vehicles.`,
   // hreflang must be reciprocal or search engines ignore it — /es/inventory/
   // points back here. See src/lib/localeRoutes.ts.
   alternates: {
@@ -97,6 +98,16 @@ export default function InventoryPage() {
               lands on the DMS waitlist and gets matched against every arrival. */}
           <WaitlistCta />
         </div>
+        <p className="mt-6 text-center text-sm text-brand-gray-600">
+          Shopping near Chicago&apos;s western suburbs? Read about{" "}
+          <Link
+            href="/used-cars-villa-park-il/"
+            className="text-brand-red hover:underline"
+          >
+            used cars in Villa Park
+          </Link>
+          , including our hours, directions and what we sell.
+        </p>
       </section>
     </>
   );

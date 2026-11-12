@@ -95,6 +95,19 @@ export default async function ServiceAreaPage({
       {/* Editorial content */}
       <article className="max-w-4xl mx-auto px-4 py-12">
         <p className="text-lg text-brand-gray-700 leading-relaxed mb-10">{content.intro}</p>
+        {content.slug !== "villa-park-il" && (
+          <p className="text-brand-gray-700 leading-relaxed mb-10 -mt-6">
+            Our lot is in Villa Park. See what is for sale and how to reach us
+            on our page for{" "}
+            <Link
+              href="/used-cars-villa-park-il/"
+              className="text-brand-red hover:underline"
+            >
+              used cars in Villa Park
+            </Link>
+            .
+          </p>
+        )}
 
         {content.sections.map((section, i) => (
           <section key={i} className="mb-10">

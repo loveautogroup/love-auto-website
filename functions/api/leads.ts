@@ -24,6 +24,7 @@
  *     the LEADS KV namespace. Deliberately NOT applied to general inquiries:
  *     throttling the main lead path is a revenue risk, and the DMS already
  *     enforces 5 per IP per 10 min on every submission.
+ *   - source === "website-book-visit" (/book-a-visit/) gets the same limit.
  */
 interface Env {
   NEXT_PUBLIC_DMS_INTAKE_KEY?: string;
@@ -34,6 +35,8 @@ const UPSTREAM = "https://dms.loveautogroup.net/api/v1/public/leads";
 
 /** leadSource tag written by src/components/TestDriveForm.tsx. */
 const TEST_DRIVE_SOURCE = "website-test-drive";
+/** leadSource tag written by src/app/book-a-visit/BookVisitForm.tsx (lead-only visit request). */
+const BOOK_VISIT_SOURCE = "website-book-visit";
 const MIN_ELAPSED_MS = 4_000;      // form must be open >= 4 s
 const RL_WINDOW_SECONDS = 600;     // 10 minutes
 const RL_MAX_ATTEMPTS = 3;         // test-drive requests per IP per window
@@ -82,9 +85,13 @@ export async function onRequestPost(ctx: { request: Request; env: Env }) {
   }
 
   // Per-IP rate limit, test-drive requests only (see header note).
+  // Book-a-visit shares the same limit (own counter) and the same guards.
   const isTestDrive = parsed["source"] === TEST_DRIVE_SOURCE;
-  const rlKey = `ratelimit:testdrive:${ip}`;
-  if (isTestDrive && ctx.env.LEADS && ip) {
+  const isBookVisit = parsed["source"] === BOOK_VISIT_SOURCE;
+  const rlKey = isBookVisit
+    ? `ratelimit:bookvisit:${ip}`
+    : `ratelimit:testdrive:${ip}`;
+  if ((isTestDrive || isBookVisit) && ctx.env.LEADS && ip) {
     const attempts = parseInt((await ctx.env.LEADS.get(rlKey)) ?? "0", 10);
     if (attempts >= RL_MAX_ATTEMPTS) {
       return json(

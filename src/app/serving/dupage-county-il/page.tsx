@@ -41,7 +41,7 @@ const FAQS = [
   {
     question: "What kinds of used cars do you sell?",
     answer:
-      "We carry Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Inventory is typically priced from around $4,500 to $18,000, with most vehicles in the 2013 to 2018 model years and 80,000 to 140,000 mile range. Every vehicle is carefully selected, and a free Carfax is available on the ones that show the badge.",
+      `We carry Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Inventory is typically priced from around ${SITE_CONFIG.priceRange.text}, with most vehicles in the 2013 to 2018 model years and 80,000 to 140,000 mile range. A free Carfax is available on the ones that show the badge.`,
   },
   {
     question: "Why buy from a small DuPage County dealer instead of a big-name lot?",
@@ -235,11 +235,19 @@ export default function DuPageCountyPage() {
           suit, and the volume runners from Honda, Toyota, and Mazda.
         </p>
         <p className="text-brand-gray-700 leading-relaxed mb-4">
-          Inventory typically prices from around $4,500 to $18,000, with most
+          Inventory typically prices from around {SITE_CONFIG.priceRange.text}, with most
           vehicles in the 2013 to 2018 model years and 80,000 to 140,000 mile
-          range. Every vehicle is carefully selected at the buying stage.
-          We&apos;re a Carfax Advantage Dealer, so vehicles that show the
-          CARFAX badge come with a free report you can pull yourself.
+          range. We&apos;re a Carfax Advantage Dealer, so vehicles that show the
+          CARFAX badge come with a free report you can pull yourself. Our
+          home base is Villa Park, so if you are starting there, see our page
+          on{" "}
+          <Link
+            href="/used-cars-villa-park-il/"
+            className="text-brand-red hover:underline"
+          >
+            used cars in Villa Park
+          </Link>
+          .
         </p>
 
         <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mt-12 mb-4">

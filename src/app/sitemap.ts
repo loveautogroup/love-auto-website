@@ -42,6 +42,7 @@
 
 import type { MetadataRoute } from "next";
 import { resolveIndexableVehicles } from "@/lib/dmsInventory";
+import { lastUpdated, GUIDE_PATHS, GUIDE_FALLBACK_ISO } from "@/lib/lastUpdated";
 
 // Required for static export.
 export const dynamic = "force-static";
@@ -65,6 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/about/`,                 lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/faq/`,                   lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/contact/`,               lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/book-a-visit/`,          lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/sell-your-car/`,         lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/waitlist/`,              lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/reviews/`,               lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
@@ -115,8 +117,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // engine surfaces only franchise dealers on Subaru-near-Chicago and
     // Lexus-in-Chicago-suburbs queries)
     { url: `${BASE}/buying-guides/`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE}/buying-guides/used-subaru-near-chicago/`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/buying-guides/used-lexus-dupage-county/`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    // Only these two guides exist under src/app/buying-guides/ (checked
+    // 2026-11-12). lastModified is the real git date of each guide, not "now".
+    { url: `${BASE}/buying-guides/used-subaru-near-chicago/`,  lastModified: lastUpdated(GUIDE_PATHS.subaru, GUIDE_FALLBACK_ISO).date, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/buying-guides/used-lexus-dupage-county/`,  lastModified: lastUpdated(GUIDE_PATHS.lexus, GUIDE_FALLBACK_ISO).date, changeFrequency: "monthly", priority: 0.8 },
     // 2026-05-05 — closes the AEO Q8 gap (engines were returning JDM importers
     // for "used car dealer near Chicago" instead of independent US-market dealers)
     // Differentiator landing

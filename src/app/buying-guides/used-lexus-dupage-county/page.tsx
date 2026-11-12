@@ -7,6 +7,9 @@ import {
 import { SITE_CONFIG } from "@/lib/constants";
 import { TrackedPhoneLink } from "@/components/TrackedLink";
 import SiteBreadcrumb from "@/components/SiteBreadcrumb";
+import { lastUpdated, GUIDE_PATHS, GUIDE_FALLBACK_ISO } from "@/lib/lastUpdated";
+
+const updated = lastUpdated(GUIDE_PATHS.lexus, GUIDE_FALLBACK_ISO);
 
 /**
  * Buying guide — "Where to Buy a Used Lexus in DuPage County"
@@ -109,7 +112,7 @@ export default function UsedLexusDuPageCountyPage() {
             Where to Buy a Used Lexus in DuPage County
           </h1>
           <p className="mt-3 text-brand-gray-500 text-sm">
-            By the team at Love Auto Group, Villa Park IL · Updated May 2026
+            By the team at Love Auto Group, Villa Park IL · Updated {updated.label}
           </p>
         </header>
 

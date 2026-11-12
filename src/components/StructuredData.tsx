@@ -114,7 +114,7 @@ export function LocalBusinessSchema() {
       latitude: SITE_CONFIG.geo.lat,
       longitude: SITE_CONFIG.geo.lng,
     },
-    priceRange: "$4,500–$20,000",
+    priceRange: SITE_CONFIG.priceRange.schema,
     image: `${SITE_CONFIG.url}/images/storefront.jpg`,
     // aggregateRating intentionally ABSENT (removed 2026-07-20, SEO plan
     // Phase 1 / DMS #6). Google's review-snippet policy: "If the entity

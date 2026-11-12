@@ -3,9 +3,9 @@ import WaitlistForm from "@/components/WaitlistForm";
 import WaitlistIntro from "./WaitlistIntro";
 
 export const metadata: Metadata = {
-  title: "Car Waitlist | Tell Us What You're Looking For | Love Auto Group",
+  title: "Car Waitlist | Love Auto Group, Villa Park IL",
   description:
-    "Don't see the car you want? Tell Love Auto Group in Villa Park, IL the make, body style, budget, or year range and we'll email you the day a match comes in.",
+    "Don't see the car you want? Tell Love Auto Group in Villa Park, IL the make, budget, or year range and we'll email you the day a match comes in.",
   alternates: { canonical: "https://www.loveautogroup.net/waitlist/" },
 };
 

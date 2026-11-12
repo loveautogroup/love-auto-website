@@ -22,6 +22,8 @@
  * used cars age in. See README in seo-quickwins/brand-pages.
  */
 
+import { SITE_CONFIG } from "@/lib/constants";
+
 export interface BrandContent {
   /** URL slug. Final URL is /brands/{slug}/ */
   slug: string;
@@ -126,7 +128,7 @@ export const BRANDS: BrandContent[] = [
     hero:
       "AWD-ready Subarus near Chicago. Serving Villa Park and the western suburbs. In business since 2014.",
     body: [
-      "Looking for a used Subaru near Chicago? You're in the right place. Love Auto Group is an independent used Subaru dealer in Villa Park, IL, twenty minutes west of downtown Chicago and central to the western suburbs and DuPage County. We've been buying and selling Foresters, Outbacks, and Crosstreks since 2014, and Subaru is one of the makes we know best.",
+      `Looking for a used Subaru near Chicago? You're in the right place. Love Auto Group is an independent used Subaru dealer in Villa Park, IL, twenty minutes west of downtown Chicago and central to the western suburbs and DuPage County. We've been buying and selling Foresters, Outbacks, and Crosstreks since 2014, and Subaru is one of the makes we know best. Our cars, Subarus included, are usually priced from ${SITE_CONFIG.priceRange.text} with no dealer fees.`,
       "A Subaru built after 2014 will run past 250,000 miles when properly maintained. That is not a marketing claim. That is what every long-term reliability study and what we see at the buying stage shows us. Foresters, Outbacks, and Crosstreks from the second-generation 2014 to 2017 era are the value sweet spot in the used Subaru market, and they are exactly what we keep in rotation on our lot in Villa Park.",
       "{{STOCK}} Symmetrical all-wheel drive, eight inches of ground clearance on the Forester, and the kind of all-season capability that handles a Chicago suburbs winter without drama. Buyers come to us from across DuPage County, including Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, and Naperville, plus the broader western suburbs.",
       "Every used Subaru on our lot has been carefully selected before it is listed for sale. The head gasket area, the CVT transmission behavior, and the all-wheel drive engagement are all things we know to look for on this platform. We also pull a free Carfax on every vehicle, looking for documented CVT fluid services, head gasket history, and consistent oil change records.",

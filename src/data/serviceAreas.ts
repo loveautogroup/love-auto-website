@@ -8,6 +8,8 @@
  * town name, and there's almost no competition for those queries.
  */
 
+import { SITE_CONFIG } from "@/lib/constants";
+
 export interface ServiceAreaContent {
   /** URL slug — final URL is /serving/{slug} */
   slug: string;
@@ -48,7 +50,7 @@ export const SERVICE_AREAS: ServiceAreaContent[] = [
         heading: "What We Stock",
         body: [
           "Our inventory rotates, but the through-line is the same: Used Lexus RX, ES, IS, and GX for buyers who want luxury without German-style repair bills. Subaru Outback, Forester, and Crosstrek for AWD winter security in the Chicago suburbs. Acura MDX with SH-AWD for the three-row family-SUV pick that holds its value. Mazda CX-5 and CX-30 for buyers who care about how the car actually drives. Honda Civic, Accord, CR-V, Pilot, and Odyssey for the highest-resale, lowest-headache picks in their segments. We also carry opportunistic non-stock when the right vehicle comes through.",
-          "Most of our inventory sits in the $4,500 to $18,000 range. Every vehicle is hand-picked at auction, and a free Carfax history report is available on the ones that show the badge.",
+          `Most of our inventory sits in the ${SITE_CONFIG.priceRange.text} range. A free Carfax history report is available on the ones that show the badge.`,
         ],
       },
       {
