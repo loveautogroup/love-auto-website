@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BRANDS } from "@/data/brands";
+import { MODEL_LANDINGS } from "@/data/modelLandings";
 import { fetchDmsInventory } from "@/lib/dmsInventory";
 import { TrackedPhoneLink } from "@/components/TrackedLink";
 import {
@@ -189,6 +190,24 @@ export default async function BrandPage({
                 )}
               </span>
             ))}
+          </p>
+        ) : null}
+        {MODEL_LANDINGS.some((x) => x.brandSlug === content.slug) ? (
+          <p className="text-base text-brand-gray-600 mt-4">
+            Looking at a specific model? See{" "}
+            {MODEL_LANDINGS.filter((x) => x.brandSlug === content.slug).map(
+              (x, i, arr) => (
+                <span key={x.slug}>
+                  <Link
+                    href={`/used/${x.slug}/`}
+                    className="text-brand-red hover:underline font-medium"
+                  >
+                    used {x.make} {x.model}
+                  </Link>
+                  {i < arr.length - 1 ? ", " : "."}
+                </span>
+              )
+            )}
           </p>
         ) : null}
       </article>

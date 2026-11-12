@@ -108,6 +108,21 @@ export default function InventoryPage() {
           </Link>
           , including our hours, directions and what we sell.
         </p>
+        <p className="mt-2 text-center text-sm text-brand-gray-600">
+          Looking for a specific model? See used{" "}
+          <Link href="/used/subaru-forester/" className="text-brand-red hover:underline">
+            Subaru Forester
+          </Link>
+          ,{" "}
+          <Link href="/used/subaru-crosstrek/" className="text-brand-red hover:underline">
+            Subaru Crosstrek
+          </Link>
+          , and{" "}
+          <Link href="/used/subaru-outback/" className="text-brand-red hover:underline">
+            Subaru Outback
+          </Link>
+          .
+        </p>
       </section>
     </>
   );

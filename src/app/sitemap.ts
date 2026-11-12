@@ -130,6 +130,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // "villa park car dealerships", "villa park dealership". Exact-match URL
     // mirrors Premium Motors' title-tag strategy that holds #1-2 for this cluster.
     { url: `${BASE}/used-cars-villa-park-il/`, lastModified: now, changeFrequency: "weekly",  priority: 0.9 },
+    // Model landing pages (/used/{make}-{model}/), grounded in our sales history.
+    { url: `${BASE}/used/subaru-forester/`,  lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/used/subaru-crosstrek/`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/used/subaru-outback/`,   lastModified: now, changeFrequency: "weekly", priority: 0.8 },
   ];
 
   // ── Per-vehicle VDPs ─────────────────────────────────────────────
