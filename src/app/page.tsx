@@ -9,6 +9,7 @@ import PaymentCalculator from "@/components/PaymentCalculator";
 import CarfaxAdvantageBadge from "@/components/CarfaxAdvantageBadge";
 import VDPTrustStrip from "@/components/VDPTrustStrip";
 import HomeHero from "@/components/HomeHero";
+import HomeCustomerVideo from "@/components/HomeCustomerVideo";
 import HomeStatBand from "@/components/HomeStatBand";
 import HomeStickyBar from "@/components/HomeStickyBar";
 import { SERVICE_AREAS } from "@/data/serviceAreas";
@@ -151,6 +152,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Happy customers video — moved here from the hero (owner, 2026-11-12) */}
+      <HomeCustomerVideo />
 
       {/* We Buy Cars — private party acquisition CTA */}
       <section

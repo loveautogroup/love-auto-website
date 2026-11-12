@@ -10,65 +10,22 @@
  * concept's core rule. The headline becomes the dealership's own required
  * tagline instead of generic filler copy.
  *
- * This is the only video on the homepage (owner removed the lower "Our
- * happy customers" section, 2026-09-27). The full video lives on /reviews.
- *
- * Native `controls` stays on, same accessibility rule PromoVideo enforces
- * elsewhere on the site: a silent looping video always needs a reachable
- * pause button, even sitting behind display type.
+ * Owner, 2026-11-12: the video moved out of the hero into its own band
+ * partway down the homepage (HomeCustomerVideo). The hero is text only now.
  *
  * Extracted from app/page.tsx so it can consume useLanguage() for EN/ES
  * translations. All other page sections stay as server-rendered RSC.
  */
 
-import { useRef } from "react";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
-import { sendEvent } from "@/lib/analytics";
 
 export default function HomeHero() {
   const { t } = useLanguage();
-  const firedPlayEvent = useRef(false);
-
-  const handlePlay = () => {
-    if (firedPlayEvent.current) return;
-    firedPlayEvent.current = true;
-    sendEvent("video_play", { video: "happy_customers", location: "homepage_hero" });
-  };
 
   return (
-    <section className="relative bg-[#0a0a0a] text-white overflow-hidden lg:min-h-[min(56.25vw,40vh)]">
-      {/* The WHOLE video frame shows at every width (owner, 2026-09-27:
-          "zoom the homepage video out ... cant view the cars that were
-          purchased"). Earlier versions stretched it behind the headline and
-          cropped it, which cut off the cars. Now it keeps its own 16:9 shape:
-          full width on top on phones, and on desktop it sits against the
-          right edge at the hero's height, fading into black under the
-          headline. Owner, 2026-09-27: use the full-length video here, not
-          the 23-second loop. */}
-      <div className="relative w-full aspect-video lg:absolute lg:inset-y-0 lg:right-0 lg:w-auto lg:h-full lg:max-w-[64%]">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          controls
-          preload="metadata"
-          poster="/videos/happy-customers-v2-poster.jpg"
-          aria-label="Love Auto Group customers and their cars"
-          onPlay={handlePlay}
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="/videos/happy-customers-v2.mp4" type="video/mp4" />
-        </video>
-        {/* Fade into the black band: from the bottom on phones (text sits
-            below), from the left on desktop (text sits beside). */}
-        <div
-          className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0a0a0a] from-0% via-transparent via-25% to-transparent lg:bg-gradient-to-r lg:from-[#0a0a0a] lg:via-transparent lg:via-30%"
-          aria-hidden="true"
-        />
-      </div>
-      <div className="relative lg:min-h-[inherit] max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-12 lg:pt-14 lg:pb-12 flex flex-col justify-end">
+    <section className="relative bg-[#0a0a0a] text-white overflow-hidden">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-12 lg:pt-16 lg:pb-16 flex flex-col justify-end">
         <div className="max-w-2xl border-l-2 sm:border-l-[3px] border-brand-red pl-4 sm:pl-6">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red-light">
             Villa Park, Illinois &middot; In Business Since 2014

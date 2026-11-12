@@ -623,6 +623,8 @@ export const translations = {
       viewFullInventory: "View Full Inventory",
     },
     homePage: {
+      videoHeading: "Our happy customers",
+      videoBody: "Real customers, real cars, right here in Villa Park.",
       whyHeading: "Why Love Auto Group?",
       inspectedTitle: "Free CARFAX Reports",
       inspectedBody: "Every vehicle that shows the CARFAX badge comes with a free history report: accident history, service records, and title status, ready before you ask.",
@@ -1268,6 +1270,8 @@ export const translations = {
       viewFullInventory: "Ver Todo el Inventario",
     },
     homePage: {
+      videoHeading: "Nuestros clientes felices",
+      videoBody: "Clientes reales, autos reales, aqu\u00ed mismo en Villa Park.",
       whyHeading: "\u00bfPor qu\u00e9 Love Auto Group?",
       inspectedTitle: "Reportes CARFAX Gratis",
       inspectedBody: "Cada veh\u00edculo que muestra el distintivo CARFAX incluye un reporte de historial gratis: historial de accidentes, registros de servicio y estado del t\u00edtulo, listo antes de que preguntes.",
