@@ -126,9 +126,9 @@ export const BRANDS: BrandContent[] = [
     metaDescription:
       "Used Subaru Forester, Outback, Crosstrek and Legacy near Chicago. Independent dealer in Villa Park, IL. Free Carfax on marked cars, no dealer fees.",
     hero:
-      "AWD-ready Subarus near Chicago. Serving Villa Park and the western suburbs. In business since 2014.",
+      "AWD-ready Subarus near Chicago. Serving Villa Park and the western suburbs. In business since 2018.",
     body: [
-      `Looking for a used Subaru near Chicago? You're in the right place. Love Auto Group is an independent used Subaru dealer in Villa Park, IL, twenty minutes west of downtown Chicago and central to the western suburbs and DuPage County. We've been buying and selling Foresters, Outbacks, and Crosstreks since 2014, and Subaru is one of the makes we know best. Our cars, Subarus included, are usually priced from ${SITE_CONFIG.priceRange.text} with no dealer fees.`,
+      `Looking for a used Subaru near Chicago? You're in the right place. Love Auto Group is an independent used Subaru dealer in Villa Park, IL, twenty minutes west of downtown Chicago and central to the western suburbs and DuPage County. We've been buying and selling Foresters, Outbacks, and Crosstreks since 2018, and Subaru is one of the makes we know best. Our cars, Subarus included, are usually priced from ${SITE_CONFIG.priceRange.text} with no dealer fees.`,
       "A Subaru built after 2014 will run past 250,000 miles when properly maintained. That is not a marketing claim. That is what every long-term reliability study and what we see at the buying stage shows us. Foresters, Outbacks, and Crosstreks from the second-generation 2014 to 2017 era are the value sweet spot in the used Subaru market, and they are exactly what we keep in rotation on our lot in Villa Park.",
       "{{STOCK}} Symmetrical all-wheel drive, eight inches of ground clearance on the Forester, and the kind of all-season capability that handles a Chicago suburbs winter without drama. Buyers come to us from across DuPage County, including Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, and Naperville, plus the broader western suburbs.",
       "Every used Subaru on our lot has been carefully selected before it is listed for sale. The head gasket area, the CVT transmission behavior, and the all-wheel drive engagement are all things we know to look for on this platform. We also pull a free Carfax on every vehicle, looking for documented CVT fluid services, head gasket history, and consistent oil change records.",
@@ -187,9 +187,9 @@ export const BRANDS: BrandContent[] = [
     metaDescription:
       "Used Lexus RX 350, ES, IS and GX in the Chicago suburbs. Independent dealer in Villa Park, IL serving DuPage County. Free Carfax. (630) 359-3643.",
     hero:
-      "Used Lexus in the Chicago suburbs. Serving Villa Park and DuPage County. In business since 2014.",
+      "Used Lexus in the Chicago suburbs. Serving Villa Park and DuPage County. In business since 2018.",
     body: [
-      "Looking for a used Lexus in the Chicago suburbs? Love Auto Group is an independent used Lexus dealer in Villa Park, IL, central to DuPage County and the western suburbs. We've been buying and selling RX, ES, IS, and GX models since 2014. Lexus is one of the makes we specialize in, alongside Subaru, Acura, Honda, Toyota, and Mazda.",
+      "Looking for a used Lexus in the Chicago suburbs? Love Auto Group is an independent used Lexus dealer in Villa Park, IL, central to DuPage County and the western suburbs. We've been buying and selling RX, ES, IS, and GX models since 2018. Lexus is one of the makes we specialize in, alongside Subaru, Acura, Honda, Toyota, and Mazda.",
       "The Lexus RX is the most reliable mid-size luxury SUV ever built, and the ES is the closest thing to a Toyota Avalon wearing a tailored suit. Both are platforms that hold up well past 200,000 miles when serviced properly. That is why we keep them in regular rotation on our lot.",
       "{{STOCK}} We focus on the 2010 to 2017 model years, where prices have come down from new but the cars still feel current inside. Most are in the 90,000 to 130,000 mile range, which on a Lexus is barely broken in. Buyers come to us from across the Chicago suburbs, including Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, Wheaton, Naperville, and Hinsdale, plus drive-ins from Chicago itself.",
       "Every used Lexus on our lot has been carefully selected before it gets a price tag. We pull a free Carfax on every vehicle and review it before listing. We are a Carfax Advantage Dealer, and vehicles that show the CARFAX badge come with that report ready to pull before you ask.",

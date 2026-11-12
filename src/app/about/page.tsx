@@ -8,7 +8,7 @@ import AboutHero from "./AboutHero";
 export const metadata: Metadata = {
   title: "About Love Auto Group, Used Cars in Villa Park IL",
   description:
-    "Independent dealer in Villa Park, IL. In business since 2014. Every vehicle carefully selected, no dealer fees, free CARFAX on marked vehicles.",
+    "Independent dealer in Villa Park, IL. In business since 2018. Every vehicle carefully selected, no dealer fees, free CARFAX on marked vehicles.",
   alternates: { canonical: "https://www.loveautogroup.net/about/" },
 };
 
@@ -26,7 +26,7 @@ export default function AboutPage() {
           <p className="text-brand-gray-700 leading-relaxed mb-6">
             Love Auto Group started with a simple idea: sell quality used
             vehicles at fair prices, and treat every customer the way you&apos;d
-            want to be treated. Since 2014, that&apos;s exactly what we&apos;ve
+            want to be treated. Since 2018, that&apos;s exactly what we&apos;ve
             done from our lot at 735 N Yale Ave in Villa Park.
           </p>
           <p className="text-brand-gray-700 leading-relaxed mb-6">
@@ -112,8 +112,8 @@ export default function AboutPage() {
             Our happy customers
           </h2>
           <PromoVideo
-            src="/videos/happy-customers-v2.mp4"
-            posterSrc="/videos/happy-customers-v2-poster.jpg"
+            src="/videos/happy-customers-v3.mp4"
+            posterSrc="/videos/happy-customers-v3-poster.jpg"
             mode="click"
             ariaLabel="Love Auto Group customers sharing their experience"
             analyticsVideo="happy_customers"

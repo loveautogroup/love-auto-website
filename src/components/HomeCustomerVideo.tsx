@@ -45,12 +45,12 @@ export default function HomeCustomerVideo() {
             playsInline
             controls
             preload="metadata"
-            poster="/videos/happy-customers-v2-poster.jpg"
+            poster="/videos/happy-customers-v3-poster.jpg"
             aria-label="Love Auto Group customers and their cars"
             onPlay={handlePlay}
             className="absolute inset-0 w-full h-full object-cover"
           >
-            <source src="/videos/happy-customers-v2.mp4" type="video/mp4" />
+            <source src="/videos/happy-customers-v3.mp4" type="video/mp4" />
           </video>
         </div>
       </div>

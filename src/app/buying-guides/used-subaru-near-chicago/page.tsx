@@ -167,7 +167,7 @@ export default function UsedSubaruNearChicagoPage() {
 
           <p>
             Love Auto Group is an independent dealer in Villa Park and has
-            been in business since 2014. Subaru
+            been in business since 2018. Subaru
             is one of the makes we know best, and a free Carfax report is
             available on every vehicle that shows the badge.
           </p>
@@ -352,7 +352,7 @@ export default function UsedSubaruNearChicagoPage() {
                   Used Cars in DuPage County
                 </div>
                 <div className="text-sm text-brand-gray-500 mt-0.5">
-                  Serving the western suburbs since 2014
+                  Serving the western suburbs since 2018
                 </div>
               </Link>
             </li>
@@ -393,7 +393,7 @@ export default function UsedSubaruNearChicagoPage() {
           </p>
 
           <p>
-            In business since 2014, specializing in
+            In business since 2018, specializing in
             makes including Subaru, Lexus, Acura, Honda, Toyota,
             and Mazda.
           </p>

@@ -77,7 +77,7 @@ const faqs = [
   {
     question: "Why does Love Auto Group focus on Japanese makes?",
     answer:
-      "Japanese makes like Lexus, Subaru, Acura, Honda and Mazda consistently rank high in reliability and hold their value well over time. Over a decade of buying and selling these specific brands, we've learned exactly what to look for and what to avoid on each model. That expertise lets us price competitively and stand behind every vehicle with confidence.",
+      "Japanese makes like Lexus, Subaru, Acura, Honda and Mazda consistently rank high in reliability and hold their value well over time. Years of buying and selling these specific brands, we've learned exactly what to look for and what to avoid on each model. That expertise lets us price competitively and stand behind every vehicle with confidence.",
   },
   {
     question: "Do you have AWD cars for Illinois winters?",

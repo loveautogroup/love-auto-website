@@ -50,11 +50,11 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     make: "Subaru",
     title: "Used Subaru for Sale in Villa Park, IL | Love Auto Group",
     description:
-      "Quality used Subaru sedans, SUVs, and crossovers in Villa Park, IL. Free Carfax, no dealer fees. In business since 2014, serving DuPage County.",
+      "Quality used Subaru sedans, SUVs, and crossovers in Villa Park, IL. Free Carfax, no dealer fees. In business since 2018, serving DuPage County.",
     hero:
       "Symmetrical AWD, legendary reliability, and Chicago-winter-ready performance — every used Subaru on our lot.",
     intro:
-      "If you're looking for a used Subaru in Villa Park, IL or anywhere in DuPage County, you're in the right place. Love Auto Group has been an independent dealer since 2014, and Subaru's reputation for symmetrical all-wheel drive, boxer-engine durability, and four-season versatility is exactly the kind of vehicle our buyers come looking for. Whether you need an Outback to handle Lake Geneva ski runs, a Forester for the daily commute on I-290, or a Crosstrek that makes school drop-off feel like an adventure, we keep our Subaru inventory carefully curated.",
+      "If you're looking for a used Subaru in Villa Park, IL or anywhere in DuPage County, you're in the right place. Love Auto Group has been an independent dealer since 2018, and Subaru's reputation for symmetrical all-wheel drive, boxer-engine durability, and four-season versatility is exactly the kind of vehicle our buyers come looking for. Whether you need an Outback to handle Lake Geneva ski runs, a Forester for the daily commute on I-290, or a Crosstrek that makes school drop-off feel like an adventure, we keep our Subaru inventory carefully curated.",
     sections: [
       {
         heading: "Why a Used Subaru Makes Sense in the Chicago Suburbs",
@@ -98,11 +98,11 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     make: "Lexus",
     title: "Used Lexus for Sale in Villa Park, IL | Love Auto Group",
     description:
-      "Used Lexus sedans, SUVs, and coupes in Villa Park, IL. Free Carfax, no dealer fees. Independent dealers serving DuPage County since 2014.",
+      "Used Lexus sedans, SUVs, and coupes in Villa Park, IL. Free Carfax, no dealer fees. Independent dealers serving DuPage County since 2018.",
     hero:
       "Toyota reliability with the materials and refinement of a German luxury car — at half the depreciation curve.",
     intro:
-      "A used Lexus is one of the smartest luxury-car purchases in the market, and Love Auto Group is one of the few independent dealerships in Villa Park, IL that consistently keeps Lexus inventory on the lot. The reason is simple: Lexus shares its drivetrains, electronics, and assembly engineering with Toyota, but its first owners pay a luxury premium that drops out of the price the moment the car hits the secondary market. That's the buyer opportunity, and we've been quietly capitalizing on it for our DuPage County customers since 2014.",
+      "A used Lexus is one of the smartest luxury-car purchases in the market, and Love Auto Group is one of the few independent dealerships in Villa Park, IL that consistently keeps Lexus inventory on the lot. The reason is simple: Lexus shares its drivetrains, electronics, and assembly engineering with Toyota, but its first owners pay a luxury premium that drops out of the price the moment the car hits the secondary market. That's the buyer opportunity, and we've been quietly capitalizing on it for our DuPage County customers since 2018.",
     sections: [
       {
         heading: "The Lexus Value Argument",
@@ -146,11 +146,11 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     make: "Acura",
     title: "Used Acura for Sale in Villa Park, IL | Love Auto Group",
     description:
-      "Used Acura SUVs, sedans, and coupes in Villa Park, IL. Honda reliability, luxury features, free Carfax. Serving DuPage County since 2014.",
+      "Used Acura SUVs, sedans, and coupes in Villa Park, IL. Honda reliability, luxury features, free Carfax. Serving DuPage County since 2018.",
     hero:
       "Honda reliability, near-luxury features, and the SH-AWD system — at independent-dealer prices.",
     intro:
-      "Acura is the smart-money luxury brand. Built on Honda mechanicals, refined with extra sound insulation and premium interior materials, and consistently priced below European competitors on the used market. If you're looking for a used Acura in Villa Park, IL or anywhere in DuPage County, Love Auto Group is one of the few independent dealerships specializing in vehicles that actively curates Acura inventory. We've been doing this since 2014.",
+      "Acura is the smart-money luxury brand. Built on Honda mechanicals, refined with extra sound insulation and premium interior materials, and consistently priced below European competitors on the used market. If you're looking for a used Acura in Villa Park, IL or anywhere in DuPage County, Love Auto Group is one of the few independent dealerships specializing in vehicles that actively curates Acura inventory. We've been doing this since 2018.",
     sections: [
       {
         heading: "Why Used Acura Makes Sense",
@@ -175,7 +175,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Serving Villa Park, Elmhurst, Lombard, and the Chicago Suburbs",
         body: [
-          "Love Auto Group is at 735 N Yale Ave in Villa Park, IL — close to Elmhurst, Lombard, Oak Brook, and the rest of DuPage County. We're a Carfax Advantage Dealer, in business since 2014, and one of the few independent dealers in the area that chooses its cars one at a time rather than carrying whatever the auctions had on hand. Browse the live Acura inventory below.",
+          "Love Auto Group is at 735 N Yale Ave in Villa Park, IL — close to Elmhurst, Lombard, Oak Brook, and the rest of DuPage County. We're a Carfax Advantage Dealer, in business since 2018, and one of the few independent dealers in the area that chooses its cars one at a time rather than carrying whatever the auctions had on hand. Browse the live Acura inventory below.",
         ],
       },
     ],
@@ -194,11 +194,11 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     make: "Mazda",
     title: "Used Mazda for Sale in Villa Park, IL | Love Auto Group",
     description:
-      "Quality used Mazda3, CX-5, CX-30, and Miata in Villa Park, IL. Driver-focused engineering, free Carfax. Serving DuPage County since 2014.",
+      "Quality used Mazda3, CX-5, CX-30, and Miata in Villa Park, IL. Driver-focused engineering, free Carfax. Serving DuPage County since 2018.",
     hero:
       "The brand that puts driving feel ahead of marketing budgets — and prices its used inventory accordingly.",
     intro:
-      "Mazda is the underrated player in the used-vehicle market. The brand consistently builds cars that drivers genuinely enjoy — sharp steering, well-judged suspension tuning, premium interior materials at mainstream prices — and yet they depreciate at competitive rates. That's the buyer opportunity we work with at Love Auto Group, and Mazda has been a quiet specialty of ours since we went into business in 2014.",
+      "Mazda is the underrated player in the used-vehicle market. The brand consistently builds cars that drivers genuinely enjoy — sharp steering, well-judged suspension tuning, premium interior materials at mainstream prices — and yet they depreciate at competitive rates. That's the buyer opportunity we work with at Love Auto Group, and Mazda has been a quiet specialty of ours since we went into business in 2018.",
     sections: [
       {
         heading: "Why Mazda Stands Out in the Used Market",
@@ -241,11 +241,11 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     make: "Honda",
     title: "Used Honda for Sale in Villa Park, IL | Love Auto Group",
     description:
-      "Used Honda Civic, Accord, CR-V, Pilot, and Odyssey in Villa Park, IL. Free Carfax, in business since 2014, serving Lombard, Elmhurst, and DuPage County.",
+      "Used Honda Civic, Accord, CR-V, Pilot, and Odyssey in Villa Park, IL. Free Carfax, in business since 2018, serving Lombard, Elmhurst, and DuPage County.",
     hero:
       "The benchmark for reliability, fuel economy, and resale value — at independent-dealer pricing.",
     intro:
-      "Honda is the brand that built the modern reliability reputation in the U.S. market — bulletproof drivetrains, exceptional fuel economy, the strongest resale value curve in the segment, and the kind of repair costs that make Honda ownership pay for itself over time. Love Auto Group has been a Honda specialist since going into business in 2014, and Civic, Accord, CR-V, Pilot, and Odyssey are constants on our lot.",
+      "Honda is the brand that built the modern reliability reputation in the U.S. market — bulletproof drivetrains, exceptional fuel economy, the strongest resale value curve in the segment, and the kind of repair costs that make Honda ownership pay for itself over time. Love Auto Group has been a Honda specialist since going into business in 2018, and Civic, Accord, CR-V, Pilot, and Odyssey are constants on our lot.",
     sections: [
       {
         heading: "Why Honda Holds Value",
@@ -269,7 +269,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
       {
         heading: "Easy to Reach From the Western Suburbs",
         body: [
-          "Our Villa Park location at 735 N Yale Ave is a 5-15 minute drive from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the rest of DuPage County. We've been in business since 2014, and we're one of the few independent dealers in the area where you can browse Honda inventory without the franchise-dealer markup. Browse the current selection below.",
+          "Our Villa Park location at 735 N Yale Ave is a 5-15 minute drive from Lombard, Elmhurst, Oak Brook, Glen Ellyn, Addison, and the rest of DuPage County. We've been in business since 2018, and we're one of the few independent dealers in the area where you can browse Honda inventory without the franchise-dealer markup. Browse the current selection below.",
         ],
       },
     ],
@@ -291,7 +291,7 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     filterValue: "SUV",
     title: "Used SUVs for Sale in Villa Park, IL | Love Auto Group",
     description:
-      "Quality used SUVs in Villa Park, IL. AWD options, third-row seats, family-ready. Free Carfax, in business since 2014. Serving DuPage County.",
+      "Quality used SUVs in Villa Park, IL. AWD options, third-row seats, family-ready. Free Carfax, in business since 2018. Serving DuPage County.",
     hero:
       "Family-ready used SUVs and crossovers — AWD options, third-row availability, and the kind of long-term reliability that makes one car last a decade.",
     intro:
@@ -340,11 +340,11 @@ export const MAKE_LANDINGS: MakeLandingContent[] = [
     filterValue: "sedan",
     title: "Used Sedans for Sale in Villa Park, IL | Love Auto Group",
     description:
-      "Used sedans in Villa Park, IL: Honda Accord, Toyota Camry, Lexus ES, Acura TLX. Free Carfax on marked cars. In DuPage County since 2014.",
+      "Used sedans in Villa Park, IL: Honda Accord, Toyota Camry, Lexus ES, Acura TLX. Free Carfax on marked cars. In DuPage County since 2018.",
     hero:
       "Commuter-ready used sedans with the highest resale value, lowest cost of ownership, and most efficient fuel economy in the market.",
     intro:
-      "Sedans are still the smart-money play for commuters and value-focused buyers, and Love Auto Group has been a used-sedan specialist since going into business in 2014. Our rotation includes Honda Accord and Civic, Toyota Camry and Corolla, Lexus ES and IS, Acura TLX and ILX, Mazda3 and Mazda6, and Subaru Legacy and Impreza — the deepest sedan inventory of any independent dealer in DuPage County.",
+      "Sedans are still the smart-money play for commuters and value-focused buyers, and Love Auto Group has been a used-sedan specialist since going into business in 2018. Our rotation includes Honda Accord and Civic, Toyota Camry and Corolla, Lexus ES and IS, Acura TLX and ILX, Mazda3 and Mazda6, and Subaru Legacy and Impreza — the deepest sedan inventory of any independent dealer in DuPage County.",
     sections: [
       {
         heading: "Why a Used Sedan Still Wins",

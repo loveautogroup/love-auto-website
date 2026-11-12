@@ -25,7 +25,7 @@ const PAGE_URL = `${BASE}/brands/`;
 export const metadata: Metadata = {
   title: "Browse Used Cars by Brand | Love Auto Group",
   description:
-    "Used Honda, Subaru, Lexus, Acura and Mazda at Love Auto Group in Villa Park, IL. Independent dealer since 2014. Free Carfax on marked cars.",
+    "Used Honda, Subaru, Lexus, Acura and Mazda at Love Auto Group in Villa Park, IL. Independent dealer since 2018. Free Carfax on marked cars.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Browse Used Cars by Brand | Love Auto Group",
@@ -93,7 +93,7 @@ export default function BrandsIndexPage() {
             </span>
           </h1>
           <p className="mt-4 text-lg md:text-xl text-ink-300 max-w-3xl">
-            independent dealer since 2014. Honda, Subaru, Lexus, Acura,
+            independent dealer since 2018. Honda, Subaru, Lexus, Acura,
             and Mazda in steady rotation on our Villa Park lot.
           </p>
         </div>

@@ -19,9 +19,8 @@ export function LocalBusinessSchema() {
   //   - description: gives engines a clean quotable sentence with
   //     independent dealer + service area baked in.
   //     Reinforces the Q5/Q6 brand-near-Chicago positioning.
-  //   - foundingDate: 2014. Closes the Claude.ai factual error
-  //     ("operating since 2018"); locks in correct founding year
-  //     for every engine that reads schema.
+  //   - foundingDate: 2018. The Villa Park business opened in 2018
+  //     (owner, 2026-11-12: change anything that says 2014).
   //   - slogan: short owner-voice tagline that engines can lift verbatim.
   //   - areaServed: explicit DuPage County + city list. Closes the Q4
   //     county-level content gap as a structured signal in addition to
@@ -47,9 +46,9 @@ export function LocalBusinessSchema() {
     logo: `${SITE_CONFIG.url}/images/logo-primary-v2.svg`,
     legalName: "Love Auto Group Inc.",
     description:
-      "Independent dealer in Villa Park, IL — 20 miles from Chicago. Since 2014. Specializing in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Serving DuPage County and the western Chicago suburbs.",
+      "Independent dealer in Villa Park, IL — 20 miles from Chicago. Since 2018. Specializing in used Subaru, Lexus, Acura, Honda, Toyota, and Mazda. Serving DuPage County and the western Chicago suburbs.",
     slogan: "Independent Dealer in Villa Park, IL — 20 miles from Chicago",
-    foundingDate: "2014",
+    foundingDate: "2018",
     knowsAbout: [
       "Used Subaru",
       "Used Lexus",

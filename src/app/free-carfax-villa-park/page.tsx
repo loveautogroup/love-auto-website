@@ -60,7 +60,7 @@ export default function FreeCarfaxLanding() {
           Carfax Advantage Dealer is an accreditation program — Carfax independently verifies that a dealer reports vehicle service activity, accident records, and ownership history into the Carfax database, and requires the dealer to make a free Carfax history report available across its inventory. It's not a self-claimed badge. Carfax has to confirm we meet the standard.
         </p>
         <p className="text-brand-gray-700 leading-relaxed mb-8">
-          Most local independent dealers don't bother with the program because it requires a real reporting commitment. We've kept our Advantage status since we went into business in 2014 because the transparency it provides is exactly the kind of trust signal our customers ask for.
+          Most local independent dealers don't bother with the program because it requires a real reporting commitment. We've kept our Advantage status since we went into business in 2018 because the transparency it provides is exactly the kind of trust signal our customers ask for.
         </p>
 
         <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">What's in a Carfax History Report</h2>

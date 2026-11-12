@@ -105,7 +105,7 @@ export default async function ModelPage({
           </h1>
           <p className="mt-4 text-lg md:text-xl text-ink-300 max-w-3xl">
             Love Auto Group is an independent used car dealer at 735 N Yale
-            Ave, Unit A in Villa Park, IL, in business since 2014. Our sales
+            Ave, Unit A in Villa Park, IL, in business since 2018. Our sales
             records for this lot go back to 2018, and in that time we have
             sold {m.stats.soldSince2018} used {name}s. The ones we have sold
             since 2024 were mostly {m.stats.typicalYears} models with{" "}

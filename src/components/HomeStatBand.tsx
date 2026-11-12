@@ -38,7 +38,7 @@ export default function HomeStatBand() {
         </div>
         <div className="px-4 py-10 sm:py-14 text-center border-t border-white/[.14] sm:border-l">
           <div className="font-heading font-extrabold text-[clamp(1.5rem,2.6vw,2.4rem)]">
-            2014
+            2018
           </div>
           <div className="mt-2 text-[11px] font-bold uppercase tracking-[0.1em] text-ink-400">
             In Business Since
