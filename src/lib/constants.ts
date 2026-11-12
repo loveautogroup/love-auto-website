@@ -12,7 +12,7 @@ export const SITE_CONFIG = {
     full: "735 N Yale Ave, Unit A, Villa Park, IL 60181",
   },
   url: "https://www.loveautogroup.net",
-  established: 2018,
+  established: 2014,
   // ONE source for the public price range. Feeds the AutoDealer JSON-LD
   // priceRange, the /inventory/ meta description, the FAQ-style copy on the
   // geo pages and the Subaru hub/guide. Change it here and nowhere else.

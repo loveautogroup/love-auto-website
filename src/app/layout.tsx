@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     creator: "@loveautogroup",
     title: "Love Auto Group | Used Car Dealership in Villa Park, IL",
     description:
-      "Independent dealer in Villa Park, IL. No dealer fees, free Carfax on marked vehicles. Since 2018.",
+      "Independent dealer in Villa Park, IL. No dealer fees, free Carfax on marked vehicles. Since 2014.",
     images: ["https://www.loveautogroup.net/og-image.png"],
   },
   verification: {

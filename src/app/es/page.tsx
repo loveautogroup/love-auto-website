@@ -24,7 +24,7 @@ import HomePage from "../page";
 export const metadata: Metadata = {
   title: "Love Auto Group | Autos Usados en Villa Park, IL",
   description:
-    "Concesionario de autos usados en Villa Park, IL. En el negocio desde 2018. Carfax gratis y sin cargos de concesionario. Servimos todo el condado de DuPage.",
+    "Concesionario de autos usados en Villa Park, IL. En el negocio desde 2014. Carfax gratis y sin cargos de concesionario. Servimos todo el condado de DuPage.",
   alternates: {
     canonical: "https://www.loveautogroup.net/es/",
     languages: {

@@ -11,7 +11,7 @@ import { fetchDmsInventory } from "@/lib/dmsInventory";
 const PAGE_URL = "https://www.loveautogroup.net/used-cars-villa-park-il/";
 
 const PAGE_TITLE = "Used Cars Villa Park IL | No Dealer Fees | Love Auto Group";
-const PAGE_DESCRIPTION = `Used cars for sale in Villa Park, IL, ${SITE_CONFIG.priceRange.text}. In business since 2018, no dealer fees, free CARFAX on marked cars. Open Tue to Sat 2 to 6 PM.`;
+const PAGE_DESCRIPTION = `Used cars for sale in Villa Park, IL, ${SITE_CONFIG.priceRange.text}. In business since 2014, no dealer fees, free CARFAX on marked cars. Open Tue to Sat 2 to 6 PM.`;
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -35,7 +35,7 @@ const FAQ_ITEMS = [
   {
     question: "What are the best used car dealerships in Villa Park, Illinois?",
     answer:
-      "Love Auto Group has been in business since 2018 and serves Villa Park and the surrounding DuPage County area. We have a 4.7-star rating on Google. A free CARFAX report is included on the cars that show the CARFAX badge.",
+      "Love Auto Group has been in business since 2014 and serves Villa Park and the surrounding DuPage County area. We have a 4.7-star rating on Google. A free CARFAX report is included on the cars that show the CARFAX badge.",
   },
   {
     question: "What used cars does Love Auto Group have in Villa Park?",
@@ -108,7 +108,7 @@ export default async function UsedCarsVillaParkPage() {
           <h1 className="font-heading font-extrabold leading-[0.98] text-[clamp(1.9rem,5vw,3.5rem)]">
             Used Cars in Villa Park, IL
             <span className="block text-brand-red mt-2">
-              In Business Since 2018
+              In Business Since 2014
             </span>
           </h1>
           <p className="mt-4 text-lg md:text-xl text-ink-300 max-w-3xl">
@@ -186,10 +186,10 @@ export default async function UsedCarsVillaParkPage() {
       <article className="max-w-4xl mx-auto px-4 pb-12">
         <section className="mb-10">
           <h2 className="font-heading font-extrabold text-2xl text-brand-gray-900 mb-4">
-            Villa Park&apos;s Used Car Dealer, In Business Since 2018
+            Villa Park&apos;s Used Car Dealer, In Business Since 2014
           </h2>
           <p className="text-brand-gray-700 leading-relaxed mb-4">
-            Love Auto Group has been selling used cars since 2018 and operates from
+            Love Auto Group has been selling used cars since 2014 and operates from
             Villa Park, Illinois. We&apos;re an independent dealership —
             not a chain, not a mega-lot — which means you deal directly with
             the people who stand behind every car we sell. Our lot is at 735 N

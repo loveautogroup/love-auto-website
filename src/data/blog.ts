@@ -152,7 +152,7 @@ export const blogPosts: BlogPost[] = [
       <h2>Where to Buy a Used Lexus in the Chicago Suburbs</h2>
       <p>You have three options: a Lexus franchise dealer (highest price, certified pre-owned with warranty), a large used-car supermarket (competitive pricing, variable quality), or an independent dealer. Franchise dealers charge a premium for the badge and the warranty, which can make sense if you want maximum peace of mind. Supermarkets have volume but the inspection depth can vary.</p>
 
-      <p>Specialist independents are the third option, and for most buyers, the best value. We've been selling Lexus and other makes since 2018. We know which model years have issues and which ones are gold. And our prices reflect the fact that we don't have a franchise fee baked in.</p>
+      <p>Specialist independents are the third option, and for most buyers, the best value. We've been selling Lexus and other makes since 2014. We know which model years have issues and which ones are gold. And our prices reflect the fact that we don't have a franchise fee baked in.</p>
 
       <p>If you're shopping for a used Lexus in DuPage County or anywhere in the Chicago suburbs, we typically keep two to four clean models in stock at any given time. <a href="/inventory">Browse our current inventory</a> or call us at (630) 359-3643 to ask what's coming in next.</p>
     `,

@@ -74,12 +74,12 @@ export const metadata: Metadata = {
   title:
     "Where to Buy a Used Lexus in DuPage County | Love Auto Group",
   description:
-    "Used Lexus RX 350, ES, IS and GX in DuPage County. Independent dealer in Villa Park, IL. In business since 2018. Free Carfax on marked cars. (630) 359-3643.",
+    "Used Lexus RX 350, ES, IS and GX in DuPage County. Independent dealer in Villa Park, IL. In business since 2014. Free Carfax on marked cars. (630) 359-3643.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: "Where to Buy a Used Lexus in DuPage County | Love Auto Group",
     description:
-      "Independent used Lexus dealer in Villa Park, IL. RX 350, ES 350, IS 250, GX 460 in the value sweet spot. In business since 2018. Free Carfax.",
+      "Independent used Lexus dealer in Villa Park, IL. RX 350, ES 350, IS 250, GX 460 in the value sweet spot. In business since 2014. Free Carfax.",
     url: PAGE_URL,
     type: "article",
     siteName: "Love Auto Group",
@@ -157,7 +157,7 @@ export default function UsedLexusDuPageCountyPage() {
 
           <p>
             Love Auto Group is an independent dealer in Villa Park and has
-            been in business since 2018. Lexus is
+            been in business since 2014. Lexus is
             one of the makes we know best, and a free Carfax report is
             available on every vehicle that shows the badge.
           </p>
@@ -332,7 +332,7 @@ export default function UsedLexusDuPageCountyPage() {
                   Used Cars in DuPage County
                 </div>
                 <div className="text-sm text-brand-gray-500 mt-0.5">
-                  Serving the western suburbs since 2018
+                  Serving the western suburbs since 2014
                 </div>
               </Link>
             </li>
@@ -373,7 +373,7 @@ export default function UsedLexusDuPageCountyPage() {
           </p>
 
           <p>
-            In business since 2018, specializing in
+            In business since 2014, specializing in
             makes including Lexus, Subaru, Acura, Honda, Toyota,
             and Mazda.
           </p>

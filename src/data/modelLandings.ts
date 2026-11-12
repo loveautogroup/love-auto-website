@@ -8,8 +8,9 @@
  * WHERE THE NUMBERS COME FROM (read-only pull, 2026-11-12, Railway
  * /api/vehicles joined to /api/deals):
  *   - Counted: deals that are not WHOLESALE and not unwound/void, matched to
- *     the vehicle by vehicle_id. Our DMS sales history starts in 2018, the
- *     year the business opened, so the counts say "since 2018".
+ *     the vehicle by vehicle_id. Our DMS sales history starts in 2018, so the
+ *     counts say "since 2018". They are NOT "since 2014" and must not be
+ *     written that way until older records exist.
  *   - Years and mileage: the middle half (25th to 75th percentile) of the
  *     cars sold since 2024-01-01, rounded.
  *   - Price band: the middle half of the deal prices on the same cars,
