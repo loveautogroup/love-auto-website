@@ -176,7 +176,7 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
   <meta name="description" content="${title} coming soon to Love Auto Group in Villa Park, IL. Contact us to get notified when this vehicle is ready." />
   <link rel="canonical" href="${canonicalUrl}" />
   <meta property="og:title" content="${title} — Coming Soon | Love Auto Group" />
-  <meta property="og:description" content="This vehicle is currently in reconditioning and will be available soon. Contact us to get notified." />
+  <meta property="og:description" content="This vehicle is being prepared for sale and will be available soon. Contact us to get notified." />
   <meta property="og:type" content="website" />
   ${heroUrl ? `<meta property="og:image" content="${heroUrl}" />` : ""}
   <style>
@@ -242,13 +242,13 @@ function renderComingSoonPage(v: DmsVehicle, slug: string): string {
         <div class="chips">
           ${mileage ? `<span class="chip">${mileage}</span>` : ""}
           ${color ? `<span class="chip">${color}</span>` : ""}
-          <span class="chip">${available ? "Available" : "In Reconditioning"}</span>
+          <span class="chip">${available ? "Available" : "Coming Soon"}</span>
         </div>
         <p class="price">${price}</p>
         <div class="cta-box">
           <p class="cta-title">${available ? "Ready to make a deal?" : "This vehicle is being prepared for sale"}</p>
           <p class="cta-body">
-            ${available ? `This ${v.year} ${make} ${model} is available now on our lot in Villa Park, IL. Call us to schedule a test drive.` : `We're finishing up reconditioning on this ${v.year} ${make} ${model}. Contact us to get first dibs — we'll reach out the moment it's lot-ready.`}
+            ${available ? `This ${v.year} ${make} ${model} is available now on our lot in Villa Park, IL. Call us to schedule a test drive.` : `This ${v.year} ${make} ${model} is being prepared for sale. Contact us to get first dibs. We'll reach out the moment it's ready.`}
           </p>
           <div class="cta-buttons">
             <a class="btn btn-primary" href="tel:+16303593643">Call (630) 359-3643</a>
