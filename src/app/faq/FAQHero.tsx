@@ -40,7 +40,7 @@ export function FAQCta() {
           (630) 359-3643
         </a>
         <a
-          href="/contact"
+          href="/contact/"
           className="inline-flex items-center justify-center gap-2 border border-white/50 hover:border-white text-white px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] hover:bg-white/10 transition-colors"
         >
           Send a Message

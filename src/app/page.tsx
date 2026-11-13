@@ -256,7 +256,7 @@ export default function HomePage() {
                   <T path={["homePage", "shipCall"]} replace={{ "{phone}": SITE_CONFIG.phone }} />
                 </TrackedPhoneLink>
                 <Link
-                  href="/contact"
+                  href="/contact/"
                   className="inline-flex items-center justify-center gap-2 bg-transparent text-white font-bold uppercase tracking-[0.06em] px-6 py-3.5 hover:bg-white/10 transition-colors text-[12px] border border-white/35"
                 >
                   <T path={["homePage", "shipCta"]} />

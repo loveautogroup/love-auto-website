@@ -301,10 +301,10 @@ export default function Footer() {
             &copy; {currentYear} {SITE_CONFIG.name}. {t.footer.rights}
           </p>
           <div className="flex gap-4">
-            <Link href="/privacy-policy" className="hover:text-ink-200">
+            <Link href="/privacy-policy/" className="hover:text-ink-200">
               {t.footer.privacy}
             </Link>
-            <Link href="/terms" className="hover:text-ink-200">
+            <Link href="/terms/" className="hover:text-ink-200">
               {t.footer.terms}
             </Link>
           </div>

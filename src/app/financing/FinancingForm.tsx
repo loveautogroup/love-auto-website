@@ -1296,7 +1296,7 @@ export default function FinancingForm() {
                 <>
                   {parts[0]}
                   <Link
-                    href="/privacy-policy"
+                    href="/privacy-policy/"
                     className="text-brand-red hover:underline"
                     target="_blank"
                   >

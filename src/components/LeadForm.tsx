@@ -371,11 +371,11 @@ export default function LeadForm({
         <span>
           {CONSENT_LANGUAGE[optInLanguageVersion].tcpa_sms}
           {" "}{locale === "es" ? "Consulte nuestra" : "Please see our"}{" "}
-          <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline text-brand-red">
+          <a href="/privacy-policy/" target="_blank" rel="noopener noreferrer" className="underline text-brand-red">
             {locale === "es" ? "Política de Privacidad" : "Privacy Policy"}
           </a>
           {" "}{locale === "es" ? "y" : "and"}{" "}
-          <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline text-brand-red">
+          <a href="/terms/" target="_blank" rel="noopener noreferrer" className="underline text-brand-red">
             {locale === "es" ? "Términos y Condiciones" : "Terms and Conditions"}
           </a>.
         </span>

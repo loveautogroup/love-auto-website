@@ -328,7 +328,7 @@ export default async function UsedCarsVillaParkPage() {
             Looking for financing on a used car in Villa Park? Love Auto Group
             works with lenders who handle a range of credit situations —
             good credit, rebuilding credit, and everything in between. You can{" "}
-            <Link href="/financing" className="text-brand-red hover:underline">
+            <Link href="/financing/" className="text-brand-red hover:underline">
               apply online in minutes
             </Link>{" "}
             or come in and we&apos;ll walk you through your options in person.
@@ -395,7 +395,7 @@ export default async function UsedCarsVillaParkPage() {
               Browse Inventory
             </Link>
             <Link
-              href="/contact"
+              href="/contact/"
               className="border border-white text-white hover:bg-white hover:text-brand-navy px-7 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               Get Directions

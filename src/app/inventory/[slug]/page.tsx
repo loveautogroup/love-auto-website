@@ -544,7 +544,7 @@ export default async function VehicleDetailPage({
                     {!isSold && (
                       <>
                         <a
-                          href="/financing"
+                          href="/financing/"
                           className="flex items-center justify-center gap-2 w-full border border-brand-gray-900 hover:bg-brand-gray-900 hover:text-white text-brand-gray-900 py-3.5 text-[12px] font-bold uppercase tracking-[0.06em] transition-colors"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -673,7 +673,7 @@ export default async function VehicleDetailPage({
                 <>
                   <div className="mt-3">{deliveryCard}</div>
                   <a
-                    href="/financing"
+                    href="/financing/"
                     className="mt-3 flex items-center justify-center gap-2 w-full bg-brand-red hover:bg-brand-red-dark text-white py-3.5 text-[12px] font-bold uppercase tracking-[0.06em] transition-colors"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

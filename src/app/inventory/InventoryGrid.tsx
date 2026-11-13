@@ -284,7 +284,7 @@ function InventoryGridInner({ vehicles: fallbackVehicles }: InventoryGridProps) 
           </p>
           <p className="mt-2 text-brand-gray-500">
             {g.noResultsSub}{" "}
-            <a href="/contact" className="text-brand-red hover:underline">
+            <a href="/contact/" className="text-brand-red hover:underline">
               {g.noResultsContact}
             </a>{" "}
             {g.noResultsSource}

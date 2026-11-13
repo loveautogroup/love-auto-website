@@ -165,7 +165,7 @@ export default async function ServiceAreaPage({
               Call (630) 359-3643
             </TrackedPhoneLink>
             <Link
-              href="/contact"
+              href="/contact/"
               className="inline-flex items-center border border-brand-gray-300 hover:border-brand-gray-900 text-brand-gray-900 px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em]"
             >
               Get Directions

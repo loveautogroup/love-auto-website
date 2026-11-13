@@ -274,7 +274,7 @@ export default function VDPTabs({
               // no VIN -- measured 2026-08-27: zero of the 8 applications on
               // file had one, even though every applicant had clicked through
               // from a specific car's page.
-              href={`/financing?vehicle=${encodeURIComponent(`${vehicle.year} ${vehicle.make} ${vehicle.model}`)}&vin=${encodeURIComponent(vehicle.vin ?? "")}&stock=${encodeURIComponent(vehicle.stockNumber ?? "")}&price=${vehicle.price ?? ""}`}
+              href={`/financing/?vehicle=${encodeURIComponent(`${vehicle.year} ${vehicle.make} ${vehicle.model}`)}&vin=${encodeURIComponent(vehicle.vin ?? "")}&stock=${encodeURIComponent(vehicle.stockNumber ?? "")}&price=${vehicle.price ?? ""}`}
               className="flex items-center justify-center w-full bg-brand-red hover:bg-brand-red-dark text-white py-4 text-[13px] font-bold uppercase tracking-[0.07em] transition-colors"
             >
               {t.vdpTabs.getPreApprovedNow}

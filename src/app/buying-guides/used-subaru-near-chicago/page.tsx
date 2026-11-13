@@ -418,7 +418,7 @@ export default function UsedSubaruNearChicagoPage() {
               Call {SITE_CONFIG.phone}
             </TrackedPhoneLink>
             <Link
-              href="/contact"
+              href="/contact/"
               className="inline-flex items-center justify-center border border-white/35 hover:border-white hover:bg-white/[.06] text-white px-6 py-3.5 text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors"
             >
               Send a message

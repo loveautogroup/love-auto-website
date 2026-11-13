@@ -544,7 +544,7 @@ export default function BookVisitForm() {
         <span>
           {CONSENT_LANGUAGE[OPT_IN_LANGUAGE_VERSION].tcpa_sms} Please see our{" "}
           <a
-            href="/privacy-policy"
+            href="/privacy-policy/"
             target="_blank"
             rel="noopener noreferrer"
             className="underline text-brand-red"
@@ -553,7 +553,7 @@ export default function BookVisitForm() {
           </a>{" "}
           and{" "}
           <a
-            href="/terms"
+            href="/terms/"
             target="_blank"
             rel="noopener noreferrer"
             className="underline text-brand-red"
