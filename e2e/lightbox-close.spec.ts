@@ -42,7 +42,9 @@ test("Escape still closes it", async ({ page }) => {
 // ── Clean-view cue + opening on any viewport (owner 2026-10-04) ──────────
 async function gotoListedVdp(page: import("@playwright/test").Page) {
   await page.goto("/inventory/");
-  const link = page.locator('a[href^="/inventory/"][href$="/"]').first();
+  // Same exclusion as openFirstListedGallery: the "Inventory" menu link also matches
+  // this selector, comes first in the DOM, and is hidden, so the wait timed out.
+  const link = page.locator('a[href^="/inventory/"][href$="/"]:not([href="/inventory/"])').filter({ hasNot: page.locator("text=Sold") }).first();
   await link.waitFor();
   await link.click();
   await page.getByRole("button", { name: /photos fullscreen/i }).first().waitFor({ timeout: 15000 });

@@ -85,9 +85,11 @@ test.describe("money is never rounded", () => {
     test.skip(vehicles.length === 0, "no available vehicles");
 
     await page.goto("/inventory/");
-    const body = await page.locator("body").innerText();
     const withCents = vehicles.filter((x) => Math.round(x.price * 100) % 100 !== 0);
     test.skip(withCents.length === 0, "no priced-with-cents vehicles to check");
+    // The grid hydrates client-side; wait for a price to render before reading the body once.
+    await expect(page.locator("body")).toContainText(expectedPrice(withCents[0].price));
+    const body = await page.locator("body").innerText();
 
     for (const v of withCents.slice(0, 3)) {
       expect(body, `grid must show ${expectedPrice(v.price)} for ${v.slug}`).toContain(expectedPrice(v.price));
@@ -144,9 +146,11 @@ test.describe("sold cars: history, never a purchase", () => {
     );
 
     await page.goto("/inventory/");
-    const body = await page.locator("body").innerText();
     const v = soldWithPhoto[0];
-    expect(body, `sold ${v.slug} should still appear in the grid`).toContain(v.vin);
+    // The grid hydrates client-side; wait for the sold car instead of reading the body once
+    // (a single early read failed intermittently on the mobile project in CI).
+    await expect(page.locator("body"), `sold ${v.slug} should still appear in the grid`).toContainText(v.vin);
+    const body = await page.locator("body").innerText();
     // Its price must never render anywhere on the page.
     if (v.price) {
       const priceStr = v.price.toLocaleString("en-US", {
