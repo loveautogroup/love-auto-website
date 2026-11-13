@@ -42,17 +42,28 @@ export async function onRequestPost(ctx: { request: Request; env: Env }) {
     ctx.request.headers.get("x-forwarded-for") ??
     "unknown";
   const rlKey = `ratelimit:creditapp:${ip}`;
+  // Fails OPEN: a KV error or exhausted KV quota must never stop a
+  // customer's application from reaching the DMS.
   if (ctx.env.LEADS) {
-    const attempts = parseInt((await ctx.env.LEADS.get(rlKey)) ?? "0", 10);
+    let attempts = 0;
+    try {
+      attempts = parseInt((await ctx.env.LEADS.get(rlKey)) ?? "0", 10) || 0;
+    } catch (err) {
+      console.error("[credit-app] rate-limit read failed; allowing", err);
+    }
     if (attempts >= RL_MAX_ATTEMPTS) {
       return new Response(
         JSON.stringify({ error: "Too many requests. Please try again later or call us at (630) 359-3643." }),
         { status: 429, headers: { "Content-Type": "application/json" } }
       );
     }
-    await ctx.env.LEADS.put(rlKey, String(attempts + 1), {
-      expirationTtl: RL_WINDOW_SECONDS,
-    });
+    try {
+      await ctx.env.LEADS.put(rlKey, String(attempts + 1), {
+        expirationTtl: RL_WINDOW_SECONDS,
+      });
+    } catch (err) {
+      console.error("[credit-app] rate-limit write failed; allowing", err);
+    }
   }
 
   let body: string;

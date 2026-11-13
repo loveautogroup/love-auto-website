@@ -267,7 +267,8 @@ export async function fetchInventory(): Promise<FeedVehicle[]> {
       // ready + sale-pending, but in case it ever returns more we double-check.
     }))
     .filter((v) =>
-      v.status === "Available" || v.status === "Sale Pending" || v.status == null
+      // A car with no status is NOT known to be for sale; leave it out.
+      v.status === "Available" || v.status === "Sale Pending"
     );
 }
 

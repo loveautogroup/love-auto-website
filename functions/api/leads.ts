@@ -92,7 +92,13 @@ export async function onRequestPost(ctx: { request: Request; env: Env }) {
     ? `ratelimit:bookvisit:${ip}`
     : `ratelimit:testdrive:${ip}`;
   if ((isTestDrive || isBookVisit) && ctx.env.LEADS && ip) {
-    const attempts = parseInt((await ctx.env.LEADS.get(rlKey)) ?? "0", 10);
+    // Fails OPEN: a KV error or exhausted KV quota must never drop a lead.
+    let attempts = 0;
+    try {
+      attempts = parseInt((await ctx.env.LEADS.get(rlKey)) ?? "0", 10) || 0;
+    } catch (err) {
+      console.error("[leads] rate-limit read failed; allowing", err);
+    }
     if (attempts >= RL_MAX_ATTEMPTS) {
       return json(
         {
@@ -102,9 +108,13 @@ export async function onRequestPost(ctx: { request: Request; env: Env }) {
         429
       );
     }
-    await ctx.env.LEADS.put(rlKey, String(attempts + 1), {
-      expirationTtl: RL_WINDOW_SECONDS,
-    });
+    try {
+      await ctx.env.LEADS.put(rlKey, String(attempts + 1), {
+        expirationTtl: RL_WINDOW_SECONDS,
+      });
+    } catch (err) {
+      console.error("[leads] rate-limit write failed; allowing", err);
+    }
   }
 
   const upstream = await fetch(UPSTREAM, {

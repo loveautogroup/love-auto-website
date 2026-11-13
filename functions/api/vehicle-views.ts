@@ -347,7 +347,12 @@ export const onRequestGet: PagesFunction<Env> = async (ctx) => {
     const groups = data.data?.viewer?.accounts?.[0]?.rumPageloadEventsAdaptiveGroups ?? [];
     const views = groups.reduce((acc, g) => acc + (g.sum?.visits ?? g.count ?? 0), 0);
     const payload = { views, since };
-    await ctx.env.INVENTORY.put(cacheKey, JSON.stringify(payload), { expirationTtl: CACHE_TTL_S });
+    // Only cache a path that has real traffic. Any made-up slug passes the
+    // regex above and reads 0 views; writing a KV key for each one let a
+    // script burn the account-wide KV write allowance the lead forms use.
+    if (views > 0) {
+      await ctx.env.INVENTORY.put(cacheKey, JSON.stringify(payload), { expirationTtl: CACHE_TTL_S });
+    }
     return json(payload);
   } catch {
     return json({ views: null });
