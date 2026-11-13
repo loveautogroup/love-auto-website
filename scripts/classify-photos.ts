@@ -142,8 +142,13 @@ Return only the category string.`;
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 20,
+      // Claude Haiku 5.5 (owner approved the model review, 2026-11-11). It
+      // thinks before answering and thinking counts toward max_tokens, so the
+      // old 20-token cap would end on a thinking block with no category. Low
+      // effort plus room for the thinking keeps the one-word answer.
+      model: "claude-haiku-5-5",
+      max_tokens: 1024,
+      output_config: { effort: "low" },
       messages: [
         {
           role: "user",
