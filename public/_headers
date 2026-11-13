@@ -90,3 +90,16 @@
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 /*.mp4
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+# Keep the Cloudflare default addresses out of search results (2026-11-13).
+# Both Pages projects (loveautogroup and the domainless love-auto-website twin)
+# build this repo, so loveautogroup.pages.dev, love-auto-website.pages.dev and
+# every <hash>.<project>.pages.dev preview served full duplicate copies of the
+# site that Google and Bing were indexing. Pages carry a canonical to www, but
+# noindex makes it certain. Matches only *.pages.dev hosts, never
+# www.loveautogroup.net.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
