@@ -570,6 +570,7 @@ export const translations = {
       showMe: "Show Me the Carfax",
       freeReportNote: "Free vehicle history report · Opens in a new tab",
       ariaLabel: "Show free Carfax report for VIN {vin}",
+      value: { great: "Great Value", good: "Good Value", fair: "Fair Value" },
     },
     marketPrice: {
       heading: "Market Price Analysis",
@@ -1217,6 +1218,7 @@ export const translations = {
       showMe: "Ver el Carfax",
       freeReportNote: "Reporte de historial gratis · Se abre en una pestaña nueva",
       ariaLabel: "Ver el reporte Carfax gratis para el VIN {vin}",
+      value: { great: "Gran valor", good: "Buen valor", fair: "Valor justo" },
     },
     marketPrice: {
       heading: "Análisis de Precio de Mercado",

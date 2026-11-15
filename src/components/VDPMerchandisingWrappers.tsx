@@ -52,7 +52,7 @@ export function VDPCarfaxButton({
     wrapperClassName ?? (variant === "inline" ? "mt-3" : "pt-1");
   return (
     <div className={cls}>
-      <ShowCarfaxButton vin={vin} variant={variant} />
+      <ShowCarfaxButton vin={vin} variant={variant} value={overlay.carfaxValue} />
     </div>
   );
 }

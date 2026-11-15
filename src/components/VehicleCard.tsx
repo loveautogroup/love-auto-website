@@ -8,6 +8,7 @@ import { SITE_CONFIG } from "@/lib/constants";
 import { useInventory } from "@/lib/useInventory";
 import { useLanguage } from "@/context/LanguageContext";
 import { useResolveOverlay } from "@/data/useMerchandising";
+import ShowCarfaxButton from "./ShowCarfaxButton";
 import { applyPhotoOrder } from "@/data/photoOrder";
 import HeroBadgeOverlay, { heroBadgeStatus } from "./badges/HeroBadgeOverlay";
 import { useReviews } from "@/context/ReviewsContext";
@@ -404,6 +405,16 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             data-cg-height="40"
             className="block mt-2 empty:hidden [&_img]:inline-block [&_img]:max-w-full"
           />
+        )}
+
+        {/* "Show me the CARFAX" on the card (owner, 2026-11-15). Same
+            fail-closed gate as the photo badge: overlay.carfax is
+            carfaxVisible(), true only when the link serves a free report.
+            z-[3] lifts it above the card's stretched link (z-[2]). */}
+        {overlay.carfax === true && !isSold && vehicle.vin && (
+          <div className="relative z-[3] mt-3">
+            <ShowCarfaxButton vin={vehicle.vin} variant="inline" value={overlay.carfaxValue} />
+          </div>
         )}
 
         <div className="mt-3 inline-flex items-center gap-2 text-[12.5px] font-bold uppercase tracking-[0.08em] text-brand-red border-b border-current pb-0.5">

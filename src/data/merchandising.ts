@@ -58,6 +58,14 @@ export interface VehicleOverlay {
   carfaxLinkLive?: boolean;
 
   /**
+   * CARFAX's own value rating for this car ("GREAT VALUE" etc.), read daily
+   * by Valet off CARFAX Online's Car Listings page (DMS carfax_ratings scan,
+   * 2026-11-15). Absent = CARFAX gives no rating. Shown only beside a CARFAX
+   * button that is itself visible (carfaxVisible).
+   */
+  carfaxValue?: "great" | "good" | "fair";
+
+  /**
    * Up to 5 custom feature pills displayed top-center over the photo.
    * Each pill supports a two-line break using \n. Keep each line under ~14 characters.
    * Examples: "Blacked-Out\nAdventure Ready", "Symmetrical\nAWD", "LED Off-Road\nLight Bar"

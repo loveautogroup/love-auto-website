@@ -18,12 +18,28 @@ interface ShowCarfaxButtonProps {
   vin: string;
   /** Variant — wide (sidebar/hero) or narrow (inline/mobile). */
   variant?: "wide" | "inline";
+  /** CARFAX's own value rating for this car (Valet reads it daily off
+   *  CARFAX Online). Absent = no rating, plain button. */
+  value?: "great" | "good" | "fair";
 }
 
-export default function ShowCarfaxButton({ vin, variant = "wide" }: ShowCarfaxButtonProps) {
+/** Strip colours per CARFAX band: green, lighter green, gray. */
+const VALUE_STYLE: Record<"great" | "good" | "fair", string> = {
+  great: "bg-[#1F7A3A] text-white",
+  good: "bg-[#5E9E2F] text-white",
+  fair: "bg-brand-gray-200 text-[#1A1919]",
+};
+
+export default function ShowCarfaxButton({ vin, variant = "wide", value }: ShowCarfaxButtonProps) {
   const { t } = useLanguage();
   const reportUrl = `https://www.carfax.com/VehicleHistory/p/Report.cfx?partner=DVW_1&vin=${vin}`;
-  const ariaLabel = t.carfaxButton.ariaLabel.replace("{vin}", vin);
+  const valueLabel = value ? t.carfaxButton.value[value] : null;
+  const ariaLabel = t.carfaxButton.ariaLabel.replace("{vin}", vin) + (valueLabel ? ` · CARFAX ${valueLabel}` : "");
+  const strip = valueLabel ? (
+    <span className={`block text-center text-[11px] font-extrabold uppercase tracking-wide px-2 py-0.5 ${VALUE_STYLE[value!]}`}>
+      {valueLabel}
+    </span>
+  ) : null;
 
   if (variant === "inline") {
     return (
@@ -33,23 +49,26 @@ export default function ShowCarfaxButton({ vin, variant = "wide" }: ShowCarfaxBu
         rel="noopener noreferrer"
         onClick={() => trackOutboundClick(reportUrl, "carfax_report_inline")}
         className="
-          inline-flex items-center gap-2
+          inline-flex flex-col
           bg-white border-2 border-[#1A1919]
-          px-3 py-2 text-[#1A1919]
+          text-[#1A1919]
           hover:bg-brand-gray-50 hover:shadow-md
           transition-all text-sm font-bold
         "
         aria-label={ariaLabel}
       >
-        <Image
-          src="/brand/carfax-logo.svg"
-          alt="Carfax"
-          width={68}
-          height={14}
-          className="h-3.5 w-auto"
-          unoptimized
-        />
-        <span>{t.carfaxButton.showMeArrow}</span>
+        <span className="inline-flex items-center gap-2 px-3 py-2">
+          <Image
+            src="/brand/carfax-logo.svg"
+            alt="Carfax"
+            width={68}
+            height={14}
+            className="h-3.5 w-auto"
+            unoptimized
+          />
+          <span>{t.carfaxButton.showMeArrow}</span>
+        </span>
+        {strip}
       </a>
     );
   }
@@ -83,6 +102,7 @@ export default function ShowCarfaxButton({ vin, variant = "wide" }: ShowCarfaxBu
         </svg>
         <span>{t.carfaxButton.showMe}</span>
       </div>
+      {strip && <span className="self-stretch">{strip}</span>}
       <p className="text-[11px] text-brand-gray-500 text-center leading-tight">
         {t.carfaxButton.freeReportNote}
       </p>
